@@ -5,30 +5,16 @@
  */
 package maggdaforestdefense;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.Scanner;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import maggdaforestdefense.auth.Credentials;
+import maggdaforestdefense.auth.AuthWindow;
+import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
-import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.Server;
-import maggdaforestdefense.storage.GameImage;
-import maggdaforestdefense.storage.ImageLoader;
-import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
 
 /**
@@ -51,6 +37,14 @@ public class MaggdaForestDefense extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        if(ConfigurationManager.getConfig().auth.signedIn) {
+            mainApp(primaryStage, ConfigurationManager.getConfig().auth);
+        } else {
+            new AuthWindow(this, primaryStage).show();
+        }
+    }
+
+    public void mainApp(Stage primaryStage, Credentials credentials) {
         try {
             Server server = new Server();
         } catch (Exception e) {
@@ -64,10 +58,12 @@ public class MaggdaForestDefense extends Application {
         primaryStage.setTitle(
                 "MaggdaForestDefense");
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
+        primaryStage.setMaximized(false);
+        primaryStage.setMinWidth(500);
+        primaryStage.setMinHeight(500);
         primaryStage.show();
         // Main
- 
+
 
         // Networks
         networkManager = NetworkManager.getInstance();
@@ -75,11 +71,9 @@ public class MaggdaForestDefense extends Application {
         // Graphics
         menueManager = new MenuManager(root);
         menueManager.start();
-        
+
         // Game
         game = new Game();
-        
-
     }
 
     /**

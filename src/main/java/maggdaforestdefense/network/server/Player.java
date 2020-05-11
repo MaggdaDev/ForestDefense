@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network.server;
 
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -15,13 +17,20 @@ public class Player {
 
     private boolean loopRunning = true;
     private ServerSocketHandler commandHandler;
+    
+    private double testCounter = 0;
 
     public Player(ServerSocketHandler handler) {
         commandHandler = handler;
+        handler.setOwner(this);
         new Thread(commandHandler).start();
     }
-    
-    public void run() {
-   
+
+    public void testUpdateCircle() {
+        testCounter += 0.01;
+        double x = Math.pow(Math.sin(testCounter), 3.0d)*200+500;
+        double y = Math.pow(Math.sin(testCounter), 5.0d)*400+500;
+        commandHandler.sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_TEST, new CommandArgument[]{new CommandArgument("x", String.valueOf(x)), new CommandArgument("y", String.valueOf(y))}));
     }
+
 }

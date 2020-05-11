@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Server {
     private ObservableList<Player> playerList;
     private SocketAcceptor acceptor;
 
+    private GameHandler gameHandler;
     private static Server instance;
 
     public Server() throws IOException {
@@ -31,6 +33,8 @@ public class Server {
         playerList = FXCollections.observableArrayList();
 
         acceptor = new SocketAcceptor();
+        
+        gameHandler = new GameHandler();
 
         Thread thread = new Thread(acceptor);
         thread.start();
@@ -50,6 +54,10 @@ public class Server {
 
     }
 
+    public void addGame(ServerGame game) {
+        gameHandler.addGame(game);
+    }
+    
     public static Server getInstance() {
         return instance;
     }

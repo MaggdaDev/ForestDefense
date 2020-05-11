@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.storage.Logger;
 import sun.rmi.runtime.Log;
@@ -40,7 +41,7 @@ public class ClientCommandHandler extends Thread {
                 if (NetworkCommand.testForKeyWord(line)) {
                     queue.add(NetworkCommand.fromString(line));
                 }
-                if (!isInGame) {
+                if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
                     handleInput();
                 }
             }
@@ -58,12 +59,19 @@ public class ClientCommandHandler extends Thread {
     }
 
     private void handleCommand(NetworkCommand command) {
-        Logger.logClient("Command handled: " + command.toString());
+        //Logger.logClient("Command handled: " + command.toString());
 
         switch (command.getCommandType()) {
             case PERMIT_CONNECTION:
                 NetworkManager.getInstance().notifyForAnswer();
                 break;
+            case UPDATE_TEST:
+                Game.getInstance().updateTestPosition(command.getNumArgument("x"), command.getNumArgument("y"));
+                break;
         }
+    }
+
+    void setInGame(boolean b) {
+        isInGame = b;
     }
 }

@@ -7,6 +7,7 @@ package maggdaforestdefense.menues;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+import maggdaforestdefense.gameplay.Game;
 
 /**
  *
@@ -49,6 +50,9 @@ public class MenuManager {
                 break;
             case MAIN_MENU:
                 showScreen(mainMenu);
+                break;
+            case GAME:
+                showScreen(Game.getInstance().getGameScreen());
                 break;
         }
     }

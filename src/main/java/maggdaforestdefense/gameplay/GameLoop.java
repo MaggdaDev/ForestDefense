@@ -6,16 +6,29 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.shape.Circle;
+import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
  * @author David
  */
 public class GameLoop extends AnimationTimer{
+    private Circle circle;
+    public GameLoop(Circle testCircle) {
+        circle = testCircle;
+    }
 
     @Override
     public void handle(long now) {
+        NetworkManager.getInstance().update();
         
+    }
+    
+    public void updateCircle(double x, double y) {
+        circle.setLayoutX(x);
+        circle.setLayoutY(y);
     }
     
 }

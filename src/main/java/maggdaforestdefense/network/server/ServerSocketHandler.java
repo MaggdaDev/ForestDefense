@@ -19,6 +19,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -36,10 +37,12 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
+    private Player owner;
 
     public ServerSocketHandler(Socket socket) throws IOException {
         
         this.socket = socket;
+
         // input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(), true);
@@ -86,17 +89,22 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
     
     private void handleCommand(NetworkCommand command) {
-        Logger.logServer("Command handled: " + command);
+        //Logger.logServer("Command handled: " + command);
         switch(command.getCommandType()) {
             case REQUIRE_CONNECTION:
                 sendCommand(NetworkCommand.PERMIT_CONNECTION);
+                break;
+            case START_GAME:
+                ServerGame newGame = new ServerGame(owner);
+                Server.getInstance().addGame(newGame);
+                newGame.start();
                 break;
         }
         
     }
     
     public void sendCommand(NetworkCommand command) {
-        Logger.logServer("Command sent: " + command.toString());
+        //Logger.logServer("Command sent: " + command.toString());
         output.println(command.toString());
     }
 
@@ -108,5 +116,9 @@ public class ServerSocketHandler implements Runnable, Stoppable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    public void setOwner(Player o) {
+        owner = o;
     }
 }

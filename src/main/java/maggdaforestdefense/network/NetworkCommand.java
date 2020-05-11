@@ -14,7 +14,8 @@ public class NetworkCommand {
     public static final CommandArgument[] EMPTY_ARGS = new CommandArgument[]{};
     // PREDEF COMMANDS
     public static final NetworkCommand REQUIRE_CONNECTION = new NetworkCommand(CommandType.REQUIRE_CONNECTION, EMPTY_ARGS),
-            PERMIT_CONNECTION = new NetworkCommand(CommandType.PERMIT_CONNECTION, EMPTY_ARGS);
+            PERMIT_CONNECTION = new NetworkCommand(CommandType.PERMIT_CONNECTION, EMPTY_ARGS),
+            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS);
 
     //CONSTANTS
     private final static String KEYWORD = "__", SEPARATOR_1 = ";";
@@ -51,6 +52,10 @@ public class NetworkCommand {
         }
         return "";
     }
+    
+    public double getNumArgument(String name) {
+        return Double.parseDouble(getArgument(name));
+    }
 
     public static NetworkCommand fromString(String string) {
         String[] splitted = string.split(SEPARATOR_1);
@@ -78,7 +83,9 @@ public class NetworkCommand {
 
         //CLIENT TO SERVER
         REQUIRE_CONNECTION,
+        START_GAME,
         // SERVER TO CLIENT
+        UPDATE_TEST,
         PERMIT_CONNECTION;
     }
 }

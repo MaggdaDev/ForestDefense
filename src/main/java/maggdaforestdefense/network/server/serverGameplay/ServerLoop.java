@@ -5,20 +5,31 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.util.List;
+import maggdaforestdefense.network.server.Player;
+
 /**
  *
  * @author David
  */
-public class ServerLoop extends Thread{
+public class ServerLoop{
     private boolean running = true;
-    public ServerLoop() {
-        
+    private List<Player> players;
+    public ServerLoop(List<Player> playerList) {
+        players = playerList;
     }
     
-    @Override
+
     public void run() {
         while(running) {
-            
+            players.forEach((Player player)->{
+                player.testUpdateCircle();
+            });
+            try {
+                Thread.sleep(1);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

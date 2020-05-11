@@ -25,7 +25,7 @@ public class NetworkManager {
     }
 
     public void update() {
-
+        commandHandler.handleInput();
     }
 
     public void connect() {
@@ -43,7 +43,7 @@ public class NetworkManager {
     }
 
     public void sendCommand(NetworkCommand command) {
-        Logger.logClient("Command sent: " + command.toString());
+        //Logger.logClient("Command sent: " + command.toString());
         serverConnection.getOutput().println(command.toString());
     }
 
@@ -51,6 +51,10 @@ public class NetworkManager {
         synchronized (this) {
             notify();
         }
+    }
+    
+    public void setInGame(boolean b) {
+        commandHandler.setInGame(b);
     }
 
     public static NetworkManager getInstance() {

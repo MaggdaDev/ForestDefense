@@ -5,10 +5,12 @@
  */
 package maggdaforestdefense.menues;
 
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import maggdaforestdefense.gameplay.Game;
 
 /**
  *
@@ -20,6 +22,9 @@ public class MainMenu extends VBox{
     public MainMenu() {
         playBt = new Button("PLAY");
         playBt.setFont(new Font(30));
+        playBt.setOnAction((ActionEvent e)->{
+            Game.getInstance().startGame();
+        });
         
         setAlignment(Pos.CENTER);
         

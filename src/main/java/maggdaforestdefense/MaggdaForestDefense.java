@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import maggdaforestdefense.auth.client.AuthWindow;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.Server;
@@ -60,7 +61,7 @@ public class MaggdaForestDefense extends Application {
         primaryStage.setTitle(
                 "MaggdaForestDefense");
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
+        primaryStage.setMaximized(false);
         primaryStage.show();
         // Main
         mainLoop = new MainLoop();
@@ -73,7 +74,7 @@ public class MaggdaForestDefense extends Application {
         menueManager = new MenuManager(root);
         menueManager.start();
         
-
+        new AuthWindow().show();
     }
 
     /**

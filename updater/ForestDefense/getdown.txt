@@ -1,0 +1,65 @@
+# The URL from which the client is downloaded
+appbase = https://forestdefense.minortom.net/updater/ForestDefense/
+# UI Configuration
+ui.name = Forest Defense
+ui.background = FFFFFF
+#ui.error_background = FF0000
+#ui.progress = 10, 100, 400, 50
+#ui.progress_text = 000000
+#ui.progress_bar = 0000FF
+ui.progress = 17, 321, 458, 22
+ui.progress_bar = 336600
+ui.progress_text = FFFFFF
+ui.status = 57, 245, 373, 68
+ui.status_text = 000000
+
+# Application jar files
+code = lib/annotations-16.0.1.jar
+code = lib/checker-compat-qual-2.5.5.jar
+code = lib/commons-codec-1.11.jar
+code = lib/commons-compress-1.0.jar
+code = lib/commons-logging-1.2.jar
+code = lib/error_prone_annotations-2.3.4.jar
+code = lib/failureaccess-1.0.1.jar
+code = lib/ForestDefense-app.jar
+code = lib/google-http-client-1.34.2.jar
+code = lib/google-oauth-client-1.30.6.jar
+code = lib/grpc-context-1.22.1.jar
+code = lib/gson-2.8.6.jar
+code = lib/guava-28.2-android.jar
+code = lib/httpclient-4.5.11.jar
+code = lib/httpcore-4.4.13.jar
+code = lib/j2objc-annotations-1.3.jar
+code = lib/jansi-1.17.1.jar
+code = lib/javafx-base-13.jar
+code = lib/javafx-base-13-linux.jar
+code = lib/javafx-controls-13.jar
+code = lib/javafx-controls-13-linux.jar
+code = lib/javafx-fxml-13-linux.jar
+code = lib/javafx-graphics-13.jar
+code = lib/javafx-graphics-13-linux.jar
+code = lib/javafx-media-13.jar
+code = lib/javafx-media-13-linux.jar
+code = lib/javafx-swing-13-linux.jar
+code = lib/javafx-web-13-linux.jar
+code = lib/javassist-3.22.0-GA.jar
+code = lib/jsr305-3.0.2.jar
+code = lib/linuxenv-1.0.0.jar
+code = lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+code = lib/log4j-api-2.11.0.jar
+code = lib/log4j-core-2.11.0.jar
+code = lib/log4j-slf4j-impl-2.11.0.jar
+code = lib/opencensus-api-0.24.0.jar
+code = lib/opencensus-contrib-http-util-0.24.0.jar
+code = lib/panda-framework-indev-0.8.87.jar
+code = lib/panda-indev-0.8.87.jar
+code = lib/panda-utilities-indev-0.8.87.jar
+code = lib/pandomium-67.0.6.jar
+code = lib/pandomium-natives-linux64-67.0.3.jar
+code = lib/pandomium-natives-win64-67.0.jar
+code = lib/slf4j-api-1.8.0-alpha2.jar
+code = lib/xz-1.6.jar
+
+# The main entry point for the application
+class = maggdaforestdefense.Main
+# version=1

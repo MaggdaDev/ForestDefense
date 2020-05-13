@@ -5,18 +5,22 @@
  */
 package maggdaforestdefense;
 
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
-import maggdaforestdefense.auth.Credentials;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
-import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.Server;
+
+import java.util.Objects;
 
 /**
  *
@@ -24,7 +28,10 @@ import maggdaforestdefense.network.client.NetworkManager;
  */
 public class MaggdaForestDefense extends Application {    
     //Main
-
+    private static MaggdaForestDefense instance;
+    public static MaggdaForestDefense getInstance() {
+        return instance;
+    }
 
     //Graphics
     private MenuManager menueManager;
@@ -38,6 +45,7 @@ public class MaggdaForestDefense extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        instance = this;
         if(ConfigurationManager.getConfig().auth.signedIn) {
             mainApp(primaryStage);
         } else {
@@ -57,9 +65,18 @@ public class MaggdaForestDefense extends Application {
             e.printStackTrace();
         }
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                exit();
+            }
+        });
+
         root = new StackPane();
 
         Scene scene = new Scene(root);
+
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("maggdaforestdefense/styles/styles.css")).toExternalForm());
 
         primaryStage.setTitle(
                 "MaggdaForestDefense");
@@ -82,11 +99,16 @@ public class MaggdaForestDefense extends Application {
         game = new Game();
     }
 
+    public void exit() {
+        System.exit(0);
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
+        SvgImageLoaderFactory.install();
         launch(args);
     }
 

@@ -6,28 +6,58 @@
 package maggdaforestdefense.menues;
 
 import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import maggdaforestdefense.MaggdaForestDefense;
+import maggdaforestdefense.config.Configuration;
+import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.storage.Logger;
 
-/**
- *
- * @author David
- */
-public class MainMenu extends VBox{
-    private Button playBt;
+public class MainMenu extends VBox {
+    private FXMLLoader loader;
+
+    @FXML private Button playBtn;
+
+    @FXML private Button logoutBtn;
+    @FXML private Button settingsBtn;
+    @FXML private Text userNameTxt;
+    @FXML private Text emailTxt;
+
     
     public MainMenu() {
-        playBt = new Button("PLAY");
-        playBt.setFont(new Font(30));
-        playBt.setOnAction((ActionEvent e)->{
-            Game.getInstance().startGame();
-        });
-        
-        setAlignment(Pos.CENTER);
-        
-        getChildren().add(playBt);
+        Logger.debugClient("FXML loading works");
     }
+
+    public void initialize() {
+        Logger.debugClient("FXML loading actually works");
+        userNameTxt.setText(ConfigurationManager.getConfig().getAuth().getUserName());
+        if (ConfigurationManager.getConfig().getAuth().getMwUser().getEmail().equals("")) {
+            emailTxt.setText("");
+        } else {
+            emailTxt.setText(ConfigurationManager.getConfig().getAuth().getMwUser().getEmail());
+        }
+        emailTxt.setFont(new Font(emailTxt.getFont().getName(), emailTxt.getFont().getSize()*0.8));
+    }
+
+    @FXML private void playBtnOnClick(ActionEvent e) {
+        Game.getInstance().startGame();
+    }
+
+    @FXML private void settingsBtnOnClick(ActionEvent e) {
+        // TODO: Find a way to open the browser
+    }
+
+    @FXML private void logoutBtnOnClick(ActionEvent e) {
+        Configuration cfg = ConfigurationManager.getConfig();
+        cfg.getAuth().setSignedIn(false);
+        ConfigurationManager.setConfig(cfg);
+        MaggdaForestDefense.getInstance().exit();
+        MaggdaForestDefense.main(new String[]{});
+    }
+
 }

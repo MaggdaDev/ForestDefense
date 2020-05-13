@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -21,10 +22,11 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Random;
 
 public class AuthWindow {
-    public static final String CLIENT_ID = "a421b7d9de61f3385de9d7ffca3a4503";
+    public static final String CLIENT_ID = "e6f0fa1029e8d2e52628db80c399b928";
     public static final String AUTH_URL = "https://wiki.minortom.net/rest.php/oauth2/authorize?useskin=example&approval_pass=1&redirect_uri=https%3A%2F%2Fforestdefense.minortom.net%2Foauth2%2Fcallback&client_id=" + CLIENT_ID + "&response_type=code";
     public static final String TOKEN_URL = "https://wiki.minortom.net/rest.php/oauth2/access_token";
     public static final String PROFILE_URL = "https://wiki.minortom.net/rest.php/oauth2/resource/profile";
@@ -69,6 +71,7 @@ public class AuthWindow {
         });
 
         btnBox = new HBox(cancelBtn, anonBtn);
+        btnBox.setPadding(new Insets(10, 10, 10, 10));
         btnBox.setSpacing(10);
         //btnBox.setAlignment(new Align);
 
@@ -78,18 +81,16 @@ public class AuthWindow {
                     (webView, message, lineNumber, sourceId) ->
                             Logger.debugClient("WebView Console: [" + sourceId + ":" + lineNumber + "] " + message)
             );
-            signinView.getEngine().setUserAgent("Mozilla/5.0 (Java; ForestDefense x86_64; rv:68.0) Gecko/20100101 Firefox/68.0");
-            signinView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
-                String location = (String)newValue;
-                int index = location.indexOf("code=");
+            //signinView.getEngine().setUserAgent("Mozilla/5.0 (Java; ForestDefense x86_64; rv:68.0) Gecko/20100101 Firefox/68.0");
+            signinView.getEngine().locationProperty().addListener((observable, oldValue, location) -> {
+                int index = (location).indexOf("code=");
                 if (index >= 0) {
-                    String code = location.substring(index + 5);
+                    String code = (location).substring(index + 5);
                     codeSignIn(code);
                 }
             });
             signinView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
-                String location = (String)newValue;
-                int index = location.indexOf("error=unauthorized_client");
+                int index = (newValue).indexOf("error=unauthorized_client");
                 if (index >= 0) {
                     new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).show();
                     cookieManager.getCookieStore().removeAll();
@@ -106,17 +107,19 @@ public class AuthWindow {
             signinView.getEngine().load(AUTH_URL);
 
             vBox = new VBox(signinView, btnBox);
-        vBox.setSpacing(10);
+            vBox.setPadding(new Insets(0, 0, 0, 0));
+        vBox.setSpacing(0);
 
         authScene = new Scene(vBox);
+        authScene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("maggdaforestdefense/styles/styles.css")).toExternalForm());
         authStage.setScene(authScene);
     }
 
     public void show() {
         authStage.setResizable(false);
         //authStage.setAlwaysOnTop(true);
-        authStage.setHeight(690);
-        authStage.setWidth(370);
+        authStage.setHeight(698);
+        authStage.setWidth(355);
         //authStage.setIconified(true);
         authStage.show();
     }

@@ -5,9 +5,12 @@
  */
 package maggdaforestdefense.menues;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import maggdaforestdefense.gameplay.Game;
+
+import java.io.IOException;
 
 /**
  *
@@ -29,9 +32,18 @@ public class MenuManager {
         mainRoot = root;
         showingScreen = Screen.LAUNCHING_SCREEN;
 
-        //Menues
-        mainMenu = new MainMenu();
-        launchingScreen = new LaunchingScreen();
+        try {
+            //Menues
+            //mainMenu = new MainMenu();
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getClassLoader().getResource("maggdaforestdefense/menues/main.fxml"));
+            mainLoader.load();
+            mainMenu = mainLoader.getRoot();
+            launchingScreen = new LaunchingScreen();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         setScreenShown(Screen.LAUNCHING_SCREEN);
 

@@ -8,7 +8,11 @@ package maggdaforestdefense.menues;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -35,6 +39,7 @@ public class MainMenu extends VBox {
 
     public void initialize() {
         Logger.debugClient("FXML loading actually works");
+        setPadding(new Insets(10, 10, 10, 10));
         userNameTxt.setText(ConfigurationManager.getConfig().getAuth().getUserName());
         if (ConfigurationManager.getConfig().getAuth().getMwUser().getEmail().equals("")) {
             emailTxt.setText("");

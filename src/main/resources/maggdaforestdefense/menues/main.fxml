@@ -6,22 +6,31 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.geometry.Insets?>
 <MainMenu xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="maggdaforestdefense.menues.MainMenu"
-          prefHeight="400.0" prefWidth="600.0"
-          alignment="CENTER" spacing="10">
+          alignment="CENTER_LEFT" spacing="10">
+    <padding><Insets bottom="10" left="10" top="10" right="10" /></padding>
 
-    <Button fx:id="playBtn" id="playBt" text="Play" onAction="#playBtnOnClick"/>
+    <VBox spacing="10">
+        <padding><Insets bottom="10" left="10" top="10" right="10" /></padding>
+        <Button fx:id="playBtn" text="Play" onAction="#playBtnOnClick"/>
+    </VBox>
 
+    <VBox spacing="10">
+        <padding><Insets bottom="10" left="10" top="10" right="10" /></padding>
+        <Separator />
 
-    <HBox spacing="10" alignment="CENTER">
-        <VBox spacing="5" alignment="CENTER">
-            <Text fx:id="userNameTxt" />
-            <Text fx:id="emailTxt" />
-        </VBox>
-        <Button fx:id="settingsBtn" styleClass="y-btn-settings" minHeight="20" minWidth="20" onAction="#settingsBtnOnClick"/>
-        <Button fx:id="logoutBtn" styleClass="y-btn-logout" minHeight="20" minWidth="20" onAction="#logoutBtnOnClick"/>
-    </HBox>
+        <HBox spacing="10">
+            <VBox spacing="5">
+                <Text fx:id="userNameTxt" />
+                <Text fx:id="emailTxt" />
+            </VBox>
+            <Button fx:id="settingsBtn" styleClass="y-btn-settings" minHeight="20" minWidth="20" onAction="#settingsBtnOnClick"/>
+            <Button fx:id="logoutBtn" styleClass="y-btn-logout" minHeight="20" minWidth="20" onAction="#logoutBtnOnClick"/>
+        </HBox>
+    </VBox>
 
 </MainMenu>

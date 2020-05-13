@@ -13,6 +13,9 @@ public class Logger {
     public static void logClient(String string) {
         System.out.println("[CLIENT] " + string);
     }
+    public static void debugClient(String string) {
+        System.out.println("[CLIENT/d] " + string);
+    }
     public static void logServer(String string) {
         System.out.println("[SERVER] " + string);
     }

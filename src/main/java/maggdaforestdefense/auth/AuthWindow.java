@@ -19,32 +19,35 @@ import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.storage.Logger;
-import org.panda_lang.pandomium.Pandomium;
-import org.panda_lang.pandomium.settings.PandomiumSettings;
-import org.panda_lang.pandomium.wrapper.PandomiumBrowser;
-import org.panda_lang.pandomium.wrapper.PandomiumClient;
+import org.apache.http.HttpConnection;
+import sun.tools.jstat.Jstat;
 
 import javax.swing.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class AuthWindow {
     public static final String CLIENT_ID = "a421b7d9de61f3385de9d7ffca3a4503";
     public static final String AUTH_URL = "https://wiki.minortom.net/rest.php/oauth2/authorize?useskin=example&approval_pass=1&redirect_uri=https%3A%2F%2Fforestdefense.minortom.net%2Foauth2%2Fcallback&client_id=" + CLIENT_ID + "&response_type=code";
     public static final String TOKEN_URL = "https://wiki.minortom.net/rest.php/oauth2/access_token";
+    public static final String PROFILE_URL = "https://wiki.minortom.net/rest.php/oauth2/resource/profile";
     public static final String REDIR_URL = "https://forestdefense.minortom.net/oauth2/callback";
 
-    public static final boolean USE_PANDOMIUM = false;
+    public static final String ANON_TOKEN = "Anonymous";
 
     private Stage primaryStage;
     private MaggdaForestDefense defense;
+    
     private Stage authStage;
     private Scene authScene;
     private VBox vBox;
     private HBox btnBox;
     private WebView signinView;
-    private Pandomium pandomium;
-    private PandomiumClient pandomiumClient;
-    private PandomiumBrowser pandomiumBrowser;
     private SwingNode browserNode;
     private Button cancelBtn;
     private Button anonBtn;
@@ -73,7 +76,6 @@ public class AuthWindow {
         btnBox.setSpacing(10);
         //btnBox.setAlignment(new Align);
 
-        if(!USE_PANDOMIUM) {
             signinView = new WebView();
             signinView.setPrefHeight(640);
             com.sun.javafx.webkit.WebConsoleListener.setDefaultListener(
@@ -107,39 +109,6 @@ public class AuthWindow {
             signinView.getEngine().load(AUTH_URL);
 
             vBox = new VBox(signinView, btnBox);
-        } else {
-            PandomiumSettings settings = PandomiumSettings.getDefaultSettingsBuilder()
-                    //.proxy("localhost", 20) // blank page
-                    .build();
-
-            Logger.logClient(settings.getNatives().getNativeDirectory());
-            pandomium = new Pandomium(settings);
-            //Alert fetchingData = new Alert(Alert.AlertType.INFORMATION, "Fetching some additional data, this might take a while", ButtonType.OK);
-            //fetchingData.showAndWait();
-            //if(fetchingData.showAndWait().orElse(ButtonType.CANCEL)==ButtonType.CANCEL) {
-            //    anonSignIn();
-            //    return;
-            //} else {
-                System.setProperty("java.library.path", System.getProperty("java.library.path") + ":" + settings.getNatives().getNativeDirectory());
-                Logger.logClient(System.getProperty("java.library.path"));
-                pandomium.initialize();
-
-
-                pandomiumClient = pandomium.createClient();
-                pandomiumBrowser = pandomiumClient.loadURL("https://wiki.minortom.net?useskin=example");
-
-                browserNode = new SwingNode();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        browserNode.setContent((JComponent) pandomiumBrowser.toAWTComponent());
-                    }
-                });
-
-            //}
-
-            vBox = new VBox(browserNode, btnBox);
-        }
         vBox.setSpacing(10);
 
         authScene = new Scene(vBox);
@@ -164,7 +133,7 @@ public class AuthWindow {
         Credentials defaultCredentials = new Credentials();
         defaultCredentials.userId = "Anonymous";
         defaultCredentials.userName = "Anonymous #" + new Random().nextInt(100);
-        defaultCredentials.authToken = "Anonymous";
+        defaultCredentials.authToken = ANON_TOKEN;
         signedIn(defaultCredentials);
     }
 
@@ -181,5 +150,62 @@ public class AuthWindow {
             new Alert(Alert.AlertType.WARNING, "Configuration could not be saved.", ButtonType.OK).showAndWait();
         }
         defense.mainApp(primaryStage, credentials);
+    }
+
+    public String refreshToken(String oldToken) {
+        return oldToken;
+    }
+
+    public MWUser getUserFromToken(String token) {
+        if(token.equals(ANON_TOKEN)) {
+            return MWUser.anonymous();
+        } else {
+            URLConnection connection = null;
+            try {
+                connection = new URL(PROFILE_URL).openConnection();
+                connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.name());
+                connection.setRequestProperty("Authorization", "Bearer " + token);
+                InputStream response = connection.getInputStream();
+                StringBuilder res = new StringBuilder();
+                Reader reader = new BufferedReader(new InputStreamReader(response, Charset.forName(StandardCharsets.UTF_8.name())));
+                    int c = 0;
+                    while ((c = reader.read()) != -1) {
+                        res.append((char) c);
+                    }
+                Logger.debugClient("Response for userfromtoken: " + ((HttpURLConnection) connection).getResponseCode() + " " + res.toString());
+                if (((HttpURLConnection) connection).getResponseCode() == 200) {
+                    return new Gson().fromJson(res.toString(), MWUser.class);
+                } else {
+                    return null;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+    public String getAccessToken(String code) {
+        try {
+            URLConnection connection = new URL(TOKEN_URL).openConnection();
+            connection.setDoOutput(true); // Triggers POST.
+            connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.name());
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + StandardCharsets.UTF_8.name());
+            try (OutputStream output = connection.getOutputStream()) {
+                output.write(("grant_type=authorization_code&code="+code).getBytes(StandardCharsets.UTF_8.name()));
+            }
+            InputStream response = connection.getInputStream();
+            StringBuilder res = new StringBuilder();
+            Reader reader = new BufferedReader(new InputStreamReader(response, Charset.forName(StandardCharsets.UTF_8.name())));
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                res.append((char) c);
+            }
+            Logger.debugClient("Response for getaccesstoken: " + ((HttpURLConnection) connection).getResponseCode() + " " + res.toString());
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

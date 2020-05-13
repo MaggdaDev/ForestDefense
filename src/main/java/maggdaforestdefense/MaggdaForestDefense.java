@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.Credentials;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.ConfigurationManager;
@@ -38,13 +39,18 @@ public class MaggdaForestDefense extends Application {
     @Override
     public void start(Stage primaryStage) {
         if(ConfigurationManager.getConfig().auth.signedIn) {
-            mainApp(primaryStage, ConfigurationManager.getConfig().auth);
+            mainApp(primaryStage);
         } else {
-            new AuthWindow(this, primaryStage).show();
+            new AuthWindow(new Afterwards() {
+                @Override
+                public void run() {
+                    mainApp(primaryStage);
+                }
+            }).show();
         }
     }
 
-    public void mainApp(Stage primaryStage, Credentials credentials) {
+    public void mainApp(Stage primaryStage) {
         try {
             Server server = new Server();
         } catch (Exception e) {

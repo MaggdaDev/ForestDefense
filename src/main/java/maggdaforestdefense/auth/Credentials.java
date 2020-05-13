@@ -5,4 +5,5 @@ public class Credentials {
     public String userId = "";
     public String userName = "";
     public String authToken = "";
+    MWUser mwUser;
 }

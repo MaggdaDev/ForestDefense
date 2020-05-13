@@ -23,7 +23,7 @@ Unicode True
 InstallDir $APPDATA\ienokih\ForestDefense\
 
 ; Text above setup
-DirText "This will install Forest Defense on your computer. MAKE SURE YOU HAVE JAVA INSTALLED!"
+DirText "This will install Forest Defense on your computer. Forest Defense requires Java to be installed. Get it from java.com/download"
 
 ;--------------------------------
 
@@ -61,10 +61,11 @@ Function DetectJRE
   
   NoJava:  
   ;Write the script to install Java here
-  SetOutPath $TEMP 
-  File "jreinstall.exe"  
-  DetailPrint "Starting the JRE installation"     
-  ExecWait "$TEMP\jreinstall.exe"
+  ;SetOutPath $TEMP 
+  ;File "jreinstall.exe"  
+  ;DetailPrint "Starting the JRE installation"     
+  ;ExecWait "$TEMP\jreinstall.exe"
+  DetailPrint "No java installation found."
  FunctionEnd
 
 
@@ -79,12 +80,14 @@ WriteUninstaller $INSTDIR\Uninstall.exe
 
 ; Shortcuts
 CreateDirectory "$SMPROGRAMS\ienokih"
-CreateShortCut "$SMPROGRAMS\ienokih\Run ForestDefense.lnk" "$INSTDIR\start.bat"
+CreateShortCut "$SMPROGRAMS\ienokih\Run ForestDefense.lnk" "$INSTDIR\start.exe"
 CreateShortCut "$SMPROGRAMS\ienokih\Uninstall ForestDefense.lnk" "$INSTDIR\Uninstall.exe"
 
   ; Put file there
   File ForestDefense\start.bat
-  File ForestDefense\getdown-launcher-1.8.6.jar
+  File ForestDefense\start.exe
+  File ForestDefense\background.png
+  File ForestDefense\getdown-launcher.jar
   File ForestDefense\getdown.txt
 
   
@@ -97,5 +100,7 @@ Delete "$SMPROGRAMS\ienokih\Uninstall ForestDefense.lnk"
 RMDIR "$SMPROGRAMS\ienokih"
 Delete $INSTDIR\Uninstall.exe
 RMDir /r $INSTDIR
+;RMDir /r $INSTDIR
+
 
 SectionEnd 

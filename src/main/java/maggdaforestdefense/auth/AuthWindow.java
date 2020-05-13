@@ -4,29 +4,21 @@ import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.storage.Logger;
-import org.apache.http.HttpConnection;
-import sun.tools.jstat.Jstat;
 
-import javax.swing.*;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -37,12 +29,11 @@ public class AuthWindow {
     public static final String TOKEN_URL = "https://wiki.minortom.net/rest.php/oauth2/access_token";
     public static final String PROFILE_URL = "https://wiki.minortom.net/rest.php/oauth2/resource/profile";
     public static final String REDIR_URL = "https://forestdefense.minortom.net/oauth2/callback";
+    public static final String SETTINGS_URL = "https://wiki.minortom.net/wiki/Special:Preferences";
 
     public static final String ANON_TOKEN = "Anonymous";
 
-    private Stage primaryStage;
-    private MaggdaForestDefense defense;
-    
+    private Afterwards afterwards;
     private Stage authStage;
     private Scene authScene;
     private VBox vBox;
@@ -52,9 +43,14 @@ public class AuthWindow {
     private Button cancelBtn;
     private Button anonBtn;
 
-    public AuthWindow(MaggdaForestDefense defense, Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.defense = defense;
+    private CookieManager cookieManager = new java.net.CookieManager();
+
+    public AuthWindow(Afterwards afterwards) {
+        this.afterwards = afterwards;
+
+        cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
+
         authStage = new Stage();
         authStage.setTitle("Log in");
 
@@ -80,7 +76,7 @@ public class AuthWindow {
             signinView.setPrefHeight(640);
             com.sun.javafx.webkit.WebConsoleListener.setDefaultListener(
                     (webView, message, lineNumber, sourceId) ->
-                            Logger.logClient("WebView Console: [" + sourceId + ":" + lineNumber + "] " + message)
+                            Logger.debugClient("WebView Console: [" + sourceId + ":" + lineNumber + "] " + message)
             );
             signinView.getEngine().setUserAgent("Mozilla/5.0 (Java; ForestDefense x86_64; rv:68.0) Gecko/20100101 Firefox/68.0");
             signinView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
@@ -96,6 +92,7 @@ public class AuthWindow {
                 int index = location.indexOf("error=unauthorized_client");
                 if (index >= 0) {
                     new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).show();
+                    cookieManager.getCookieStore().removeAll();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -134,11 +131,41 @@ public class AuthWindow {
         defaultCredentials.userId = "Anonymous";
         defaultCredentials.userName = "Anonymous #" + new Random().nextInt(100);
         defaultCredentials.authToken = ANON_TOKEN;
+        defaultCredentials.mwUser = MWUser.anonymous();
         signedIn(defaultCredentials);
     }
 
     private void codeSignIn(String code) {
-        Logger.logClient("Code " + code);
+        Logger.debugClient("Code " + code);
+        TokenRes token = getAccessToken(code);
+        MWUser u = getUserFromToken(token.getAccess_token());
+        if(u==null) {
+            new Alert(Alert.AlertType.ERROR, "Uh oh. Something went wrong.", ButtonType.OK).show();
+        } else if (!u.isConfirmed_email()) {
+            new Alert(Alert.AlertType.WARNING, "Please add a verified e-mail-address to your account to continue.", ButtonType.OK).show();
+            cookieManager.getCookieStore().removeAll();
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    /*try {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop.getDesktop().browse(new URI(SETTINGS_URL));
+                        }
+                    } catch (IOException | URISyntaxException e) {
+                        e.printStackTrace();
+                    }*/
+                    signinView.getEngine().load(AUTH_URL);
+                }
+            });
+        } else {
+            Credentials c = new Credentials();
+            c.signedIn = true;
+            c.userName = u.getUsername();
+            c.userId = u.getUsername();
+            c.authToken = token.getAccess_token();
+            c.mwUser = u;
+            signedIn(c);
+        }
     }
 
     private void signedIn(Credentials credentials) {
@@ -149,7 +176,7 @@ public class AuthWindow {
         if(!ConfigurationManager.setConfig(c)) {
             new Alert(Alert.AlertType.WARNING, "Configuration could not be saved.", ButtonType.OK).showAndWait();
         }
-        defense.mainApp(primaryStage, credentials);
+        afterwards.run();
     }
 
     public String refreshToken(String oldToken) {
@@ -185,15 +212,16 @@ public class AuthWindow {
         }
     }
 
-    public String getAccessToken(String code) {
+    public TokenRes getAccessToken(String code) {
         try {
+            //URLConnection connection = new URL(TOKEN_URL + "?" + "grant_type=authorization_code&code="+code).openConnection();
             URLConnection connection = new URL(TOKEN_URL).openConnection();
             connection.setDoOutput(true); // Triggers POST.
             connection.setRequestProperty("Accept-Charset", StandardCharsets.UTF_8.name());
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + StandardCharsets.UTF_8.name());
-            try (OutputStream output = connection.getOutputStream()) {
-                output.write(("grant_type=authorization_code&code="+code).getBytes(StandardCharsets.UTF_8.name()));
-            }
+            OutputStream output = connection.getOutputStream();
+            output.write(("grant_type=authorization_code&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIR_URL + "&code="+code).getBytes(StandardCharsets.UTF_8.name()));
+            //output.write("".getBytes(StandardCharsets.UTF_8.name()));
             InputStream response = connection.getInputStream();
             StringBuilder res = new StringBuilder();
             Reader reader = new BufferedReader(new InputStreamReader(response, Charset.forName(StandardCharsets.UTF_8.name())));
@@ -202,7 +230,11 @@ public class AuthWindow {
                 res.append((char) c);
             }
             Logger.debugClient("Response for getaccesstoken: " + ((HttpURLConnection) connection).getResponseCode() + " " + res.toString());
-            return null;
+            if (((HttpURLConnection) connection).getResponseCode() == 200) {
+                return new Gson().fromJson(res.toString(), TokenRes.class);
+            } else {
+                return null;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -1,3 +1,5 @@
+/* BOOTSTRAP STYLE */
+
 .root {
     -fx-body-color : #F5F5F5;
     -fx-outer-border : #cecece;
@@ -934,7 +936,7 @@ VBox > .split-menu-button.last > .arrow-button {
 /*  OWN STYLES */
 
 .y-btn-settings {
-    -fx-background-image: url("./bootstrapicons/gear-fill.svg");
+    -fx-background-image: url("./bootstrapicons/gear-fill.png");
     -fx-display: inline-block;
     -fx-content: "";
     -fx-background-repeat: no-repeat;
@@ -943,7 +945,7 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 .y-btn-logout {
-    -fx-background-image: url("./bootstrapicons/box-arrow-right.svg");
+    -fx-background-image: url("./bootstrapicons/box-arrow-right.png");
     -fx-display: inline-block;
     -fx-content: "";
     -fx-background-repeat: no-repeat;

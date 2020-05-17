@@ -5,7 +5,6 @@
  */
 package maggdaforestdefense;
 
-import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -108,7 +107,7 @@ public class MaggdaForestDefense extends Application {
      */
     public static void main(String[] args) {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
-        SvgImageLoaderFactory.install();
+        //SvgImageLoaderFactory.install();
         launch(args);
     }
 

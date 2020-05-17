@@ -109,6 +109,7 @@ public class SwingAuthWindow {
         PandomiumSettings settings = PandomiumSettings.getDefaultSettingsBuilder()
                 .argument("--disable-gpu")
                 .argument("--disable-software-rasterizer")
+                .argument("--user-agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0\"")
                 .build();
 
         pandomium = new Pandomium(settings);

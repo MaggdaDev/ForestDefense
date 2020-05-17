@@ -82,10 +82,11 @@ public class NetworkCommand {
     public static enum CommandType {
 
         //CLIENT TO SERVER
-        REQUIRE_CONNECTION,
-        START_GAME,
+        REQUIRE_CONNECTION,     // NO ARGS
+        START_GAME,             // NO ARGS
         // SERVER TO CLIENT
-        UPDATE_TEST,
-        PERMIT_CONNECTION;
+        UPDATE_TEST,            // x and y
+        PERMIT_CONNECTION,      // NO ARGS
+        SHOW_MAP;               // map
     }
 }

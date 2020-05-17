@@ -21,6 +21,8 @@ import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.Server;
 
 import java.util.Objects;
+import javafx.scene.image.Image;
+import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import org.panda_lang.pandomium.util.os.PandomiumOS;
 

@@ -16,7 +16,11 @@ import javafx.scene.image.Image;
  */
 public enum GameImage {
 
-    TEST("test/test.bmp");
+    // Map Cells
+    MAP_CELL_SAND("maggdaforestdefense/map_cells/sand.png"),
+    MAP_CELL_WATER("maggdaforestdefense/map_cells/water.png"),
+    MAP_CELL_STONE("maggdaforestdefense/map_cells/stone.png"),
+    MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png");
 
     private Image image;
 

@@ -68,6 +68,9 @@ public class ClientCommandHandler extends Thread {
             case UPDATE_TEST:
                 Game.getInstance().updateTestPosition(command.getNumArgument("x"), command.getNumArgument("y"));
                 break;
+            case SHOW_MAP:
+                
+                break;
         }
     }
 

@@ -32,5 +32,9 @@ public class Player {
         double y = Math.pow(Math.sin(testCounter), 5.0d)*400+500;
         commandHandler.sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_TEST, new CommandArgument[]{new CommandArgument("x", String.valueOf(x)), new CommandArgument("y", String.valueOf(y))}));
     }
+    
+    public void sendCommand(NetworkCommand command) {
+        commandHandler.sendCommand(command);
+    }
 
 }

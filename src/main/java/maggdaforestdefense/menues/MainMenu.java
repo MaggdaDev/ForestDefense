@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import maggdaforestdefense.MaggdaForestDefense;
+import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
@@ -54,7 +55,7 @@ public class MainMenu extends VBox {
     }
 
     @FXML private void settingsBtnOnClick(ActionEvent e) {
-        // TODO: Find a way to open the browser
+        AuthWindow.openBrowser(AuthWindow.SETTINGS_URL);
     }
 
     @FXML private void logoutBtnOnClick(ActionEvent e) {

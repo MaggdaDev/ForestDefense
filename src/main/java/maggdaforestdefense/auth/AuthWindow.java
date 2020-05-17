@@ -50,6 +50,11 @@ public class AuthWindow {
 
     private CookieManager cookieManager;
 
+    /**
+     * Creates an authentication window using {@link WebView}.
+     * @param afterwards What to execute after signin in.
+     * @author MinorTom
+     */
     public AuthWindow(Afterwards afterwards) {
         this.afterwards = afterwards;
 
@@ -95,14 +100,8 @@ public class AuthWindow {
             signinView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
                 int index = (newValue).indexOf("error=unauthorized_client");
                 if (index >= 0) {
-                    new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).show();
-                    cookieManager.getCookieStore().removeAll();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            signinView.getEngine().load(AUTH_URL);
-                        }
-                    });
+                    new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).showAndWait();
+                    cancel();
                 }
             });
 
@@ -118,6 +117,9 @@ public class AuthWindow {
         authStage.setScene(authScene);
     }
 
+    /**
+     * Shows the previously created window.
+     */
     public void show() {
         authStage.setResizable(false);
         //authStage.setAlwaysOnTop(true);
@@ -127,11 +129,17 @@ public class AuthWindow {
         authStage.show();
     }
 
+    /**
+     * Used to cancel the authentication (e.g. when the button "cancel" is pressed).
+     */
     private void cancel() {
         authStage.hide();
         System.exit(0);
     }
 
+    /**
+     * Used to sign the user in anonymously.
+     */
     private void anonSignIn() {
         Credentials defaultCredentials = new Credentials();
         defaultCredentials.userId = "Anonymous";
@@ -141,6 +149,10 @@ public class AuthWindow {
         signedIn(defaultCredentials);
     }
 
+    /**
+     * Used to validate a code got from signing the user in.
+     * @param code The code from authenticating the user, according to OAuth2.
+     */
     private void codeSignIn(String code) {
         Logger.debugClient("Code " + code);
         TokenRes token = getAccessToken(code);
@@ -153,13 +165,7 @@ public class AuthWindow {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    /*try {
-                        if (Desktop.isDesktopSupported()) {
-                            Desktop.getDesktop().browse(new URI(SETTINGS_URL));
-                        }
-                    } catch (IOException | URISyntaxException e) {
-                        e.printStackTrace();
-                    }*/
+                    openBrowser(SETTINGS_URL);
                     signinView.getEngine().load(AUTH_URL);
                 }
             });
@@ -174,6 +180,10 @@ public class AuthWindow {
         }
     }
 
+    /**
+     * Called by {@link AuthWindow#anonSignIn()} and {@link AuthWindow#codeSignIn(String)}.
+     * @param credentials The credentials used to continue.
+     */
     private void signedIn(Credentials credentials) {
         authStage.hide();
         Logger.logClient("Signed in with credentials " + new Gson().toJson(credentials));
@@ -185,10 +195,20 @@ public class AuthWindow {
         afterwards.run();
     }
 
+    /**
+     * Refreshes the token according to OAuth2 specifications.
+     * @param oldToken The old token.
+     * @return The new/refreshed token.
+     */
     public static String refreshToken(String oldToken) {
         return oldToken;
     }
 
+    /**
+     * Verify a token and get the user's details.
+     * @param token The OAuth2 token.
+     * @return The user details or {@code null};
+     */
     public static MWUser getUserFromToken(String token) {
         if(token.equals(ANON_TOKEN)) {
             return MWUser.anonymous();
@@ -218,6 +238,11 @@ public class AuthWindow {
         }
     }
 
+    /**
+     * Get a token from an OAuth2 code.
+     * @param code The code.
+     * @return The token or {@code null}.
+     */
     public static TokenRes getAccessToken(String code) {
         try {
             //URLConnection connection = new URL(TOKEN_URL + "?" + "grant_type=authorization_code&code="+code).openConnection();
@@ -246,8 +271,27 @@ public class AuthWindow {
             return null;
         }
     }
-    
+
+    /**
+     * Helper that chooses between {@link AuthWindow} and {@link SwingAuthWindow}.
+     * @param afterwards What to execute after signing in.
+     */
+    public static void authenticate(Afterwards afterwards) {
+        if(PandomiumOS.isWindows()&&(System.getProperty("java.version").startsWith("1."))) {
+            Logger.debugClient("Using pandemonium");
+            new SwingAuthWindow(afterwards).show();
+        } else {
+            Logger.debugClient("Using javafx.webview");
+            new AuthWindow(afterwards).show();
+        }
+    }
+
+    /**
+     * Helper that tries to open a browser.
+     * @param url The URL to open.
+     */
     public static void openBrowser(String url) {
+        Logger.logClient("Opening browser with URL: " + url);
         if (Desktop.isDesktopSupported()&&!PandomiumOS.isLinux()) {
             try {
                 Desktop.getDesktop().browse(new URI(SETTINGS_URL));

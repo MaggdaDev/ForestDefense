@@ -55,9 +55,19 @@ public class SwingAuthWindow {
     private PandomiumClient client;
     private PandomiumBrowser browser;
 
+    /**
+     * Creates an authentication window using {@link Pandomium} and Swing.
+     * @param afterwards What to execute when the user is signed in.
+     * @author MinorTom
+     * */
     public SwingAuthWindow(Afterwards afterwards) {
         this.afterwards = afterwards;
-        
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         frame = new JFrame("Sign in");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -99,6 +109,7 @@ public class SwingAuthWindow {
         PandomiumSettings settings = PandomiumSettings.getDefaultSettingsBuilder()
                 .argument("--disable-gpu")
                 .argument("--disable-software-rasterizer")
+                .argument("--user-agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0\"")
                 .build();
 
         pandomium = new Pandomium(settings);
@@ -120,8 +131,8 @@ public class SwingAuthWindow {
                         }
                         index = (message_text).indexOf("error=unauthorized_client");
                         if (index >= 0) {
-                            new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).show();
-                            anonSignIn();
+                            new Alert(Alert.AlertType.WARNING, "You did not authorize the access", ButtonType.OK).showAndWait();
+                            cancel();
                         }
 
                     }
@@ -228,15 +239,24 @@ public class SwingAuthWindow {
         frame.getContentPane().add(BorderLayout.CENTER, browser.toAWTComponent());
     }
 
+    /**
+     * Shows the previously created auth. window.
+     */
     public void show() {
         frame.setVisible(true);
     }
 
+    /**
+     * Used to cancel the authentication (e.g. when the button "cancel" is pressed).
+     */
     private void cancel() {
         frame.dispose();
         System.exit(0);
     }
 
+    /**
+     * Used to sign the user in anonymously.
+     */
     private void anonSignIn() {
         Credentials defaultCredentials = new Credentials();
         defaultCredentials.userId = "Anonymous";
@@ -246,10 +266,14 @@ public class SwingAuthWindow {
         signedIn(defaultCredentials);
     }
 
+    /**
+     * Used to validate a code got from signing the user in.
+     * @param code The code from authenticating the user, according to OAuth2.
+     */
     private void codeSignIn(String code) {
         Logger.debugClient("Code " + code);
-        TokenRes token = getAccessToken(code);
-        MWUser u = getUserFromToken(token.getAccess_token());
+        TokenRes token = AuthWindow.getAccessToken(code);
+        MWUser u = AuthWindow.getUserFromToken(token.getAccess_token());
         if(u==null) {
             new Alert(Alert.AlertType.ERROR, "Uh oh. Something went wrong.", ButtonType.OK).show();
         } else if (!u.isConfirmed_email()) {
@@ -269,6 +293,10 @@ public class SwingAuthWindow {
         } 
     }
 
+    /**
+     * Called by {@link SwingAuthWindow#anonSignIn()} and {@link SwingAuthWindow#codeSignIn(String)}.
+     * @param credentials The credentials used to continue.
+     */
     private void signedIn(Credentials credentials) {
         frame.dispose();
         Logger.logClient("Signed in with credentials " + new Gson().toJson(credentials));
@@ -278,17 +306,5 @@ public class SwingAuthWindow {
             new Alert(Alert.AlertType.WARNING, "Configuration could not be saved.", ButtonType.OK).showAndWait();
         }
         afterwards.run();
-    }
-
-    public String refreshToken(String oldToken) {
-        return AuthWindow.refreshToken(oldToken);
-    }
-
-    public MWUser getUserFromToken(String token) {
-        return AuthWindow.getUserFromToken(token);
-    }
-
-    public TokenRes getAccessToken(String code) {
-        return AuthWindow.getAccessToken(code);
     }
 }

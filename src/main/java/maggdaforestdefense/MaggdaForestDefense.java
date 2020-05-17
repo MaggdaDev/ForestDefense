@@ -14,6 +14,7 @@ import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.auth.SwingAuthWindow;
+import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
@@ -25,8 +26,8 @@ import maggdaforestdefense.storage.Logger;
 import org.panda_lang.pandomium.util.os.PandomiumOS;
 
 /**
- *
- * @author David
+ * Main class.
+ * @author David, MinorTom
  */
 public class MaggdaForestDefense extends Application {    
     //Main
@@ -45,32 +46,29 @@ public class MaggdaForestDefense extends Application {
     // Game
     private Game game;
 
+    /**
+     * Starts the program/GUI
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         instance = this;
-        if(ConfigurationManager.getConfig().auth.signedIn) {
+        if(ConfigurationManager.getConfig().getAuth().isSignedIn() && ConfigurationManager.getConfig().getAuth().refresh()) {
             mainApp(primaryStage);
         } else {
-            if(PandomiumOS.isWindows()&&(System.getProperty("java.version").startsWith("1."))) {
-                Logger.logClient("Using pandemonium");
-                new SwingAuthWindow(new Afterwards() {
-                    @Override
-                    public void run() {
-                        mainApp(primaryStage);
-                    }
-                }).show();
-            } else {
-                Logger.logClient("Using javafx.webview");
-                new AuthWindow(new Afterwards() {
-                    @Override
-                    public void run() {
-                        mainApp(primaryStage);
-                    }
-                }).show();
-            }
+            AuthWindow.authenticate(new Afterwards() {
+                @Override
+                public void run() {
+                    mainApp(primaryStage);
+                }
+            });
         }
     }
 
+    /**
+     * Opens the main window
+     * @param primaryStage
+     */
     public void mainApp(Stage primaryStage) {
         try {
             Server server = new Server();

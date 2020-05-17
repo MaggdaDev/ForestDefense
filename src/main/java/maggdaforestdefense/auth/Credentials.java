@@ -7,6 +7,17 @@ public class Credentials {
     public String authToken = "";
     MWUser mwUser;
 
+    /**
+     * Refreshes the user details.
+     * @return Whether or not the refresh was successful.
+     */
+    public boolean refresh() {
+        setAuthToken(AuthWindow.refreshToken(getAuthToken()));
+        setMwUser(AuthWindow.getUserFromToken(getAuthToken()));
+        setSignedIn(!(getMwUser()==null));
+        return isSignedIn();
+    }
+
     public boolean isSignedIn() {
         return signedIn;
     }

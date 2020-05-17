@@ -45,7 +45,7 @@ public class AuthWindow {
     private Button cancelBtn;
     private Button anonBtn;
 
-    private CookieManager cookieManager = new java.net.CookieManager();
+    private CookieManager cookieManager;
 
     public AuthWindow(Afterwards afterwards) {
         this.afterwards = afterwards;

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.AuthWindow;
+import maggdaforestdefense.auth.SwingAuthWindow;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
@@ -48,7 +49,7 @@ public class MaggdaForestDefense extends Application {
         if(ConfigurationManager.getConfig().auth.signedIn) {
             mainApp(primaryStage);
         } else {
-            new AuthWindow(new Afterwards() {
+            new SwingAuthWindow(new Afterwards() {
                 @Override
                 public void run() {
                     mainApp(primaryStage);

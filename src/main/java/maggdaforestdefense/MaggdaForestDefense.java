@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.AuthWindow;
+import maggdaforestdefense.auth.SwingAuthWindow;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
@@ -20,6 +21,8 @@ import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.Server;
 
 import java.util.Objects;
+import maggdaforestdefense.storage.Logger;
+import org.panda_lang.pandomium.util.os.PandomiumOS;
 
 /**
  *
@@ -48,12 +51,23 @@ public class MaggdaForestDefense extends Application {
         if(ConfigurationManager.getConfig().auth.signedIn) {
             mainApp(primaryStage);
         } else {
-            new AuthWindow(new Afterwards() {
-                @Override
-                public void run() {
-                    mainApp(primaryStage);
-                }
-            }).show();
+            if(PandomiumOS.isWindows()&&(System.getProperty("java.version").startsWith("1."))) {
+                Logger.logClient("Using pandemonium");
+                new SwingAuthWindow(new Afterwards() {
+                    @Override
+                    public void run() {
+                        mainApp(primaryStage);
+                    }
+                }).show();
+            } else {
+                Logger.logClient("Using javafx.webview");
+                new AuthWindow(new Afterwards() {
+                    @Override
+                    public void run() {
+                        mainApp(primaryStage);
+                    }
+                }).show();
+            }
         }
     }
 
@@ -107,6 +121,8 @@ public class MaggdaForestDefense extends Application {
      */
     public static void main(String[] args) {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
+        //System.setProperty("java.library.path", "natives");
+        Logger.logClient("Java version: " + System.getProperty("java.version"));
         //SvgImageLoaderFactory.install();
         launch(args);
     }

@@ -1,6 +1,7 @@
 package maggdaforestdefense.auth;
 
 import com.google.gson.Gson;
+import java.awt.Desktop;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
@@ -24,6 +25,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Random;
+import java.util.logging.Level;
+import org.panda_lang.pandomium.util.os.PandomiumOS;
 
 public class AuthWindow {
     public static final String CLIENT_ID = "e6f0fa1029e8d2e52628db80c399b928";
@@ -45,7 +48,7 @@ public class AuthWindow {
     private Button cancelBtn;
     private Button anonBtn;
 
-    private CookieManager cookieManager = new java.net.CookieManager();
+    private CookieManager cookieManager;
 
     public AuthWindow(Afterwards afterwards) {
         this.afterwards = afterwards;
@@ -182,11 +185,11 @@ public class AuthWindow {
         afterwards.run();
     }
 
-    public String refreshToken(String oldToken) {
+    public static String refreshToken(String oldToken) {
         return oldToken;
     }
 
-    public MWUser getUserFromToken(String token) {
+    public static MWUser getUserFromToken(String token) {
         if(token.equals(ANON_TOKEN)) {
             return MWUser.anonymous();
         } else {
@@ -215,7 +218,7 @@ public class AuthWindow {
         }
     }
 
-    public TokenRes getAccessToken(String code) {
+    public static TokenRes getAccessToken(String code) {
         try {
             //URLConnection connection = new URL(TOKEN_URL + "?" + "grant_type=authorization_code&code="+code).openConnection();
             URLConnection connection = new URL(TOKEN_URL).openConnection();
@@ -241,6 +244,18 @@ public class AuthWindow {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    
+    public static void openBrowser(String url) {
+        if (Desktop.isDesktopSupported()&&!PandomiumOS.isLinux()) {
+            try {
+                Desktop.getDesktop().browse(new URI(SETTINGS_URL));
+            } catch (URISyntaxException ex) {
+                
+            } catch (IOException ex) {
+                
+            }
         }
     }
 }

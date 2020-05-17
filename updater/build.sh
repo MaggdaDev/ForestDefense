@@ -34,7 +34,7 @@ echo "# Deploying update via git"
 # shellcheck disable=SC2164
 rm -r ../../web/updater/ForestDefense
 cp -r ForestDefense ../../web/updater/ForestDefense
-(cd ../../web && git add -A && git commit -m "autocommit"&& git push)
+(cd ../../web && git add -A && git commit -m "Eine neue Version ist Verfügbar!"&& git push)
 
 echo "# Cleaning up"
 rm -r tmp/

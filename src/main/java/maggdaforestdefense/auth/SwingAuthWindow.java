@@ -85,7 +85,12 @@ public class SwingAuthWindow {
         anonBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                cancel();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        anonSignIn();
+                    }
+                });
             }
         });
         btnPanel.add(anonBtn);

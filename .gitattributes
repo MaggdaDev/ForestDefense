@@ -1,0 +1,2 @@
+updater/ForestDefense/natives.jar filter=lfs diff=lfs merge=lfs -text
+updater/ForestDefense/resources.jar filter=lfs diff=lfs merge=lfs -text

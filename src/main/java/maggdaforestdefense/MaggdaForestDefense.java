@@ -37,6 +37,7 @@ public class MaggdaForestDefense extends Application {
     private MenuManager menueManager;
     private StackPane root;
     private Scene scene;
+    private Stage primStage;
 
     //Networks
     private NetworkManager networkManager;
@@ -51,6 +52,7 @@ public class MaggdaForestDefense extends Application {
     @Override
     public void start(Stage primaryStage) {
         instance = this;
+        primStage = primaryStage;
         if(ConfigurationManager.getConfig().getAuth().isSignedIn() && ConfigurationManager.getConfig().getAuth().refresh()) {
             mainApp(primaryStage);
         } else {
@@ -93,7 +95,7 @@ public class MaggdaForestDefense extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(500);
+        primaryStage.setMinHeight(1000);
         primaryStage.show();
         // Main
 
@@ -126,6 +128,14 @@ public class MaggdaForestDefense extends Application {
     
     public Scene getScene() {
         return scene;
+    }
+    
+    public static double getWindowWidth() {
+        return instance.primStage.getWidth();
+    }
+    
+    public static double getWindowHeight() {
+        return instance.primStage.getHeight();
     }
 
 }

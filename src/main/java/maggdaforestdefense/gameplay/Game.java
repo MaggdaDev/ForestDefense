@@ -5,19 +5,15 @@
  */
 package maggdaforestdefense.gameplay;
 
-import java.util.EventListener;
-import java.util.Vector;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
+
+import java.util.Vector;
 
 /**
  *

@@ -6,7 +6,6 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.shape.Circle;
 import maggdaforestdefense.network.client.NetworkManager;
 
 /**

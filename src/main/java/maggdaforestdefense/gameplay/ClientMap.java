@@ -6,7 +6,6 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
-import maggdaforestdefense.network.server.serverGameplay.Map;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**

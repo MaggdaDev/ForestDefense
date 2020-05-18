@@ -7,12 +7,8 @@ package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
-import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.KeyEventHandler;
 
 /**

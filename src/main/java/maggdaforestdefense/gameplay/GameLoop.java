@@ -23,11 +23,9 @@ public class GameLoop extends AnimationTimer{
     @Override
     public void handle(long now) {
         NetworkManager.getInstance().update();
-        
+        Game.getInstance().updateMapFocus();
     }
     
-    public void updateCircle(double x, double y) {
-        
-    }
+   
     
 }

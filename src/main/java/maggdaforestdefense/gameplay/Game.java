@@ -5,12 +5,19 @@
  */
 package maggdaforestdefense.gameplay;
 
+import java.util.EventListener;
+import java.util.Vector;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.util.KeyEventHandler;
 
 /**
  *
@@ -23,11 +30,14 @@ public class Game {
     private GameScreen gameScreen;
     private static Game instance;
     
+    private Vector<KeyEventHandler> keyEventHandlers;
     public Game() {
         instance = this;
         isInGame = false;
+        keyEventHandlers = new Vector();
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
+        
     }
     
     public void startGame() {
@@ -36,15 +46,39 @@ public class Game {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
+        
+        // Key Events
+        /*
+        gameScreen.setOnKeyPressed((KeyEvent event)->{
+            handleKeyEvent(event.getCode());
+        });
+*/
     }
     
+    // General
+    private void handleKeyEvent(KeyCode keyCode) {
+        for(KeyEventHandler handler: keyEventHandlers) {
+            if(handler.getKeyCode().equals(keyCode)) {
+                handler.handle();
+            }
+        }
+    }
+    
+    public void addKeyListener(KeyEventHandler handler) {
+        keyEventHandlers.add(handler);
+    }
+    
+    
+    // Map stuff
     public void generateMap(MapCell[][] mapCellArray) {
         gameScreen.generateMap(mapCellArray);
     }
     
-    public void updateTestPosition(double x, double y) {
-        gameLoop.updateCircle(x,y);
+    public void updateMapFocus() {
+        gameScreen.updateFocus();
     }
+    
+    
     
     public GameScreen getGameScreen() {
         return gameScreen;

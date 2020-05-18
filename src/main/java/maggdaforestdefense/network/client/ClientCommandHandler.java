@@ -67,7 +67,7 @@ public class ClientCommandHandler extends Thread {
                 NetworkManager.getInstance().notifyForAnswer();
                 break;
             case UPDATE_TEST:
-                Game.getInstance().updateTestPosition(command.getNumArgument("x"), command.getNumArgument("y"));
+                
                 break;
             case SHOW_MAP:
                 Map map = Map.generateMap(command.getArgument("map"));

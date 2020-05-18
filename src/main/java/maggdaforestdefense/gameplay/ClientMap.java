@@ -17,6 +17,7 @@ public class ClientMap extends Group{
     
     
     public ClientMap(MapCell[][] mapCellArray) {
+        setManaged(false);
         
         for(int x = 0; x < mapCellArray.length; x++) {
             MapCell[] yArray = mapCellArray[x];

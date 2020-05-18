@@ -10,7 +10,7 @@ package maggdaforestdefense.network.server.serverGameplay;
  * @author DavidPrivat
  */
 public class Map {
-    public final static int MAP_SIZE = 15;
+    public final static int MAP_SIZE = 25;
     
     private MapCell[][] cellArray;          //MapCell[x][y]
     

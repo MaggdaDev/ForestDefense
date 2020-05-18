@@ -8,9 +8,11 @@ package maggdaforestdefense.gameplay;
 import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.KeyEventHandler;
 
 /**
@@ -21,26 +23,51 @@ public class GameScreen extends Group{
     
     private ClientMap map;
     private Group gamePlayGroup;
+    
+    private double scrolling = 1;
     public GameScreen() {
         gamePlayGroup = new Group();
         gamePlayGroup.setManaged(false);
         getChildren().add(gamePlayGroup);
         setManaged(false);
         
-        /*
+        
         // Focus controll
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.RIGHT) {
             @Override
             public void handle() {
-                gamePlayGroup.setScaleX(gamePlayGroup.getScaleX()+1);
+                gamePlayGroup.setLayoutX(gamePlayGroup.getLayoutX()-5);
             }
         });
-*/
+        Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.LEFT) {
+            @Override
+            public void handle() {
+                gamePlayGroup.setLayoutX(gamePlayGroup.getLayoutX()+5);
+            }
+        });
+        Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.UP) {
+            @Override
+            public void handle() {
+                gamePlayGroup.setLayoutY(gamePlayGroup.getLayoutY()+5);
+            }
+        });
+        Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.DOWN) {
+            @Override
+            public void handle() {
+                gamePlayGroup.setLayoutY(gamePlayGroup.getLayoutY()-5);
+            }
+        });
+        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnScroll((ScrollEvent e)->{
+            scrolling += e.getDeltaY();
+
+
+            gamePlayGroup.setScaleX(Math.pow(1.001, scrolling));
+            gamePlayGroup.setScaleY(Math.pow(1.001, scrolling));
+        });
+
       
         
-        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent e)->{
-            gamePlayGroup.setScaleX(gamePlayGroup.getScaleX()+1);
-        });
+       
     }
     
     public void generateMap(MapCell[][] mapCellArray) {

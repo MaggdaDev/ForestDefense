@@ -48,11 +48,11 @@ public class Game {
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
         
         // Key Events
-        /*
-        gameScreen.setOnKeyPressed((KeyEvent event)->{
+        
+        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event)->{
             handleKeyEvent(event.getCode());
         });
-*/
+
     }
     
     // General

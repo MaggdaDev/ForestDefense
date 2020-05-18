@@ -8,14 +8,21 @@ package maggdaforestdefense.gameplay;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
  *
  * @author David
  */
 public class GameScreen extends Group{
-    public GameScreen(Circle gameCircle) {
+    
+    private ClientMap map;
+    public GameScreen() {
         setManaged(false);
-        getChildren().add(gameCircle);
+    }
+    
+    public void generateMap(MapCell[][] mapCellArray) {
+        map = new ClientMap(mapCellArray);
+        getChildren().add(map);
     }
 }

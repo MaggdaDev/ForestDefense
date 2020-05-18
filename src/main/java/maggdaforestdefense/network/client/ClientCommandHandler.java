@@ -11,6 +11,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.Map;
 import maggdaforestdefense.storage.Logger;
 import sun.rmi.runtime.Log;
 
@@ -69,7 +70,8 @@ public class ClientCommandHandler extends Thread {
                 Game.getInstance().updateTestPosition(command.getNumArgument("x"), command.getNumArgument("y"));
                 break;
             case SHOW_MAP:
-                
+                Map map = Map.generateMap(command.getArgument("map"));
+                Game.getInstance().generateMap(map.getCells());
                 break;
         }
     }

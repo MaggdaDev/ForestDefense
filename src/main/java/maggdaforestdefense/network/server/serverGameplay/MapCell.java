@@ -23,6 +23,8 @@ public class MapCell extends ImageView{
         cellType = type;
         image = cellType.getImage();
         setImage(image);
+        setFitWidth(CELL_SIZE);
+        setFitHeight(CELL_SIZE);
 
     }
     

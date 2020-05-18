@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
  *
@@ -22,13 +23,11 @@ public class Game {
     private GameScreen gameScreen;
     private static Game instance;
     
-    private Circle testCircle;
     public Game() {
         instance = this;
         isInGame = false;
-        testCircle = new Circle(100, Color.RED);
-        gameLoop = new GameLoop(testCircle);
-        gameScreen = new GameScreen(testCircle);
+        gameLoop = new GameLoop();
+        gameScreen = new GameScreen();
     }
     
     public void startGame() {
@@ -37,6 +36,10 @@ public class Game {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
+    }
+    
+    public void generateMap(MapCell[][] mapCellArray) {
+        gameScreen.generateMap(mapCellArray);
     }
     
     public void updateTestPosition(double x, double y) {

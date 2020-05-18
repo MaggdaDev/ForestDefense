@@ -15,9 +15,9 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class GameLoop extends AnimationTimer{
-    private Circle circle;
-    public GameLoop(Circle testCircle) {
-        circle = testCircle;
+
+    public GameLoop() {
+
     }
 
     @Override
@@ -27,8 +27,7 @@ public class GameLoop extends AnimationTimer{
     }
     
     public void updateCircle(double x, double y) {
-        circle.setLayoutX(x);
-        circle.setLayoutY(y);
+        
     }
     
 }

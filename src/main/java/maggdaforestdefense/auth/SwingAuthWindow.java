@@ -1,6 +1,16 @@
 package maggdaforestdefense.auth;
 
 import com.google.gson.Gson;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import maggdaforestdefense.config.Configuration;
+import maggdaforestdefense.config.ConfigurationManager;
+import maggdaforestdefense.storage.Logger;
+import org.cef.browser.CefBrowser;
+import org.cef.callback.CefJSDialogCallback;
+import org.cef.handler.CefJSDialogHandler;
+import org.cef.misc.BoolRef;
 import org.panda_lang.pandomium.Pandomium;
 import org.panda_lang.pandomium.settings.PandomiumSettings;
 import org.panda_lang.pandomium.wrapper.PandomiumBrowser;
@@ -12,37 +22,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+
 import static maggdaforestdefense.auth.AuthWindow.ANON_TOKEN;
-import static maggdaforestdefense.auth.AuthWindow.AUTH_URL;
-import static maggdaforestdefense.auth.AuthWindow.CLIENT_ID;
-import static maggdaforestdefense.auth.AuthWindow.PROFILE_URL;
-import static maggdaforestdefense.auth.AuthWindow.REDIR_URL;
-import static maggdaforestdefense.auth.AuthWindow.TOKEN_URL;
-import maggdaforestdefense.config.Configuration;
-import maggdaforestdefense.config.ConfigurationManager;
-import maggdaforestdefense.storage.Logger;
-import org.cef.browser.CefBrowser;
-import org.cef.callback.CefJSDialogCallback;
-import org.cef.handler.CefJSDialogHandler;
-import org.cef.handler.CefRequestHandler;
-import org.cef.handler.CefResourceHandler;
-import org.cef.misc.BoolRef;
 
 public class SwingAuthWindow {
     private Afterwards afterwards;

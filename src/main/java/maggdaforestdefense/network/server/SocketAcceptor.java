@@ -5,11 +5,11 @@
  */
 package maggdaforestdefense.network.server;
 
-import maggdaforestdefense.network.server.Server;
+import maggdaforestdefense.storage.Logger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import maggdaforestdefense.storage.Logger;
 
 /**
  *

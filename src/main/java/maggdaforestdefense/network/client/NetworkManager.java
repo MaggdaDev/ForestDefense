@@ -5,9 +5,7 @@
  */
 package maggdaforestdefense.network.client;
 
-import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
-import maggdaforestdefense.storage.Logger;
 
 /**
  *

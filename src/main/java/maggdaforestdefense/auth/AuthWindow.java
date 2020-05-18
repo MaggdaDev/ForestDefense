@@ -1,7 +1,6 @@
 package maggdaforestdefense.auth;
 
 import com.google.gson.Gson;
-import java.awt.Desktop;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
@@ -18,15 +17,15 @@ import javafx.stage.WindowEvent;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.storage.Logger;
+import org.panda_lang.pandomium.util.os.PandomiumOS;
 
+import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Random;
-import java.util.logging.Level;
-import org.panda_lang.pandomium.util.os.PandomiumOS;
 
 public class AuthWindow {
     public static final String CLIENT_ID = "e6f0fa1029e8d2e52628db80c399b928";

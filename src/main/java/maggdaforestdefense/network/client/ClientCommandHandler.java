@@ -5,14 +5,13 @@
  */
 package maggdaforestdefense.network.client;
 
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.network.NetworkCommand;
+
 import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import maggdaforestdefense.gameplay.Game;
-import maggdaforestdefense.network.NetworkCommand;
-import maggdaforestdefense.storage.Logger;
-import sun.rmi.runtime.Log;
 
 /**
  *

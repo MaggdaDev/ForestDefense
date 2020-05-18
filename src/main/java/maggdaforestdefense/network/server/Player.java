@@ -7,7 +7,6 @@ package maggdaforestdefense.network.server;
 
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
-import maggdaforestdefense.storage.Logger;
 
 /**
  *

@@ -13,19 +13,14 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.AuthWindow;
-import maggdaforestdefense.auth.SwingAuthWindow;
-import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.Server;
+import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
-import javafx.scene.image.Image;
-import maggdaforestdefense.storage.GameImage;
-import maggdaforestdefense.storage.Logger;
-import org.panda_lang.pandomium.util.os.PandomiumOS;
 
 /**
  * Main class.

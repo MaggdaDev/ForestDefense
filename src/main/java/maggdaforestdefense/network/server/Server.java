@@ -5,14 +5,12 @@
  */
 package maggdaforestdefense.network.server;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  *

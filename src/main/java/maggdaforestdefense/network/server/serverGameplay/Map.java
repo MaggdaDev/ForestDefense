@@ -10,12 +10,12 @@ package maggdaforestdefense.network.server.serverGameplay;
  * @author DavidPrivat
  */
 public class Map {
-    public final static int MAP_SIZE = 15;
+    public final static int MAP_SIZE = 25;
     
     private MapCell[][] cellArray;          //MapCell[x][y]
     
     //Separators
-    public final static String COLLUMN_SEPARATOR = "|", CELL_SEPARATOR = ",";
+    public final static String COLLUMN_SEPARATOR = "-", CELL_SEPARATOR = ",";
     
     private Map() {
         cellArray = new MapCell[MAP_SIZE][MAP_SIZE];
@@ -72,6 +72,10 @@ public class Map {
             retString += COLLUMN_SEPARATOR;
         }
         return retString;
+    }
+    
+    public MapCell[][] getCells() {
+        return cellArray;
     }
     
     

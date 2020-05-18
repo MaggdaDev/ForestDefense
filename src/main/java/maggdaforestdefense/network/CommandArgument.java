@@ -28,17 +28,8 @@ public class CommandArgument {
     }
 
     public boolean isValid(String s) {
-        char[] charArr = s.toLowerCase().toCharArray();
-        for (char currChar : charArr) {
-            if (currChar < 'a' || 'z' < currChar) {
-                if (currChar != '.') {
-                    try {
-                        Double.parseDouble(new String(new char[]{currChar}));
-                    } catch (NumberFormatException e) {
-                        return false;
-                    }
-                }
-            }
+        if((s.contains(SEPARATOR) || (s.contains(NetworkCommand.SEPARATOR_1)))) {
+            return false;
         }
         return true;
     }

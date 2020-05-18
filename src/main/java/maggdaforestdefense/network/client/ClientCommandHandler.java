@@ -5,13 +5,15 @@
  */
 package maggdaforestdefense.network.client;
 
-import maggdaforestdefense.gameplay.Game;
-import maggdaforestdefense.network.NetworkCommand;
-
 import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.Map;
+import maggdaforestdefense.storage.Logger;
+import sun.rmi.runtime.Log;
 
 /**
  *
@@ -65,10 +67,11 @@ public class ClientCommandHandler extends Thread {
                 NetworkManager.getInstance().notifyForAnswer();
                 break;
             case UPDATE_TEST:
-                Game.getInstance().updateTestPosition(command.getNumArgument("x"), command.getNumArgument("y"));
+                
                 break;
             case SHOW_MAP:
-                
+                Map map = Map.generateMap(command.getArgument("map"));
+                Game.getInstance().generateMap(map.getCells());
                 break;
         }
     }

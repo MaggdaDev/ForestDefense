@@ -14,20 +14,17 @@ import maggdaforestdefense.network.client.NetworkManager;
  * @author David
  */
 public class GameLoop extends AnimationTimer{
-    private Circle circle;
-    public GameLoop(Circle testCircle) {
-        circle = testCircle;
+
+    public GameLoop() {
+
     }
 
     @Override
     public void handle(long now) {
         NetworkManager.getInstance().update();
-        
+        Game.getInstance().updateMapFocus();
     }
     
-    public void updateCircle(double x, double y) {
-        circle.setLayoutX(x);
-        circle.setLayoutY(y);
-    }
+   
     
 }

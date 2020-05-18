@@ -18,7 +18,7 @@ public class NetworkCommand {
             START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS);
 
     //CONSTANTS
-    private final static String KEYWORD = "__", SEPARATOR_1 = ";";
+    public final static String KEYWORD = "__", SEPARATOR_1 = ";";
 
     private CommandType commandType;
     private CommandArgument[] commandArguments;

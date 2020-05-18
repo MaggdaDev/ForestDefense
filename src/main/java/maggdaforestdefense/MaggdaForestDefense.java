@@ -36,6 +36,7 @@ public class MaggdaForestDefense extends Application {
     //Graphics
     private MenuManager menueManager;
     private StackPane root;
+    private Scene scene;
 
     //Networks
     private NetworkManager networkManager;
@@ -82,7 +83,8 @@ public class MaggdaForestDefense extends Application {
 
         root = new StackPane();
 
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
+        
 
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("maggdaforestdefense/styles/styles.css")).toExternalForm());
 
@@ -120,6 +122,10 @@ public class MaggdaForestDefense extends Application {
         Logger.logClient("Java version: " + System.getProperty("java.version"));
         //SvgImageLoaderFactory.install();
         launch(args);
+    }
+    
+    public Scene getScene() {
+        return scene;
     }
 
 }

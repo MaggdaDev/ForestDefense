@@ -13,10 +13,13 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  * @author DavidPrivat
  */
 public class ClientMap extends Group{
+    private double width, height;
     
     
     public ClientMap(MapCell[][] mapCellArray) {
         setManaged(false);
+        width = mapCellArray.length * MapCell.CELL_SIZE;
+        height = mapCellArray[0].length * MapCell.CELL_SIZE;
         
         for(int x = 0; x < mapCellArray.length; x++) {
             MapCell[] yArray = mapCellArray[x];
@@ -27,6 +30,14 @@ public class ClientMap extends Group{
                 getChildren().add(currentCell);
             }
         }
+    }
+    
+    public double getHeight() {
+        return height;
+    }
+    
+    public double getWidth() {
+        return width;
     }
    
 }

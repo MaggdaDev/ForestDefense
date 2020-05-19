@@ -20,10 +20,8 @@ public class GameScreen extends Group {
     private ClientMap map;
     private Group gamePlayGroup;
 
-    private double scrolling = 1;
+    private double scrolling = 1, mapXInset = 0, mapYInset = 0;
 
-    // DAAN
-    private double scrollX = 0, scrollY = 0;
 
     public GameScreen() {
         gamePlayGroup = new Group();
@@ -35,47 +33,52 @@ public class GameScreen extends Group {
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.RIGHT) {
             @Override
             public void handle() {
-                gamePlayGroup.setLayoutX(gamePlayGroup.getLayoutX()-5);
-                scrollX += 5;
-                //refreshGameplayGroupPosition();
+                mapXInset += 5;
+                refreshGameplayGroupPosition();
             }
         });
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.LEFT) {
             @Override
             public void handle() {
-                gamePlayGroup.setLayoutX(gamePlayGroup.getLayoutX()+5);
-                scrollX -= 5;
-                //refreshGameplayGroupPosition();
+                
+                mapXInset -= 5;
+                refreshGameplayGroupPosition();
 
             }
         });
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.UP) {
             @Override
             public void handle() {
-                gamePlayGroup.setLayoutY(gamePlayGroup.getLayoutY()+5);
-                scrollY += 5;
-                //refreshGameplayGroupPosition();
+                mapYInset += 5;
+                refreshGameplayGroupPosition();
             }
         });
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.DOWN) {
             @Override
             public void handle() {
-                gamePlayGroup.setLayoutY(gamePlayGroup.getLayoutY()-5);
-                scrollY -= 5;
-                //refreshGameplayGroupPosition();
+                mapYInset -= 5;
+                refreshGameplayGroupPosition();
             }
         });
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnScroll((ScrollEvent e) -> {
-            double centerX = getGameplayGroupCenterX(Math.pow(1.001, scrolling));
-            double centerY = getGameplayGroupCenterY(Math.pow(1.001, scrolling));
+            double oldCenterX = getCenterX(mapXInset,Math.pow(1.001, scrolling));
+            double oldCenterY = getCenterY(mapYInset,Math.pow(1.001, scrolling));
             scrolling += e.getDeltaY();
+            double newScale = Math.pow(1.001, scrolling);
             
             
 
-            gamePlayGroup.setScaleX(Math.pow(1.001, scrolling));
-            gamePlayGroup.setScaleY(Math.pow(1.001, scrolling));
+            gamePlayGroup.setScaleX(newScale);
+            gamePlayGroup.setScaleY(newScale);
 
-            setGameplayGroupMid(centerX, centerY, Math.pow(1.001, scrolling));
+            double newCenterX = getCenterX(mapXInset,newScale);
+            double newCenterY = getCenterY(mapYInset,newScale);
+            
+            mapXInset -= (newCenterX-oldCenterX)*newScale;
+            mapYInset -= (newCenterY-oldCenterY)*newScale;
+            
+            refreshGameplayGroupPosition();
+            
             //scrollX *= 0.9;
             //scrollY *= 0.9;
 
@@ -89,24 +92,18 @@ public class GameScreen extends Group {
 
     }
     
-    private void setGameplayGroupMid(double centerX, double centerY, double scale) {
-        double x = -(centerX - maggdaforestdefense.MaggdaForestDefense.getWindowWidth()*0.5*scale);
-        double y = -(centerY - maggdaforestdefense.MaggdaForestDefense.getWindowHeight()*0.5*scale);
-        gamePlayGroup.setLayoutX(x);
-        gamePlayGroup.setLayoutY(y);
+    private double getCenterX(double xInset, double scale) {
+        return xInset/scale + 0.5*maggdaforestdefense.MaggdaForestDefense.getWindowWidth()/scale;
     }
     
-    private double getGameplayGroupCenterX(double scale) {
-        return maggdaforestdefense.MaggdaForestDefense.getWindowWidth()/(2*scale) - gamePlayGroup.getLayoutX();
+    private double getCenterY(double yInset, double scale) {
+        return yInset/scale + 0.5*maggdaforestdefense.MaggdaForestDefense.getWindowHeight()/scale;
     }
     
-    private double getGameplayGroupCenterY(double scale) {
-        return maggdaforestdefense.MaggdaForestDefense.getWindowHeight()/(2*scale) - gamePlayGroup.getLayoutY();
-    }
 
     private void refreshGameplayGroupPosition() {
-        gamePlayGroup.setLayoutX(scrollX);
-        gamePlayGroup.setLayoutY(scrollY);
+        gamePlayGroup.setLayoutX(mapXInset);
+        gamePlayGroup.setLayoutY(mapYInset);
     }
 
     public void generateMap(MapCell[][] mapCellArray) {

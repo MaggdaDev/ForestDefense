@@ -6,6 +6,9 @@
 package maggdaforestdefense.network.server.serverGameplay;
 
 import java.util.Vector;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
 import maggdaforestdefense.util.RandomEvent;
 import maggdaforestdefense.util.Randomizer;
 
@@ -24,6 +27,16 @@ public class Map {
 
     private Map() {
         cellArray = new MapCell[MAP_SIZE][MAP_SIZE];
+    }
+    
+    public PathCell[][] toPathCellMap() {
+        PathCell[][] retMap = new PathCell[cellArray.length][cellArray[0].length];
+        for(int x = 0; x < cellArray.length; x++) {
+            for(int y = 0; y < cellArray[x].length; y++) {
+                retMap[x][y] = cellArray[x][y].getPathCell();
+            }
+        }
+        return retMap;
     }
 
     public static Map generateMap() {
@@ -45,6 +58,11 @@ public class Map {
         int midY = (int) (returnMap.cellArray[0].length/2);
         returnMap.cellArray[midX][midY].setCellType(MapCell.CellType.BASE);
         returnMap.cellArray[midX][midY].generate();
+        
+        
+        /// TEST
+        PathFinder testPathFinder = new PathFinder(returnMap.cellArray[0][0].getPathCell(), returnMap.cellArray[midX][midY].getPathCell(), returnMap.toPathCellMap());
+        Path path = testPathFinder.findPath();
 
         return returnMap;
     }

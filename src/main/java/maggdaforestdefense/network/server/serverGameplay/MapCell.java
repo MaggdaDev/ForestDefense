@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.util.RandomEvent;
 import maggdaforestdefense.util.Randomizer;
@@ -28,11 +29,15 @@ public class MapCell extends ImageView {
     private Map map;
     private boolean generated = false;
 
+    // Pathfindin
+    private PathCell pathCell;
+
     public MapCell(Map map, int x, int y) {
 
         this.map = map;
         xIndex = x;
         yIndex = y;
+        pathCell = new PathCell(xIndex, yIndex, CELL_SIZE, CELL_SIZE);
 
         setFitWidth(CELL_SIZE);
         setFitHeight(CELL_SIZE);
@@ -42,11 +47,11 @@ public class MapCell extends ImageView {
     }
 
     public MapCell(CellType type, Map map, int x, int y) {
-
         setCellType(type);
         this.map = map;
         xIndex = x;
         yIndex = y;
+        pathCell = new PathCell(xIndex, yIndex, CELL_SIZE, CELL_SIZE);
 
         setFitWidth(CELL_SIZE);
         setFitHeight(CELL_SIZE);
@@ -95,9 +100,8 @@ public class MapCell extends ImageView {
 
                     }
                 }
-                 setUpCellTypeFromNumber(rand.throwDice());
+                setUpCellTypeFromNumber(rand.throwDice());
             }
-           
 
             for (MapCell currNeighbour : neighbours) {
                 if (currNeighbour != null) {
@@ -124,6 +128,7 @@ public class MapCell extends ImageView {
     }
 
     public void setUpNeightbours() {
+
         if (0 < xIndex) {
             leftNeighbour = map.getCells()[xIndex - 1][yIndex];
         }
@@ -137,6 +142,15 @@ public class MapCell extends ImageView {
             botNeighbour = map.getCells()[xIndex][yIndex + 1];
         }
         neighbours = new MapCell[]{leftNeighbour, topNeighbour, rightNeighbour, botNeighbour};
+
+        // pathfinding
+        PathCell[] pathCellNeighbours = new PathCell[4];
+        for (int i = 0; i < neighbours.length; i++) {
+            if (neighbours[i] != null) {
+                pathCellNeighbours[i] = neighbours[i].getPathCell();
+            }
+        }
+        pathCell.setNeighbours(pathCellNeighbours);
     }
 
     public int getXIndex() {
@@ -145,6 +159,10 @@ public class MapCell extends ImageView {
 
     public int getYIndex() {
         return yIndex;
+    }
+
+    public PathCell getPathCell() {
+        return pathCell;
     }
 
     public static enum CellType {

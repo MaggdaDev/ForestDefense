@@ -20,6 +20,7 @@ public enum GameImage {
     MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png");
 
     private Image image;
+    
 
     GameImage(String path) {
         try {

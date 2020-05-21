@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.util.Vector;
 import maggdaforestdefense.util.RandomEvent;
 import maggdaforestdefense.util.Randomizer;
 
@@ -27,46 +28,23 @@ public class Map {
 
     public static Map generateMap() {
         Map returnMap = new Map();
-        boolean finished = false;
 
-        while (!finished) {
-            for (int x = 0; x < returnMap.cellArray.length; x++) {
-                for (int y = 0; y < returnMap.cellArray[x].length; y++) {
-
-                    Randomizer randomizer = new Randomizer();
-
-                    if (x > 0 && returnMap.cellArray[x - 1][y] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y].getCellType().ordinal(), 1));
-                    }
-                    if (x > 0 && y > 0 && returnMap.cellArray[x - 1][y - 1] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y - 1].getCellType().ordinal(), 1));
-                    }
-                    if (y > 0 && returnMap.cellArray[x][y - 1] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x][y - 1].getCellType().ordinal(), 1));
-                    }
-                    if (y > 0 && x < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y - 1] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y - 1].getCellType().ordinal(), 1));
-                    }
-                    if (x < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y].getCellType().ordinal(), 1));
-                    }
-                    if (x < returnMap.cellArray.length - 1 && y < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y + 1].getCellType().ordinal(), 1));
-                    }
-                    if (y < returnMap.cellArray.length - 1 && returnMap.cellArray[x][y + 1] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x][y + 1].getCellType().ordinal(), 1));
-                    }
-                    if (x > 0 && y < returnMap.cellArray.length - 1 && returnMap.cellArray[x - 1][y + 1] != null) {
-                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y + 1].getCellType().ordinal(), 1));
-                    }
-
-                    int random = randomizer.throwDice();
-
-                    returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.values()[random]);
-
-                }
+        for (int x = 0; x < returnMap.cellArray.length; x++) {          // Generate all cells
+            for (int y = 0; y < returnMap.cellArray[x].length; y++) {
+                returnMap.cellArray[x][y] = new MapCell(returnMap, x, y);
             }
         }
+
+        for (int x = 0; x < returnMap.cellArray.length; x++) {           // setUp neighbours
+            for (int y = 0; y < returnMap.cellArray[x].length; y++) {
+                returnMap.cellArray[x][y].setUpNeightbours();
+            }
+        }
+
+        int randX = (int) (Math.random()*returnMap.cellArray.length);
+        int randY = (int) (Math.random()*returnMap.cellArray[randX].length);
+        returnMap.cellArray[randX][randY].generate();
+
         return returnMap;
     }
 
@@ -78,7 +56,7 @@ public class Map {
             for (int y = 0; y < currCollumn.length; y++) {
                 String currCellAsString = currCollumn[y];
                 int cellTypeOrdinary = Integer.parseInt(currCellAsString);
-                returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.values()[cellTypeOrdinary]);
+                returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.values()[cellTypeOrdinary], returnMap, x, y);
             }
         }
         return returnMap;

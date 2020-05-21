@@ -43,14 +43,11 @@ public class MapCell extends ImageView {
 
     public MapCell(CellType type, Map map, int x, int y) {
 
-        cellType = type;
+        setCellType(type);
         this.map = map;
         xIndex = x;
         yIndex = y;
-        if (type != CellType.UNDEFINED) {
-            image = type.getImage();
-            setImage(image);
-        }
+
         setFitWidth(CELL_SIZE);
         setFitHeight(CELL_SIZE);
     }
@@ -66,11 +63,8 @@ public class MapCell extends ImageView {
     }
 
     private final void setUpCellTypeFromNumber(int number) {
-        cellType = CellType.values()[number];
-        if (cellType != CellType.UNDEFINED) {
-            image = cellType.getImage();
-            setImage(image);
-        }
+        setCellType(CellType.values()[number]);
+
     }
 
     public void generate() {
@@ -89,7 +83,7 @@ public class MapCell extends ImageView {
                                 rand.addEvent(new RandomEvent(CellType.STONE.ordinal(), 1));
                                 break;
                             case WATER:
-                                rand.addEvent(new RandomEvent(CellType.WATER.ordinal(), 30));
+                                rand.addEvent(new RandomEvent(CellType.WATER.ordinal(), 20));
                                 break;
                             case SAND:
                                 rand.addEvent(new RandomEvent(CellType.SAND.ordinal(), 10));
@@ -101,11 +95,15 @@ public class MapCell extends ImageView {
 
                     }
                 }
+                 setUpCellTypeFromNumber(rand.throwDice());
             }
-            setUpCellTypeFromNumber(rand.throwDice());
+           
 
             for (MapCell currNeighbour : neighbours) {
                 if (currNeighbour != null) {
+                    if (cellType == CellType.BASE) {
+                        currNeighbour.setCellType(cellType.DIRT);
+                    }
                     currNeighbour.generate();
                 }
             }
@@ -115,6 +113,14 @@ public class MapCell extends ImageView {
 
     public CellType getCellType() {
         return cellType;
+    }
+
+    public void setCellType(CellType type) {
+        cellType = type;
+        if (type != CellType.UNDEFINED) {
+            image = type.getImage();
+            setImage(image);
+        }
     }
 
     public void setUpNeightbours() {
@@ -146,7 +152,8 @@ public class MapCell extends ImageView {
         WATER(GameImage.MAP_CELL_WATER),
         SAND(GameImage.MAP_CELL_SAND),
         DIRT(GameImage.MAP_CELL_DIRT),
-        STONE(GameImage.MAP_CELL_STONE);
+        STONE(GameImage.MAP_CELL_STONE),
+        BASE(GameImage.MAP_CELL_BASE);
 
         private final GameImage image;
 

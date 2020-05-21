@@ -17,7 +17,8 @@ public enum GameImage {
     MAP_CELL_SAND("maggdaforestdefense/map_cells/sand.png"),
     MAP_CELL_WATER("maggdaforestdefense/map_cells/water.png"),
     MAP_CELL_STONE("maggdaforestdefense/map_cells/stone.png"),
-    MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png");
+    MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png"),
+    MAP_CELL_BASE("maggdaforestdefense/map_cells/base.png");
 
     private Image image;
     

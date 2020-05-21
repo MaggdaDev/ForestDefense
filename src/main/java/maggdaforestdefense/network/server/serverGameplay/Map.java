@@ -41,9 +41,10 @@ public class Map {
             }
         }
 
-        int randX = (int) (Math.random()*returnMap.cellArray.length);
-        int randY = (int) (Math.random()*returnMap.cellArray[randX].length);
-        returnMap.cellArray[randX][randY].generate();
+        int midX = (int) (returnMap.cellArray.length/2);
+        int midY = (int) (returnMap.cellArray[0].length/2);
+        returnMap.cellArray[midX][midY].setCellType(MapCell.CellType.BASE);
+        returnMap.cellArray[midX][midY].generate();
 
         return returnMap;
     }

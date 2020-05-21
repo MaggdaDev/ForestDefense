@@ -5,6 +5,9 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import maggdaforestdefense.util.RandomEvent;
+import maggdaforestdefense.util.Randomizer;
+
 /**
  *
  * @author DavidPrivat
@@ -29,23 +32,38 @@ public class Map {
         while (!finished) {
             for (int x = 0; x < returnMap.cellArray.length; x++) {
                 for (int y = 0; y < returnMap.cellArray[x].length; y++) {
-                    int random = (int) (Math.random() * 4);
-                    switch (random) {
-                        case 0:
-                            returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.STONE);
-                            break;
-                        case 1:
-                            returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.DIRT);
-                            break;
-                        case 2:
-                            returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.SAND);
-                            break;
-                        case 3:
-                            returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.WATER);
-                            break;
-                            
 
+                    Randomizer randomizer = new Randomizer();
+
+                    if (x > 0 && returnMap.cellArray[x - 1][y] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y].getCellType().ordinal(), 1));
                     }
+                    if (x > 0 && y > 0 && returnMap.cellArray[x - 1][y - 1] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y - 1].getCellType().ordinal(), 1));
+                    }
+                    if (y > 0 && returnMap.cellArray[x][y - 1] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x][y - 1].getCellType().ordinal(), 1));
+                    }
+                    if (y > 0 && x < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y - 1] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y - 1].getCellType().ordinal(), 1));
+                    }
+                    if (x < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y].getCellType().ordinal(), 1));
+                    }
+                    if (x < returnMap.cellArray.length - 1 && y < returnMap.cellArray.length - 1 && returnMap.cellArray[x + 1][y] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x + 1][y + 1].getCellType().ordinal(), 1));
+                    }
+                    if (y < returnMap.cellArray.length - 1 && returnMap.cellArray[x][y + 1] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x][y + 1].getCellType().ordinal(), 1));
+                    }
+                    if (x > 0 && y < returnMap.cellArray.length - 1 && returnMap.cellArray[x - 1][y + 1] != null) {
+                        randomizer.addEvent(new RandomEvent(returnMap.cellArray[x - 1][y + 1].getCellType().ordinal(), 1));
+                    }
+
+                    int random = randomizer.throwDice();
+
+                    returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.values()[random]);
+
                 }
             }
         }

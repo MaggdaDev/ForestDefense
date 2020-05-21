@@ -12,30 +12,31 @@ import java.util.Vector;
  * @author DavidPrivat
  */
 public class Randomizer {
-    
+
     private final Vector<RandomEvent> events;
+
     public Randomizer() {
         events = new Vector();
     }
-    
+
     public void addEvent(RandomEvent e) {
         events.add(e);
     }
-    
-    public void throwDice() {
+
+    public int throwDice() {
         double probsum = 0;
-        for(RandomEvent event: events) {
+        for (RandomEvent event : events) {
             probsum += event.getProbability();
         }
         double currProb = 0;
         double random = Math.random() * probsum;
-        for(RandomEvent event: events) {
-            if(currProb < random && random < currProb+event.getProbability()) {
-                event.handle();
-                return;
+        for (RandomEvent event : events) {
+            if (currProb < random && random < currProb + event.getProbability()) {
+                return event.getNumber();
             } else {
-                currProb +=event.getProbability();
+                currProb += event.getProbability();
             }
         }
+        return 0;
     }
 }

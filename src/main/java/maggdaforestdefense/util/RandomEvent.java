@@ -9,14 +9,20 @@ package maggdaforestdefense.util;
  *
  * @author DavidPrivat
  */
-public abstract class RandomEvent {
+public class RandomEvent {
     private final double prob;
+    private final int num;
+ 
     
-    public RandomEvent(double prob) {
+    public RandomEvent(int number, double prob) {
         this.prob = prob;
+        num = number;
     }
     
-    public abstract void handle();
+    public int getNumber() {
+        return num;
+    }
+    
     
     public double getProbability() {
         return prob;

@@ -6,6 +6,7 @@
 package maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding;
 
 import java.util.Vector;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
  *
@@ -18,9 +19,12 @@ public class PathCell {
     private double xPos, yPos;
     private double fValue;
     private PathCell previousCell;
+    
     private PathCell[] neighbours;
 
-    public PathCell(int x, int y, double width, double height) {
+    private MapCell.CellType cellType;
+
+    public PathCell(int x, int y, double width, double height, MapCell.CellType cellType) {
         xIndex = x;
         yIndex = y;
         xPos = xIndex * width + width / 2;
@@ -28,7 +32,7 @@ public class PathCell {
 
         fValue = Double.MAX_VALUE;
 
-        
+        this.cellType = cellType;
 
     }
 
@@ -37,16 +41,16 @@ public class PathCell {
         fValue = distanceToEnd + distanceToStart;
         return fValue;
     }
-    
+
     public Vector<PathCell> generateVector(Vector<PathCell> vec) {
         vec.add(this);
-        if(previousCell != null) {
+        if (previousCell != null) {
             return previousCell.generateVector(vec);
         } else {
             return vec;
         }
     }
-    
+
     public void setNeighbours(PathCell[] n) {
         neighbours = n;
     }
@@ -57,6 +61,10 @@ public class PathCell {
 
     public double getYPos() {
         return yPos;
+    }
+
+    public void setCellType(MapCell.CellType t) {
+        cellType = t;
     }
 
     public double getDistanceToStart() {
@@ -96,7 +104,11 @@ public class PathCell {
         return neighbours;
     }
 
+    public MapCell.CellType getCellType() {
+        return cellType;
+    }
+
     public static double getDistance(PathCell c1, PathCell c2) {
-        return Math.sqrt(Math.pow(c2.getXPos() - c1.getXPos(), 2.0d) + Math.pow(c2.getYPos() - c1.getYPos(), 2.0d));
+        return Math.sqrt(Math.pow(c2.getXPos() - c1.getXPos(), 2.0d) + Math.pow(c2.getYPos() - c1.getYPos(), 2.0d))/MapCell.CELL_SIZE;
     }
 }

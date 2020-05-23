@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects;
 
+import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -12,10 +14,13 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class ClientBug extends ClientGameObject{
+    public static final double width = 50, height = 50;
     
     private double xPos, yPos;
     public ClientBug(int id, double x, double y) {
-        super(id, GameImage.MOB_BUG);
+        super(id, GameImage.MOB_BUG, GameObjectType.BUG);
+        setFitWidth(width);
+        setFitHeight(height);
         setNewPos(x, y);
         
     }
@@ -26,5 +31,10 @@ public class ClientBug extends ClientGameObject{
         setLayoutX(x);
         setLayoutY(y);
         
+    }
+    
+    @Override
+    public void update(NetworkCommand updateCommand) {
+        setNewPos(updateCommand.getNumArgument("x")-width/2, updateCommand.getNumArgument("y")-height/2);
     }
 }

@@ -28,6 +28,8 @@ public abstract class GameObject {
     public int getId() {
         return id;
     }
+    
+    public abstract NetworkCommand update(double timeElapsed);
 
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {

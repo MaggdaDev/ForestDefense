@@ -6,6 +6,8 @@
 package maggdaforestdefense.gameplay.clientGameObjects;
 
 import javafx.scene.image.ImageView;
+import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -14,9 +16,17 @@ import maggdaforestdefense.storage.GameImage;
  */
 public abstract class ClientGameObject extends ImageView{
     private final int id;
-    protected ClientGameObject(int id, GameImage gameImage) {
+    private final GameObjectType gameObjectType;
+    protected ClientGameObject(int id, GameImage gameImage, GameObjectType objectType) {
         setImage(gameImage.getImage());
+        gameObjectType = objectType;
         this.id = id;
+    }
+    
+    public abstract void update(NetworkCommand updateCommand);
+    
+    public GameObjectType getType() {
+        return gameObjectType;
     }
     
     public int getGameObjectId() {

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
@@ -21,7 +22,13 @@ public class PathFinder {
     private PriorityQueue<PathCell> openList;
     private HashSet<PathCell> closedList;
     private PathCell start, end;
-    public PathFinder(PathCell start, PathCell end, PathCell[][] map) {
+    
+    private GameObjectType mobType;
+    public PathFinder(PathCell start, PathCell end, PathCell[][] map, GameObjectType objectType) {
+        mobType = objectType;
+        
+        
+        //Pathfind
         closedList = new HashSet();
         openList = new PriorityQueue<>(new Comparator() {
             @Override
@@ -80,14 +87,34 @@ public class PathFinder {
             }
             
         }
-        
+        start.setPrevious(null);
         path.generate(end);
-        
-        
         return path;
     }
     
-    public static double calculateDistance(PathCell c1, PathCell c2) {
-        return MapCell.CELL_SIZE;
+    public double calculateDistance(PathCell c1, PathCell c2) {
+        switch(mobType) {
+            case BUG:
+                double distance = 0;
+                for(PathCell cell: new PathCell[]{c1,c2}) {
+                    switch(cell.getCellType()) {
+                        case BASE: case DIRT: case UNDEFINED:
+                            distance += 1000;
+                            break;
+                        case WATER:
+                            distance += 1000;
+                            break;
+                        case STONE:
+                            distance += 1000;
+                            break;
+                        case SAND:
+                            distance += 1;
+                            break;
+                            
+                    }
+                }
+                return distance;
+        }
+        return 1;
     }
 }

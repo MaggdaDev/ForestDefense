@@ -88,6 +88,7 @@ public class NetworkCommand {
         UPDATE_TEST,            // x and y
         PERMIT_CONNECTION,      // NO ARGS
         SHOW_MAP,               // map
-        NEW_GAME_OBJECT;        //type, id, x, y (maybe more; type specific)
+        NEW_GAME_OBJECT,        //type, id, x, y (maybe more; type specific)
+        UPDATE_GAME_OBJECT;     //id, args (x,y maybe more, type specific)
     }
 }

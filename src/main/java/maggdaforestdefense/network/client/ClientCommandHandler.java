@@ -79,6 +79,9 @@ public class ClientCommandHandler extends Thread {
                 ClientGameObject gameObject = GameObject.generateClientGameObject(command);
                 Game.getInstance().addGameObject(gameObject);
                 break;
+            case UPDATE_GAME_OBJECT:
+                Game.getInstance().updateGameObject(command);
+                break;
         }
     }
 

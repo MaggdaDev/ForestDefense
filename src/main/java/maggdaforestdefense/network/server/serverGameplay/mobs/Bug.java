@@ -18,9 +18,11 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
  * @author DavidPrivat
  */
 public class Bug extends Mob {
+
+    private double speed = 50;
     
     public Bug(ServerGame game) {
-        super(game);
+        super(game, GameObjectType.BUG);
         findStartPos();
     }
     
@@ -30,6 +32,19 @@ public class Bug extends Mob {
             new CommandArgument("y", String.valueOf(yPos)),
             new CommandArgument("type", String.valueOf(GameObjectType.BUG.ordinal())),
             new CommandArgument("id", String.valueOf(id))};
+    }
+    
+    @Override
+    public NetworkCommand update(double timeElapsed) {
+        path.walk(timeElapsed * speed);
+        xPos = path.getCurrentX();
+        yPos = path.getCurrentY();
+        
+        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+            new CommandArgument("id", String.valueOf(id)),
+            new CommandArgument("x", String.valueOf(xPos)),
+            new CommandArgument("y", String.valueOf(yPos))});
+        
     }
     
 }

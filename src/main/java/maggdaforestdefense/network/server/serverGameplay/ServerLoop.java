@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.util.HashMap;
 import maggdaforestdefense.network.server.Player;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class ServerLoop{
     private List<Player> players;
 
     private long startTimeNano = 0;
-    private double runTime = 0;
+    private double runTime = 0, oldRunTime = 0;
     
     private ServerGame serverGame;
     public ServerLoop(List<Player> playerList, ServerGame game) {
@@ -31,12 +32,17 @@ public class ServerLoop{
 
     public void run() {
         startTimeNano = System.nanoTime();
-        
+        oldRunTime = startTimeNano;
         //Test
         double secondsBetweenspawns = 1;
         int spawnAmount = 0;
         while(running) {
             runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
+            
+            double timeElapsed = runTime - oldRunTime;
+            oldRunTime = runTime;
+            
+            serverGame.updateGameObjects(timeElapsed);
             
             
             //TEST
@@ -47,9 +53,7 @@ public class ServerLoop{
             
             
             //TEST END
-            players.forEach((Player player)->{
-                player.testUpdateCircle();
-            });
+
             try {
                 Thread.sleep(1);
             } catch(Exception e) {

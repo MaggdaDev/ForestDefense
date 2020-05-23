@@ -59,12 +59,13 @@ public class Map {
         returnMap.cellArray[midX][midY].setCellType(MapCell.CellType.BASE);
         returnMap.cellArray[midX][midY].generate();
         
-        
-        /// TEST
-        PathFinder testPathFinder = new PathFinder(returnMap.cellArray[0][0].getPathCell(), returnMap.cellArray[midX][midY].getPathCell(), returnMap.toPathCellMap());
-        Path path = testPathFinder.findPath();
+      
 
         return returnMap;
+    }
+    
+    public MapCell getBase() {
+        return cellArray[(int)(cellArray.length/2)][(int)(cellArray[0].length/2)];
     }
 
     public static Map generateMap(String mapAsString) {

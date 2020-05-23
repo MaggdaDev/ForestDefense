@@ -94,4 +94,9 @@ public class Game {
     public static Game getInstance() {
         return instance;
     }
+
+    public void updateGameObject(NetworkCommand command) {
+        ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
+        gObj.update(command);
+    }
 }

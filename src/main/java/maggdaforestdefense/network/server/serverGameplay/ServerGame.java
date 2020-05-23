@@ -46,6 +46,12 @@ public class ServerGame extends Thread{
         serverLoop.run();
     }
     
+    public void updateGameObjects(double timeElapsed) {
+        gameObjects.forEach((String key, GameObject g)->{
+            sendCommandToAllPlayers(g.update(timeElapsed));
+        });
+    }
+    
     public void sendCommandToAllPlayers(NetworkCommand command) {
         players.forEach((Player player)->{
             player.sendCommand(command);

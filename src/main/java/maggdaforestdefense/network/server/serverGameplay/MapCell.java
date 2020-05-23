@@ -33,11 +33,10 @@ public class MapCell extends ImageView {
     private PathCell pathCell;
 
     public MapCell(Map map, int x, int y) {
-
+        pathCell = new PathCell(x, y, CELL_SIZE, CELL_SIZE, cellType);
         this.map = map;
         xIndex = x;
         yIndex = y;
-        pathCell = new PathCell(xIndex, yIndex, CELL_SIZE, CELL_SIZE);
 
         setFitWidth(CELL_SIZE);
         setFitHeight(CELL_SIZE);
@@ -47,14 +46,15 @@ public class MapCell extends ImageView {
     }
 
     public MapCell(CellType type, Map map, int x, int y) {
+        pathCell = new PathCell(x, y, CELL_SIZE, CELL_SIZE, cellType);
         setCellType(type);
         this.map = map;
         xIndex = x;
         yIndex = y;
-        pathCell = new PathCell(xIndex, yIndex, CELL_SIZE, CELL_SIZE);
 
         setFitWidth(CELL_SIZE);
         setFitHeight(CELL_SIZE);
+
     }
 
     private final void initialRandomType() {
@@ -124,7 +124,10 @@ public class MapCell extends ImageView {
         if (type != CellType.UNDEFINED) {
             image = type.getImage();
             setImage(image);
+
         }
+        pathCell.setCellType(type);
+
     }
 
     public void setUpNeightbours() {

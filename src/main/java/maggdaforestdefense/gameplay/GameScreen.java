@@ -9,6 +9,7 @@ import javafx.scene.Group;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Scale;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
 
@@ -82,6 +83,10 @@ public class GameScreen extends Group {
 
         });
 
+    }
+    
+    public void addGameObject(ClientGameObject gameObject) {
+        gamePlayGroup.getChildren().add(gameObject);
     }
 
     private double getScaleFromScroll() {

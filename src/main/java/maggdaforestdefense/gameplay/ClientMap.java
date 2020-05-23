@@ -17,6 +17,7 @@ public class ClientMap extends Group{
     
     
     public ClientMap(MapCell[][] mapCellArray) {
+
         setManaged(false);
         width = mapCellArray.length * MapCell.CELL_SIZE;
         height = mapCellArray[0].length * MapCell.CELL_SIZE;

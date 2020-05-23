@@ -87,6 +87,7 @@ public class NetworkCommand {
         // SERVER TO CLIENT
         UPDATE_TEST,            // x and y
         PERMIT_CONNECTION,      // NO ARGS
-        SHOW_MAP;               // map
+        SHOW_MAP,               // map
+        NEW_GAME_OBJECT;        //type, id, x, y (maybe more; type specific)
     }
 }

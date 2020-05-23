@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay;
 
+import java.util.HashMap;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import maggdaforestdefense.menues.MenuManager;
@@ -14,6 +15,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
 
 import java.util.Vector;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 
 /**
  *
@@ -24,6 +26,8 @@ public class Game {
     private GameLoop gameLoop;
     private boolean isInGame;
     private GameScreen gameScreen;
+    
+    private HashMap<String, ClientGameObject> gameObjects;
     private static Game instance;
     
     private Vector<KeyEventHandler> keyEventHandlers;
@@ -33,6 +37,7 @@ public class Game {
         keyEventHandlers = new Vector();
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
+        gameObjects = new HashMap<>();
         
     }
     
@@ -52,6 +57,11 @@ public class Game {
     }
     
     // General
+    public void addGameObject(ClientGameObject gameObject) {
+        gameObjects.put(String.valueOf(gameObject.getGameObjectId()), gameObject);
+        gameScreen.addGameObject(gameObject);
+    }
+    
     private void handleKeyEvent(KeyCode keyCode) {
         for(KeyEventHandler handler: keyEventHandlers) {
             if(handler.getKeyCode().equals(keyCode)) {
@@ -73,6 +83,7 @@ public class Game {
     public void updateMapFocus() {
         gameScreen.updateFocus();
     }
+   
     
     
     

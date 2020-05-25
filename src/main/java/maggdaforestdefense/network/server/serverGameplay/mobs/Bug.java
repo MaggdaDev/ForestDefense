@@ -5,7 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.mobs;
 
-import maggdaforestdefense.gameplay.clientGameObjects.ClientBug;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -19,10 +19,10 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
  */
 public class Bug extends Mob {
 
-    private double speed = 50;
+    private double speed = 100;
     
     public Bug(ServerGame game) {
-        super(game, GameObjectType.BUG);
+        super(game, GameObjectType.M_BUG);
         findStartPos();
     }
     
@@ -30,7 +30,7 @@ public class Bug extends Mob {
     public CommandArgument[] toNetworkCommandArgs() {
         return new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
             new CommandArgument("y", String.valueOf(yPos)),
-            new CommandArgument("type", String.valueOf(GameObjectType.BUG.ordinal())),
+            new CommandArgument("type", String.valueOf(GameObjectType.M_BUG.ordinal())),
             new CommandArgument("id", String.valueOf(id))};
     }
     

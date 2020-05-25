@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.NetworkCommand;
@@ -72,8 +73,8 @@ public class ClientCommandHandler extends Thread {
                 
                 break;
             case SHOW_MAP:
-                Map map = Map.generateMap(command.getArgument("map"));
-                Game.getInstance().generateMap(map.getCells());
+                ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));
+                Game.getInstance().generateMap(cells);
                 break;
             case NEW_GAME_OBJECT:
                 ClientGameObject gameObject = GameObject.generateClientGameObject(command);

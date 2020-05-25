@@ -94,21 +94,21 @@ public class PathFinder {
     
     public double calculateDistance(PathCell c1, PathCell c2) {
         switch(mobType) {
-            case BUG:
+            case M_BUG:
                 double distance = 0;
                 for(PathCell cell: new PathCell[]{c1,c2}) {
                     switch(cell.getCellType()) {
                         case BASE: case DIRT: case UNDEFINED:
-                            distance += 1000;
+                            distance += 1;
                             break;
                         case WATER:
-                            distance += 1000;
+                            distance += 20;
                             break;
                         case STONE:
-                            distance += 1000;
+                            distance += 10;
                             break;
                         case SAND:
-                            distance += 1;
+                            distance += 3;
                             break;
                             
                     }

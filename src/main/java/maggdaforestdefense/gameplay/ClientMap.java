@@ -12,33 +12,37 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  *
  * @author DavidPrivat
  */
-public class ClientMap extends Group{
-    private double width, height;
-    
-    
-    public ClientMap(MapCell[][] mapCellArray) {
+public class ClientMap extends Group {
 
+    private double width, height;
+    private ClientMapCell[][] cells;
+
+    public ClientMap(ClientMapCell[][] mapCellArray) {
+        cells = mapCellArray;
         setManaged(false);
         width = mapCellArray.length * MapCell.CELL_SIZE;
         height = mapCellArray[0].length * MapCell.CELL_SIZE;
-        
-        for(int x = 0; x < mapCellArray.length; x++) {
-            MapCell[] yArray = mapCellArray[x];
-            for(int y = 0; y < yArray.length; y++) {
-                MapCell currentCell = yArray[y];
-                currentCell.setLayoutX(x*MapCell.CELL_SIZE);
-                currentCell.setLayoutY(y*MapCell.CELL_SIZE);
+
+        for (int x = 0; x < mapCellArray.length; x++) {
+            ClientMapCell[] yArray = mapCellArray[x];
+            for (int y = 0; y < yArray.length; y++) {
+                ClientMapCell currentCell = yArray[y];
+
                 getChildren().add(currentCell);
             }
         }
     }
-    
+
+    public ClientMapCell[][] getCells() {
+        return cells;
+    }
+
     public double getHeight() {
         return height;
     }
-    
+
     public double getWidth() {
         return width;
     }
-   
+
 }

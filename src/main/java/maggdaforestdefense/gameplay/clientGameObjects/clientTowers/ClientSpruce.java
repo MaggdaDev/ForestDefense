@@ -3,16 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package maggdaforestdefense.network.server.serverGameplay;
+package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 /**
  *
  * @author DavidPrivat
  */
-public enum GameObjectType {
-    //MOBS
-    M_BUG,
+public class ClientSpruce {
     
-    //TOWERS
-    T_SPRUCE;
 }

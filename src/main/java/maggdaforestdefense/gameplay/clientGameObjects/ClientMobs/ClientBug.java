@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package maggdaforestdefense.gameplay.clientGameObjects;
+package maggdaforestdefense.gameplay.clientGameObjects.ClientMobs;
 
+import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
@@ -18,7 +19,7 @@ public class ClientBug extends ClientGameObject{
     
     private double xPos, yPos;
     public ClientBug(int id, double x, double y) {
-        super(id, GameImage.MOB_BUG, GameObjectType.BUG);
+        super(id, GameImage.MOB_BUG, GameObjectType.M_BUG);
         setFitWidth(width);
         setFitHeight(height);
         setNewPos(x, y);

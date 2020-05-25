@@ -6,6 +6,7 @@
 package maggdaforestdefense.network.server.serverGameplay;
 
 import java.util.Vector;
+import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
@@ -68,18 +69,18 @@ public class Map {
         return cellArray[(int)(cellArray.length/2)][(int)(cellArray[0].length/2)];
     }
 
-    public static Map generateMap(String mapAsString) {
-        Map returnMap = new Map();
+    public static ClientMapCell[][] stringToClientMapCells(String mapAsString) {
+        ClientMapCell[][] retCells = new ClientMapCell[MAP_SIZE][MAP_SIZE];
         String[] collumnArray = mapAsString.split(COLLUMN_SEPARATOR);
         for (int x = 0; x < collumnArray.length; x++) {
             String[] currCollumn = collumnArray[x].split(CELL_SEPARATOR);
             for (int y = 0; y < currCollumn.length; y++) {
                 String currCellAsString = currCollumn[y];
                 int cellTypeOrdinary = Integer.parseInt(currCellAsString);
-                returnMap.cellArray[x][y] = new MapCell(MapCell.CellType.values()[cellTypeOrdinary], returnMap, x, y);
+                retCells[x][y] = new ClientMapCell(MapCell.CellType.values()[cellTypeOrdinary], x, y);
             }
         }
-        return returnMap;
+        return retCells;
     }
 
     @Override

@@ -16,12 +16,11 @@ import maggdaforestdefense.util.Randomizer;
  *
  * @author DavidPrivat
  */
-public class MapCell extends ImageView {
+public class MapCell  {
 
     public static final double CELL_SIZE = 100;
 
     private CellType cellType;
-    private Image image;
 
     private MapCell topNeighbour, botNeighbour, rightNeighbour, leftNeighbour;
     private MapCell[] neighbours;
@@ -38,8 +37,6 @@ public class MapCell extends ImageView {
         xIndex = x;
         yIndex = y;
 
-        setFitWidth(CELL_SIZE);
-        setFitHeight(CELL_SIZE);
 
         initialRandomType();
 
@@ -52,8 +49,6 @@ public class MapCell extends ImageView {
         xIndex = x;
         yIndex = y;
 
-        setFitWidth(CELL_SIZE);
-        setFitHeight(CELL_SIZE);
 
     }
 
@@ -121,11 +116,7 @@ public class MapCell extends ImageView {
 
     public void setCellType(CellType type) {
         cellType = type;
-        if (type != CellType.UNDEFINED) {
-            image = type.getImage();
-            setImage(image);
 
-        }
         pathCell.setCellType(type);
 
     }

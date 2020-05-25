@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.transform.Scale;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
 
@@ -21,29 +22,20 @@ public class GameScreen extends Group {
 
     private ClientMap map;
     private Group gamePlayGroup;
+    private PlayerInputHandler inputHandler;
 
     private double scrolling = 0, mapXInset = 0, mapYInset = 0;
 
     public GameScreen() {
+        
         gamePlayGroup = new Group();
         gamePlayGroup.setManaged(false);
         getChildren().add(gamePlayGroup);
         setManaged(false);
+        
+        inputHandler = new PlayerInputHandler();
 
-        //TEST
-        /*
-        double oldCenterX = getCenterX(-0.5,2, 8);
-            double oldCenterY = getCenterY(-1,2, 4);
-            
-            double newScale = 3;
-
-            double newCenterX = getCenterX(-0.5,newScale, 8);
-            double newCenterY = getCenterY(-1,newScale, 4);
-            
-            double x = (newCenterX-oldCenterX)*newScale;
-            double y = (newCenterY-oldCenterY)*newScale;
-         */
-        // Focus controll
+ 
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.RIGHT) {
             @Override
             public void handle() {
@@ -98,9 +90,10 @@ public class GameScreen extends Group {
         gamePlayGroup.setLayoutY(mapYInset);
     }
 
-    public void generateMap(MapCell[][] mapCellArray) {
+    public void generateMap(ClientMapCell[][] mapCellArray) {
         map = new ClientMap(mapCellArray);
         gamePlayGroup.getChildren().add(map);
+        inputHandler.setMap(map);
     }
 
     public void updateFocus() {

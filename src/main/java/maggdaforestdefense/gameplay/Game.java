@@ -15,6 +15,8 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
 
 import java.util.Vector;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 
 /**
@@ -74,9 +76,13 @@ public class Game {
         keyEventHandlers.add(handler);
     }
     
+    public void setOnMouseMoved(EventHandler<MouseEvent> h) {
+        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnMouseMoved(h);
+    }
+    
     
     // Map stuff
-    public void generateMap(MapCell[][] mapCellArray) {
+    public void generateMap(ClientMapCell[][] mapCellArray) {
         gameScreen.generateMap(mapCellArray);
     }
     

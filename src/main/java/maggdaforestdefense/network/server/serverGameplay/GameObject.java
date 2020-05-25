@@ -5,7 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
-import maggdaforestdefense.gameplay.clientGameObjects.ClientBug;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -33,7 +33,7 @@ public abstract class GameObject {
 
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
-            case BUG:
+            case M_BUG:
                 return new ClientBug((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
             default:
                 return null;

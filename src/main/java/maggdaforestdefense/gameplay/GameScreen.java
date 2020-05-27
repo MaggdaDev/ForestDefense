@@ -6,10 +6,13 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
 import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
@@ -74,6 +77,9 @@ public class GameScreen extends Group {
             gamePlayGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), maggdaforestdefense.MaggdaForestDefense.getWindowWidth()/2, maggdaforestdefense.MaggdaForestDefense.getWindowHeight()/2));
 
         });
+        
+        getChildren().add(new SideMenu());
+
 
     }
     

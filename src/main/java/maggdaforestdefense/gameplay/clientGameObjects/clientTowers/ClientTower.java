@@ -5,7 +5,7 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
-import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
 
@@ -13,14 +13,9 @@ import maggdaforestdefense.storage.GameImage;
  *
  * @author DavidPrivat
  */
-public class ClientSpruce extends ClientTower {
-
-    public ClientSpruce(int id) {
-        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE);
-    }
-
-    @Override
-    public void update(NetworkCommand updateCommand) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+public abstract class ClientTower extends ClientGameObject{
+    
+    public ClientTower(int id, GameImage image, GameObjectType type) {
+        super(id, image, type);
     }
 }

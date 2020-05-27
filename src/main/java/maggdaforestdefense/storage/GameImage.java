@@ -21,7 +21,16 @@ public enum GameImage {
     MAP_CELL_BASE("maggdaforestdefense/map_cells/base.png"),
     
     // Mobs
-    MOB_BUG("maggdaforestdefense/mobs/bug.png");
+    MOB_BUG_1("maggdaforestdefense/mobs/bug1.png"),
+    MOB_BUG_2("maggdaforestdefense/mobs/bug2.png"),
+    MOB_BUG_3("maggdaforestdefense/mobs/bug3.png"),
+    
+    
+    // TOWERS
+    TOWER_SPRUCE_1("maggdaforestdefense/towers/spruce1.png"),
+    
+    // MENU ICONS
+    MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png");
 
     private Image image;
     

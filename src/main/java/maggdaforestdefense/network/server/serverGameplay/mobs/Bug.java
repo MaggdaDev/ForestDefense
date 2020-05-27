@@ -19,7 +19,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
  */
 public class Bug extends Mob {
 
-    private double speed = 100;
+    private double speed = 200;
     
     public Bug(ServerGame game) {
         super(game, GameObjectType.M_BUG);

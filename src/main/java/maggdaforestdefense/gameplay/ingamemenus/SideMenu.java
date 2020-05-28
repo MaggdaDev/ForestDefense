@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,58 +30,78 @@ import maggdaforestdefense.storage.GameImage;
  *
  * @author DavidPrivat
  */
-public class SideMenu extends GridPane{
-    protected VBox content;
+public class SideMenu extends GridPane {
+
     protected Button expandButton;
     protected ImageView expandIcon;
+    private Parent content;
+    public boolean shown;
+
     public SideMenu() {
         expandIcon = new ImageView(GameImage.MENUICON_EXPAND.getImage());
         expandIcon.setFitWidth(20);
         expandIcon.setFitHeight(20);
         setShowingLeft(false);
-        
-        ImageView test = new ImageView(GameImage.TOWER_SPRUCE_1.getImage());
-        content = new VBox(test);
-        
-        setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.DASHED, new CornerRadii(0,10,10,0,false), new BorderWidths(3))));
+
+
+        setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.DASHED, new CornerRadii(30, 0, 0, 30, false), new BorderWidths(3))));
         setPrefHeight(500);
-        setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(0,10,10,0,false), new Insets(3))));
-        
+        setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(30, 0, 0, 30, false), new Insets(3))));
+
         expandButton = new Button("", expandIcon);
-        show();
-        
-        add(content, 0 ,0);
-        add(expandButton, 1, 0);
+
+        add(expandButton, 0, 0);
         setAlignment(Pos.CENTER);
+
+        shown = false;
         
         
-        
-        
+        maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize(((observable, oldValue, newValue) -> {
+            refreshPosition();
+        }));
+
     }
-    
-   
-    
-    protected void hide() {
-        setLayoutX(getWidth() * -1 + expandButton.getWidth());
-        setShowingLeft(false);
-        expandButton.setOnAction((ActionEvent e)->{
+
+    public void setContent(Parent p) {
+        if(content != null) {
+            getChildren().remove(content);
+        }
+        content = p;
+        add(content, 1, 0);
+    }
+
+    public void hide() {
+        shown = false;
+        refreshPosition();
+        expandButton.setOnAction((ActionEvent e) -> {
             show();
         });
     }
-    
-    protected void show() {
-        setLayoutX(0);
-        setShowingLeft(true);
-        expandButton.setOnAction((ActionEvent e)->{
+
+    public void show() {
+        shown = true;
+        refreshPosition();
+        expandButton.setOnAction((ActionEvent e) -> {
             hide();
         });
     }
-    
+
     protected void setShowingLeft(boolean left) {
-        if(!left) {
+        if (left) {
             expandIcon.setRotate(270);
         } else {
             expandIcon.setRotate(90);
         }
+    }
+
+    public void refreshPosition() {
+        if (shown) {
+            setLayoutX(maggdaforestdefense.MaggdaForestDefense.getWindowWidth() - getWidth());
+            setShowingLeft(true);
+        } else {
+            setLayoutX(maggdaforestdefense.MaggdaForestDefense.getWindowWidth() - expandButton.getWidth());
+            setShowingLeft(false);
+        }
+        setPrefHeight(maggdaforestdefense.MaggdaForestDefense.getWindowHeight());
     }
 }

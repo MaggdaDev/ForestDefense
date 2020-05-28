@@ -21,6 +21,7 @@ import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
+import javafx.beans.value.ChangeListener;
 
 /**
  * Main class.
@@ -126,16 +127,21 @@ public class MaggdaForestDefense extends Application {
         launch(args);
     }
     
+    public void addOnSceneResize(ChangeListener<? super Number> l) {
+        scene.widthProperty().addListener(l);
+        scene.heightProperty().addListener(l);
+    }
+    
     public Scene getScene() {
         return scene;
     }
     
     public static double getWindowWidth() {
-        return instance.primStage.getWidth();
+        return instance.scene.getWidth();
     }
     
     public static double getWindowHeight() {
-        return instance.primStage.getHeight();
+        return instance.scene.getHeight();
     }
 
 }

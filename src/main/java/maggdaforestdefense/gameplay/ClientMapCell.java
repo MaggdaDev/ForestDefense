@@ -5,9 +5,13 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import maggdaforestdefense.gameplay.ingamemenus.PlantMenu;
+import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
+import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
 import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
@@ -19,6 +23,8 @@ public class ClientMapCell extends StackPane{
     private ImageView imageView;
     private MapCell.CellType cellType;
     private boolean isSelectionQuare = false;
+
+    private PlantMenu plantMenu;
     public ClientMapCell(MapCell.CellType type, double xIndex, double yIndex) {
         cellType = type;
         imageView = new ImageView(type.getImage());
@@ -37,6 +43,12 @@ public class ClientMapCell extends StackPane{
         setOnMouseExited((MouseEvent e)->{
             removeSelectionSquare();
         });
+        setOnMouseClicked((MouseEvent e)->{
+            PlayerInputHandler.getInstance().mapCellClicked(this);
+        });
+        
+        
+        plantMenu = new PlantMenu();
     }
     
     public void addSelectionSquare() {
@@ -51,5 +63,9 @@ public class ClientMapCell extends StackPane{
             isSelectionQuare = false;
             getChildren().remove(SelectionSqare.getInstance());
         }
+    }
+    
+    public Parent getCurrentMenu() {
+        return plantMenu;
     }
 }

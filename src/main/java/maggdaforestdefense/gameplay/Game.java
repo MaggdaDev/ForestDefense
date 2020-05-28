@@ -85,10 +85,6 @@ public class Game {
     public void generateMap(ClientMapCell[][] mapCellArray) {
         gameScreen.generateMap(mapCellArray);
     }
-    
-    public void updateMapFocus() {
-        gameScreen.updateFocus();
-    }
    
     
     

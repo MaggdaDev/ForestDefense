@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 
 /**
  *
@@ -34,6 +35,8 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
     private Player owner;
+    
+    private ServerGame game;
 
     public ServerSocketHandler(Socket socket) throws IOException {
         
@@ -91,9 +94,17 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 sendCommand(NetworkCommand.PERMIT_CONNECTION);
                 break;
             case START_GAME:
-                ServerGame newGame = new ServerGame(owner);
-                Server.getInstance().addGame(newGame);
-                newGame.start();
+                game = new ServerGame(owner);
+                Server.getInstance().addGame(game);
+                game.start();
+                break;
+            case ADD_TOWER:
+                double xPos = command.getNumArgument("x");
+                double yPos = command.getNumArgument("y");
+                GameObjectType type = GameObjectType.values()[(int)command.getNumArgument("type")];
+                
+                game.addNewTower(xPos, yPos, type);
+                
                 break;
         }
         

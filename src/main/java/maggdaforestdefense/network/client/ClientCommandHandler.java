@@ -69,9 +69,6 @@ public class ClientCommandHandler extends Thread {
             case PERMIT_CONNECTION:
                 NetworkManager.getInstance().notifyForAnswer();
                 break;
-            case UPDATE_TEST:
-                
-                break;
             case SHOW_MAP:
                 ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));
                 Game.getInstance().generateMap(cells);

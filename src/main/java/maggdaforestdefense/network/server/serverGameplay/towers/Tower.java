@@ -6,13 +6,14 @@
 package maggdaforestdefense.network.server.serverGameplay.towers;
 
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 
 /**
  *
  * @author DavidPrivat
  */
 public abstract class Tower extends GameObject{
-    public Tower() {
-        super(-1);
+    public Tower(ServerGame game) {
+        super(game.getNextId());
     }
 }

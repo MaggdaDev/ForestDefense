@@ -11,6 +11,8 @@ import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.Player;
 
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 
 /**
  *
@@ -20,7 +22,7 @@ public class ServerGame extends Thread{
 
     private ServerLoop serverLoop;
     private Vector<Player> players;
-    private HashMap<String, GameObject> gameObjects;
+    private ConcurrentHashMap<String, GameObject> gameObjects;
     private Map map;
     
     private int currentGameObjectId;
@@ -34,7 +36,7 @@ public class ServerGame extends Thread{
         
         map = Map.generateMap();
         
-        gameObjects = new HashMap<>();
+        gameObjects = new ConcurrentHashMap<>();
     }
     
     @Override
@@ -46,9 +48,27 @@ public class ServerGame extends Thread{
         serverLoop.run();
     }
     
+    public void addNewTower(double xPos, double yPos, GameObjectType type) {
+        GameObject newTower;
+        switch(type) {
+            case T_SPRUCE:
+                newTower = new Spruce(this, xPos, yPos);
+                break;
+                
+                
+                
+            default:
+                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        addGameObject(newTower);
+    }
+    
     public void updateGameObjects(double timeElapsed) {
         gameObjects.forEach((String key, GameObject g)->{
-            sendCommandToAllPlayers(g.update(timeElapsed));
+            NetworkCommand comm = g.update(timeElapsed);
+            if(comm != null) {
+            sendCommandToAllPlayers(comm);
+            }
         });
     }
     
@@ -70,4 +90,8 @@ public class ServerGame extends Thread{
     public synchronized int getNextId() {
         return currentGameObjectId++;
     }
+
+ 
+
+    
 }

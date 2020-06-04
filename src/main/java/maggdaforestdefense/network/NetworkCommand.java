@@ -84,6 +84,7 @@ public class NetworkCommand {
         //CLIENT TO SERVER
         REQUIRE_CONNECTION,     // NO ARGS
         START_GAME,             // NO ARGS
+        ADD_TOWER,              // x, y, type
         // SERVER TO CLIENT
         UPDATE_TEST,            // x and y
         PERMIT_CONNECTION,      // NO ARGS

@@ -19,6 +19,7 @@ import maggdaforestdefense.menues.MenuManager;
 public class PlayerInputHandler {
 
     private SelectionSqare selectionSquare;
+    private SelectionClickedSquare selectionClickedSquare;
     private ClientMap map;
 
 
@@ -32,10 +33,9 @@ public class PlayerInputHandler {
     public void setMap(ClientMap map) {
         this.map = map;
         selectionSquare = new SelectionSqare(map);
+        selectionClickedSquare = new SelectionClickedSquare(map);
 
-        Game.getInstance().setOnMouseMoved((MouseEvent e) -> {
-            //selectionSquare.updatePosition(e);
-        });
+       
     }
 
     public void mapCellClicked(ClientMapCell clickedCell) {

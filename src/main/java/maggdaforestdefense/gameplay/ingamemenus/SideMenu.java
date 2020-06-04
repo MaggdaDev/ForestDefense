@@ -24,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -47,6 +48,8 @@ public class SideMenu extends GridPane {
         setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.DASHED, new CornerRadii(30, 0, 0, 30, false), new BorderWidths(3))));
         setPrefHeight(500);
         setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(30, 0, 0, 30, false), new Insets(3))));
+        setHgap(20);
+        setVgap(20);
 
         expandButton = new Button("", expandIcon);
 
@@ -57,6 +60,9 @@ public class SideMenu extends GridPane {
         
         
         maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize(((observable, oldValue, newValue) -> {
+            refreshPosition();
+        }));
+        super.widthProperty().addListener(((observable, oldValue, newValue) -> {
             refreshPosition();
         }));
 

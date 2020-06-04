@@ -15,12 +15,17 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientSpruce extends ClientTower {
 
-    public ClientSpruce(int id) {
+    public ClientSpruce(int id, double xPos, double yPos) {
         super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE);
+        setPreserveRatio(true);
+        setFitHeight(100);
+        
+        setLayoutX(xPos);
+        setLayoutY(yPos);
     }
 
     @Override
     public void update(NetworkCommand updateCommand) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 }

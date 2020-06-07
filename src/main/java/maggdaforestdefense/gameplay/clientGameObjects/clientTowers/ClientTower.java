@@ -15,14 +15,15 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public abstract class ClientTower extends ClientGameObject{
-    protected int xIndex, yIndex;
+    protected int xIndex, yIndex, range;
     protected UpgradeMenu upgradeMenu;
     
-    public ClientTower(int id, GameImage image, GameObjectType type, int xIndex, int yIndex) {
+    public ClientTower(int id, GameImage image, GameObjectType type, int xIndex, int yIndex, int range) {
         super(id, image, type);
         upgradeMenu = new UpgradeMenu(this);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
+        this.range = range;
     }
     
     public int getXIndex() {
@@ -35,5 +36,9 @@ public abstract class ClientTower extends ClientGameObject{
     
     public UpgradeMenu getUpgradeMenu() {
         return upgradeMenu;
+    }
+    
+    public int getRange() {
+        return range;
     }
 }

@@ -20,7 +20,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  * @author DavidPrivat
  */
 public class Spruce extends Tower{
-    public final static int DEFAULT_RANGE = 3;
+    public final static int DEFAULT_RANGE = 2;
     
     
     public final static UpgradeSet upgradeSet = new UpgradeSet(new Upgrade[][]{

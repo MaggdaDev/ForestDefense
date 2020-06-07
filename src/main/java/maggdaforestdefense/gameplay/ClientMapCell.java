@@ -28,12 +28,12 @@ public class ClientMapCell extends StackPane {
 
     private ImageView imageView;
     private MapCell.CellType cellType;
-    private boolean isSelectionQuare = false, isPlanted = false;
+    private boolean isSelectionQuare = false, isPlanted = false, isSelectionClickedSquare = false;
 
     private PlantMenu plantMenu;
 
     private ClientTower currentTower = null;
-    
+
     private Pane menuPane;
 
     public ClientMapCell(MapCell.CellType type, int xIndex, int yIndex) {
@@ -56,11 +56,11 @@ public class ClientMapCell extends StackPane {
         });
         setOnMouseClicked((MouseEvent e) -> {
             PlayerInputHandler.getInstance().mapCellClicked(this);
-            addSelectionClickedSquare();
+            SelectionClickedSquare.getInstance().addToMapCell(this);
         });
 
         plantMenu = new PlantMenu(type, xIndex, yIndex);
-        
+
         menuPane = new Pane(plantMenu);
     }
 
@@ -72,7 +72,17 @@ public class ClientMapCell extends StackPane {
     }
 
     public void addSelectionClickedSquare() {
-        SelectionClickedSquare.getInstance().addToMapCell(this);
+        isSelectionClickedSquare = true;
+        if(!getChildren().contains(SelectionClickedSquare.getInstance())) {
+            getChildren().add(SelectionClickedSquare.getInstance());
+        }
+    }
+    
+    public void removeSelectionClickedSquare() {
+        isSelectionClickedSquare = false;
+        if(getChildren().contains(SelectionClickedSquare.getInstance())) {
+            getChildren().remove(SelectionClickedSquare.getInstance());
+        }
     }
 
     public void removeSelectionSquare() {
@@ -88,6 +98,7 @@ public class ClientMapCell extends StackPane {
     }
 
     public void plantTree(ClientTower tree) {
+        isPlanted = true;
         try {
             if (currentTower != null) {
                 throw new Exceptions.MultipleTowersOnCellException();
@@ -97,8 +108,24 @@ public class ClientMapCell extends StackPane {
             menuPane.getChildren().clear();
             menuPane.getChildren().add(tree.getUpgradeMenu());
             
+            if(isSelectionClickedSquare) {
+                PlayerInputHandler.getInstance().mapCellClicked(this);
+            }
+
         } catch (Exceptions.MultipleTowersOnCellException e) {
             e.printStackTrace();
         }
+    }
+
+    public ClientTower getCurrentTower() {
+        return currentTower;
+    }
+
+    public boolean isPlanted() {
+        if (isPlanted && currentTower != null) {
+            return true;
+        }
+        return false;
+
     }
 }

@@ -35,32 +35,13 @@ public class SelectionClickedSquare extends Rectangle {
         setStrokeWidth(6);
     }
 
-    public void updatePosition(MouseEvent e) {
-        int xIndex = (int) Math.round(e.getSceneX() / MapCell.CELL_SIZE - 1);
-        int yIndex = (int) Math.round(e.getSceneY() / MapCell.CELL_SIZE - 1);
-        if (xIndex >= map.getCells().length) {
-            xIndex = map.getCells().length - 1;
-        }
-        if (yIndex >= map.getCells()[xIndex].length) {
-            yIndex = map.getCells()[xIndex].length - 1;
-        }
-        ClientMapCell newCell = map.getCells()[xIndex][yIndex];
-        if (newCell != mapCell) {
-            mapCell.removeSelectionSquare();
-            mapCell = newCell;
-            mapCell.addSelectionSquare();
-        }
-    }
-
     public static SelectionClickedSquare getInstance() {
         return instance;
     }
 
     public void addToMapCell(ClientMapCell c) {
-        if (mapCell.getChildren().contains(this)) {
-            mapCell.getChildren().remove(this);
-        }
+        mapCell.removeSelectionClickedSquare();
         mapCell = c;
-        mapCell.getChildren().add(this);
+        mapCell.addSelectionClickedSquare();
     }
 }

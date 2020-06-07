@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import maggdaforestdefense.gameplay.ClientMap;
 import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.GameScreen;
 import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
 import maggdaforestdefense.menues.MenuManager;
 
@@ -20,8 +21,8 @@ public class PlayerInputHandler {
 
     private SelectionSqare selectionSquare;
     private SelectionClickedSquare selectionClickedSquare;
+    private RangeRect rangeRect;
     private ClientMap map;
-
 
     private static PlayerInputHandler instance;
 
@@ -34,16 +35,31 @@ public class PlayerInputHandler {
         this.map = map;
         selectionSquare = new SelectionSqare(map);
         selectionClickedSquare = new SelectionClickedSquare(map);
+        rangeRect = new RangeRect(map);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(rangeRect);
+                
 
-       
     }
 
     public void mapCellClicked(ClientMapCell clickedCell) {
         Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getMenuPane());
+        if(clickedCell.isPlanted()) {
+            showRange(clickedCell);
+
+        } else {
+            rangeRect.setVisible(false);
+        }
 
     }
 
     public static PlayerInputHandler getInstance() {
         return instance;
+    }
+
+    public void showRange(ClientMapCell cell) {
+        if (cell.getCurrentTower() != null) {
+            rangeRect.adjustRange(cell.getCurrentTower());
+            
+        }
     }
 }

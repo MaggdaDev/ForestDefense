@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import maggdaforestdefense.gameplay.ClientMap;
 import maggdaforestdefense.gameplay.ClientMapCell;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
@@ -21,28 +22,44 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  *
  * @author DavidPrivat
  */
-public class RangeRect extends Rectangle{
+public class RangeRect extends Rectangle {
+
     private ClientMap clientMap;
     private ClientMapCell lastCell;
+
     public RangeRect(ClientMap map) {
-        super();
+        super(0,0,100,100);
         clientMap = map;
-        setOpacity(0.2);
+        setOpacity(0.3);
         setFill(Color.LIGHTGRAY);
         setStroke(Color.BLUE);
-       
+        setMouseTransparent(true);
+        setVisible(false);
+
     }
-    
-    public void adjustRange(int range, int xIndex, int yIndex) {
+
+    public void adjustRange(ClientTower tower) {
+        setVisible(true);
+        int xIndex = tower.getXIndex();
+        int yIndex = tower.getYIndex();
+        int range = tower.getRange();
         ClientMapCell newCell = clientMap.getCells()[xIndex][yIndex];
-        if((!newCell.equals(lastCell)) && lastCell != null && lastCell.getChildren().contains(this)) {
-            lastCell.getChildren().remove(this);
-        }
-        newCell.getChildren().add(this);
+
+
         lastCell = newCell;
-        
-        double size = (range*2 + 1) * MapCell.CELL_SIZE;
+
+        double size = (range * 2 + 1) * MapCell.CELL_SIZE;
         setWidth(size);
         setHeight(size);
+        setLayoutX((xIndex*MapCell.CELL_SIZE-size/2) + 0.5 * MapCell.CELL_SIZE);
+        setLayoutY((yIndex*MapCell.CELL_SIZE-size/2) + 0.5 * MapCell.CELL_SIZE);
+        setViewOrder(-100);
+    }
+
+
+    public void remove() {
+        if (lastCell.getChildren().contains(this)) {
+            lastCell.getChildren().add(this);
+        }
     }
 }

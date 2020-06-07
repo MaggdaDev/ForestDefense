@@ -126,5 +126,9 @@ public class GameScreen extends Group {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.plantTree(tree);
     }
+    
+    public Group getGamePlayGroup() {
+        return gamePlayGroup;
+    }
 
 }

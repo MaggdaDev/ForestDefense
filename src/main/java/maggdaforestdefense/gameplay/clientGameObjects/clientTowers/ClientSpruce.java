@@ -17,9 +17,8 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientSpruce extends ClientTower {
 
-    private int range = Spruce.DEFAULT_RANGE;
     public ClientSpruce(int id, int xIndex, int yIndex) {
-        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, xIndex, yIndex);
+        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, xIndex, yIndex, Spruce.DEFAULT_RANGE);
         setPreserveRatio(true);
         setFitHeight(100);
         
@@ -32,9 +31,6 @@ public class ClientSpruce extends ClientTower {
         
     }
     
-    public int getRange() {
-        return range;
-    }
     
     
 }

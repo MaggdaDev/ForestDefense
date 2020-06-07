@@ -11,4 +11,16 @@ package maggdaforestdefense.network.server.serverGameplay;
  */
 public class UpgradeSet {
     private Upgrade[][] upgrades;
+    
+    public UpgradeSet(Upgrade[][] array) {
+        upgrades = array;
+    }
+    
+    public Upgrade getUpgrade(int tier, int type) {
+        return upgrades[tier-1][type-1];
+    }
+    
+    public Upgrade[][] getUpgrades() {
+        return upgrades;
+    }
 }

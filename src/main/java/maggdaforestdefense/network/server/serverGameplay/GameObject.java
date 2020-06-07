@@ -18,9 +18,11 @@ import maggdaforestdefense.network.NetworkCommand;
 public abstract class GameObject {
 
     protected final int id;
+    protected final GameObjectType gameObjectType;
 
-    public GameObject(int id) {
+    public GameObject(int id, GameObjectType t) {
         this.id = id;
+        gameObjectType = t;
     }
 
     public abstract CommandArgument[] toNetworkCommandArgs();
@@ -31,6 +33,10 @@ public abstract class GameObject {
     }
     
     public abstract NetworkCommand update(double timeElapsed);
+    
+    public GameObjectType getGameObjectType() {
+        return gameObjectType;
+    }
 
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
@@ -42,7 +48,7 @@ public abstract class GameObject {
                 
                 //TOWERS
             case T_SPRUCE:
-                return new ClientSpruce((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
+                return new ClientSpruce((int)command.getNumArgument("id"), (int)command.getNumArgument("xIndex"), (int)command.getNumArgument("yIndex"));
             default:
                 throw new UnsupportedOperationException();
         }

@@ -18,6 +18,8 @@ import java.util.Vector;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.network.server.serverGameplay.GameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 
 /**
  *
@@ -100,5 +102,12 @@ public class Game {
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
         gObj.update(command);
+    }
+
+    public void plantTree(NetworkCommand command) {
+        ClientTower tree = (ClientTower)GameObject.generateClientGameObject(command);
+        gameObjects.put(String.valueOf(tree.getGameObjectId()), tree);
+        
+        gameScreen.addTower(tree);
     }
 }

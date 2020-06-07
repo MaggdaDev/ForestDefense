@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network;
 
+import maggdaforestdefense.util.Exceptions;
+
 /**
  *
  * @author David
@@ -50,9 +52,14 @@ public class NetworkCommand {
                 return arg.getValue();
             }
         }
+        try {
+            throw new Exceptions.ArgumentNotFoundException();
+        } catch (Exceptions.ArgumentNotFoundException e) {
+            e.printStackTrace();
+        }
         return "";
     }
-    
+
     public double getNumArgument(String name) {
         return Double.parseDouble(getArgument(name));
     }
@@ -82,14 +89,14 @@ public class NetworkCommand {
     public static enum CommandType {
 
         //CLIENT TO SERVER
-        REQUIRE_CONNECTION,     // NO ARGS
-        START_GAME,             // NO ARGS
-        ADD_TOWER,              // x, y, type
+        REQUIRE_CONNECTION, // NO ARGS
+        START_GAME, // NO ARGS
+        ADD_TOWER, // x, y, type
         // SERVER TO CLIENT
-        UPDATE_TEST,            // x and y
-        PERMIT_CONNECTION,      // NO ARGS
-        SHOW_MAP,               // map
-        NEW_GAME_OBJECT,        //type, id, x, y (maybe more; type specific)
-        UPDATE_GAME_OBJECT;     //id, args (x,y maybe more, type specific)
+        PERMIT_CONNECTION, // NO ARGS
+        SHOW_MAP, // map
+        NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
+        UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
+        PLANT_TREE;             //id, type, xIndex, yIndex
     }
 }

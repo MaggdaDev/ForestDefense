@@ -13,6 +13,8 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
 import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -53,7 +55,7 @@ public class GameScreen extends Group {
         });
 
         setUpInputListeners();
-        
+
         sideMenu = new SideMenu();
         getChildren().add(sideMenu);
         sideMenu.setVisible(false);
@@ -95,6 +97,7 @@ public class GameScreen extends Group {
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
+
     }
 
     private double getScaleFromScroll() {
@@ -117,6 +120,11 @@ public class GameScreen extends Group {
         sideMenu.setContent(p);
         sideMenu.show();
         sideMenu.setVisible(true);
+    }
+
+    void addTower(ClientTower tree) {
+        ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
+        cell.plantTree(tree);
     }
 
 }

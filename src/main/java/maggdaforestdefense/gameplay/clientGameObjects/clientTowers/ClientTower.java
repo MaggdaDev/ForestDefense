@@ -6,6 +6,7 @@
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
 
@@ -14,8 +15,25 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public abstract class ClientTower extends ClientGameObject{
+    protected int xIndex, yIndex;
+    protected UpgradeMenu upgradeMenu;
     
-    public ClientTower(int id, GameImage image, GameObjectType type) {
+    public ClientTower(int id, GameImage image, GameObjectType type, int xIndex, int yIndex) {
         super(id, image, type);
+        upgradeMenu = new UpgradeMenu(this);
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
+    }
+    
+    public int getXIndex() {
+        return xIndex;
+    }
+    
+    public int getYIndex() {
+        return yIndex;
+    }
+    
+    public UpgradeMenu getUpgradeMenu() {
+        return upgradeMenu;
     }
 }

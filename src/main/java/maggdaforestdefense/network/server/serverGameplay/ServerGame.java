@@ -13,6 +13,7 @@ import maggdaforestdefense.network.server.Player;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 
 /**
  *
@@ -49,7 +50,7 @@ public class ServerGame extends Thread{
     }
     
     public void addNewTower(double xPos, double yPos, GameObjectType type) {
-        GameObject newTower;
+        Tower newTower;
         switch(type) {
             case T_SPRUCE:
                 newTower = new Spruce(this, xPos, yPos);
@@ -60,7 +61,17 @@ public class ServerGame extends Thread{
             default:
                  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-        addGameObject(newTower);
+        plantTree(newTower);
+    }
+    
+    public void plantTree(Tower tower) {
+        gameObjects.put(String.valueOf(tower.getId()), tower);
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.PLANT_TREE, new CommandArgument[]{
+            new CommandArgument("id", String.valueOf(tower.getId())),
+            new CommandArgument("xIndex", String.valueOf(tower.getXIndex())),
+            new CommandArgument("yIndex", String.valueOf(tower.getYIndex())),
+            new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal()))
+        }));
     }
     
     public void updateGameObjects(double timeElapsed) {

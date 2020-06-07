@@ -29,8 +29,15 @@ public enum GameImage {
     // TOWERS
     TOWER_SPRUCE_1("maggdaforestdefense/towers/spruce1.png"),
     
+    // PROJECTILES
+    PROJECTILE_SPRUCE_SHOT("maggdaforestdefense/projectiles/spruce_shot.png"),
+    
+    // UPGRADE ICONS
+    UPGRADE_SPRUCE_01_01("maggdaforestdefense/upgrade_icons/spruce_01_01.png"),
+    
     // MENU ICONS
     MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png");
+    
 
     private Image image;
     

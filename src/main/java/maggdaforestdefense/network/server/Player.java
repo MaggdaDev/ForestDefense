@@ -25,13 +25,6 @@ public class Player {
         new Thread(commandHandler).start();
     }
 
-    public void testUpdateCircle() {
-        testCounter += 0.01;
-        double x = Math.pow(Math.sin(testCounter), 3.0d)*200+500;
-        double y = Math.pow(Math.sin(testCounter), 5.0d)*400+500;
-        commandHandler.sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_TEST, new CommandArgument[]{new CommandArgument("x", String.valueOf(x)), new CommandArgument("y", String.valueOf(y))}));
-    }
-    
     public void sendCommand(NetworkCommand command) {
         commandHandler.sendCommand(command);
     }

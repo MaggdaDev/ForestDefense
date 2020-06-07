@@ -39,7 +39,7 @@ public class PlayerInputHandler {
     }
 
     public void mapCellClicked(ClientMapCell clickedCell) {
-        Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getCurrentMenu());
+        Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getMenuPane());
 
     }
 

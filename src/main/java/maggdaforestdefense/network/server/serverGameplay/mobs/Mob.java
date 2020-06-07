@@ -25,13 +25,11 @@ public abstract class Mob extends GameObject {
     protected PathFinder pathFinder;
     protected Path path;
     
-    protected GameObjectType gameObjectType;
     
 
     public Mob(ServerGame game, GameObjectType objectType) {
-        super(game.getNextId());
+        super(game.getNextId(), objectType);
         serverGame = game;
-        gameObjectType = objectType;
     }
     
 

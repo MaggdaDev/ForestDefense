@@ -7,6 +7,8 @@ package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -15,17 +17,24 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientSpruce extends ClientTower {
 
-    public ClientSpruce(int id, double xPos, double yPos) {
-        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE);
+    private int range = Spruce.DEFAULT_RANGE;
+    public ClientSpruce(int id, int xIndex, int yIndex) {
+        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, xIndex, yIndex);
         setPreserveRatio(true);
         setFitHeight(100);
         
-        setLayoutX(xPos);
-        setLayoutY(yPos);
+        setLayoutX(xIndex*MapCell.CELL_SIZE);
+        setLayoutY(yIndex*MapCell.CELL_SIZE);
     }
 
     @Override
     public void update(NetworkCommand updateCommand) {
         
     }
+    
+    public int getRange() {
+        return range;
+    }
+    
+    
 }

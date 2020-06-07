@@ -6,16 +6,30 @@
 package maggdaforestdefense.network.server.serverGameplay;
 
 import javafx.scene.image.Image;
+import maggdaforestdefense.storage.GameImage;
 
 /**
  *
  * @author DavidPrivat
  */
-public class Upgrade {
-    private final String upgradeName;
-    private final Image upgradeIcon;
-    public Upgrade(String name, Image icon) {
-        upgradeIcon = icon;
-        upgradeName = name;
+public enum Upgrade {
+
+    // SPRUCE
+    SPRUCE_1_1(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Adlerauge");
+
+    private final Image icon;
+    private final String name;
+
+    private Upgrade(Image i, String n) {
+        icon = i;
+        name = n;
+    }
+    
+    public Image getIcon() {
+        return icon;
+    }
+    
+    public String getName() {
+        return name;
     }
 }

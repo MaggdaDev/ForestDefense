@@ -11,4 +11,8 @@ package maggdaforestdefense.util;
  */
 public class Exceptions {
     public static class GameObjectNotCompatibleException extends Exception {};
+    
+    public static class MultipleTowersOnCellException extends Exception {};
+    
+    public static class ArgumentNotFoundException extends Exception {};
 }

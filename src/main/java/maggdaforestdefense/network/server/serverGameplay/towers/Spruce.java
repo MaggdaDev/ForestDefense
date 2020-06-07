@@ -11,16 +11,29 @@ import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
+import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
  *
  * @author DavidPrivat
  */
 public class Spruce extends Tower{
+    public final static int DEFAULT_RANGE = 3;
+    
+    
+    public final static UpgradeSet upgradeSet = new UpgradeSet(new Upgrade[][]{
+    new Upgrade[]{
+        Upgrade.SPRUCE_1_1
+    }});
+    
+    
+    private int range = DEFAULT_RANGE;
     
     double xPos, yPos;
     public Spruce(ServerGame game, double x, double y) {
-        super(game);
+        super(game, x, y, GameObjectType.T_SPRUCE);
         xPos = x;
         yPos = y;
     }

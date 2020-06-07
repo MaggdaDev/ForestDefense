@@ -14,5 +14,8 @@ public enum GameObjectType {
     M_BUG,
     
     //TOWERS
-    T_SPRUCE;
+    T_SPRUCE,
+    
+    //PROJECTILES
+    P_SPRUCE_SHOT;
 }

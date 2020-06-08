@@ -66,6 +66,12 @@ public class Game {
         gameScreen.addGameObject(gameObject);
     }
     
+    public void removeGameObject(String id) {
+        ClientGameObject remove = gameObjects.get(id);
+        gameObjects.remove(id);
+        gameScreen.removeGameObject(remove);
+    }
+    
     private void handleKeyEvent(KeyCode keyCode) {
         for(KeyEventHandler handler: keyEventHandlers) {
             if(handler.getKeyCode().equals(keyCode)) {
@@ -110,4 +116,6 @@ public class Game {
         
         gameScreen.addTower(tree);
     }
+
+    
 }

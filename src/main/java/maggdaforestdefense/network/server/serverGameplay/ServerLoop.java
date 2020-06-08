@@ -48,7 +48,7 @@ public class ServerLoop{
             //TEST
             if(secondsBetweenspawns*spawnAmount < runTime) {
                 spawnAmount++;
-                serverGame.addGameObject(new Bug(serverGame));
+                serverGame.addMob(new Bug(serverGame));
             }
             
             

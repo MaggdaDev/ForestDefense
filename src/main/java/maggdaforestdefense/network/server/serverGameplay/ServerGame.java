@@ -5,7 +5,11 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.Player;
@@ -14,6 +18,8 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 
 /**
  *
@@ -27,6 +33,8 @@ public class ServerGame extends Thread{
     private Map map;
     
     private int currentGameObjectId;
+    
+    private TreeSet<Mob> mobsList;
 
     public ServerGame(Player firstPlayer) {
         currentGameObjectId = 0;
@@ -38,7 +46,22 @@ public class ServerGame extends Thread{
         map = Map.generateMap();
         
         gameObjects = new ConcurrentHashMap<>();
+        
+        mobsList = new TreeSet<>(new Comparator<Mob>() {
+            @Override
+            public int compare(Mob mob1, Mob mob2) {
+                double diff = mob1.getDistanceToBase() - mob2.getDistanceToBase();
+                if(diff == 0) {
+                    return 0;
+                } else if(diff < 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
+    
     
     @Override
     public void run() {     //Start game!
@@ -89,9 +112,31 @@ public class ServerGame extends Thread{
         });
     }
     
-    public void addGameObject(GameObject g) {
+    private void addGameObject(GameObject g) {
         gameObjects.put(String.valueOf(g.getId()), g);
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
+    }
+    
+    private void removeGameObject(GameObject g) {
+        gameObjects.remove(String.valueOf(g.getId()));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
+    }
+    
+    public void addProjectile(Projectile projectile) {
+        addGameObject(projectile);
+    }
+    
+    public void removeProjectile(Projectile projectile) {
+        removeGameObject(projectile);
+    }
+    
+    public void addMob(Mob mob) {
+        addGameObject(mob);
+        mobsList.add(mob);
+    }
+    
+    public TreeSet<Mob> getSortedMobs() {
+        return mobsList;
     }
     
     public Map getMap() {

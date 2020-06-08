@@ -92,11 +92,13 @@ public class NetworkCommand {
         REQUIRE_CONNECTION, // NO ARGS
         START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
+        
         // SERVER TO CLIENT
         PERMIT_CONNECTION, // NO ARGS
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
-        PLANT_TREE;             //id, type, xIndex, yIndex
+        PLANT_TREE,             //id, type, xIndex, yIndex
+        REMOVE_GAME_OBJECT;     //id
     }
 }

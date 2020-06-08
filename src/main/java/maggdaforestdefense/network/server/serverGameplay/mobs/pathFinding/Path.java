@@ -51,4 +51,8 @@ public class Path {
         int currentWay = (int) (wayWalked / MapCell.CELL_SIZE);
         return ways.get(currentWay).getYOnWay((wayWalked - currentWay * MapCell.CELL_SIZE) / MapCell.CELL_SIZE);
     }
+    
+    public double getRestWay() {
+        return ways.size() * MapCell.CELL_SIZE - wayWalked;
+    }
 }

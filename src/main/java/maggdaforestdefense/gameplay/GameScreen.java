@@ -97,7 +97,12 @@ public class GameScreen extends Group {
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
+    }
 
+    void removeGameObject(ClientGameObject remove) {
+        if (gamePlayGroup.getChildren().contains(remove)) {
+            gamePlayGroup.getChildren().remove(remove);
+        }
     }
 
     private double getScaleFromScroll() {
@@ -126,7 +131,7 @@ public class GameScreen extends Group {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.plantTree(tree);
     }
-    
+
     public Group getGamePlayGroup() {
         return gamePlayGroup;
     }

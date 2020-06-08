@@ -83,6 +83,9 @@ public class ClientCommandHandler extends Thread {
             case PLANT_TREE:
                 Game.getInstance().plantTree(command);
                 break;
+            case REMOVE_GAME_OBJECT:
+                Game.getInstance().removeGameObject(command.getArgument("id"));
+                break;
         }
     }
 

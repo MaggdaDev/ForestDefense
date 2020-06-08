@@ -8,6 +8,7 @@ package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -19,7 +20,7 @@ public abstract class ClientTower extends ClientGameObject{
     protected UpgradeMenu upgradeMenu;
     
     public ClientTower(int id, GameImage image, GameObjectType type, int xIndex, int yIndex, int range) {
-        super(id, image, type);
+        super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
         upgradeMenu = new UpgradeMenu(this);
         this.xIndex = xIndex;
         this.yIndex = yIndex;

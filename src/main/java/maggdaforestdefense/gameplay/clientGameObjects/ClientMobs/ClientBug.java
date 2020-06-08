@@ -22,25 +22,17 @@ public class ClientBug extends ClientGameObject {
     private final static double distance_between_steps = 5;
 
     private double distanceSinceLastStep = 0;
-    private double xPos, yPos;
 
     private int animationState = 0;
 
     public ClientBug(int id, double x, double y) {
-        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG);
+        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y);
         setFitWidth(width);
         setFitHeight(height);
-        setNewPos(x, y);
 
     }
 
-    public final void setNewPos(double x, double y) {
-        xPos = x;
-        yPos = y;
-        setLayoutX(x);
-        setLayoutY(y);
 
-    }
 
     @Override
     public void update(NetworkCommand updateCommand) {
@@ -53,11 +45,13 @@ public class ClientBug extends ClientGameObject {
             distanceSinceLastStep = 0;
             step();
         }
+        if (distanceSinceLastStep != 0) {
+            updateRotate(newX, newY);
+        }
+        
         setNewPos(newX, newY);
 
-        if (distanceSinceLastStep != 0) {
-            setRotate(GameMaths.getDegAngleToYAxis(dX, dY));
-        }
+        
 
     }
 

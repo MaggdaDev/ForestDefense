@@ -9,28 +9,50 @@ import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
+import maggdaforestdefense.util.GameMaths;
 
 /**
  *
  * @author DavidPrivat
  */
-public class SpruceShot extends GameObject{
-    
-    private Spruce owner;
-    private double xPos, yPos, xSpd, ySpd, totalSpeed;
-    
-    public SpruceShot(int id, double x, double y, double xSpeed, double ySpeed) {
-        super(id, GameObjectType.P_SPRUCE_SHOT);
+public class SpruceShot extends ConstantFlightProjectile {
+
+    private final static double DEFAULT_SPEED = 1000;
+    private final static int DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
+
+ 
+
+    public SpruceShot(int id, ServerGame game, double x, double y, Mob target) {
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game);
+        serverGame = game;
+        xPos = x;
+        yPos = y;
+
+        calculateSpeed(target);
+
     }
 
     @Override
     public CommandArgument[] toNetworkCommandArgs() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
+            new CommandArgument("y", String.valueOf(yPos)),
+            new CommandArgument("type", String.valueOf(GameObjectType.P_SPRUCE_SHOT.ordinal())),
+            new CommandArgument("id", String.valueOf(id))};
     }
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean stillExists = updateFlight(timeElapsed);
+
+        if (stillExists) {
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
+                new CommandArgument("y", String.valueOf(yPos)),
+                new CommandArgument("id", String.valueOf(id))});
+        } else {
+            return null;
+        }
     }
 }

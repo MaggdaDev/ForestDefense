@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientSpruceShot;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -49,6 +50,11 @@ public abstract class GameObject {
                 //TOWERS
             case T_SPRUCE:
                 return new ClientSpruce((int)command.getNumArgument("id"), (int)command.getNumArgument("xIndex"), (int)command.getNumArgument("yIndex"));
+                
+                //PROJECTILES
+            case P_SPRUCE_SHOT:
+                
+                return new ClientSpruceShot((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
             default:
                 throw new UnsupportedOperationException();
         }

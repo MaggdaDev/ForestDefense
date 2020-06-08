@@ -27,10 +27,10 @@ public class GameMaths {
             return 0;
         }
         double oneVecX = dX / getAbs(dX, dY);
-        double rad = Math.asin(oneVecX);
-        if(dY > 0 ) {
-            rad += Math.PI;
+        double radToX = Math.acos(oneVecX);
+        if(dY < 0 ) {
+            radToX = 2*Math.PI - radToX;
         }
-        return radToDegrees(rad);
+        return radToDegrees(radToX + 0.5*Math.PI);
     }
 }

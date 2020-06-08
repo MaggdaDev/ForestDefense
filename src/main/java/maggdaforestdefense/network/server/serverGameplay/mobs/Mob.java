@@ -64,6 +64,21 @@ public abstract class Mob extends GameObject {
         pathFinder = new PathFinder(serverGame.getMap().getCells()[startXIndex][startYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType);
         path = pathFinder.findPath();
     }
+    
+    public double getDistanceToBase() {
+        return path.getRestWay();
+    }
+    
+    // Get/Set
+    
+    public double getXPos() {
+        return xPos;
+    }
+    
+    public double getYPos() {
+        return yPos;
+    }
+    
 
     
     

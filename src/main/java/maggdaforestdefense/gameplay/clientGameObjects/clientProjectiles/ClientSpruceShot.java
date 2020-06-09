@@ -16,6 +16,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
  * @author DavidPrivat
  */
 public class ClientSpruceShot extends ClientGameObject {
+    
 
     public ClientSpruceShot(int id, double x, double y) {
         super(id, GameImage.PROJECTILE_SPRUCE_SHOT, GameObjectType.P_SPRUCE_SHOT, x, y);
@@ -29,4 +30,7 @@ public class ClientSpruceShot extends ClientGameObject {
         updateRotate(newX, newY);
         setNewPos(newX, newY);
     }
+    
+    @Override 
+    public void onRemove(){}
 }

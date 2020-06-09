@@ -5,9 +5,11 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.ClientMobs;
 
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.GameMaths;
@@ -16,7 +18,7 @@ import maggdaforestdefense.util.GameMaths;
  *
  * @author DavidPrivat
  */
-public class ClientBug extends ClientGameObject {
+public class ClientBug extends ClientMob {
 
     public static final double width = 70, height = 70;
     private final static double distance_between_steps = 5;
@@ -26,7 +28,7 @@ public class ClientBug extends ClientGameObject {
     private int animationState = 0;
 
     public ClientBug(int id, double x, double y) {
-        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y);
+        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, Bug.DEFAULT_HP);
         setFitWidth(width);
         setFitHeight(height);
 
@@ -36,6 +38,7 @@ public class ClientBug extends ClientGameObject {
 
     @Override
     public void update(NetworkCommand updateCommand) {
+        double newHealth = updateCommand.getNumArgument("hp");
         double newX = updateCommand.getNumArgument("x") - width / 2;
         double newY = updateCommand.getNumArgument("y") - height / 2;
         double dX = newX - xPos;
@@ -50,6 +53,7 @@ public class ClientBug extends ClientGameObject {
         }
         
         setNewPos(newX, newY);
+        updateHealth(newHealth);
 
         
 
@@ -72,5 +76,7 @@ public class ClientBug extends ClientGameObject {
         }
 
     }
+
+    
 
 }

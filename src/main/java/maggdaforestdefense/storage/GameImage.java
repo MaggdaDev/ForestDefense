@@ -36,8 +36,11 @@ public enum GameImage {
     UPGRADE_SPRUCE_01_01("maggdaforestdefense/upgrade_icons/spruce_01_01.png"),
     
     // MENU ICONS
-    MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png");
+    MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png"),
     
+    //DISPLAY 
+    DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),
+    DISPLAY_HEALTH_BAR("maggdaforestdefense/display/health_bar.png");
 
     private Image image;
     

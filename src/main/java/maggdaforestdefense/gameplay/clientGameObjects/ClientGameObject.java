@@ -26,8 +26,8 @@ public abstract class ClientGameObject extends ImageView {
         setImage(gameImage.getImage());
         gameObjectType = objectType;
         this.id = id;
-        double xPos = x;
-        double yPos = y;
+        xPos = x;
+        yPos = y;
     }
 
     public abstract void update(NetworkCommand updateCommand);
@@ -54,5 +54,8 @@ public abstract class ClientGameObject extends ImageView {
         setLayoutX(x);
         setLayoutY(y);
     }
+    
+    public abstract void onRemove();
+
 
 }

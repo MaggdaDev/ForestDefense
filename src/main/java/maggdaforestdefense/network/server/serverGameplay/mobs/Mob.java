@@ -5,8 +5,13 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.mobs;
 
+import java.util.LinkedList;
+import java.util.List;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.gameplay.HealthBar;
+import maggdaforestdefense.network.server.serverGameplay.Damage;
+import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
@@ -18,20 +23,30 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFi
  */
 public abstract class Mob extends GameObject {
 
-    protected double xPos, yPos;
+    protected double xPos, yPos, healthPoints;
     protected int startXIndex, startYIndex;
     protected ServerGame serverGame;
     
     protected PathFinder pathFinder;
     protected Path path;
     
+    protected HitBox hitBox;
     
-
-    public Mob(ServerGame game, GameObjectType objectType) {
+    protected LinkedList<Damage> damageTaken;
+    
+    protected boolean dead = false;
+    
+    
+    public Mob(ServerGame game, GameObjectType objectType, double health, HitBox hitBox) {
         super(game.getNextId(), objectType);
         serverGame = game;
+        this.hitBox = hitBox;
+
+        healthPoints = health;
+        
+        damageTaken = new LinkedList<>();
     }
-    
+
 
     protected void findStartPos() {
         int width = serverGame.getMap().getCells().length;
@@ -57,6 +72,7 @@ public abstract class Mob extends GameObject {
         }
         xPos = startXIndex * MapCell.CELL_SIZE;
         yPos = startYIndex * MapCell.CELL_SIZE;
+        hitBox.updatePos(xPos, yPos);
         initializePathFinder();
     }
     
@@ -69,6 +85,42 @@ public abstract class Mob extends GameObject {
         return path.getRestWay();
     }
     
+    public boolean checkAlive() {
+        if(healthPoints <= 0) {
+            die();
+            return false;
+        } else {
+            return true;
+        }
+        }
+    
+    public void die() {
+        if(!dead) {
+            dead = true;
+        serverGame.removeMob(this);
+        }
+    }
+    
+    
+    public void damage(Damage damage) {
+        
+        if(!damageTaken.contains(damage)) {
+            damageTaken.add(damage);
+        switch(damage.getType()) {
+            case DIRECT:
+                directDamage((Damage.DirectDamage)damage);
+                break;            
+            default:
+                throw new UnsupportedOperationException();
+        }
+        }
+   
+    
+    }
+    
+    public void directDamage(Damage.DirectDamage damage) {
+        healthPoints -= damage.getDamage();
+    }
     // Get/Set
     
     public double getXPos() {
@@ -78,6 +130,12 @@ public abstract class Mob extends GameObject {
     public double getYPos() {
         return yPos;
     }
+    
+    public HitBox getHitBox() {
+        return hitBox;
+    }
+    
+    
     
 
     

@@ -42,4 +42,7 @@ public abstract class ClientTower extends ClientGameObject{
     public int getRange() {
         return range;
     }
+    
+    @Override
+    public void onRemove(){}
 }

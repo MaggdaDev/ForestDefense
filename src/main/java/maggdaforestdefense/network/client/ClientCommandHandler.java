@@ -26,7 +26,7 @@ public class ClientCommandHandler extends Thread {
 
     private BufferedReader input;
     private LinkedBlockingQueue<NetworkCommand> queue;
-    private Queue<NetworkCommand> workingQueue;
+    private LinkedList<NetworkCommand> workingQueue;
 
     private boolean isInGame = false;
 
@@ -57,7 +57,7 @@ public class ClientCommandHandler extends Thread {
     public void handleInput() {
         queue.drainTo(workingQueue);
         while (workingQueue.size() != 0) {
-            handleCommand(workingQueue.poll());
+            handleCommand(workingQueue.removeFirst());
         }
 
     }

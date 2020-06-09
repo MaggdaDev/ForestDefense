@@ -15,4 +15,5 @@ public class Exceptions {
     public static class MultipleTowersOnCellException extends Exception {};
     
     public static class ArgumentNotFoundException extends Exception {};
+    
 }

@@ -16,10 +16,12 @@ import maggdaforestdefense.network.server.Player;
 
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -34,7 +36,10 @@ public class ServerGame extends Thread{
     
     private int currentGameObjectId;
     
-    private TreeSet<Mob> mobsList;
+    private HashMap<String, Mob> mobsList;
+    
+    //TEMP
+    int count = 0;
 
     public ServerGame(Player firstPlayer) {
         currentGameObjectId = 0;
@@ -47,19 +52,7 @@ public class ServerGame extends Thread{
         
         gameObjects = new ConcurrentHashMap<>();
         
-        mobsList = new TreeSet<>(new Comparator<Mob>() {
-            @Override
-            public int compare(Mob mob1, Mob mob2) {
-                double diff = mob1.getDistanceToBase() - mob2.getDistanceToBase();
-                if(diff == 0) {
-                    return 0;
-                } else if(diff < 0) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
-        });
+        mobsList = new HashMap<>();
     }
     
     
@@ -101,9 +94,21 @@ public class ServerGame extends Thread{
         gameObjects.forEach((String key, GameObject g)->{
             NetworkCommand comm = g.update(timeElapsed);
             if(comm != null) {
-            sendCommandToAllPlayers(comm);
+                sendCommandToAllPlayers(comm);
             }
         });
+        
+        
+        /*
+        count++;
+        
+        for(Mob mob: mobsList.toArray(new Mob[]{})) {
+            if(!gameObjects.contains(mob)) {
+                mobsList.remove(mob);
+                Logger.logServer("Mob removed (because in mobsList, but not gameobjects): id: " + mob.getId() + "         in round: " + count);
+            }
+        }
+*/
     }
     
     public void sendCommandToAllPlayers(NetworkCommand command) {
@@ -120,6 +125,7 @@ public class ServerGame extends Thread{
     private void removeGameObject(GameObject g) {
         gameObjects.remove(String.valueOf(g.getId()));
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
+    
     }
     
     public void addProjectile(Projectile projectile) {
@@ -132,10 +138,15 @@ public class ServerGame extends Thread{
     
     public void addMob(Mob mob) {
         addGameObject(mob);
-        mobsList.add(mob);
+        mobsList.put(String.valueOf(mob.getId()), mob);
     }
     
-    public TreeSet<Mob> getSortedMobs() {
+    public void removeMob(Mob mob) {
+        mobsList.remove(String.valueOf(mob.getId()));
+        removeGameObject(mob);
+    }
+    
+    public HashMap<String, Mob> getMobs() {
         return mobsList;
     }
     

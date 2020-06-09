@@ -18,6 +18,10 @@ public class GameMaths {
         return (0.5*rad / Math.PI) * 360;
     }
     
+    public static double degreesToRad(double deg) {
+        return (deg / 360) * Math.PI * 2;
+    }
+    
     public static double getAbs(double dX, double dY) {
         return Math.sqrt(Math.pow(dX, 2.0d) + Math.pow(dY, 2.0d));
     }

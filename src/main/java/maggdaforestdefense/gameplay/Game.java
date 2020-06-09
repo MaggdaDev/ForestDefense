@@ -20,21 +20,23 @@ import javafx.scene.input.MouseEvent;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
  * @author David
  */
 public class Game {
-    
+
     private GameLoop gameLoop;
     private boolean isInGame;
     private GameScreen gameScreen;
-    
+
     private HashMap<String, ClientGameObject> gameObjects;
     private static Game instance;
-    
+
     private Vector<KeyEventHandler> keyEventHandlers;
+
     public Game() {
         instance = this;
         isInGame = false;
@@ -42,80 +44,74 @@ public class Game {
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
-        
+
     }
-    
+
     public void startGame() {
         isInGame = true;
         NetworkManager.getInstance().setInGame(true);
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
-        
+
         // Key Events
-        
-        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event)->{
+        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
             handleKeyEvent(event.getCode());
         });
 
     }
-    
+
     // General
     public void addGameObject(ClientGameObject gameObject) {
         gameObjects.put(String.valueOf(gameObject.getGameObjectId()), gameObject);
         gameScreen.addGameObject(gameObject);
     }
-    
+
     public void removeGameObject(String id) {
         ClientGameObject remove = gameObjects.get(id);
         gameObjects.remove(id);
         gameScreen.removeGameObject(remove);
     }
-    
+
     private void handleKeyEvent(KeyCode keyCode) {
-        for(KeyEventHandler handler: keyEventHandlers) {
-            if(handler.getKeyCode().equals(keyCode)) {
+        for (KeyEventHandler handler : keyEventHandlers) {
+            if (handler.getKeyCode().equals(keyCode)) {
                 handler.handle();
             }
         }
     }
-    
+
     public void addKeyListener(KeyEventHandler handler) {
         keyEventHandlers.add(handler);
     }
-    
+
     public void setOnMouseMoved(EventHandler<MouseEvent> h) {
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnMouseMoved(h);
     }
-    
-    
+
     // Map stuff
     public void generateMap(ClientMapCell[][] mapCellArray) {
         gameScreen.generateMap(mapCellArray);
     }
-   
-    
-    
-    
+
     public GameScreen getGameScreen() {
         return gameScreen;
     }
-    
+
     public static Game getInstance() {
         return instance;
     }
 
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
-        gObj.update(command);
+            gObj.update(command);
     }
 
     public void plantTree(NetworkCommand command) {
-        ClientTower tree = (ClientTower)GameObject.generateClientGameObject(command);
+        ClientTower tree = (ClientTower) GameObject.generateClientGameObject(command);
         gameObjects.put(String.valueOf(tree.getGameObjectId()), tree);
-        
+
         gameScreen.addTower(tree);
     }
 
-    
 }

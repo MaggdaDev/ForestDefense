@@ -7,8 +7,10 @@ package maggdaforestdefense.network.server.serverGameplay.projectiles;
 
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
@@ -22,11 +24,13 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     private final static double DEFAULT_SPEED = 1000;
     private final static int DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
-
+    private final static double HITBOX_RADIUS = 10;
+    private final static double DAMAGE = 1;
  
 
+    private final Damage damageObject = new Damage.DirectDamage(DAMAGE);
     public SpruceShot(int id, ServerGame game, double x, double y, Mob target) {
-        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game);
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS,x,y));
         serverGame = game;
         xPos = x;
         yPos = y;
@@ -45,8 +49,10 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
+        
         boolean stillExists = updateFlight(timeElapsed);
 
+        collision(serverGame.getMobs());
         if (stillExists) {
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
                 new CommandArgument("y", String.valueOf(yPos)),
@@ -55,4 +61,11 @@ public class SpruceShot extends ConstantFlightProjectile {
             return null;
         }
     }
+
+    @Override
+    public void dealDamage(Mob target) {
+        target.damage(damageObject);
+    }
+    
+    
 }

@@ -6,6 +6,7 @@
 package maggdaforestdefense.network.server.serverGameplay.projectiles;
 
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -21,8 +22,8 @@ public abstract class ConstantFlightProjectile extends Projectile{
     protected int towerRange;
     protected Mob targetMob;
     protected ServerGame serverGame;
-    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game) {
-        super(id, type);
+    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox) {
+        super(id, type, hitBox);
         targetMob = target;
         towerRange = range;
         totalSpeed = totSpd;
@@ -47,6 +48,8 @@ public abstract class ConstantFlightProjectile extends Projectile{
         xPos += xSpd * timeElapsed;
         yPos += ySpd * timeElapsed;
         distanceTravelled += totalSpeed * timeElapsed;
+        
+        hitBox.updatePos(xPos, yPos);
         
         if(!checkAlive()) {
             serverGame.removeProjectile(this);

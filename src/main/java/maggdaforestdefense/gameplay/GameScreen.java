@@ -97,12 +97,15 @@ public class GameScreen extends Group {
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
+        
+        
     }
 
     void removeGameObject(ClientGameObject remove) {
         if (gamePlayGroup.getChildren().contains(remove)) {
             gamePlayGroup.getChildren().remove(remove);
         }
+        remove.onRemove();
     }
 
     private double getScaleFromScroll() {
@@ -135,5 +138,7 @@ public class GameScreen extends Group {
     public Group getGamePlayGroup() {
         return gamePlayGroup;
     }
+    
+    
 
 }

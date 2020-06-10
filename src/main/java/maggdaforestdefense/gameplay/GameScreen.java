@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -63,15 +64,17 @@ public class GameScreen extends Group {
         
         
         
-        
+        setCursor(Cursor.OPEN_HAND);
         setOnMousePressed((MouseEvent e)->{
            PlayerInputHandler.getInstance().setMousePressed(true, e);
         });
         setOnMouseReleased((MouseEvent e)->{
            PlayerInputHandler.getInstance().setMousePressed(false, e);
+           setCursor(Cursor.OPEN_HAND);
         });
         setOnMouseDragged((MouseEvent e)->{
                    PlayerInputHandler.getInstance().mouseMoved(e);
+                   setCursor(Cursor.CLOSED_HAND);
         });
 
     }

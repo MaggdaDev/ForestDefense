@@ -23,7 +23,7 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 public class Spruce extends Tower {
 
     public final static int DEFAULT_RANGE = 2;              //map cells
-    public final static double DEFAULT_SHOOT_TIME = 0.1;        //per sec
+    public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
 
     public final static UpgradeSet upgradeSet = new UpgradeSet(new Upgrade[][]{
         new Upgrade[]{

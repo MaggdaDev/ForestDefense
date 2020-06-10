@@ -5,10 +5,12 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
@@ -59,6 +61,21 @@ public class GameScreen extends Group {
         sideMenu = new SideMenu();
         getChildren().add(sideMenu);
         sideMenu.setVisible(false);
+        
+        
+        
+        setCursor(Cursor.OPEN_HAND);
+        setOnMousePressed((MouseEvent e)->{
+           PlayerInputHandler.getInstance().setMousePressed(true, e);
+        });
+        setOnMouseReleased((MouseEvent e)->{
+           PlayerInputHandler.getInstance().setMousePressed(false, e);
+           setCursor(Cursor.OPEN_HAND);
+        });
+        setOnMouseDragged((MouseEvent e)->{
+                   PlayerInputHandler.getInstance().mouseMoved(e);
+                   setCursor(Cursor.CLOSED_HAND);
+        });
 
     }
 

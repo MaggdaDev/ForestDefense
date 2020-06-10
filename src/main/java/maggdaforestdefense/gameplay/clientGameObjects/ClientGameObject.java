@@ -28,6 +28,8 @@ public abstract class ClientGameObject extends ImageView {
         this.id = id;
         xPos = x;
         yPos = y;
+        
+        setMouseTransparent(true);
     }
 
     public abstract void update(NetworkCommand updateCommand);

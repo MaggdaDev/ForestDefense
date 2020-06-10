@@ -12,6 +12,7 @@ import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.GameScreen;
 import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
 import maggdaforestdefense.menues.MenuManager;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -26,6 +27,9 @@ public class PlayerInputHandler {
 
     private static PlayerInputHandler instance;
 
+    private double dragStartMouseX, dragStartMouseY, dragStartLayoutX, dragStartLayoutY;
+    private boolean mousePressed = false;
+
     public PlayerInputHandler() {
         instance = this;
 
@@ -37,13 +41,12 @@ public class PlayerInputHandler {
         selectionClickedSquare = new SelectionClickedSquare(map);
         rangeRect = new RangeRect(map);
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(rangeRect);
-                
 
     }
 
     public void mapCellClicked(ClientMapCell clickedCell) {
         Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getMenuPane());
-        if(clickedCell.isPlanted()) {
+        if (clickedCell.isPlanted()) {
             showRange(clickedCell);
 
         } else {
@@ -59,7 +62,28 @@ public class PlayerInputHandler {
     public void showRange(ClientMapCell cell) {
         if (cell.getCurrentTower() != null) {
             rangeRect.adjustRange(cell.getCurrentTower());
-            
+
         }
     }
+
+    public void setMousePressed(boolean b, MouseEvent e) {
+        if (mousePressed == false && b == true) {
+            dragStartMouseX = e.getX();
+            dragStartMouseY = e.getY();
+            dragStartLayoutX = Game.getInstance().getGameScreen().getGamePlayGroup().getLayoutX();
+            dragStartLayoutY = Game.getInstance().getGameScreen().getGamePlayGroup().getLayoutY();
+            Logger.logClient("New Start");
+        }
+        mousePressed = b;
+
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        if (mousePressed) {
+            Logger.logClient("moved");
+            Game.getInstance().getGameScreen().getGamePlayGroup().setLayoutX(dragStartLayoutX + e.getX() - dragStartMouseX);
+            Game.getInstance().getGameScreen().getGamePlayGroup().setLayoutY(dragStartLayoutY + e.getY() - dragStartMouseY);
+        }
+    }
+
 }

@@ -18,11 +18,11 @@ import maggdaforestdefense.util.GameMaths;
  */
 public abstract class ConstantFlightProjectile extends Projectile{
     
-    protected double startX, startY, xPos, yPos, xSpd, ySpd, totalSpeed, distanceTravelled = 0;
+    protected double startX, startY, xPos, yPos, xSpd, ySpd, totalSpeed, distanceTravelled = 0, pierce;
     protected int towerRange;
     protected Mob targetMob;
     protected ServerGame serverGame;
-    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox) {
+    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce) {
         super(id, type, hitBox);
         targetMob = target;
         towerRange = range;
@@ -32,6 +32,7 @@ public abstract class ConstantFlightProjectile extends Projectile{
         startX = x;
         startY = y;
         serverGame = game;
+        this.pierce = pierce;
         
     }
     
@@ -61,7 +62,8 @@ public abstract class ConstantFlightProjectile extends Projectile{
     
     protected boolean checkAlive() {
         double towerRangeRectHalfSite = (towerRange + 0.5) * MapCell.CELL_SIZE;
-        if(Math.abs(startX - xPos) > towerRangeRectHalfSite || Math.abs(startY - yPos) > towerRangeRectHalfSite) {
+        if((Math.abs(startX - xPos) > towerRangeRectHalfSite || Math.abs(startY - yPos) > towerRangeRectHalfSite) ||        //range
+                pierce <= 0) {                                                                                              //pierce
             return false;
         }
         return true;

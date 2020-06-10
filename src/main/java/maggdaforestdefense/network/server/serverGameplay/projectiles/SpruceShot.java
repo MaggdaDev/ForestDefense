@@ -26,11 +26,12 @@ public class SpruceShot extends ConstantFlightProjectile {
     private final static int DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
     private final static double HITBOX_RADIUS = 10;
     private final static double DAMAGE = 1;
+    private final static int DEFAULT_PIERCE = 1;
  
 
     private final Damage damageObject = new Damage.DirectDamage(DAMAGE);
     public SpruceShot(int id, ServerGame game, double x, double y, Mob target) {
-        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS,x,y));
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS,x,y), DEFAULT_PIERCE);
         serverGame = game;
         xPos = x;
         yPos = y;
@@ -64,6 +65,7 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     @Override
     public void dealDamage(Mob target) {
+        pierce --;
         target.damage(damageObject);
     }
     

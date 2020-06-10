@@ -58,6 +58,7 @@ public class ClientMapCell extends StackPane {
             PlayerInputHandler.getInstance().mapCellClicked(this);
             SelectionClickedSquare.getInstance().addToMapCell(this);
         });
+        
 
         plantMenu = new PlantMenu(type, xIndex, yIndex);
 

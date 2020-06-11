@@ -7,6 +7,7 @@ rm -r ForestDefense/bin
 rm -r ForestDefense/ForestDefense-app.jar
 rm -r ForestDefense/digest.txt
 rm -r ForestDefense/digest2.txt
+rm ForestDefense/OPENSOURCELICENSES.md
 
 # Do gradle build
 cd ..
@@ -30,6 +31,10 @@ cp -r tmp/ForestDefense-app/bin ForestDefense
 echo '# Generating digest'
 java -classpath getdown-core-1.8.6.jar com.threerings.getdown.tools.Digester ForestDefense
 
+echo '# Generating open source licenses'
+cp ../OPENSOURCELICENSES.md ./ForestDefense/OPENSOURCELICENSES.md
+pandoc ./../OPENSOURCELICENSES.md -f markdown -t html -s --metadata title="OPEN SOURCE LICENSES" --toc -H ./opensourcelicenses/style.css -A ./opensourcelicenses/footer.html -o ./../../web/opensourcelicenses.html
+
 echo "# Deploying update via git"
 # shellcheck disable=SC2164
 rm -r ../../web/updater/ForestDefense
@@ -38,9 +43,10 @@ cp -r ForestDefense ../../web/updater/ForestDefense
 
 echo "# Cleaning up"
 rm -r tmp/
-exit
+#exit
 rm -r ForestDefense/lib
 rm -r ForestDefense/bin
 rm -r ForestDefense/ForestDefense-app.jar
 rm -r ForestDefense/digest.txt
 rm -r ForestDefense/digest2.txt
+rm ForestDefense/OPENSOURCELICENSES.md

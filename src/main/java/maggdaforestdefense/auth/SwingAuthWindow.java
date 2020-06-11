@@ -103,7 +103,13 @@ public class SwingAuthWindow {
         reloadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                browser = client.loadURL(AuthWindow.AUTH_URL);
+                //frame.getContentPane().remove(browser.toAWTComponent());
+                //browser = client.loadURL(AuthWindow.AUTH_URL);
+                //frame.getContentPane().add(BorderLayout.CENTER, browser.toAWTComponent());
+                while (browser.getCefBrowser().canGoBack()) {
+                    browser.getCefBrowser().goBack();
+                }
+                browser.getCefBrowser().reload();
             }
         });
         btnPanel.add(reloadBtn);

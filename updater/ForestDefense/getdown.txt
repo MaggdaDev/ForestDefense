@@ -22,7 +22,7 @@ ui.status_text = 000000
 #resource = start.bat
 #resource = start.exe
 resource = getdown-launcher.jar
-uresouce = resources.jar
+uresource = resources.jar
 
 # Application jar files
 # code = lib/

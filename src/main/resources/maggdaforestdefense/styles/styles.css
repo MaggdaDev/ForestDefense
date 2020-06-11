@@ -976,6 +976,15 @@ VBox > .split-menu-button.last > .arrow-button {
     -fx-background-position: center;
 }
 
+.y-btn-reload {
+    -fx-background-image: url("./bootstrapicons/arrow-repeat.png");
+    -fx-display: inline-block;
+    -fx-content: "";
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 80%;
+    -fx-background-position: center;
+}
+
 @font-face {
     font-family: 'Roboto';
     font-style: normal;

@@ -8,9 +8,19 @@ import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.storage.Logger;
 import org.cef.browser.CefBrowser;
+import org.cef.browser.CefFrame;
+import org.cef.callback.CefAuthCallback;
 import org.cef.callback.CefJSDialogCallback;
+import org.cef.callback.CefRequestCallback;
 import org.cef.handler.CefJSDialogHandler;
+import org.cef.handler.CefLoadHandler;
+import org.cef.handler.CefRequestHandler;
+import org.cef.handler.CefResourceHandler;
 import org.cef.misc.BoolRef;
+import org.cef.misc.StringRef;
+import org.cef.network.CefRequest;
+import org.cef.network.CefResponse;
+import org.cef.network.CefURLRequest;
 import org.panda_lang.pandomium.Pandomium;
 import org.panda_lang.pandomium.settings.PandomiumSettings;
 import org.panda_lang.pandomium.wrapper.PandomiumBrowser;
@@ -22,6 +32,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static maggdaforestdefense.auth.AuthWindow.ANON_TOKEN;
@@ -33,6 +45,7 @@ public class SwingAuthWindow {
     private JPanel btnPanel;
     private JButton cancelBtn;
     private JButton anonBtn;
+    private JButton reloadBtn;
     private Pandomium pandomium;
     private PandomiumClient client;
     private PandomiumBrowser browser;
@@ -86,12 +99,20 @@ public class SwingAuthWindow {
             }
         });
         btnPanel.add(anonBtn);
+        reloadBtn = new JButton("Reload");
+        reloadBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                browser = client.loadURL(AuthWindow.AUTH_URL);
+            }
+        });
+        btnPanel.add(reloadBtn);
         frame.getContentPane().add(BorderLayout.SOUTH, btnPanel);
 
         PandomiumSettings settings = PandomiumSettings.getDefaultSettingsBuilder()
                 .argument("--disable-gpu")
                 .argument("--disable-software-rasterizer")
-                .argument("--user-agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0\"")
+//                .argument("--user-agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0\"")
                 .build();
 
         pandomium = new Pandomium(settings);
@@ -138,84 +159,74 @@ public class SwingAuthWindow {
                 
             }
         });
-        /*client.getCefClient().addResourceHandler(new CefResourceHandler() {
+        client.getCefClient().addRequestHandler(new CefRequestHandler() {
             @Override
-            public boolean onBeforeBrowse(CefBrowser browser,
-                                        CefRequest request,
-                                        boolean is_redirect) {
+            public boolean onBeforeBrowse(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest, boolean b, boolean b1) {
                 return false;
             }
 
             @Override
-            public boolean onBeforeResourceLoad(CefBrowser browser, CefRequest request) {
+            public boolean onBeforeResourceLoad(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest) {
+                if(cefRequest.getURL().startsWith("https://accounts.google.com")) {
+                    Map<String, String> headerMap = new HashMap<String,String>();
+                    cefRequest.getHeaderMap(headerMap);
+                    headerMap.remove("User-Agent");
+                    headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0");
+                    cefRequest.setHeaderMap(headerMap);
+                }
                 return false;
             }
 
             @Override
-            public CefResourceHandler getResourceHandler(CefBrowser browser,
-                                                       CefRequest request) {
+            public CefResourceHandler getResourceHandler(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest) {
                 return null;
             }
 
-
-
             @Override
+            public void onResourceRedirect(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest, CefResponse cefResponse, StringRef stringRef) {
 
-            public void onResourceRedirect(CefBrowser browser,
-                                         String old_url,
-                                         StringRef new_url) {
             }
 
             @Override
-            public boolean getAuthCredentials(CefBrowser browser,
-                                            boolean isProxy,
-                                            String host,
-                                            int port,
-                                            String realm,
-                                            String scheme,
-                                            CefAuthCallback callback) {
+            public boolean onResourceResponse(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest, CefResponse cefResponse) {
                 return false;
             }
 
             @Override
-            public boolean onQuotaRequest(CefBrowser browser,
-                                        String origin_url,
-                                        long new_size,
-                                        CefQuotaCallback callback) {
+            public void onResourceLoadComplete(CefBrowser cefBrowser, CefFrame cefFrame, CefRequest cefRequest, CefResponse cefResponse, CefURLRequest.Status status, long l) {
+
+            }
+
+            @Override
+            public boolean getAuthCredentials(CefBrowser cefBrowser, CefFrame cefFrame, boolean b, String s, int i, String s1, String s2, CefAuthCallback cefAuthCallback) {
                 return false;
             }
 
             @Override
-            public void onProtocolExecution(CefBrowser browser,
-                                          String url,
-                                          BoolRef allow_os_execution) {
-            }
-
-            @Override
-            public boolean onCertificateError(ErrorCode cert_error,
-                                            String request_url,
-                                            CefAllowCertificateErrorCallback callback) {
+            public boolean onQuotaRequest(CefBrowser cefBrowser, String s, long l, CefRequestCallback cefRequestCallback) {
                 return false;
             }
 
             @Override
-            public boolean onBeforePluginLoad(CefBrowser browser,
-                                            String url,
-                                            String policyUrl,
-                                            CefWebPluginInfo info) {
+            public void onProtocolExecution(CefBrowser cefBrowser, String s, BoolRef boolRef) {
+
+            }
+
+            @Override
+            public boolean onCertificateError(CefBrowser cefBrowser, CefLoadHandler.ErrorCode errorCode, String s, CefRequestCallback cefRequestCallback) {
                 return false;
             }
 
             @Override
-            public void onPluginCrashed(CefBrowser browser,
-                                      String pluginPath) {
+            public void onPluginCrashed(CefBrowser cefBrowser, String s) {
+
             }
 
             @Override
-            public void onRenderProcessTerminated(CefBrowser browser,
-                                                TerminationStatus status) {
+            public void onRenderProcessTerminated(CefBrowser cefBrowser, TerminationStatus terminationStatus) {
+
             }
-        });*/
+        });
         browser = client.loadURL(AuthWindow.AUTH_URL);
 
         frame.getContentPane().add(BorderLayout.CENTER, browser.toAWTComponent());

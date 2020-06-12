@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
@@ -27,22 +29,33 @@ import maggdaforestdefense.util.KeyEventHandler;
  *
  * @author David
  */
-public class GameScreen extends Group {
+public class GameScreen extends Group{
 
     private ClientMap map;
     private Group gamePlayGroup;
+    private TopOverlay topOverlay;
     private PlayerInputHandler inputHandler;
 
     private double scrolling = 0, mapXInset = 0, mapYInset = 0;
 
     private SideMenu sideMenu;
 
+
     public GameScreen() {
 
         gamePlayGroup = new Group();
         gamePlayGroup.setManaged(false);
+        
+        topOverlay = new TopOverlay(0, 0);
+        
+        sideMenu = new SideMenu();
+        sideMenu.setVisible(false);
+        
+        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay);
+        gamePlayGroup.setViewOrder(3);
+        sideMenu.setViewOrder(2);
+        topOverlay.setViewOrder(1);
 
-        getChildren().add(gamePlayGroup);
         setManaged(false);
 
         inputHandler = new PlayerInputHandler();
@@ -58,9 +71,7 @@ public class GameScreen extends Group {
 
         setUpInputListeners();
 
-        sideMenu = new SideMenu();
-        getChildren().add(sideMenu);
-        sideMenu.setVisible(false);
+        
         
         
         
@@ -154,6 +165,10 @@ public class GameScreen extends Group {
 
     public Group getGamePlayGroup() {
         return gamePlayGroup;
+    }
+    
+    public TopOverlay getTopOverlay() {
+        return topOverlay;
     }
     
     

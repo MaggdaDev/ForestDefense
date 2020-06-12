@@ -26,6 +26,10 @@ public class CommandArgument {
         }
 
     }
+    
+    public CommandArgument(String n, int val) {
+        this(n, String.valueOf(val));
+    }
 
     public boolean isValid(String s) {
         if((s.contains(SEPARATOR) || (s.contains(NetworkCommand.SEPARATOR_1)))) {

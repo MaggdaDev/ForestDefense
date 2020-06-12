@@ -28,7 +28,11 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class ServerGame extends Thread{
-
+    public final static int START_COINS = 100, START_ESSENCE = 20;
+    
+    private int essence = START_ESSENCE, coins = START_COINS;
+    
+    
     private ServerLoop serverLoop;
     private Vector<Player> players;
     private ConcurrentHashMap<String, GameObject> gameObjects;
@@ -38,8 +42,7 @@ public class ServerGame extends Thread{
     
     private HashMap<String, Mob> mobsList;
     
-    //TEMP
-    int count = 0;
+    
 
     public ServerGame(Player firstPlayer) {
         currentGameObjectId = 0;
@@ -98,19 +101,12 @@ public class ServerGame extends Thread{
             }
         });
         
-        
-        /*
-        count++;
-        
-        for(Mob mob: mobsList.toArray(new Mob[]{})) {
-            if(!gameObjects.contains(mob)) {
-                mobsList.remove(mob);
-                Logger.logServer("Mob removed (because in mobsList, but not gameobjects): id: " + mob.getId() + "         in round: " + count);
-            }
-        }
-*/
     }
     
+    public void updateRessources() {
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", essence)}));
+    }
+   
     public void sendCommandToAllPlayers(NetworkCommand command) {
         players.forEach((Player player)->{
             player.sendCommand(command);

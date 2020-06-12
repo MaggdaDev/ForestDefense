@@ -98,7 +98,9 @@ public class NetworkCommand {
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
+        UPDATE_GAME_RESSOURCES, // coins, essence
         PLANT_TREE,             //id, type, xIndex, yIndex
         REMOVE_GAME_OBJECT;     //id
+        
     }
 }

@@ -80,6 +80,9 @@ public class ClientCommandHandler extends Thread {
             case UPDATE_GAME_OBJECT:
                 Game.getInstance().updateGameObject(command);
                 break;
+            case UPDATE_GAME_RESSOURCES:
+                Game.getInstance().updateRessources(command);
+                break;
             case PLANT_TREE:
                 Game.getInstance().plantTree(command);
                 break;

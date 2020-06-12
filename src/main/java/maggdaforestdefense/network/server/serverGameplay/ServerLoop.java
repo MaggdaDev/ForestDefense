@@ -44,6 +44,8 @@ public class ServerLoop{
             
             serverGame.updateGameObjects(timeElapsed);
             
+            serverGame.updateRessources();
+            
             
             //TEST
             if(secondsBetweenspawns*spawnAmount < runTime) {

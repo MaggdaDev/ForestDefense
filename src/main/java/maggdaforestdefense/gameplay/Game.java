@@ -36,6 +36,8 @@ public class Game {
     private static Game instance;
 
     private Vector<KeyEventHandler> keyEventHandlers;
+    
+    private int essence = 0, coins = 0;
 
     public Game() {
         instance = this;
@@ -105,6 +107,12 @@ public class Game {
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
             gObj.update(command);
+    }
+    
+    public void updateRessources(NetworkCommand command) {
+        coins = (int)command.getNumArgument("coins");
+        essence = (int)command.getNumArgument("essence");
+        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
     }
 
     public void plantTree(NetworkCommand command) {

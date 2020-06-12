@@ -23,7 +23,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFi
  */
 public abstract class Mob extends GameObject {
 
-    protected double xPos, yPos, healthPoints;
+    protected double xPos, yPos, healthPoints, speed, maxHealth;
     protected int startXIndex, startYIndex;
     protected ServerGame serverGame;
     
@@ -37,12 +37,14 @@ public abstract class Mob extends GameObject {
     protected boolean dead = false;
     
     
-    public Mob(ServerGame game, GameObjectType objectType, double health, HitBox hitBox) {
+    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox) {
         super(game.getNextId(), objectType);
         serverGame = game;
         this.hitBox = hitBox;
+        this.speed = speed;
 
         healthPoints = health;
+        maxHealth = healthPoints;
         
         damageTaken = new LinkedList<>();
     }
@@ -97,7 +99,7 @@ public abstract class Mob extends GameObject {
     public void die() {
         if(!dead) {
             dead = true;
-        serverGame.removeMob(this);
+        serverGame.killMob(this);
         }
     }
     
@@ -133,6 +135,14 @@ public abstract class Mob extends GameObject {
     
     public HitBox getHitBox() {
         return hitBox;
+    }
+    
+    public double calculateStrength() {
+        return maxHealth * speed;
+    }
+    
+    public double getCoinValue() {
+        return (int)(calculateStrength() / 500);
     }
     
     

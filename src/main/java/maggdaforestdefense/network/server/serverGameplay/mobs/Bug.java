@@ -23,10 +23,10 @@ public class Bug extends Mob {
     public final static double DEFAULT_HP = 10;
     public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
 
-    private double speed = 200;
+    public final static double DEFAULT_SPEED = 200;
 
     public Bug(ServerGame game) {
-        super(game, GameObjectType.M_BUG, DEFAULT_HP, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0));
+        super(game, GameObjectType.M_BUG, DEFAULT_HP, DEFAULT_SPEED, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0));
         findStartPos();
     }
 
@@ -40,17 +40,17 @@ public class Bug extends Mob {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        if(checkAlive()) {
+        if (checkAlive()) {
 
-        path.walk(timeElapsed * speed);
-        xPos = path.getCurrentX();
-        yPos = path.getCurrentY();
-        hitBox.updatePos(xPos, yPos);
-        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-            new CommandArgument("id", String.valueOf(id)),
-            new CommandArgument("x", String.valueOf(xPos)),
-            new CommandArgument("y", String.valueOf(yPos)),
-            new CommandArgument("hp", String.valueOf(healthPoints))});
+            path.walk(timeElapsed * speed);
+            xPos = path.getCurrentX();
+            yPos = path.getCurrentY();
+            hitBox.updatePos(xPos, yPos);
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+                new CommandArgument("id", String.valueOf(id)),
+                new CommandArgument("x", String.valueOf(xPos)),
+                new CommandArgument("y", String.valueOf(yPos)),
+                new CommandArgument("hp", String.valueOf(healthPoints))});
         } else {
             return null;
         }

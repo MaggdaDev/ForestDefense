@@ -137,9 +137,10 @@ public class ServerGame extends Thread{
         mobsList.put(String.valueOf(mob.getId()), mob);
     }
     
-    public void removeMob(Mob mob) {
+    public void killMob(Mob mob) {
         mobsList.remove(String.valueOf(mob.getId()));
         removeGameObject(mob);
+        coins += mob.getCoinValue();
     }
     
     public HashMap<String, Mob> getMobs() {

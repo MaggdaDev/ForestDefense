@@ -72,6 +72,9 @@ public class ServerGame extends Thread{
         Tower newTower;
         switch(type) {
             case T_SPRUCE:
+                if(coins < Spruce.DEFAULT_PRIZE) {
+                    return;
+                }
                 newTower = new Spruce(this, xPos, yPos);
                 break;
                 
@@ -85,6 +88,7 @@ public class ServerGame extends Thread{
     
     public void plantTree(Tower tower) {
         gameObjects.put(String.valueOf(tower.getId()), tower);
+        coins -= tower.getPrize();
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.PLANT_TREE, new CommandArgument[]{
             new CommandArgument("id", String.valueOf(tower.getId())),
             new CommandArgument("xIndex", String.valueOf(tower.getXIndex())),

@@ -142,7 +142,7 @@ public abstract class Mob extends GameObject {
     }
     
     public double getCoinValue() {
-        return (int)(calculateStrength() / 500);
+        return (int)(calculateStrength() / 50);
     }
     
     

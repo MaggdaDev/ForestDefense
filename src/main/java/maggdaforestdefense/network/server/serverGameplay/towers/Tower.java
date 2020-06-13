@@ -21,15 +21,16 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
  */
 public abstract class Tower extends GameObject {
 
-    protected int xIndex, yIndex;
+    protected int xIndex, yIndex, prize;
 
     protected ServerGame serverGame;
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize) {
         super(game.getNextId(), type);
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
         yIndex = (int) (yPos / MapCell.CELL_SIZE);
         serverGame = game;
+        this.prize = prize;
     }
 
     protected Mob findTarget(int range) {
@@ -82,5 +83,9 @@ public abstract class Tower extends GameObject {
 
     public double getCenterY() {
         return (yIndex + 0.5d) * MapCell.CELL_SIZE;
+    }
+    
+    public int getPrize() {
+        return prize;
     }
 }

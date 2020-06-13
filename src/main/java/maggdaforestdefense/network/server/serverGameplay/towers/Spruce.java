@@ -24,6 +24,7 @@ public class Spruce extends Tower {
 
     public final static int DEFAULT_RANGE = 2;              //map cells
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
+    public final static int DEFAULT_PRIZE = 100;
 
     public final static UpgradeSet upgradeSet = new UpgradeSet(new Upgrade[][]{
         new Upgrade[]{
@@ -36,7 +37,7 @@ public class Spruce extends Tower {
     double shootTimer = 0, shootTime = DEFAULT_SHOOT_TIME;
 
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE);
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE);
         xPos = x;
         yPos = y;
     }

@@ -27,6 +27,7 @@ import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Exceptions;
 
 /**
@@ -93,6 +94,16 @@ public class PlantTowerButton extends Button{
             new CommandArgument("x", String.valueOf(xIndex*MapCell.CELL_SIZE)),
             new CommandArgument("y", String.valueOf(yIndex*MapCell.CELL_SIZE)),
             new CommandArgument("type", String.valueOf(gameObjectType.ordinal()))}));
+    }
+
+    void updateCoins(double coins) {
+        if(coins < coinsPrize) {
+            setDisable(true);
+            Logger.logClient("DISABLE");
+        } else {
+            setDisable(false);
+            Logger.logClient("ENABLE");
+        }
     }
     
    

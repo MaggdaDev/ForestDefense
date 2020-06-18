@@ -171,6 +171,10 @@ public class GameScreen extends Group{
         return topOverlay;
     }
     
+    public SideMenu getSideMenu() {
+        return sideMenu;
+    }
+    
     
 
 }

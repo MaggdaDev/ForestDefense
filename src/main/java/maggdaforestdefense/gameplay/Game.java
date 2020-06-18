@@ -109,17 +109,19 @@ public class Game {
             gObj.update(command);
     }
     
-    public void updateRessources(NetworkCommand command) {
-        coins = (int)command.getNumArgument("coins");
-        essence = (int)command.getNumArgument("essence");
-        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
-    }
-
+ 
     public void plantTree(NetworkCommand command) {
         ClientTower tree = (ClientTower) GameObject.generateClientGameObject(command);
         gameObjects.put(String.valueOf(tree.getGameObjectId()), tree);
 
         gameScreen.addTower(tree);
     }
+       public void updateRessources(NetworkCommand command) {
+        coins = (int)command.getNumArgument("coins");
+        essence = (int)command.getNumArgument("essence");
+        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
+        gameScreen.getSideMenu().updateCoins(coins);
+    }
+
 
 }

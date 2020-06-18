@@ -56,21 +56,25 @@
 /* MAGGDA */
 
 .addTowerButton{
-        -fx-background-color:#D6D6D6;
-        -fx-background-radius: 5,5,4;
-        -fx-background-insets: 0 0 -1 0,0,1;
-        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
-        -fx-text-alignment: center;
+    -fx-background-color:#D6D6D6;
+    -fx-background-radius: 5,5,4;
+    -fx-background-insets: 0 0 -1 0,0,1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-alignment: center;
 }
 
 .addTowerButton:hover{
-        -fx-background-color:#9F9F9F;
-        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-background-color:#9F9F9F;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
 }
 .addTowerButton:pressed{
-        -fx-background-color:#7D7D7D; 
-        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
-        
+    -fx-background-color:#7D7D7D; 
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+
+}
+.addTowerButton:disabled{
+    -fx-background-color:#C4C4C4;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.1) , 5, 0.0 , 0 , 1 );
 }
 
 

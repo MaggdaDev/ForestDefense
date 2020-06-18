@@ -6,6 +6,7 @@
 package maggdaforestdefense.gameplay.ingamemenus;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -100,6 +101,15 @@ public class PlantMenu extends VBox {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public void updateCoins(double coins) {
+        for(Node node: towerButtons.getChildren()) {
+            if(node instanceof PlantTowerButton) {
+                ((PlantTowerButton)node).updateCoins(coins);
+            }
         }
     }
 }

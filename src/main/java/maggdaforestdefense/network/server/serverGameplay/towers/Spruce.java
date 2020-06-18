@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.towers;
 
+import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
@@ -26,10 +27,7 @@ public class Spruce extends Tower {
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 100;
 
-    public final static UpgradeSet upgradeSet = new UpgradeSet(new Upgrade[][]{
-        new Upgrade[]{
-            Upgrade.SPRUCE_1_1
-        }});
+   private Vector<Upgrade> upgrades;
 
     private int range = DEFAULT_RANGE;
 
@@ -40,6 +38,7 @@ public class Spruce extends Tower {
         super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE);
         xPos = x;
         yPos = y;
+        upgrades = new Vector<>();
     }
 
     @Override
@@ -69,9 +68,11 @@ public class Spruce extends Tower {
     }
 
     private void shoot(Mob target) {
-
         serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, getCenterX(), getCenterY(), target));
-
+    }
+    
+    public void addUpgrade(Upgrade upgrade) {
+        upgrades.add(upgrade);
     }
 
 }

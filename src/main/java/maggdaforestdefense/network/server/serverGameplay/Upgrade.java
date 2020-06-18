@@ -15,14 +15,17 @@ import maggdaforestdefense.storage.GameImage;
 public enum Upgrade {
 
     // SPRUCE
-    SPRUCE_1_1(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Adlerauge");
+    SPRUCE_1_1(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Nadelsturm", 50),
+    SPRUCE_1_6(GameImage.UPGRADE_SPRUCE_01_06.getImage(), "Lebenskristall", 50);
 
     private final Image icon;
     private final String name;
+    private final int prize;
 
-    private Upgrade(Image i, String n) {
+    private Upgrade(Image i, String n, int p) {
         icon = i;
         name = n;
+        prize = p;
     }
     
     public Image getIcon() {
@@ -31,5 +34,9 @@ public enum Upgrade {
     
     public String getName() {
         return name;
+    }
+    
+    public int getPrize() {
+        return prize;
     }
 }

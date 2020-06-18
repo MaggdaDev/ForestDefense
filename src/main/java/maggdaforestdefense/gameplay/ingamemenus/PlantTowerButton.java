@@ -40,7 +40,7 @@ public class PlantTowerButton extends Button{
     private int xIndex, yIndex;
     private GameObjectType gameObjectType;
     private int coinsPrize;
-    private Label prizeLabel;
+    private PrizeLabel prizeLabel;
     public PlantTowerButton(GameObjectType type, int x, int y, int prize) throws Exceptions.GameObjectNotCompatibleException {
         gameObjectType = type;
         imageView = new ImageView();
@@ -51,11 +51,8 @@ public class PlantTowerButton extends Button{
         yIndex = y;
         coinsPrize = prize;
         
-        ImageView coinIcon = new ImageView(GameImage.COIN_ICON.getImage());
-        coinIcon.setFitHeight(20);
-        coinIcon.setFitWidth(20);
-        prizeLabel = new Label(String.valueOf(coinsPrize), coinIcon);
-        prizeLabel.setFont(font);
+
+        prizeLabel = new PrizeLabel(coinsPrize);
         
         setOnAction((ActionEvent e)->{
             plantTower();
@@ -99,10 +96,10 @@ public class PlantTowerButton extends Button{
     void updateCoins(double coins) {
         if(coins < coinsPrize) {
             setDisable(true);
-            Logger.logClient("DISABLE");
+            setOpacity(0.5);
         } else {
             setDisable(false);
-            Logger.logClient("ENABLE");
+            setOpacity(1);
         }
     }
     

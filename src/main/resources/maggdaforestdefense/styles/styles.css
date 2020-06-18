@@ -72,10 +72,6 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
 
 }
-.addTowerButton:disabled{
-    -fx-background-color:#C4C4C4;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.1) , 5, 0.0 , 0 , 1 );
-}
 
 
 /* MAGGDA ENDE */

@@ -70,9 +70,9 @@ public class SideMenu extends GridPane {
     }
     
     public void updateCoins(double coins) {
-       if(content != null && (!content.getChildrenUnmodifiable().isEmpty()) ) {
-           if(content.getChildrenUnmodifiable().get(0) instanceof PlantMenu) {
-               ((PlantMenu)content.getChildrenUnmodifiable().get(0)).updateCoins(coins);
+       if(content != null  ) {
+           if(content instanceof PlantMenu) {
+               ((PlantMenu)content).updateCoins(coins);
            }
        }
     }

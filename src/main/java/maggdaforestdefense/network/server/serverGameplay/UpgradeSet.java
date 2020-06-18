@@ -9,17 +9,23 @@ package maggdaforestdefense.network.server.serverGameplay;
  *
  * @author DavidPrivat
  */
-public class UpgradeSet {
+public enum UpgradeSet {
+    SPRUCE_SET(new Upgrade[][]{
+        new Upgrade[]{
+            Upgrade.SPRUCE_1_1,
+            Upgrade.SPRUCE_1_6
+        }});
+
     private Upgrade[][] upgrades;
-    
-    public UpgradeSet(Upgrade[][] array) {
+
+    UpgradeSet(Upgrade[][] array) {
         upgrades = array;
     }
-    
+
     public Upgrade getUpgrade(int tier, int type) {
-        return upgrades[tier-1][type-1];
+        return upgrades[tier - 1][type - 1];
     }
-    
+
     public Upgrade[][] getUpgrades() {
         return upgrades;
     }

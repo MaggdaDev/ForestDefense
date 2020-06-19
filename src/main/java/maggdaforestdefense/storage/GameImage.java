@@ -39,6 +39,8 @@ public enum GameImage {
     // MENU ICONS
     MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png"),
     MENUICON_LOCK("maggdaforestdefense/styles/gameicons/lock.png"),
+    MENUICON_ARROW_RIGHT("maggdaforestdefense/styles/gameicons/arrow_right.png"),
+    MENUICON_ARROW_LEFT("maggdaforestdefense/styles/gameicons/arrow_left.png"),
     
     //DISPLAY 
     DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),

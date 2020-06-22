@@ -123,5 +123,14 @@ public class Game {
         gameScreen.getSideMenu().updateCoins(coins);
     }
 
+    public void buyUpgrade(NetworkCommand command) {
+        String id = command.getArgument("id");
+        int tier = (int)command.getNumArgument("tier");
+        int type = (int)command.getNumArgument("type");
+        
+        ClientTower tower = (ClientTower) gameObjects.get(id);
+        tower.buyUpgrade(tier, type);
+    }
+
 
 }

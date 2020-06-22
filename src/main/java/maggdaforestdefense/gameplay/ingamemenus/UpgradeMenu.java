@@ -47,11 +47,12 @@ public class UpgradeMenu extends VBox{
     private Label treeNameLabel;
     
     private ObservableList<UpgradeButtonTierBox> boxes;
+  
     
     private Button nextUpgradeTierButton, previousUpgradeTierButton;
     
     private HBox buttonMenuScrollBox;
-    private int currentTierShowing = 1;
+    private int currentTierShowing = 1, currentTierToBuy = 1;
     
     private final UpgradeSet upgradeSet;
     
@@ -117,7 +118,36 @@ public class UpgradeMenu extends VBox{
                 throw new UnsupportedOperationException();
         }
           getChildren().addAll(treeNameLabel, treePane, new Separator(), buttonMenuScrollBox);
+          
+          updateButtonsLocked();
     }
+    
+    public void updateButtonsLocked() {
+        for(int tier = 1; tier <= upgradeSet.getMaxTier(); tier++) {
+            
+            if(tier < currentTierToBuy) {
+                for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
+                    if(button.getClickState() != BuyUpgradeButton.CLICK_STATES.BOUGHT) {
+                        button.setClickState(BuyUpgradeButton.CLICK_STATES.TIER_ALREADY_BOUGHT);
+                    }
+                }
+            } else if(tier == currentTierToBuy) {
+                for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
+                    
+                        button.setClickState(BuyUpgradeButton.CLICK_STATES.USUAL);
+                    
+                }
+            } else {
+                for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
+                    
+                        button.setClickState(BuyUpgradeButton.CLICK_STATES.LOCKED);
+                    
+                }
+            }
+        }
+    }
+    
+   
     
     public void updateButtonDisable() {
  
@@ -151,12 +181,26 @@ public class UpgradeMenu extends VBox{
         updateUpgradesShowing();
     }
     
+    public void buyUpgrade(int tier, int type) { 
+        boxes.get(tier-1).getButtons().get(type-1).setClickState(BuyUpgradeButton.CLICK_STATES.BOUGHT);
+        currentTierToBuy = tier+1;
+    }
+    
     public class UpgradeButtonTierBox extends VBox {
+        private ObservableList<BuyUpgradeButton> buttons;
+        
+        public ObservableList<BuyUpgradeButton> getButtons() {
+            return buttons;
+        }
         
         public UpgradeButtonTierBox(int tier, Upgrade[] upgrades) {
-            for(Upgrade upgrade: upgrades) {
-                BuyUpgradeButton button = new BuyUpgradeButton(ownerTower, upgrade, true);
+            buttons = FXCollections.observableArrayList();
+            
+            for(int i = 0; i < upgrades.length; i++) {
+                Upgrade upgrade = upgrades[i];
+                BuyUpgradeButton button = new BuyUpgradeButton(ownerTower, upgrade, true, tier, i+1);
                 getChildren().add(button);
+                buttons.add(button);
             }
             
             setAlignment(Pos.CENTER);

@@ -55,4 +55,8 @@ public abstract class ClientTower extends ClientGameObject{
     
     @Override
     public void onRemove(){}
+
+    public void buyUpgrade(int tier, int type) {
+        upgradeMenu.buyUpgrade(tier,type);
+    }
 }

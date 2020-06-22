@@ -13,7 +13,9 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 
 /**
  *
@@ -25,8 +27,10 @@ public abstract class Tower extends GameObject {
 
     protected ServerGame serverGame;
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize) {
+    protected UpgradeSet upgradeSet;
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades) {
         super(game.getNextId(), type);
+        upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
         yIndex = (int) (yPos / MapCell.CELL_SIZE);
         serverGame = game;
@@ -88,4 +92,11 @@ public abstract class Tower extends GameObject {
     public int getPrize() {
         return prize;
     }
+    
+    public UpgradeSet getUpgradeSet() {
+        return upgradeSet;
+    }
+
+    
+    abstract public void addUpgrade(Upgrade upgrade);
 }

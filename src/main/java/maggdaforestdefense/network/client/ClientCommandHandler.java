@@ -89,6 +89,9 @@ public class ClientCommandHandler extends Thread {
             case REMOVE_GAME_OBJECT:
                 Game.getInstance().removeGameObject(command.getArgument("id"));
                 break;
+            case UPGRADE_BUY_CONFIRMED:
+                Game.getInstance().buyUpgrade(command);
+                break;
         }
     }
 

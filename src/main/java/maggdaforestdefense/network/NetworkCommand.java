@@ -88,19 +88,21 @@ public class NetworkCommand {
 
     public static enum CommandType {
 
-        //CLIENT TO SERVER
+        //  CLIENT TO SERVER
         REQUIRE_CONNECTION, // NO ARGS
         START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
+        UPGRADE_BUTTON_CLICKED, //id, tier, type
         
-        // SERVER TO CLIENT
+        //  SERVER TO CLIENT
         PERMIT_CONNECTION, // NO ARGS
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
         UPDATE_GAME_RESSOURCES, // coins, essence
         PLANT_TREE,             //id, type, xIndex, yIndex
-        REMOVE_GAME_OBJECT;     //id
+        REMOVE_GAME_OBJECT,     //id
+        UPGRADE_BUY_CONFIRMED;  //id, tier, type
         
     }
 }

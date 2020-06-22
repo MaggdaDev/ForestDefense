@@ -35,7 +35,7 @@ public class Spruce extends Tower {
     double shootTimer = 0, shootTime = DEFAULT_SHOOT_TIME;
 
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE);
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET);
         xPos = x;
         yPos = y;
         upgrades = new Vector<>();
@@ -71,8 +71,10 @@ public class Spruce extends Tower {
         serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, getCenterX(), getCenterY(), target));
     }
     
+    @Override
     public void addUpgrade(Upgrade upgrade) {
         upgrades.add(upgrade);
     }
+  
 
 }

@@ -159,6 +159,15 @@ public class ServerGame extends Thread{
         return currentGameObjectId++;
     }
 
+    public void buyUpgrade(String id, int tier, int upgradeType) {
+        Tower tower = (Tower)gameObjects.get(id);
+        UpgradeSet upgrades = tower.getUpgradeSet();
+        tower.addUpgrade(upgrades.getUpgrade(tier, upgradeType));
+        Logger.logServer("Upgrade tier " + tier + "      type " + upgradeType);
+        
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("tier", tier), new CommandArgument("type", upgradeType)}));
+    }
+
  
 
     

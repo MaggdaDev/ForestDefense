@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.ingamemenus;
 
+import com.google.api.client.util.Sleeper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,7 +44,7 @@ public class UpgradeMenu extends VBox{
     private GameObjectType gameObjectType;
     private ClientTower ownerTower;
     
-    private BorderPane treePane;
+    private VBox treePane;
     private Label treeNameLabel;
     
     private ObservableList<UpgradeButtonTierBox> boxes;
@@ -58,6 +59,10 @@ public class UpgradeMenu extends VBox{
     
     private StackPane upgradeStackPane;
     
+    private BoughtUpgradesBox boughtUpgradesBox;
+    
+    private SelectedUpgradeBox selectedUpgradeBox;
+    
     public UpgradeMenu(ClientTower owner) {
         ownerTower = owner;
         gameObjectType = ownerTower.getType();
@@ -65,11 +70,21 @@ public class UpgradeMenu extends VBox{
         ImageView treeView = new ImageView();
         treeView.setFitWidth(100);
         treeView.setPreserveRatio(true);
-        treePane = new BorderPane(treeView);
-        treePane.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        boughtUpgradesBox = new BoughtUpgradesBox(owner.getUpgradeSet().getMaxTier());
+        
         
         treeNameLabel = new Label();
         treeNameLabel.setFont(font);
+        treePane = new VBox();
+        treePane.getChildren().addAll(treeNameLabel, treeView, boughtUpgradesBox);
+        
+        treePane.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        treePane.setAlignment(Pos.CENTER);
+        treePane.setFillWidth(true);
+        
+        
+        
+        selectedUpgradeBox = new SelectedUpgradeBox();
         
         
         // Set up upgrades scroll
@@ -117,7 +132,7 @@ public class UpgradeMenu extends VBox{
             default:
                 throw new UnsupportedOperationException();
         }
-          getChildren().addAll(treeNameLabel, treePane, new Separator(), buttonMenuScrollBox);
+          getChildren().addAll(treePane,  new Separator(), buttonMenuScrollBox, new Separator(), selectedUpgradeBox);
           
           updateButtonsLocked();
     }
@@ -127,25 +142,35 @@ public class UpgradeMenu extends VBox{
             
             if(tier < currentTierToBuy) {
                 for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
-                    if(button.getClickState() != BuyUpgradeButton.CLICK_STATES.BOUGHT) {
+                    if(!button.isBought()) {
                         button.setClickState(BuyUpgradeButton.CLICK_STATES.TIER_ALREADY_BOUGHT);
+                        button.setBought(false);
+                        button.setLocked(false);
                     }
                 }
             } else if(tier == currentTierToBuy) {
                 for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
                     
                         button.setClickState(BuyUpgradeButton.CLICK_STATES.USUAL);
+                        button.setLocked(false);
                     
                 }
             } else {
                 for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
                     
-                        button.setClickState(BuyUpgradeButton.CLICK_STATES.LOCKED);
+                        button.setLocked(true);
                     
                 }
             }
         }
     }
+    
+    public void updateCoins(double coins) {
+        boxes.forEach((UpgradeButtonTierBox box)->{
+            box.updateCoins(coins);
+        });
+        selectedUpgradeBox.update();
+    } 
     
    
     
@@ -182,11 +207,21 @@ public class UpgradeMenu extends VBox{
     }
     
     public void buyUpgrade(int tier, int type) { 
-        boxes.get(tier-1).getButtons().get(type-1).setClickState(BuyUpgradeButton.CLICK_STATES.BOUGHT);
+        boxes.get(tier-1).getButtons().get(type-1).setBought(true);
         currentTierToBuy = tier+1;
+        
+        Upgrade upgrade = upgradeSet.getUpgrade(tier, type);
+        boughtUpgradesBox.setBought(upgrade, tier);
+        
+        updateButtonsLocked();
+        selectedUpgradeBox.update();
     }
     
-    public class UpgradeButtonTierBox extends VBox {
+    public SelectedUpgradeBox getSelectedUpgradeBox() {
+        return selectedUpgradeBox;
+    }
+    
+    public class UpgradeButtonTierBox extends FlowPane {
         private ObservableList<BuyUpgradeButton> buttons;
         
         public ObservableList<BuyUpgradeButton> getButtons() {
@@ -204,8 +239,97 @@ public class UpgradeMenu extends VBox{
             }
             
             setAlignment(Pos.CENTER);
-            setSpacing(30);
-            setFillWidth(false);
+            setHgap(30);
+            setVgap(30);
+            
+        }
+
+        public void updateCoins(double coins) {
+            buttons.forEach((BuyUpgradeButton button)->{
+               button.updateCoins(coins); 
+            });
+        }
+    }
+    
+    public class BoughtUpgradesBox extends HBox {
+        public UpgradeDisplayPane[] panes;
+        public BoughtUpgradesBox(int tierAmount) {
+            panes = new UpgradeDisplayPane[tierAmount];
+            for(int i = 0; i < tierAmount; i++) {
+                UpgradeDisplayPane addPane = new UpgradeDisplayPane();
+                panes[i] = addPane;
+                getChildren().add(addPane);
+            }
+            setSpacing(20);
+            
+            setManaged(true);
+            setAlignment(Pos.CENTER);
+        }
+        
+        public void setBought(Upgrade upgrade, int tier) {
+            panes[tier-1].getImageView().setImage(upgrade.getIcon());
+        }
+        
+        class UpgradeDisplayPane extends StackPane{
+            public final static double SIZE = 80;
+            private ImageView imageView;
+            
+            public UpgradeDisplayPane() {
+                imageView = new ImageView();
+                imageView.setFitHeight(SIZE);
+                imageView.setFitWidth(SIZE);
+                
+                setPrefSize(SIZE, SIZE);
+                
+                setBorder(new Border(new BorderStroke(Color.DARKMAGENTA, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
+                
+                getChildren().add(imageView);
+            }
+            public ImageView getImageView() {
+                return imageView;
+            }
+        }
+    }
+    
+    public class SelectedUpgradeBox extends VBox {
+        public static final double ICON_SIZE = 100;
+        private Button buyButton;
+        private ImageView upgradeIcon;
+        private Label descriptionLabel;
+        private BuyUpgradeButton currentButton;
+        
+        public SelectedUpgradeBox() {
+            buyButton = new Button("BUY");
+            buyButton.setFont(font);
+            
+            upgradeIcon = new ImageView();
+            upgradeIcon.setFitHeight(ICON_SIZE);
+            upgradeIcon.setFitWidth(ICON_SIZE);
+            
+            descriptionLabel = new Label("Test description laaaaail");
+            descriptionLabel.setFont(font);
+            
+            getChildren().addAll(descriptionLabel, upgradeIcon, buyButton);
+            
+            setManaged(true);
+            setAlignment(Pos.CENTER);
+        }
+        
+        public void setUpgrade(BuyUpgradeButton button, boolean buyable) {
+            currentButton = button;
+            upgradeIcon.setImage(button.getUpgrade().getIcon());
+            buyButton.setDisable(!buyable);
+            buyButton.setOnAction((ActionEvent e)->{
+                button.sendBuyOrder();
+            });
+        }
+        
+        public void update() {
+            if(currentButton == null) {
+                buyButton.setDisable(true);
+            } else {
+                buyButton.setDisable(!currentButton.isBuyable());
+            }
         }
     }
 }

@@ -131,6 +131,10 @@ public class Game {
         ClientTower tower = (ClientTower) gameObjects.get(id);
         tower.buyUpgrade(tier, type);
     }
+    
+    public int getCoins() {
+        return coins;
+    }
 
 
 }

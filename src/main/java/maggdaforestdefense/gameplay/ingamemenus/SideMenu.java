@@ -73,6 +73,8 @@ public class SideMenu extends GridPane {
        if(content != null  ) {
            if(content instanceof PlantMenu) {
                ((PlantMenu)content).updateCoins(coins);
+           } else if(content instanceof UpgradeMenu) {
+               ((UpgradeMenu)content).updateCoins(coins);
            }
        }
     }

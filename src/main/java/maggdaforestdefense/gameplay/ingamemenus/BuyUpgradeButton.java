@@ -38,6 +38,7 @@ public class BuyUpgradeButton extends StackPane {
     private ClientTower tower;
     private PrizeLabel prizeLabel;
     private final int tier, type;
+    private boolean bought, locked;
 
     public BuyUpgradeButton(ClientTower owner, Upgrade upgrade, boolean locked, int tier, int type) {
         this.upgrade = upgrade;
@@ -57,14 +58,10 @@ public class BuyUpgradeButton extends StackPane {
         checkIcon = new ImageView(GameImage.MENUICON_CHECK_GREEN.getImage());
         checkIcon.setPreserveRatio(true);
         checkIcon.setFitWidth(SIZE/2);
+        this.locked = locked;
+        bought = false;
 
-        if (locked) {
-            lockedIcon.setVisible(true);
-            clickState = CLICK_STATES.LOCKED;
-        } else {
-            clickState = CLICK_STATES.USUAL;
-            lockedIcon.setVisible(false);
-        }
+
         
         prizeLabel = new PrizeLabel(upgrade.getPrize());
         
@@ -74,6 +71,8 @@ public class BuyUpgradeButton extends StackPane {
         vbox.setAlignment(Pos.CENTER);
 
         getChildren().addAll(vbox, lockedIcon, checkIcon);
+        
+        clickState = CLICK_STATES.USUAL;
 
         update();
 
@@ -91,11 +90,22 @@ public class BuyUpgradeButton extends StackPane {
         
         setOnMouseReleased((MouseEvent e)->{
             if(clickState == CLICK_STATES.CLICKED) {
-                NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUTTON_CLICKED, new CommandArgument[]{new CommandArgument("id", owner.getGameObjectId()), new CommandArgument("tier", tier), new CommandArgument("type", type)}));
+                clickState = CLICK_STATES.USUAL;
                 
+                
+                update();
             }
         });
+        
+        setOnMouseClicked((MouseEvent e)->{
+            tower.getUpgradeMenu().getSelectedUpgradeBox().setUpgrade(this, isBuyable());
+        });
 
+    }
+    
+    public boolean isBuyable() {
+        if(locked || bought) return false;
+        return Game.getInstance().getCoins() >= upgrade.getPrize();
     }
 
     public void update() {
@@ -119,18 +129,6 @@ public class BuyUpgradeButton extends StackPane {
                 upgradeIcon.setOpacity(0.5);
                 setEffect(new ColorAdjust(0, 0, 0, 0));
                 break;
-            case LOCKED:
-                lockedIcon.setVisible(true);
-                checkIcon.setVisible(false);
-                upgradeIcon.setOpacity(0.5);
-                setEffect(new ColorAdjust(0, 0, 0, 0));
-                break;
-            case BOUGHT:
-                checkIcon.setVisible(true);
-                lockedIcon.setVisible(false);
-                upgradeIcon.setOpacity(0.5);
-                setEffect(new ColorAdjust(0, 0, 0, 0));
-                break;
             case TIER_ALREADY_BOUGHT:
                 checkIcon.setVisible(false);
                 lockedIcon.setVisible(false);
@@ -138,6 +136,21 @@ public class BuyUpgradeButton extends StackPane {
                 setEffect(new ColorAdjust(0, 0, -0.5, 0));
                 break;
         }
+        if(locked) {
+            bought = false;
+        }
+        if(bought) {
+            locked = false;
+        }
+        lockedIcon.setVisible(locked);
+        checkIcon.setVisible(bought);
+    }
+    
+    public void sendBuyOrder() {
+        NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUTTON_CLICKED, new CommandArgument[]{
+            new CommandArgument("id", tower.getGameObjectId()), 
+            new CommandArgument("tier", tier), 
+            new CommandArgument("type", type)}));
     }
     
     public CLICK_STATES getClickState() {
@@ -148,14 +161,50 @@ public class BuyUpgradeButton extends StackPane {
         clickState = c;
         update();
     }
+    
+    public void setBought(boolean b) {
+        bought = b;
+        update();
+    }
+    
+    public void setLocked(boolean b) {
+        locked = b;
+        update();
+    }
+    
+    public boolean isBought() {
+        return bought;
+    }
+    
+    public boolean isLocked() {
+        return locked;
+    }
+    public Upgrade getUpgrade() {
+        return upgrade;
+    }
+    
+    
+
+    public void updateCoins(double coins) {
+        switch(clickState) {
+            case USUAL: case CLICKED:
+                prizeLabel.setBuyable(upgrade.getPrize() <= coins);
+                break;
+            default:
+                prizeLabel.setBuyable(true);
+                break;
+        }
+    }
+
+    
 
     public static enum CLICK_STATES {
         USUAL,
         CLICKED,
-        LOCKED,
+
         DISABLE,
-        TIER_ALREADY_BOUGHT,
-        BOUGHT;
+        TIER_ALREADY_BOUGHT;
+
 
     }
 }

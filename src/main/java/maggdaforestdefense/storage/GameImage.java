@@ -34,13 +34,20 @@ public enum GameImage {
     
     // UPGRADE ICONS
     UPGRADE_SPRUCE_01_01("maggdaforestdefense/upgrade_icons/spruce_01_01.png"),
+    UPGRADE_SPRUCE_01_06("maggdaforestdefense/upgrade_icons/spruce_01_06.png"),
     
     // MENU ICONS
     MENUICON_EXPAND("maggdaforestdefense/styles/gameicons/expand.png"),
+    MENUICON_LOCK("maggdaforestdefense/styles/gameicons/lock.png"),
+    MENUICON_ARROW_RIGHT("maggdaforestdefense/styles/gameicons/arrow_right.png"),
+    MENUICON_ARROW_LEFT("maggdaforestdefense/styles/gameicons/arrow_left.png"),
+    MENUICON_CHECK_GREEN("maggdaforestdefense/styles/gameicons/green_check.png"),
     
     //DISPLAY 
     DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),
-    DISPLAY_HEALTH_BAR("maggdaforestdefense/display/health_bar.png");
+    DISPLAY_HEALTH_BAR("maggdaforestdefense/display/health_bar.png"),
+    COIN_ICON("maggdaforestdefense/display/coin_icon.png"),
+    ESSENCE_ICON("maggdaforestdefense/display/essence_icon.png");
 
     private Image image;
     
@@ -58,4 +65,6 @@ public enum GameImage {
 
         return image;
     }
+
+ 
 }

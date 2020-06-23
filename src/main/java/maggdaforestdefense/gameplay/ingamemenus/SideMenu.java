@@ -26,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -66,6 +67,16 @@ public class SideMenu extends GridPane {
             refreshPosition();
         }));
 
+    }
+    
+    public void updateCoins(double coins) {
+       if(content != null  ) {
+           if(content instanceof PlantMenu) {
+               ((PlantMenu)content).updateCoins(coins);
+           } else if(content instanceof UpgradeMenu) {
+               ((UpgradeMenu)content).updateCoins(coins);
+           }
+       }
     }
 
     public void setContent(Parent p) {

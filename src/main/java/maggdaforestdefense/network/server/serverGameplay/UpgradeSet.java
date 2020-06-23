@@ -9,18 +9,57 @@ package maggdaforestdefense.network.server.serverGameplay;
  *
  * @author DavidPrivat
  */
-public class UpgradeSet {
+public enum UpgradeSet {
+    SPRUCE_SET(new Upgrade[][]{
+        new Upgrade[]{
+            Upgrade.SPRUCE_1_1,
+            Upgrade.SPRUCE_1_2,
+            Upgrade.SPRUCE_1_3,
+            Upgrade.SPRUCE_1_4,
+            Upgrade.SPRUCE_1_5,
+            Upgrade.SPRUCE_1_6
+        }, new Upgrade[]{
+            Upgrade.SPRUCE_2_1,
+            Upgrade.SPRUCE_2_2,
+            Upgrade.SPRUCE_2_3,
+            Upgrade.SPRUCE_2_4,
+            Upgrade.SPRUCE_2_5,
+            Upgrade.SPRUCE_2_6
+        }, new Upgrade[]{
+            Upgrade.SPRUCE_3_1,
+            Upgrade.SPRUCE_3_2,
+            Upgrade.SPRUCE_3_3,
+            Upgrade.SPRUCE_3_4,
+            Upgrade.SPRUCE_3_5,
+            Upgrade.SPRUCE_3_6
+        }, new Upgrade[]{
+            Upgrade.SPRUCE_4_1,
+            Upgrade.SPRUCE_4_2,
+            Upgrade.SPRUCE_4_3,
+            Upgrade.SPRUCE_4_4,
+            Upgrade.SPRUCE_4_5,
+            Upgrade.SPRUCE_4_6
+        }});
+
     private Upgrade[][] upgrades;
-    
-    public UpgradeSet(Upgrade[][] array) {
+
+    UpgradeSet(Upgrade[][] array) {
         upgrades = array;
     }
-    
+
     public Upgrade getUpgrade(int tier, int type) {
-        return upgrades[tier-1][type-1];
+        return upgrades[tier - 1][type - 1];
     }
-    
+
     public Upgrade[][] getUpgrades() {
         return upgrades;
+    }
+    
+    public Upgrade[] getAllFromTier(int tier) {
+        return upgrades[tier-1];
+    }
+    
+    public int getMaxTier() {
+        return upgrades.length;
     }
 }

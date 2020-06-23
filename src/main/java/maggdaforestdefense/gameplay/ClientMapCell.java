@@ -33,8 +33,9 @@ public class ClientMapCell extends StackPane {
     private PlantMenu plantMenu;
 
     private ClientTower currentTower = null;
+    
+    private MENU_STATE menuState = MENU_STATE.PLANT_MENU;
 
-    private Pane menuPane;
 
     public ClientMapCell(MapCell.CellType type, int xIndex, int yIndex) {
         cellType = type;
@@ -62,7 +63,7 @@ public class ClientMapCell extends StackPane {
 
         plantMenu = new PlantMenu(type, xIndex, yIndex);
 
-        menuPane = new Pane(plantMenu);
+ 
     }
 
     public void addSelectionSquare() {
@@ -93,9 +94,15 @@ public class ClientMapCell extends StackPane {
         }
     }
 
-    public Parent getMenuPane() {
-        return menuPane;
-
+    public Parent getMenu() {
+        switch(menuState) {
+            case PLANT_MENU:
+                return plantMenu;
+            case UPGRADE_MENU:
+                return currentTower.getUpgradeMenu();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     public void plantTree(ClientTower tree) {
@@ -106,8 +113,7 @@ public class ClientMapCell extends StackPane {
             }
             getChildren().add(tree);
             currentTower = tree;
-            menuPane.getChildren().clear();
-            menuPane.getChildren().add(tree.getUpgradeMenu());
+            menuState = MENU_STATE.UPGRADE_MENU;
             
             if(isSelectionClickedSquare) {
                 PlayerInputHandler.getInstance().mapCellClicked(this);
@@ -128,5 +134,10 @@ public class ClientMapCell extends StackPane {
         }
         return false;
 
+    }
+    
+    public static enum MENU_STATE {
+        PLANT_MENU,
+        UPGRADE_MENU;
     }
 }

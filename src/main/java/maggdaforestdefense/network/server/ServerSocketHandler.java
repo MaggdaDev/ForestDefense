@@ -106,6 +106,13 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 game.addNewTower(xPos, yPos, type);
                 
                 break;
+                
+            case UPGRADE_BUTTON_CLICKED:
+                String id = command.getArgument("id");
+                int tier = (int)command.getNumArgument("tier");
+                int upgradeType = (int)command.getNumArgument("type");
+                game.buyUpgrade(id, tier, upgradeType);
+                break;
         }
         
     }

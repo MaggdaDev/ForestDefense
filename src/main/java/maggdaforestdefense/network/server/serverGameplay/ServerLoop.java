@@ -34,7 +34,7 @@ public class ServerLoop{
         startTimeNano = System.nanoTime();
         oldRunTime = startTimeNano;
         //Test
-        double secondsBetweenspawns = 1;
+        double secondsBetweenspawns = 0.25;
         int spawnAmount = 0;
         while(running) {
             runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
@@ -43,6 +43,8 @@ public class ServerLoop{
             oldRunTime = runTime;
             
             serverGame.updateGameObjects(timeElapsed);
+            
+            serverGame.updateRessources();
             
             
             //TEST

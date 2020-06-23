@@ -28,7 +28,11 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class ServerGame extends Thread{
-
+    public final static int START_COINS = 100, START_ESSENCE = 20;
+    
+    private int essence = START_ESSENCE, coins = START_COINS;
+    
+    
     private ServerLoop serverLoop;
     private Vector<Player> players;
     private ConcurrentHashMap<String, GameObject> gameObjects;
@@ -38,8 +42,7 @@ public class ServerGame extends Thread{
     
     private HashMap<String, Mob> mobsList;
     
-    //TEMP
-    int count = 0;
+    
 
     public ServerGame(Player firstPlayer) {
         currentGameObjectId = 0;
@@ -69,6 +72,9 @@ public class ServerGame extends Thread{
         Tower newTower;
         switch(type) {
             case T_SPRUCE:
+                if(coins < Spruce.DEFAULT_PRIZE) {
+                    return;
+                }
                 newTower = new Spruce(this, xPos, yPos);
                 break;
                 
@@ -82,6 +88,7 @@ public class ServerGame extends Thread{
     
     public void plantTree(Tower tower) {
         gameObjects.put(String.valueOf(tower.getId()), tower);
+        coins -= tower.getPrize();
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.PLANT_TREE, new CommandArgument[]{
             new CommandArgument("id", String.valueOf(tower.getId())),
             new CommandArgument("xIndex", String.valueOf(tower.getXIndex())),
@@ -98,19 +105,12 @@ public class ServerGame extends Thread{
             }
         });
         
-        
-        /*
-        count++;
-        
-        for(Mob mob: mobsList.toArray(new Mob[]{})) {
-            if(!gameObjects.contains(mob)) {
-                mobsList.remove(mob);
-                Logger.logServer("Mob removed (because in mobsList, but not gameobjects): id: " + mob.getId() + "         in round: " + count);
-            }
-        }
-*/
     }
     
+    public void updateRessources() {
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", essence)}));
+    }
+   
     public void sendCommandToAllPlayers(NetworkCommand command) {
         players.forEach((Player player)->{
             player.sendCommand(command);
@@ -141,9 +141,10 @@ public class ServerGame extends Thread{
         mobsList.put(String.valueOf(mob.getId()), mob);
     }
     
-    public void removeMob(Mob mob) {
+    public void killMob(Mob mob) {
         mobsList.remove(String.valueOf(mob.getId()));
         removeGameObject(mob);
+        coins += mob.getCoinValue();
     }
     
     public HashMap<String, Mob> getMobs() {
@@ -156,6 +157,22 @@ public class ServerGame extends Thread{
     
     public synchronized int getNextId() {
         return currentGameObjectId++;
+    }
+
+    public void buyUpgrade(String id, int tier, int upgradeType) {
+   
+        
+        Tower tower = (Tower)gameObjects.get(id);
+        UpgradeSet upgrades = tower.getUpgradeSet();
+        Upgrade upgrade = upgrades.getUpgrade(tier, upgradeType);
+        if(coins >= upgrade.getPrize()) {
+            coins -= (int)upgrade.getPrize();
+        tower.addUpgrade(upgrade);
+        Logger.logServer("Upgrade tier " + tier + "      type " + upgradeType);
+        
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("tier", tier), new CommandArgument("type", upgradeType)}));
+        }
+        
     }
 
  

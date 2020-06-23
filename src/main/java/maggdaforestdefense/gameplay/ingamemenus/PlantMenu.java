@@ -6,6 +6,7 @@
 package maggdaforestdefense.gameplay.ingamemenus;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -22,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -30,6 +32,8 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class PlantMenu extends VBox {
     private final static Font font = new Font(40);
+    
+    
 
     private MapCell.CellType cellType;
 
@@ -79,7 +83,7 @@ public class PlantMenu extends VBox {
                 case DIRT:
                     cellTypeView.setImage(GameImage.MAP_CELL_DIRT.getImage());
                     cellTypeLabel.setText("Dirt");
-                    towerButtons.add(new PlantTowerButton(GameObjectType.T_SPRUCE, xIndex, yIndex), 0, 0);
+                    towerButtons.add(new PlantTowerButton(GameObjectType.T_SPRUCE, xIndex, yIndex, Spruce.DEFAULT_PRIZE), 0, 0);
                     break;
                 case SAND:
                     cellTypeView.setImage(GameImage.MAP_CELL_SAND.getImage());
@@ -97,6 +101,15 @@ public class PlantMenu extends VBox {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public void updateCoins(double coins) {
+        for(Node node: towerButtons.getChildren()) {
+            if(node instanceof PlantTowerButton) {
+                ((PlantTowerButton)node).updateCoins(coins);
+            }
         }
     }
 }

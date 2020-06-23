@@ -1,4 +1,16 @@
+config.json
+oauthnotes.txt
+natives/
+natives2/
+updater/tmp
+updater/packedresources
 
+
+!updater/getdown-core-1.8.6.jar
+!updater/getdown-launcher-1.8.6.jar
+!updater/ForestDefense/getdown-launcher.jar
+!updater/ForestDefense/natives.jar
+!updater/ForestDefense/resources.jar
 
 
 ### JetBrains template
@@ -127,20 +139,3 @@ gradle-app.setting
 
 # Local Netlify folder
 .netlify
-
-# dsfif
-
-
-config.json
-oauthnotes.txt
-natives/
-natives2/
-updater/tmp
-#updater/packedresources
-
-
-!updater/getdown-core-1.8.6.jar
-!updater/getdown-launcher-1.8.6.jar
-!updater/ForestDefense/getdown-launcher.jar
-!updater/ForestDefense/natives.jar
-!updater/ForestDefense/resources.jar

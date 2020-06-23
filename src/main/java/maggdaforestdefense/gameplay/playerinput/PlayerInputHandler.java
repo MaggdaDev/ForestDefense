@@ -45,7 +45,7 @@ public class PlayerInputHandler {
     }
 
     public void mapCellClicked(ClientMapCell clickedCell) {
-        Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getMenuPane());
+        Game.getInstance().getGameScreen().setNewContentSideMenu(clickedCell.getMenu());
         if (clickedCell.isPlanted()) {
             showRange(clickedCell);
 

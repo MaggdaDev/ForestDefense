@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,7 +18,6 @@ import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.storage.Logger;
 import org.panda_lang.pandomium.util.os.PandomiumOS;
-import sun.tools.jstat.Alignment;
 
 import java.awt.*;
 import java.io.*;
@@ -48,7 +46,6 @@ public class AuthWindow {
     private SwingNode browserNode;
     private Button cancelBtn;
     private Button anonBtn;
-    private Button reloadBtn;
 
     private CookieManager cookieManager;
 
@@ -80,18 +77,10 @@ public class AuthWindow {
             anonSignIn();
         });
 
-        reloadBtn = new Button();
-        reloadBtn.getStyleClass().add("y-btn-reload");
-        reloadBtn.setMinHeight(20);
-        reloadBtn.setMinWidth(20);
-        reloadBtn.setOnAction(event -> {
-            signinView.getEngine().load(AUTH_URL);
-        });
-
-        btnBox = new HBox(cancelBtn, anonBtn, reloadBtn);
+        btnBox = new HBox(cancelBtn, anonBtn);
         btnBox.setPadding(new Insets(10, 10, 10, 10));
         btnBox.setSpacing(10);
-        btnBox.setAlignment(Pos.CENTER);
+        //btnBox.setAlignment(new Align);
 
             signinView = new WebView();
             signinView.setPrefHeight(640);
@@ -132,10 +121,11 @@ public class AuthWindow {
      */
     public void show() {
         authStage.setResizable(false);
+        //authStage.setAlwaysOnTop(true);
         authStage.setHeight(698);
         authStage.setWidth(355);
+        //authStage.setIconified(true);
         authStage.show();
-        authStage.requestFocus();
     }
 
     /**

@@ -26,6 +26,7 @@ public class MenuManager {
     // Menues
     private MainMenu mainMenu;
     private LaunchingScreen launchingScreen;
+    private MapEditor mapEditor;
 
     public MenuManager(StackPane root) {
         instance = this;
@@ -34,10 +35,15 @@ public class MenuManager {
 
         try {
             //Menues
-            //mainMenu = new MainMenu();
+
             FXMLLoader mainLoader = new FXMLLoader(getClass().getClassLoader().getResource("maggdaforestdefense/menues/main.fxml"));
             mainLoader.load();
             mainMenu = mainLoader.getRoot();
+
+            FXMLLoader mapEditorLoader = new FXMLLoader(getClass().getClassLoader().getResource("maggdaforestdefense/menues/mapeditor.fxml"));
+            mapEditorLoader.load();
+            mapEditor = mapEditorLoader.getRoot();
+
             launchingScreen = new LaunchingScreen();
 
         } catch (IOException e) {
@@ -63,6 +69,10 @@ public class MenuManager {
             case MAIN_MENU:
                 showScreen(mainMenu);
                 break;
+            case MAP_EDITOR:
+                mapEditor.initialize();
+                showScreen(mapEditor);
+                break;
             case GAME:
                 showScreen(Game.getInstance().getGameScreen());
                 break;
@@ -82,6 +92,7 @@ public class MenuManager {
 
         LAUNCHING_SCREEN,
         MAIN_MENU,
+        MAP_EDITOR,
         GAME;
     }
     

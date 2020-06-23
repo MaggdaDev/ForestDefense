@@ -12,6 +12,8 @@ applicationDefaultJvmArgs = ["-Djava.library.path=natives"]
 
 sourceCompatibility = 1.8
 
+compileJava.options.encoding = 'ISO-8859-1'
+
 repositories {
     mavenCentral()
     maven {

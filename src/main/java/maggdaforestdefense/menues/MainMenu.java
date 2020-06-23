@@ -27,6 +27,7 @@ public class MainMenu extends VBox {
 
     @FXML private Button logoutBtn;
     @FXML private Button settingsBtn;
+    @FXML private Button mapEditorBtn;
     @FXML private Text userNameTxt;
     @FXML private Text emailTxt;
 
@@ -61,6 +62,10 @@ public class MainMenu extends VBox {
         ConfigurationManager.setConfig(cfg);
         MaggdaForestDefense.getInstance().exit();
         MaggdaForestDefense.main(new String[]{});
+    }
+
+    @FXML private void mapEditorBtnOnClick(ActionEvent e) {
+        MenuManager.getInstance().setScreenShown(MenuManager.Screen.MAP_EDITOR);
     }
 
 }

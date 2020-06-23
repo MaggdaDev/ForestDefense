@@ -26,6 +26,7 @@ unzip ForestDefense-app.zip
 cd ..
 cp -r tmp/ForestDefense-app/lib ForestDefense
 cp -r tmp/ForestDefense-app/bin ForestDefense
+cp ../OPENSOURCELICENSES.md ./ForestDefense/OPENSOURCELICENSES.md
 #cp tmp/ForestDefense-app/lib/ForestDefense-app.jar ForestDefense/ForestDefense-app.jar
 
 echo '# Generating digest'
@@ -33,7 +34,7 @@ java -classpath getdown-core-1.8.6.jar com.threerings.getdown.tools.Digester For
 
 echo '# Generating open source licenses'
 cp ../OPENSOURCELICENSES.md ./ForestDefense/OPENSOURCELICENSES.md
-pandoc ./../OPENSOURCELICENSES.md -f markdown -t html -s --metadata title="OPEN SOURCE LICENSES" --toc -H ./opensourcelicenses/style.css -A ./opensourcelicenses/footer.html -o ./../../web/opensourcelicenses.html
+pandoc ./../OPENSOURCELICENSES.md -f markdown -t html -s --metadata title="OPEN SOURCE LICENSES" --toc -H ./opensourcelicenses/style.html -A ./opensourcelicenses/footer.html -o ./../../web/opensourcelicenses.html
 
 echo "# Deploying update via git"
 # shellcheck disable=SC2164

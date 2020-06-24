@@ -74,6 +74,13 @@ public class Spruce extends Tower {
     @Override
     public void addUpgrade(Upgrade upgrade) {
         upgrades.add(upgrade);
+        
+        switch(upgrade) {
+            case SPRUCE_1_2:
+                shootTime *= 0.01;
+                break;
+                
+        }
     }
   
 

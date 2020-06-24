@@ -72,7 +72,6 @@ public class PlayerInputHandler {
             dragStartMouseY = e.getY();
             dragStartLayoutX = Game.getInstance().getGameScreen().getGamePlayGroup().getLayoutX();
             dragStartLayoutY = Game.getInstance().getGameScreen().getGamePlayGroup().getLayoutY();
-            Logger.logClient("New Start");
         }
         mousePressed = b;
 
@@ -80,7 +79,6 @@ public class PlayerInputHandler {
 
     public void mouseMoved(MouseEvent e) {
         if (mousePressed) {
-            Logger.logClient("moved");
             Game.getInstance().getGameScreen().getGamePlayGroup().setLayoutX(dragStartLayoutX + e.getX() - dragStartMouseX);
             Game.getInstance().getGameScreen().getGamePlayGroup().setLayoutY(dragStartLayoutY + e.getY() - dragStartMouseY);
         }

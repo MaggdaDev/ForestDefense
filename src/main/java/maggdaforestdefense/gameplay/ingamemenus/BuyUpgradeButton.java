@@ -33,12 +33,12 @@ public class BuyUpgradeButton extends StackPane {
 
     public static final double SIZE = 100;
     private Upgrade upgrade;
-    private ImageView upgradeIcon, lockedIcon, checkIcon;
+    private ImageView upgradeIcon, lockedIcon, checkIcon, notAvailableIcon;
     private CLICK_STATES clickState;
     private ClientTower tower;
     private PrizeLabel prizeLabel;
     private final int tier, type;
-    private boolean bought, locked;
+    private boolean bought, locked, tierBought;
 
     public BuyUpgradeButton(ClientTower owner, Upgrade upgrade, boolean locked, int tier, int type) {
         this.upgrade = upgrade;
@@ -58,8 +58,14 @@ public class BuyUpgradeButton extends StackPane {
         checkIcon = new ImageView(GameImage.MENUICON_CHECK_GREEN.getImage());
         checkIcon.setPreserveRatio(true);
         checkIcon.setFitWidth(SIZE/2);
+        
+        notAvailableIcon = new ImageView(GameImage.MENUICON_NOT_AVAILABLE.getImage());
+        notAvailableIcon.setPreserveRatio(true);
+        notAvailableIcon.setFitWidth(SIZE/1.3);
+        
         this.locked = locked;
         bought = false;
+        tierBought = false;
 
 
         
@@ -70,7 +76,7 @@ public class BuyUpgradeButton extends StackPane {
         VBox vbox = new VBox(upgradeIcon, prizeLabel);
         vbox.setAlignment(Pos.CENTER);
 
-        getChildren().addAll(vbox, lockedIcon, checkIcon);
+        getChildren().addAll(vbox, lockedIcon, checkIcon, notAvailableIcon);
         
         clickState = CLICK_STATES.USUAL;
 
@@ -104,7 +110,7 @@ public class BuyUpgradeButton extends StackPane {
     }
     
     public boolean isBuyable() {
-        if(locked || bought) return false;
+        if(locked || bought || tierBought) return false;
         return Game.getInstance().getCoins() >= upgrade.getPrize();
     }
 
@@ -112,38 +118,31 @@ public class BuyUpgradeButton extends StackPane {
 
         switch (clickState) {
             case USUAL:
-                lockedIcon.setVisible(false);
-                checkIcon.setVisible(false);
-                upgradeIcon.setOpacity(1);
                 setEffect(new ColorAdjust(0, 0, 0, 0));
                 break;
             case CLICKED:
-                lockedIcon.setVisible(false);
-                checkIcon.setVisible(false);
-                upgradeIcon.setOpacity(1);
-                setEffect(new ColorAdjust(0, 0, -0.5, 0));
-                break;
-            case DISABLE:
-                lockedIcon.setVisible(false);
-                checkIcon.setVisible(false);
-                upgradeIcon.setOpacity(0.5);
-                setEffect(new ColorAdjust(0, 0, 0, 0));
-                break;
-            case TIER_ALREADY_BOUGHT:
-                checkIcon.setVisible(false);
-                lockedIcon.setVisible(false);
-                upgradeIcon.setOpacity(0.1);
-                setEffect(new ColorAdjust(0, 0, -0.5, 0));
-                break;
+                setEffect(new ColorAdjust(0, 0, -0.5 , 0));
+                break;           
         }
         if(locked) {
+            upgradeIcon.setOpacity(0.2);
             bought = false;
-        }
-        if(bought) {
+            tierBought = false;
+        } else if(bought) {
+            upgradeIcon.setOpacity(1);
             locked = false;
+            tierBought = false;
+        } else if(tierBought) {
+            upgradeIcon.setOpacity(0.2);
+            locked = false;
+            bought = false;
+        } else {
+            upgradeIcon.setOpacity(1);
         }
         lockedIcon.setVisible(locked);
         checkIcon.setVisible(bought);
+        notAvailableIcon.setVisible(tierBought);
+    
     }
     
     public void sendBuyOrder() {
@@ -183,6 +182,15 @@ public class BuyUpgradeButton extends StackPane {
         return upgrade;
     }
     
+    public void setTierBought(boolean b) {
+        tierBought = b;
+        update();
+    }
+    
+    public boolean isTierBought() {
+        return tierBought;
+    }
+    
     
 
     public void updateCoins(double coins) {
@@ -200,10 +208,7 @@ public class BuyUpgradeButton extends StackPane {
 
     public static enum CLICK_STATES {
         USUAL,
-        CLICKED,
-
-        DISABLE,
-        TIER_ALREADY_BOUGHT;
+        CLICKED;
 
 
     }

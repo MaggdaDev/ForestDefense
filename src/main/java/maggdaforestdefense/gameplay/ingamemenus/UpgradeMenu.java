@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.geometry.Insets;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
@@ -40,6 +41,7 @@ import maggdaforestdefense.storage.Logger;
  */
 public class UpgradeMenu extends VBox{
     public final static Font font = new Font(40);
+    public final static Font descriptionFont = new Font(25);
     
     private GameObjectType gameObjectType;
     private ClientTower ownerTower;
@@ -79,8 +81,10 @@ public class UpgradeMenu extends VBox{
         treePane.getChildren().addAll(treeNameLabel, treeView, boughtUpgradesBox);
         
         treePane.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        treePane.setPadding(new Insets(20));
         treePane.setAlignment(Pos.CENTER);
         treePane.setFillWidth(true);
+        treePane.setSpacing(10);
         
         
         
@@ -115,10 +119,12 @@ public class UpgradeMenu extends VBox{
 
         buttonMenuScrollBox = new HBox(previousUpgradeTierButton, upgradeStackPane, nextUpgradeTierButton);
         buttonMenuScrollBox.setAlignment(Pos.CENTER);
+        buttonMenuScrollBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        buttonMenuScrollBox.setPadding(new Insets(20));
       
         updateButtonDisable();
         updateUpgradesShowing();
-        
+        updateButtonsLocked();
         
         switch(gameObjectType) {
             case T_SPRUCE:
@@ -132,9 +138,14 @@ public class UpgradeMenu extends VBox{
             default:
                 throw new UnsupportedOperationException();
         }
-          getChildren().addAll(treePane,  new Separator(), buttonMenuScrollBox, new Separator(), selectedUpgradeBox);
+          getChildren().addAll(treePane, buttonMenuScrollBox, selectedUpgradeBox);
+          setSpacing(20);
+          setAlignment(Pos.TOP_CENTER);
           
-          updateButtonsLocked();
+          selectedUpgradeBox.setVisible(false);
+          
+          
+          
     }
     
     public void updateButtonsLocked() {
@@ -143,9 +154,9 @@ public class UpgradeMenu extends VBox{
             if(tier < currentTierToBuy) {
                 for(BuyUpgradeButton button: boxes.get(tier-1).getButtons()) {
                     if(!button.isBought()) {
-                        button.setClickState(BuyUpgradeButton.CLICK_STATES.TIER_ALREADY_BOUGHT);
                         button.setBought(false);
                         button.setLocked(false);
+                        button.setTierBought(true);
                     }
                 }
             } else if(tier == currentTierToBuy) {
@@ -198,12 +209,15 @@ public class UpgradeMenu extends VBox{
         currentTierShowing++;
         updateButtonDisable();
         updateUpgradesShowing();
+        
+        selectedUpgradeBox.setUpgrade(null, false);
     }
     
     public void previousTier() {
         currentTierShowing--;
         updateButtonDisable();
         updateUpgradesShowing();
+        selectedUpgradeBox.setUpgrade(null, false);
     }
     
     public void buyUpgrade(int tier, int type) { 
@@ -306,28 +320,43 @@ public class UpgradeMenu extends VBox{
             upgradeIcon.setFitHeight(ICON_SIZE);
             upgradeIcon.setFitWidth(ICON_SIZE);
             
-            descriptionLabel = new Label("Test description laaaaail");
-            descriptionLabel.setFont(font);
+            descriptionLabel = new Label();
+            descriptionLabel.setFont(descriptionFont);
+            descriptionLabel.setWrapText(true);
             
-            getChildren().addAll(descriptionLabel, upgradeIcon, buyButton);
+            getChildren().addAll(upgradeIcon, descriptionLabel, buyButton);
             
             setManaged(true);
             setAlignment(Pos.CENTER);
+            
+            setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+            setPadding(new Insets(20));
         }
         
         public void setUpgrade(BuyUpgradeButton button, boolean buyable) {
+            if(button == null) {
+                currentButton = null;
+                setVisible(false);
+                buyButton.setDisable(true);
+                return;
+            }
             currentButton = button;
             upgradeIcon.setImage(button.getUpgrade().getIcon());
             buyButton.setDisable(!buyable);
             buyButton.setOnAction((ActionEvent e)->{
                 button.sendBuyOrder();
             });
+            descriptionLabel.setText(button.getUpgrade().getDescription());
+            descriptionLabel.setPrefWidth(boxes.get(0).getWidth());
+            setVisible(true);
         }
         
         public void update() {
             if(currentButton == null) {
                 buyButton.setDisable(true);
+                setVisible(false);
             } else {
+                setVisible(true);
                 buyButton.setDisable(!currentButton.isBuyable());
             }
         }

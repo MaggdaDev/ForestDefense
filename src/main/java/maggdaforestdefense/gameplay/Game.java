@@ -17,6 +17,8 @@ import maggdaforestdefense.util.KeyEventHandler;
 import java.util.Vector;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import language.Deutsch;
+import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
@@ -27,7 +29,8 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class Game {
-
+    public static Language language = new Deutsch();
+    
     private GameLoop gameLoop;
     private boolean isInGame;
     private GameScreen gameScreen;

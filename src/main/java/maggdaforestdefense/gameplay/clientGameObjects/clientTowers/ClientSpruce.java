@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import javafx.scene.image.Image;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -31,6 +32,29 @@ public class ClientSpruce extends ClientTower {
     public void update(NetworkCommand updateCommand) {
         
     }
+    
+    @Override
+    public void setTier(int tier) {
+        Image image;
+        switch(tier) {
+            case 4:
+                image = GameImage.TOWER_SPRUCE_4.getImage();
+                break;
+            case 3:
+                image = GameImage.TOWER_SPRUCE_3.getImage();
+                break;
+            case 2:
+                image = GameImage.TOWER_SPRUCE_2.getImage();
+                break;
+            case 1: default:
+                image = GameImage.TOWER_SPRUCE_1.getImage();
+                break;
+        }
+        
+        setImage(image);
+        upgradeMenu.setTreeImage(image);
+    }
+    
     
     
     

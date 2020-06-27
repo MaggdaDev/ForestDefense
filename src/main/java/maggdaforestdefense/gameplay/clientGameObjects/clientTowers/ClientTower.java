@@ -59,4 +59,6 @@ public abstract class ClientTower extends ClientGameObject{
     public void buyUpgrade(int tier, int type) {
         upgradeMenu.buyUpgrade(tier,type);
     }
+    
+    public abstract void setTier(int tier);
 }

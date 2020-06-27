@@ -27,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.geometry.Insets;
+import javafx.scene.image.Image;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
@@ -48,6 +49,7 @@ public class UpgradeMenu extends VBox{
     
     private VBox treePane;
     private Label treeNameLabel;
+    private ImageView treeView;
     
     private ObservableList<UpgradeButtonTierBox> boxes;
   
@@ -69,7 +71,7 @@ public class UpgradeMenu extends VBox{
         ownerTower = owner;
         gameObjectType = ownerTower.getType();
         
-        ImageView treeView = new ImageView();
+        treeView = new ImageView();
         treeView.setFitWidth(100);
         treeView.setPreserveRatio(true);
         boughtUpgradesBox = new BoughtUpgradesBox(owner.getUpgradeSet().getMaxTier());
@@ -229,10 +231,16 @@ public class UpgradeMenu extends VBox{
         
         updateButtonsLocked();
         selectedUpgradeBox.update();
+        
+        ownerTower.setTier(tier);
     }
     
     public SelectedUpgradeBox getSelectedUpgradeBox() {
         return selectedUpgradeBox;
+    }
+
+    public void setTreeImage(Image image) {
+        treeView.setImage(image);
     }
     
     public class UpgradeButtonTierBox extends FlowPane {

@@ -7,10 +7,12 @@
 <?import javafx.scene.layout.*?>
 <?import maggdaforestdefense.menues.MapEditor?>
 
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
 <MapEditor xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="maggdaforestdefense.menues.MapEditor"
-           alignment="CENTER">
+           alignment="TOP_CENTER">
 
     <!-- Menu Bar -->
 
@@ -24,10 +26,30 @@
         </Menu>
     </MenuBar>
 
-    <!-- Map view -->
+    <SplitPane>
 
+        <!-- Map view -->
 
+        <Group fx:id="mapGroup" managed="false">
 
-    <!-- Settings view -->
+        </Group>
+
+        <!-- Settings view -->
+
+        <TabPane>
+            <Tab text="Map settings" closable="false">
+                <VBox spacing="10">
+                    <padding><Insets top="20" bottom="20" left="10" right="10" /></padding>
+                    <VBox spacing="5">
+                        <Text text="Map size" />
+                        <TextField fx:id="textMapSize" onAction="#applyMapSize" />
+                    </VBox>
+                    <Button text="Apply" onAction="#applyMapSize" />
+                    <Separator />
+                </VBox>
+            </Tab>
+        </TabPane>
+
+    </SplitPane>
 
 </MapEditor>

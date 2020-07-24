@@ -70,7 +70,7 @@ public class MenuManager {
                 showScreen(mainMenu);
                 break;
             case MAP_EDITOR:
-                mapEditor.initialize();
+                mapEditor.firstInit();
                 showScreen(mapEditor);
                 break;
             case GAME:

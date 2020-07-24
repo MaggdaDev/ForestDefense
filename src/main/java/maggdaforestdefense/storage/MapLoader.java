@@ -23,7 +23,9 @@ public class MapLoader {
 
     public static void saveMap(GenerateableMap map, File file) throws MapLoaderException {
         try {
-            new Gson().toJson(map, new FileWriter(file));
+            FileWriter fw = new FileWriter(file);
+            new Gson().toJson(map, fw);
+            fw.close();
         } catch (Exception e) {
             throw new MapLoaderException().setText("File could not be saved.").setAdditionalData(e);
         }

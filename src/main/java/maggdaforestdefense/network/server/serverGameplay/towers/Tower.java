@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
@@ -16,6 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
+import maggdaforestdefense.util.UpgradeHandler;
 
 /**
  *
@@ -26,8 +28,13 @@ public abstract class Tower extends GameObject {
     protected int xIndex, yIndex, prize;
 
     protected ServerGame serverGame;
+    
+    protected Vector<Upgrade> upgrades;
 
     protected UpgradeSet upgradeSet;
+    
+    // Upgrade events
+    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate;
     public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
@@ -35,6 +42,10 @@ public abstract class Tower extends GameObject {
         yIndex = (int) (yPos / MapCell.CELL_SIZE);
         serverGame = game;
         this.prize = prize;
+        this.upgrades = new Vector<>();
+        this.onShoot = new Vector<UpgradeHandler>();
+        this.onKill = new Vector<UpgradeHandler>();
+        this.onUpdate = new Vector<UpgradeHandler>();
     }
 
     protected Mob findTarget(int range) {
@@ -96,8 +107,40 @@ public abstract class Tower extends GameObject {
     public UpgradeSet getUpgradeSet() {
         return upgradeSet;
     }
+    
+    public Vector<Upgrade> getUpgrades() {
+        return upgrades;
+    }
 
+    // UpradePerforms
+    
+    public void performUpgradesOnShoot() {                  // MUST BE IN EVERY SUB CLASS SHOOT METHOD
+        for(int i = 0; i < onShoot.size();i++) {
+            UpgradeHandler u = onShoot.get(i);
+            u.handleUpgrade();
+        }
+    }
+    
+    public void performUpgradesOnKill() {                  
+        for(int i = 0; i < onKill.size();i++) {
+            UpgradeHandler u = onKill.get(i);
+            u.handleUpgrade();
+        }
+    }
+    
+     public void performUpgradesOnUpdate() {                  // MUST BE IN EVERY SUB CLASS UPDATE METHOD
+        for(int i = 0; i < onUpdate.size();i++) {
+            UpgradeHandler u = onUpdate.get(i);
+            u.handleUpgrade();
+        }
+    }
+    
+    // UPgrade performs end
     
     abstract public void addUpgrade(Upgrade upgrade);
+    
+    public void notifyKill() {
+        performUpgradesOnKill();
+    }
 
 }

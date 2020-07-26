@@ -11,11 +11,14 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentSkipListSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.util.UpgradeHandler;
 
 /**
  *
@@ -23,9 +26,18 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
  */
 public abstract class Projectile extends GameObject{
     protected HitBox hitBox;
-    public Projectile(int id, GameObjectType type, HitBox hitBox) {
+    protected Tower owner;
+    
+    protected Vector<UpgradeHandler> onCollision;
+    
+    protected Vector<Mob> mobsDamaged;
+    public Projectile(int id, GameObjectType type, HitBox hitBox, Tower ownerTower) {
         super(id, type);
         this.hitBox = hitBox;
+        this.owner = ownerTower;
+        
+        mobsDamaged = new Vector<Mob>();
+        onCollision = new Vector<UpgradeHandler>();
     }
     
     
@@ -46,4 +58,8 @@ public abstract class Projectile extends GameObject{
     }
     
     public abstract void dealDamage(Mob target);
+
+    public Tower getOwnerTower() {
+        return owner;
+    }
 }

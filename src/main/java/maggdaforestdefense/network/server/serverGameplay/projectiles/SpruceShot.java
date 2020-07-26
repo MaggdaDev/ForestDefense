@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.projectiles;
 
+import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
@@ -12,9 +13,12 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.util.GameMaths;
+import maggdaforestdefense.util.UpgradeHandler;
 
 /**
  *
@@ -26,17 +30,35 @@ public class SpruceShot extends ConstantFlightProjectile {
     private final static int DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
     private final static double HITBOX_RADIUS = 10;
     private final static double DAMAGE = 1;
-    private final static int DEFAULT_PIERCE = 1;
- 
+    private final static int DEFAULT_PIERCE = 2;
 
-    private final Damage damageObject = new Damage.DirectDamage(DAMAGE);
-    public SpruceShot(int id, ServerGame game, double x, double y, Mob target) {
-        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS,x,y), DEFAULT_PIERCE);
+    private final Damage damageObject = new Damage.DirectDamage(DAMAGE, this);
+
+    public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower) {
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower);
         serverGame = game;
         xPos = x;
         yPos = y;
 
         calculateSpeed(target);
+
+        ownerTower.getUpgrades().forEach((Upgrade upgrade) -> {
+            addUpgrade(upgrade);
+        });
+
+    }
+
+    private SpruceShot(int id, ServerGame game, double x, double y, double xSpd, double ySpd, Tower ownerTower, double pierce, Vector<Mob> mobsDamaged) {
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, null, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower);
+        serverGame = game;
+        xPos = x;
+        yPos = y;
+        this.xSpd = xSpd;
+        this.ySpd = ySpd;
+        this.pierce = pierce;
+        
+        this.mobsDamaged = mobsDamaged;
+        
 
     }
 
@@ -50,7 +72,7 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        
+
         boolean stillExists = updateFlight(timeElapsed);
 
         collision(serverGame.getMobs());
@@ -65,9 +87,76 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     @Override
     public void dealDamage(Mob target) {
-        pierce --;
-        target.damage(damageObject);
+        if (pierce > 0 && (!mobsDamaged.contains(target))) {
+            pierce--;
+            mobsDamaged.add(target);
+            target.damage(damageObject);
+            for (int i = 0; i < onCollision.size(); i++) {
+                UpgradeHandler u = onCollision.get(i);
+                u.handleUpgrade();
+            }
+          
+        }
+
+    }
+
+    private void addUpgrade(Upgrade upgrade) {
+        switch (upgrade) {
+            case SPRUCE_1_1:    // nadelteilung
+                onCollision.add(new UpgradeHandler() {
+                    @Override
+                    public void handleUpgrade() {
+                        performNeedleSplit();
+                        onCollision.remove(this);
+
+                    }
+                });
+                break;
+            case SPRUCE_1_5:    // Nadelstaerkung
+                onCollision.add(new UpgradeHandler() {
+                    @Override
+                    public void handleUpgrade() {
+                        performNeedlesStronger();
+                        onCollision.remove(this);
+
+                    }
+                });
+                break;
+        }
+    }
+
+    // Perform upgrades
+    private void performNeedleSplit() {
+        double totSpd = GameMaths.getAbs(xSpd, ySpd);
+        double otherX1 = ySpd * -1;
+        double otherY1 = xSpd;
+
+        double otherX2 = ySpd;
+        double otherY2 = xSpd * -1;
+
+        double newVec1X = 3*xSpd + otherX1;
+        double newVec1Y = 3*ySpd + otherY1;
+        double tot1 = GameMaths.getAbs(newVec1X, newVec1Y);
+
+        double newVec2X = 3*xSpd + otherX2;
+        double newVec2Y = 3*ySpd + otherY2;
+        double tot2 = GameMaths.getAbs(newVec2X, newVec2Y);
+
+        newVec1X = newVec1X * totSpd / tot1;
+        newVec1Y = newVec1Y * totSpd / tot1;
+
+        newVec2X = newVec2X * totSpd / tot2;
+        newVec2Y = newVec2Y * totSpd / tot2;
+
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec1X, newVec1Y, owner, pierce + 1, mobsDamaged));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec2X, newVec2Y, owner, pierce + 1, mobsDamaged));
+
+        pierce = 0;
     }
     
-    
+    private void performNeedlesStronger() {
+
+        damageObject.setDamage(damageObject.getDamage() * Spruce.NADEL_STAERKUNG_MULTIPLIER);
+    }
+
 }

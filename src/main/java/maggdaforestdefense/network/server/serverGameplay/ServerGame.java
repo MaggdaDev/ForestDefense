@@ -174,6 +174,10 @@ public class ServerGame extends Thread{
         }
         
     }
+    
+    public ConcurrentHashMap<String, GameObject> getGameObjects() {
+        return gameObjects;
+    }
 
  
 

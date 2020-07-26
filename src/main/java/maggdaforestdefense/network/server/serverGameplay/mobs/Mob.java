@@ -87,14 +87,24 @@ public abstract class Mob extends GameObject {
         return path.getRestWay();
     }
     
-    public boolean checkAlive() {
-        if(healthPoints <= 0) {
+    public boolean updateAlive() {
+        if(!checkAlive()) {
             die();
             return false;
         } else {
             return true;
         }
         }
+    
+    public boolean checkAlive() {
+        if(healthPoints <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+
     
     public void die() {
         if(!dead) {
@@ -105,6 +115,7 @@ public abstract class Mob extends GameObject {
     
     
     public void damage(Damage damage) {
+
         
         if(!damageTaken.contains(damage)) {
             damageTaken.add(damage);
@@ -114,14 +125,22 @@ public abstract class Mob extends GameObject {
                 break;            
             default:
                 throw new UnsupportedOperationException();
+                
+                
         }
         }
+        
    
     
     }
     
     public void directDamage(Damage.DirectDamage damage) {
+        if(checkAlive()) {
         healthPoints -= damage.getDamage();
+        if(!checkAlive()) {
+            damage.getOwnerProjectile().getOwnerTower().notifyKill();
+        }
+        }
     }
     // Get/Set
     

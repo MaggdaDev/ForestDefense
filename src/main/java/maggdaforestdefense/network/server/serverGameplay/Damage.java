@@ -12,29 +12,42 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
  * @author DavidPrivat
  */
 public abstract class Damage {
+
     private double damage;
     private final DamageType type;
+    private Projectile owner;
 
-    protected Damage(double d, DamageType type) {
+    protected Damage(double d, DamageType type, Projectile owner) {
         damage = d;
         this.type = type;
-    } 
-    public static class DirectDamage extends Damage{
-        public DirectDamage(double d) {
-            super(d, DamageType.DIRECT);
-        }
+        this.owner = owner;
     }
-    
+
+    public static class DirectDamage extends Damage {
+
+        public DirectDamage(double d, Projectile owner) {
+            super(d, DamageType.DIRECT, owner);
+        }
+
+    }
+
     public double getDamage() {
         return damage;
     }
-    
+
     public DamageType getType() {
         return type;
     }
 
-    
-    public static enum DamageType{
+    public Projectile getOwnerProjectile() {
+        return owner;
+    }
+
+    public static enum DamageType {
         DIRECT;
+    }
+    
+    public void setDamage(double d) {
+        damage = d;
     }
 }

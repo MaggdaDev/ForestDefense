@@ -20,7 +20,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
  */
 public class Bug extends Mob {
 
-    public final static double DEFAULT_HP = 1;
+    public final static double DEFAULT_HP = 2;
     public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
 
     public final static double DEFAULT_SPEED = 200;
@@ -40,7 +40,7 @@ public class Bug extends Mob {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        if (checkAlive()) {
+        if (updateAlive()) {
 
             path.walk(timeElapsed * speed);
             xPos = path.getCurrentX();

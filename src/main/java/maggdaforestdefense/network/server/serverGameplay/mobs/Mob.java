@@ -138,7 +138,7 @@ public abstract class Mob extends GameObject {
         if(checkAlive()) {
         healthPoints -= damage.getDamage();
         if(!checkAlive()) {
-            damage.getOwnerProjectile().getOwnerTower().notifyKill();
+            damage.getOwnerProjectile().notifyKill(this);
         }
         }
     }
@@ -162,6 +162,10 @@ public abstract class Mob extends GameObject {
     
     public double getCoinValue() {
         return (int)(calculateStrength() / 50);
+    }
+    
+    public double getHP() {
+        return healthPoints;
     }
     
     

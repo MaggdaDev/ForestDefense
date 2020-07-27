@@ -33,6 +33,13 @@ public class SpruceShot extends ConstantFlightProjectile {
     private final static int DEFAULT_PIERCE = 2;
 
     private final Damage damageObject = new Damage.DirectDamage(DAMAGE, this);
+    
+    // Upgrade consts
+    private final static double percetageOfHealthRiesenschreck = 0.05;
+    private final static double extraDamagePerPixel = 0.01;
+    
+    // Upgrade vars
+    private boolean isRiesenschreck = false;
 
     public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower) {
         super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower);
@@ -56,9 +63,8 @@ public class SpruceShot extends ConstantFlightProjectile {
         this.xSpd = xSpd;
         this.ySpd = ySpd;
         this.pierce = pierce;
-        
+
         this.mobsDamaged = mobsDamaged;
-        
 
     }
 
@@ -88,14 +94,16 @@ public class SpruceShot extends ConstantFlightProjectile {
     @Override
     public void dealDamage(Mob target) {
         if (pierce > 0 && (!mobsDamaged.contains(target))) {
+            performUpgradesOnCollision();
             pierce--;
             mobsDamaged.add(target);
-            target.damage(damageObject);
-            for (int i = 0; i < onCollision.size(); i++) {
-                UpgradeHandler u = onCollision.get(i);
-                u.handleUpgrade();
+            
+            if(isRiesenschreck) {       // RIESENSCHRECK UPGRADE
+                damageObject.setDamage(DAMAGE + percetageOfHealthRiesenschreck * target.getHP());
             }
-          
+            
+            target.damage(damageObject);
+
         }
 
     }
@@ -122,6 +130,21 @@ public class SpruceShot extends ConstantFlightProjectile {
                     }
                 });
                 break;
+            case SPRUCE_2_5:    // Erbarmungslose fichte
+                onKill.add(new UpgradeHandler() {
+                    @Override
+                    public void handleUpgrade() {
+                        performErbarmungslos();
+                        
+
+                    }
+                });
+                break;
+            case SPRUCE_3_5:    // Dominierende nadeln
+                onCollision.add(()->{
+                    damageObject.setDamage(DAMAGE + extraDamagePerPixel * distanceTravelled);
+                });
+            
         }
     }
 
@@ -134,12 +157,12 @@ public class SpruceShot extends ConstantFlightProjectile {
         double otherX2 = ySpd;
         double otherY2 = xSpd * -1;
 
-        double newVec1X = 3*xSpd + otherX1;
-        double newVec1Y = 3*ySpd + otherY1;
+        double newVec1X = 3 * xSpd + otherX1;
+        double newVec1Y = 3 * ySpd + otherY1;
         double tot1 = GameMaths.getAbs(newVec1X, newVec1Y);
 
-        double newVec2X = 3*xSpd + otherX2;
-        double newVec2Y = 3*ySpd + otherY2;
+        double newVec2X = 3 * xSpd + otherX2;
+        double newVec2Y = 3 * ySpd + otherY2;
         double tot2 = GameMaths.getAbs(newVec2X, newVec2Y);
 
         newVec1X = newVec1X * totSpd / tot1;
@@ -153,10 +176,14 @@ public class SpruceShot extends ConstantFlightProjectile {
 
         pierce = 0;
     }
-    
+
     private void performNeedlesStronger() {
 
         damageObject.setDamage(damageObject.getDamage() * Spruce.NADEL_STAERKUNG_MULTIPLIER);
+    }
+    
+    private void performErbarmungslos() {
+        pierce++;
     }
 
 }

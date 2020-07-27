@@ -27,8 +27,7 @@ public class Spruce extends Tower {
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 1;
 
-   
-
+    //Balancing stats
     private int range = DEFAULT_RANGE;
 
     double xPos, yPos;
@@ -44,6 +43,9 @@ public class Spruce extends Tower {
     
     private double rasendeFichteMultiplier = 1;
     private int rasendeFichteKillCounter = 0;
+    
+    private double aufruestungMultiplier = 1;
+    private int aufruestungCounter = 0;
 
 
     
@@ -68,7 +70,7 @@ public class Spruce extends Tower {
     public NetworkCommand update(double timeElapsed) {
 
         // Shooting
-        shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier;
+        shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
         if (shootTimer > shootTime) {
             Mob target = findTarget(range);
             if (target != null) {
@@ -102,6 +104,17 @@ public class Spruce extends Tower {
                        }
                    });
                    monoculturalMultiplier = Math.sqrt((double)spruceCounter);
+                });
+                break;
+            case SPRUCE_2_1:        // AUFRUESTUNG
+                onShoot.add(()->{
+                   aufruestungCounter = 0;
+                   serverGame.getMobs().forEach((String key, Mob mob)->{
+                       if(isInRange(mob, range)) {
+                           aufruestungCounter++;
+                       }
+                   });
+                   aufruestungMultiplier = Math.sqrt(0.3 * (int)aufruestungCounter + 1.0d);
                 });
                 break;
             case SPRUCE_2_2:        // Fichtenwut

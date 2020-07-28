@@ -25,7 +25,7 @@ public enum Upgrade {
     SPRUCE_1_6(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Lebensraub", 150, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_1_6;})),
     SPRUCE_2_1(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Aufruestung", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_1;})),
     SPRUCE_2_2(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Fichten-Wut", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_2;})),
-    SPRUCE_2_3(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Kritische Nadeln", 400, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_3;})),
+    SPRUCE_2_3(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Kritische Nadeln", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_3;})),
     SPRUCE_2_4(GameImage.UPGRADE_SPRUCE_01_06.getImage(), "Wurzelhieb", 400, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_4;})),
     SPRUCE_2_5(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Erbarmungslose Fichte", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_5;})),
     SPRUCE_2_6(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Fichtenfreundschaft", 400, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_2_6;})),

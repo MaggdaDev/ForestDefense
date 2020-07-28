@@ -35,7 +35,7 @@ public class Spruce extends Tower {
     
     // UPGRADE CONSTANTS
     public final static double FICHTEN_WUT_MULTIPLIER = 0.999;
-    public final static double NADEL_STAERKUNG_MULTIPLIER = 3;
+    public final static double NADEL_STAERKUNG_MULT = 3;
     
     // UPGRADE VARIABLES
     private double monoculturalMultiplier = 1;  // *deltaT => >1
@@ -123,9 +123,9 @@ public class Spruce extends Tower {
                 });
                 break;
                 
-            case SPRUCE_3_1:        //Serienmörder
+            case SPRUCE_3_1:        //Serienmoerder
                 onKill.add(()->{
-                    shootTimer = shootTime;
+                    shootTimer = shootTime * 0.99;
                 });
                 break;
                 

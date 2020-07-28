@@ -119,26 +119,18 @@ public abstract class Mob extends GameObject {
         
         if(!damageTaken.contains(damage)) {
             damageTaken.add(damage);
-        switch(damage.getType()) {
-            case DIRECT:
-                directDamage((Damage.DirectDamage)damage);
-                break;            
-            default:
-                throw new UnsupportedOperationException();
-                
-                
-        }
+            directDamage(damage);
         }
         
    
     
     }
     
-    public void directDamage(Damage.DirectDamage damage) {
+    public void directDamage(Damage damage) {
         if(checkAlive()) {
-        healthPoints -= damage.getDamage();
+        healthPoints -= damage.getTotalDamage();
         if(!checkAlive()) {
-            damage.getOwnerProjectile().notifyKill(this);
+            damage.getOwner().notifyKill(this);
         }
         }
     }

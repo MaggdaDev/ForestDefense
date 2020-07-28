@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentSkipListSet;
+import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
@@ -29,10 +30,11 @@ public abstract class Projectile extends GameObject {
     protected HitBox hitBox;
     protected Tower owner;
 
-    protected Vector<UpgradeHandler> onCollision;
+    protected Vector<UpgradeHandler> beforeCollision, afterCollision;
     protected Vector<UpgradeHandler> onKill;
 
     protected Vector<Mob> mobsDamaged;
+
 
     public Projectile(int id, GameObjectType type, HitBox hitBox, Tower ownerTower) {
         super(id, type);
@@ -40,7 +42,8 @@ public abstract class Projectile extends GameObject {
         this.owner = ownerTower;
 
         mobsDamaged = new Vector<Mob>();
-        onCollision = new Vector<UpgradeHandler>();
+        beforeCollision = new Vector<UpgradeHandler>();
+        afterCollision = new Vector<UpgradeHandler>();
         onKill = new Vector<UpgradeHandler>();
     }
 
@@ -65,9 +68,16 @@ public abstract class Projectile extends GameObject {
     }
 
     // Perform upgrades
-    protected void performUpgradesOnCollision() {
-        for (int i = 0; i < onCollision.size(); i++) {
-            UpgradeHandler u = (UpgradeHandler) onCollision.get(i);
+    protected void performUpgradesBeforeCollision() {
+        for (int i = 0; i < beforeCollision.size(); i++) {
+            UpgradeHandler u = (UpgradeHandler) beforeCollision.get(i);
+            u.handleUpgrade();
+        }
+    }
+    
+    protected void performUpgradesAfterCollision() {
+        for (int i = 0; i < afterCollision.size(); i++) {
+            UpgradeHandler u = (UpgradeHandler) afterCollision.get(i);
             u.handleUpgrade();
         }
     }

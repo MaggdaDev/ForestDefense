@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.util.RandomEvent;
 import maggdaforestdefense.util.Randomizer;
@@ -30,6 +31,8 @@ public class MapCell  {
 
     // Pathfindin
     private PathCell pathCell;
+    
+    private Tower tower = null;
 
     public MapCell(Map map, int x, int y) {
         pathCell = new PathCell(x, y, CELL_SIZE, CELL_SIZE, cellType);
@@ -119,6 +122,14 @@ public class MapCell  {
 
         pathCell.setCellType(type);
 
+    }
+    
+    public void setTower(Tower tower) {
+        this.tower = tower;
+    }
+    
+    public Tower getTower() {
+        return tower;
     }
 
     public void setUpNeightbours() {

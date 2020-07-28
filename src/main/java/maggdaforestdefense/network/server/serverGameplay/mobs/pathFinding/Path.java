@@ -16,6 +16,7 @@ public class Path {
 
     private Vector<PathCell> cells;
     private Vector<WaySegment> ways;
+    
     double wayWalked = 0;
 
     public Path() {
@@ -34,10 +35,13 @@ public class Path {
         }
     }
 
-    public void walk(double delta) {
+    public boolean walk(double delta) {
         if (wayWalked + delta < ways.size() * MapCell.CELL_SIZE) {
 
             wayWalked += delta;
+            return false;
+        } else {
+            return true;    //arrived
         }
     }
 

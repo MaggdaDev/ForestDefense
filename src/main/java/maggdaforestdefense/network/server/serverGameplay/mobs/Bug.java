@@ -20,13 +20,17 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
  */
 public class Bug extends Mob {
 
-    public final static double DEFAULT_HP = 10;
+    public final static double DEFAULT_HP = 20;
     public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
 
     public final static double DEFAULT_SPEED = 200;
+    
+    public final static int TOWER_VISION_RANGE = 5;
+    
+    public final static double DEFAULT_DAMAGE = 10, DEFAULT_DAMAGE_TIME = 0.25;
 
     public Bug(ServerGame game) {
-        super(game, GameObjectType.M_BUG, DEFAULT_HP, DEFAULT_SPEED, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0));
+        super(game, GameObjectType.M_BUG, DEFAULT_HP, DEFAULT_SPEED, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), TOWER_VISION_RANGE, DEFAULT_DAMAGE, DEFAULT_DAMAGE_TIME);
         findStartPos();
     }
 
@@ -41,11 +45,9 @@ public class Bug extends Mob {
     @Override
     public NetworkCommand update(double timeElapsed) {
         if (updateAlive()) {
-
-            path.walk(timeElapsed * speed);
-            xPos = path.getCurrentX();
-            yPos = path.getCurrentY();
-            hitBox.updatePos(xPos, yPos);
+            updateIndexPosition();
+            updateMovement(timeElapsed);
+            updateDamageTarget(timeElapsed);
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
                 new CommandArgument("id", String.valueOf(id)),
                 new CommandArgument("x", String.valueOf(xPos)),

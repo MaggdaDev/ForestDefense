@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 
 import java.util.Arrays;
 import java.util.Vector;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 import maggdaforestdefense.storage.Logger;
@@ -17,12 +18,19 @@ import maggdaforestdefense.storage.Logger;
  */
 public class Damage {
 
-    private Projectile owner;
+    private Projectile ownerProjectile;
+    private Mob ownerMob;
     private Vector<DamageSubclass> damageList;
     private Vector<DamageMultiplier> damageMultiplierList;
 
     public Damage(Projectile ownerProjectile) {
-        owner = ownerProjectile;
+        this.ownerProjectile = ownerProjectile;
+        damageList = new Vector<DamageSubclass>();
+        damageMultiplierList = new Vector<DamageMultiplier>();
+    }
+    
+    public Damage(Mob owner) {
+        this.ownerMob = owner;
         damageList = new Vector<DamageSubclass>();
         damageMultiplierList = new Vector<DamageMultiplier>();
     }
@@ -54,8 +62,12 @@ public class Damage {
         return damageCounter;
     }
 
-    public Projectile getOwner() {
-        return owner;
+    public Projectile getOwnerProjectile() {
+        return ownerProjectile;
+    }
+    
+    public Mob getOwnerMob() {
+        return ownerMob;
     }
 
     //Multipliers
@@ -75,7 +87,7 @@ public class Damage {
         }
         @Override
         public double getMultiplier() {
-            Logger.logServer("Normal mult: " + multiplier);
+            //Logger.logServer("Normal mult: " + multiplier);
             return multiplier;
         }
         
@@ -95,10 +107,10 @@ public class Damage {
         @Override
         public double getMultiplier() {
             if (Math.random() <= critChance) {
-                Logger.logServer("Crit: x" + critMultiplier);
+                //Logger.logServer("Crit: x" + critMultiplier);
                 return critMultiplier;
             } else {
-                Logger.logServer("No crit ");
+                //Logger.logServer("No crit ");
                 return 1;
             }
         }
@@ -129,7 +141,7 @@ public class Damage {
 
         @Override
         public double getDamageValue() {
-            Logger.logServer("Normal damage: " + damageVal);
+            //Logger.logServer("Normal damage: " + damageVal);
             return damageVal;
         }
 

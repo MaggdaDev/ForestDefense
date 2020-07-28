@@ -49,6 +49,8 @@ public class HealthBar extends Group{
         
         bar.setFitWidth((BOX_WIDTH - BOX_BORDER*2) * (health / maxHealth));
         
+        
+        bar.setVisible(health > 0);
         setVisible(true);
     }
     

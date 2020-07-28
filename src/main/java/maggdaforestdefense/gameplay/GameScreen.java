@@ -133,6 +133,9 @@ public class GameScreen extends Group{
         if (gamePlayGroup.getChildren().contains(remove)) {
             gamePlayGroup.getChildren().remove(remove);
         }
+        if(remove instanceof ClientTower) {
+            removeTower((ClientTower)remove);
+        }
         remove.onRemove();
     }
 
@@ -161,6 +164,11 @@ public class GameScreen extends Group{
     void addTower(ClientTower tree) {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.plantTree(tree);
+    }
+    
+    public void removeTower(ClientTower tree) {
+        ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
+        cell.removeTree(tree);
     }
 
     public Group getGamePlayGroup() {

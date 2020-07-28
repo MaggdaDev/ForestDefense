@@ -147,6 +147,12 @@ public class ServerGame extends Thread{
         coins += mob.getCoinValue();
     }
     
+    
+    public void killTower(Tower tower) {
+        removeGameObject(tower);
+        Logger.logServer("KIIIIIIILL");
+    }
+    
     public HashMap<String, Mob> getMobs() {
         return mobsList;
     }
@@ -178,6 +184,7 @@ public class ServerGame extends Thread{
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
+
 
  
 

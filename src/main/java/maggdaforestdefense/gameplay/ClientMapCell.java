@@ -123,6 +123,15 @@ public class ClientMapCell extends StackPane {
             e.printStackTrace();
         }
     }
+    
+     void removeTree(ClientTower tree) {
+        if(getChildren().contains(tree)) {
+            isPlanted = false;
+            currentTower = null;
+            getChildren().remove(tree);
+            menuState = MENU_STATE.PLANT_MENU;
+        }
+    }
 
     public ClientTower getCurrentTower() {
         return currentTower;
@@ -135,6 +144,8 @@ public class ClientMapCell extends StackPane {
         return false;
 
     }
+
+   
     
     public static enum MENU_STATE {
         PLANT_MENU,

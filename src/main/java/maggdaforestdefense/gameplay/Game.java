@@ -29,8 +29,9 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class Game {
+
     public static Language language = new Deutsch();
-    
+
     private GameLoop gameLoop;
     private boolean isInGame;
     private GameScreen gameScreen;
@@ -39,7 +40,7 @@ public class Game {
     private static Game instance;
 
     private Vector<KeyEventHandler> keyEventHandlers;
-    
+
     private int essence = 0, coins = 0;
 
     public Game() {
@@ -109,35 +110,36 @@ public class Game {
 
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
+        if (gObj != null) {
             gObj.update(command);
+        }
     }
-    
- 
+
     public void plantTree(NetworkCommand command) {
         ClientTower tree = (ClientTower) GameObject.generateClientGameObject(command);
         gameObjects.put(String.valueOf(tree.getGameObjectId()), tree);
 
         gameScreen.addTower(tree);
     }
-       public void updateRessources(NetworkCommand command) {
-        coins = (int)command.getNumArgument("coins");
-        essence = (int)command.getNumArgument("essence");
+
+    public void updateRessources(NetworkCommand command) {
+        coins = (int) command.getNumArgument("coins");
+        essence = (int) command.getNumArgument("essence");
         gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
         gameScreen.getSideMenu().updateCoins(coins);
     }
 
     public void buyUpgrade(NetworkCommand command) {
         String id = command.getArgument("id");
-        int tier = (int)command.getNumArgument("tier");
-        int type = (int)command.getNumArgument("type");
-        
+        int tier = (int) command.getNumArgument("tier");
+        int type = (int) command.getNumArgument("type");
+
         ClientTower tower = (ClientTower) gameObjects.get(id);
         tower.buyUpgrade(tier, type);
     }
-    
+
     public int getCoins() {
         return coins;
     }
-
 
 }

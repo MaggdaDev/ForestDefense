@@ -33,28 +33,26 @@ public class Spruce extends Tower {
 
     double xPos, yPos;
     double shootTimer = 0, shootTime = DEFAULT_SHOOT_TIME;
-    
+
     // UPGRADE CONSTANTS
     public final static double FICHTEN_WUT_MULTIPLIER = 0.999;
     public final static double NADEL_STAERKUNG_MULT = 3;
-    
+
     // UPGRADE VARIABLES
     private double monoculturalMultiplier = 1;  // *deltaT => >1
     private int spruceCounter = 0;
-    
+
     private double rasendeFichteMultiplier = 1;
     private int rasendeFichteKillCounter = 0;
-    
+
     private double aufruestungMultiplier = 1;
     private int aufruestungCounter = 0;
 
-
-    
     public Spruce(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH);
         xPos = x;
         yPos = y;
-        
+
     }
 
     @Override
@@ -69,9 +67,13 @@ public class Spruce extends Tower {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-
+        if (!checkAlive()) {
+            return null;
+        }
+        
         // Shooting
         shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
+
         if (shootTimer > shootTime) {
             Mob target = findTarget(range);
             if (target != null) {
@@ -79,12 +81,11 @@ public class Spruce extends Tower {
                 shoot(target);
             }
         }
-        
-        // Health
 
-        
+        // Health
         // Upgrades
         performUpgradesOnUpdate();
+        
 
         return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
     }
@@ -93,57 +94,54 @@ public class Spruce extends Tower {
         serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, getCenterX(), getCenterY(), target, this));
         performUpgradesOnShoot();
     }
-    
+
     @Override
     public void addUpgrade(Upgrade upgrade) {
         upgrades.add(upgrade);
-        
-        switch(upgrade) {
+
+        switch (upgrade) {
             case SPRUCE_1_2:        // Fichtenmonokultur
-                onUpdate.add(()->{
-                   spruceCounter = 0;
-                   serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
-                       if(gameObject.getGameObjectType() == (GameObjectType.T_SPRUCE)) {
-                           spruceCounter++;
-                       }
-                   });
-                   monoculturalMultiplier = Math.sqrt((double)spruceCounter);
+                onUpdate.add(() -> {
+                    spruceCounter = 0;
+                    serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
+                        if (gameObject.getGameObjectType() == (GameObjectType.T_SPRUCE)) {
+                            spruceCounter++;
+                        }
+                    });
+                    monoculturalMultiplier = Math.sqrt((double) spruceCounter);
                 });
                 break;
             case SPRUCE_2_1:        // AUFRUESTUNG
-                onShoot.add(()->{
-                   aufruestungCounter = 0;
-                   serverGame.getMobs().forEach((String key, Mob mob)->{
-                       if(isInRange(mob, range)) {
-                           aufruestungCounter++;
-                       }
-                   });
-                   aufruestungMultiplier = Math.sqrt(0.3 * (int)aufruestungCounter + 1.0d);
+                onShoot.add(() -> {
+                    aufruestungCounter = 0;
+                    serverGame.getMobs().forEach((String key, Mob mob) -> {
+                        if (isInRange(mob, range)) {
+                            aufruestungCounter++;
+                        }
+                    });
+                    aufruestungMultiplier = Math.sqrt(0.3 * (int) aufruestungCounter + 1.0d);
                 });
                 break;
             case SPRUCE_2_2:        // Fichtenwut
-                onShoot.add(()->{
-                   shootTime *= FICHTEN_WUT_MULTIPLIER;
+                onShoot.add(() -> {
+                    shootTime *= FICHTEN_WUT_MULTIPLIER;
                 });
                 break;
-                
+
             case SPRUCE_3_1:        //Serienmoerder
-                onKill.add(()->{
+                onKill.add(() -> {
                     shootTimer = shootTime * 0.99;
                 });
                 break;
-                
+
             case SPRUCE_3_2:        //rasende fichte
-                onKill.add(()->{
+                onKill.add(() -> {
                     rasendeFichteKillCounter++;
-                    rasendeFichteMultiplier = Math.sqrt(0.1 * (int)rasendeFichteKillCounter + 1.0d);
+                    rasendeFichteMultiplier = Math.sqrt(0.1 * (int) rasendeFichteKillCounter + 1.0d);
                 });
                 break;
-            
+
         }
     }
-    
-    
-  
 
 }

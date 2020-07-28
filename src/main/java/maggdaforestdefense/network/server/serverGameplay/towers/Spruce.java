@@ -26,6 +26,7 @@ public class Spruce extends Tower {
     public final static int DEFAULT_RANGE = 2;              //map cells
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 1;
+    public final static double HEALTH = 50;
 
     //Balancing stats
     private int range = DEFAULT_RANGE;
@@ -50,7 +51,7 @@ public class Spruce extends Tower {
 
     
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET);
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH);
         xPos = x;
         yPos = y;
         
@@ -79,10 +80,13 @@ public class Spruce extends Tower {
             }
         }
         
+        // Health
+
+        
         // Upgrades
         performUpgradesOnUpdate();
 
-        return null;
+        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
     }
 
     private void shoot(Mob target) {

@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
@@ -33,19 +34,23 @@ public abstract class Tower extends GameObject {
 
     protected UpgradeSet upgradeSet;
     
+    protected double healthPoints;
+    
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate;
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
         yIndex = (int) (yPos / MapCell.CELL_SIZE);
         serverGame = game;
         this.prize = prize;
+        this.healthPoints = health;
         this.upgrades = new Vector<>();
         this.onShoot = new Vector<UpgradeHandler>();
         this.onKill = new Vector<UpgradeHandler>();
         this.onUpdate = new Vector<UpgradeHandler>();
+        
     }
 
     protected Mob findTarget(int range) {
@@ -142,5 +147,7 @@ public abstract class Tower extends GameObject {
     public void notifyKill() {
         performUpgradesOnKill();
     }
+    
+    
 
 }

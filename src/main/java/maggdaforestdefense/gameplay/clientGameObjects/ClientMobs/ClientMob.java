@@ -22,7 +22,7 @@ public abstract class ClientMob extends ClientGameObject{
     public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth) {
         super(id, image, type, x, y);
         
-        healthBar = new HealthBar(maxHealth);
+        healthBar = new HealthBar(maxHealth, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_MOB);
         
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
     }

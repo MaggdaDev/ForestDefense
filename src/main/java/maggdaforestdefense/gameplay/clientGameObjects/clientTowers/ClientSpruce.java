@@ -6,6 +6,8 @@
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import javafx.scene.image.Image;
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -20,7 +22,7 @@ import maggdaforestdefense.storage.GameImage;
 public class ClientSpruce extends ClientTower {
 
     public ClientSpruce(int id, int xIndex, int yIndex) {
-        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE);
+        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH);
         setPreserveRatio(true);
         setFitHeight(100);
         
@@ -30,7 +32,8 @@ public class ClientSpruce extends ClientTower {
 
     @Override
     public void update(NetworkCommand updateCommand) {
-        
+        healthPoints = updateCommand.getNumArgument("hp");
+        healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
     }
     
     @Override
@@ -53,6 +56,14 @@ public class ClientSpruce extends ClientTower {
         
         setImage(image);
         upgradeMenu.setTreeImage(image);
+    }
+    
+    @Override
+    public void onRemove() {
+        if(Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().contains(healthBar)) {
+            Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().remove(healthBar);
+        }
+        
     }
     
     

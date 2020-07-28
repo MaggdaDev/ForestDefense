@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -22,13 +24,19 @@ public abstract class ClientTower extends ClientGameObject{
     protected UpgradeMenu upgradeMenu;
     protected final UpgradeSet upgradeSet;
     
-    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range) {
+    protected HealthBar healthBar;
+    protected double healthPoints;
+    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range, double health) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
           this.upgradeSet = upgrades;
         upgradeMenu = new UpgradeMenu(this);
         this.xIndex = xIndex;
         this.yIndex = yIndex;
         this.range = range;
+        
+        healthPoints = health;
+        healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
       
 
     }

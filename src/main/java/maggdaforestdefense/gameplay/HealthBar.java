@@ -25,14 +25,14 @@ public class HealthBar extends Group{
     
     private double maxHealth;
     private ImageView box, bar;
-    public HealthBar(double max) {
+    public HealthBar(double max, GameImage boxImage, GameImage barImage) {
         maxHealth = max;
         
-        box = new ImageView(GameImage.DISPLAY_HEALTH_BOX.getImage());
+        box = new ImageView(boxImage.getImage());
         box.setFitWidth(BOX_WIDTH);
         box.setFitHeight(BOX_HEIGHT);
         
-        bar = new ImageView(GameImage.DISPLAY_HEALTH_BAR.getImage());
+        bar = new ImageView(barImage.getImage());
         bar.setFitWidth(BOX_WIDTH-BOX_BORDER*2);
         bar.setFitHeight(BOX_HEIGHT-BOX_BORDER*2);
         bar.setLayoutX(BOX_BORDER);
@@ -51,4 +51,6 @@ public class HealthBar extends Group{
         
         setVisible(true);
     }
+    
+    
 }

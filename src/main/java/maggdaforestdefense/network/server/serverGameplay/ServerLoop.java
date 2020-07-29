@@ -10,6 +10,7 @@ import maggdaforestdefense.network.server.Player;
 
 import java.util.List;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.TestBug;
 import maggdaforestdefense.util.GameMaths;
 
 /**
@@ -50,7 +51,7 @@ public class ServerLoop{
             //TEST
             if(secondsBetweenspawns*spawnAmount < runTime) {
                 spawnAmount++;
-                serverGame.addMob(new Bug(serverGame));
+                serverGame.addMob(new TestBug(serverGame));
             }
             
             

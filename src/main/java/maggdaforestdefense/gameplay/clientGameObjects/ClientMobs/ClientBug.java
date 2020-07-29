@@ -27,8 +27,8 @@ public class ClientBug extends ClientMob {
 
     private int animationState = 0;
 
-    public ClientBug(int id, double x, double y) {
-        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, Bug.DEFAULT_HP);
+    public ClientBug(int id, double x, double y, double hp) {
+        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, hp);
         setFitWidth(width);
         setFitHeight(height);
 

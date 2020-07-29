@@ -43,7 +43,7 @@ public abstract class GameObject {
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
             case M_BUG:
-                return new ClientBug((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
+                return new ClientBug((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"));
             
                 
                 

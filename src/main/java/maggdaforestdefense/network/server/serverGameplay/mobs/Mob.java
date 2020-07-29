@@ -14,6 +14,7 @@ import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
@@ -48,11 +49,14 @@ public abstract class Mob extends GameObject {
 
     protected Damage damageObject;
     protected Damage.NormalDamage basicDamage;
+    
+    protected MapDistanceSet mapDistanceSet;
 
-    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime) {
+    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet) {
         super(game.getNextId(), objectType);
         serverGame = game;
         this.hitBox = hitBox;
+        this.mapDistanceSet = distanceSet;
         this.speed = speed;
         this.towerVisionRange = towerVision;
         this.damage = damage;
@@ -130,7 +134,7 @@ public abstract class Mob extends GameObject {
             if (gameObject instanceof Tower) {
                 Tower tower = ((Tower) gameObject);
                 if (Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
-                    PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType);
+                    PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
                     Path newPath = finder.findPath();
                     if (newPath.getRestWay() < path.getRestWay()) {
                         path = newPath;
@@ -169,12 +173,12 @@ public abstract class Mob extends GameObject {
     }
     
     protected void pathToBase() {
-        pathFinder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType);
+        pathFinder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
         path = pathFinder.findPath();
     }
 
     protected void initializePathFinder() {
-        pathFinder = new PathFinder(serverGame.getMap().getCells()[startXIndex][startYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType);
+        pathFinder = new PathFinder(serverGame.getMap().getCells()[startXIndex][startYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
         path = pathFinder.findPath();
     }
 

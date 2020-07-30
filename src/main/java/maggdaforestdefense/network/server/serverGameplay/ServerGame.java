@@ -95,6 +95,8 @@ public class ServerGame extends Thread{
             new CommandArgument("yIndex", String.valueOf(tower.getYIndex())),
             new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal()))
         }));
+        
+        notifyTowerChanges();
     }
     
     public void updateGameObjects(double timeElapsed) {
@@ -128,6 +130,8 @@ public class ServerGame extends Thread{
     
     }
     
+     
+    
     public void addProjectile(Projectile projectile) {
         addGameObject(projectile);
     }
@@ -150,7 +154,15 @@ public class ServerGame extends Thread{
     
     public void killTower(Tower tower) {
         removeGameObject(tower);
-        Logger.logServer("KIIIIIIILL");
+        notifyTowerChanges();
+    }
+    
+    public void notifyTowerChanges() {
+        gameObjects.forEach((String key, GameObject gameObject)->{
+            if(gameObject instanceof Tower) {
+                ((Tower)gameObject).notifyTowerChanges();
+            }
+        });
     }
     
     public HashMap<String, Mob> getMobs() {
@@ -179,11 +191,15 @@ public class ServerGame extends Thread{
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("tier", tier), new CommandArgument("type", upgradeType)}));
         }
         
+        notifyTowerChanges();
+        
     }
     
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
+
+   
 
 
  

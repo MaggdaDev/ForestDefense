@@ -74,4 +74,6 @@ public abstract class ConstantFlightProjectile extends Projectile{
         }
         return true;
     }
+    
+    
 }

@@ -120,12 +120,12 @@ public class SpruceShot extends ConstantFlightProjectile {
                 riesenschreckDamage.setDamageVal(DAMAGE + percetageOfHealthRiesenschreck * target.getHP());
             }
 
-            target.damage(damageObject);
-            
+            notifyOwnerDamage(target.damage(damageObject));
             performUpgradesAfterCollision();
-
+            
+            
         }
-
+        
     }
 
     private void addUpgrade(Upgrade upgrade) {

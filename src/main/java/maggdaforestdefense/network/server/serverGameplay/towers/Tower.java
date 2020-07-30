@@ -19,6 +19,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.UpgradeHandler;
 
 /**
@@ -35,16 +36,20 @@ public abstract class Tower extends GameObject {
 
     protected UpgradeSet upgradeSet;
 
-    protected double healthPoints;
+    protected double healthPoints, regenerationPerSecond, maxHealth;
+    
+    protected double lifeSteal = 0;
+    
+    protected int range;
 
     protected MapCell mapCell;
     
     protected boolean isAlive = true;
 
     // Upgrade events
-    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate;
+    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges;
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
@@ -54,12 +59,18 @@ public abstract class Tower extends GameObject {
         mapCell = serverGame.getMap().getCells()[xIndex][yIndex];
         mapCell.setTower(this);
 
+        this.range = range;
         this.prize = prize;
         this.healthPoints = health;
+        this.maxHealth = healthPoints;
+        this.regenerationPerSecond = regen;
         this.upgrades = new Vector<>();
         this.onShoot = new Vector<UpgradeHandler>();
         this.onKill = new Vector<UpgradeHandler>();
         this.onUpdate = new Vector<UpgradeHandler>();
+        this.onTowerChanges = new Vector<UpgradeHandler>();
+        
+
 
     }
 
@@ -86,6 +97,14 @@ public abstract class Tower extends GameObject {
         }
 
         return null;
+    }
+    
+    protected void updateRegen(double timeElapsed) {
+        if(timeElapsed*regenerationPerSecond + healthPoints > maxHealth) {
+            healthPoints = maxHealth;
+        } else {
+            healthPoints += timeElapsed * regenerationPerSecond;
+        }
     }
 
     protected boolean isInRange(Mob mob, int range) {
@@ -149,6 +168,15 @@ public abstract class Tower extends GameObject {
         return isAlive;
     }
 
+    
+    public double getHealthPoints() {
+        return healthPoints;
+    }
+    
+    public double getMaxHealthPoints() {
+        return maxHealth;
+    }
+    
     // UpradePerforms
     public void performUpgradesOnShoot() {                  // MUST BE IN EVERY SUB CLASS SHOOT METHOD
         for (int i = 0; i < onShoot.size(); i++) {
@@ -170,12 +198,38 @@ public abstract class Tower extends GameObject {
             u.handleUpgrade();
         }
     }
+    
+    public void performUpgradesOnTowerChanges() {
+        for (int i = 0; i < onTowerChanges.size(); i++) {
+            UpgradeHandler u = onTowerChanges.get(i);
+            u.handleUpgrade();
+        }
+    }
 
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);
+    
 
     public void notifyKill() {
         performUpgradesOnKill();
+    }
+    
+    public void notifyTowerChanges() {
+        performUpgradesOnTowerChanges();
+    }
+    
+    public int getRange() {
+        return range;
+    }
+    
+    public void notifyDamage(double damageVal) {
+        Logger.logServer("DAMAGE: " + damageVal);
+        double healthAdd = damageVal * lifeSteal;
+        if(healthPoints + healthAdd > maxHealth) {
+            healthPoints = maxHealth;
+        } else {
+            healthPoints += healthAdd;
+        }
     }
 
 }

@@ -36,6 +36,9 @@ public class Path {
     }
 
     public boolean walk(double delta) {
+        if(ways.size() == 0) {
+            return true;
+        }
         if (wayWalked + delta < ways.size() * MapCell.CELL_SIZE) {
 
             wayWalked += delta;

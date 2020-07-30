@@ -93,5 +93,9 @@ public abstract class Projectile extends GameObject {
         owner.notifyKill();
         performUpgradesOnKill();
     }
+    
+    protected void notifyOwnerDamage(double damage) {
+        owner.notifyDamage(damage);
+    }
 
 }

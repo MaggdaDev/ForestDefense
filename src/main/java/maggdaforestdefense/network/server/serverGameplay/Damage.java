@@ -51,13 +51,18 @@ public class Damage {
         damageMultiplierList.addAll(Arrays.asList(d));
     }
 
-    public double getTotalDamage() {
+    public double getTotalDamage(double armor) {
         double damageCounter = 0;
         for (DamageSubclass currDamage : damageList) {
             damageCounter += currDamage.getDamageValue();
         }
         for(DamageMultiplier currMult : damageMultiplierList) {
             damageCounter *= currMult.getMultiplier();
+        }
+        
+        damageCounter -= armor;
+        if(damageCounter < 0) {
+            damageCounter = 0;
         }
         return damageCounter;
     }

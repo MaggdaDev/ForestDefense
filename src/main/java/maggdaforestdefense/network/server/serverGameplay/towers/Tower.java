@@ -37,19 +37,21 @@ public abstract class Tower extends GameObject {
     protected UpgradeSet upgradeSet;
 
     protected double healthPoints, regenerationPerSecond, maxHealth;
-    
+
     protected double lifeSteal = 0;
-    
+
     protected int range;
 
     protected MapCell mapCell;
-    
+
     protected boolean isAlive = true;
+
+    protected CanAttackSet canAttackSet;
 
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges;
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range, CanAttackSet attackSet) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
@@ -69,8 +71,7 @@ public abstract class Tower extends GameObject {
         this.onKill = new Vector<UpgradeHandler>();
         this.onUpdate = new Vector<UpgradeHandler>();
         this.onTowerChanges = new Vector<UpgradeHandler>();
-        
-
+        this.canAttackSet = attackSet;
 
     }
 
@@ -92,15 +93,21 @@ public abstract class Tower extends GameObject {
         });
         for (Mob mob : mobs) {
             if (isInRange(mob, range)) {
-                return mob;
+                if (mob.getMovementType() == Mob.MovementType.DIG && canAttackSet.canAttackDigging()) {
+                    return mob;
+                } else if (mob.getMovementType() == Mob.MovementType.WALK && canAttackSet.canAttackWalking()) {
+                    return mob;
+                } else if (mob.getMovementType() == Mob.MovementType.FLY && canAttackSet.canAttackFlying()) {
+                    return mob;
+                }
             }
         }
 
         return null;
     }
-    
+
     protected void updateRegen(double timeElapsed) {
-        if(timeElapsed*regenerationPerSecond + healthPoints > maxHealth) {
+        if (timeElapsed * regenerationPerSecond + healthPoints > maxHealth) {
             healthPoints = maxHealth;
         } else {
             healthPoints += timeElapsed * regenerationPerSecond;
@@ -118,18 +125,18 @@ public abstract class Tower extends GameObject {
     }
 
     public void damage(Damage damageObject) {
-        healthPoints -= damageObject.getTotalDamage();
+        healthPoints -= damageObject.getTotalDamage(0);
     }
-    
+
     public boolean checkAlive() {
-        if(healthPoints < 0) {
+        if (healthPoints < 0) {
             die();
             return false;
         } else {
             return true;
         }
     }
-    
+
     public void die() {
         serverGame.killTower(this);
         isAlive = false;
@@ -163,20 +170,19 @@ public abstract class Tower extends GameObject {
     public Vector<Upgrade> getUpgrades() {
         return upgrades;
     }
-    
+
     public boolean isAlive() {
         return isAlive;
     }
 
-    
     public double getHealthPoints() {
         return healthPoints;
     }
-    
+
     public double getMaxHealthPoints() {
         return maxHealth;
     }
-    
+
     // UpradePerforms
     public void performUpgradesOnShoot() {                  // MUST BE IN EVERY SUB CLASS SHOOT METHOD
         for (int i = 0; i < onShoot.size(); i++) {
@@ -198,7 +204,7 @@ public abstract class Tower extends GameObject {
             u.handleUpgrade();
         }
     }
-    
+
     public void performUpgradesOnTowerChanges() {
         for (int i = 0; i < onTowerChanges.size(); i++) {
             UpgradeHandler u = onTowerChanges.get(i);
@@ -208,27 +214,61 @@ public abstract class Tower extends GameObject {
 
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);
-    
 
     public void notifyKill() {
         performUpgradesOnKill();
     }
-    
+
     public void notifyTowerChanges() {
         performUpgradesOnTowerChanges();
     }
-    
+
     public int getRange() {
         return range;
     }
-    
+
     public void notifyDamage(double damageVal) {
         Logger.logServer("DAMAGE: " + damageVal);
         double healthAdd = damageVal * lifeSteal;
-        if(healthPoints + healthAdd > maxHealth) {
+        if (healthPoints + healthAdd > maxHealth) {
             healthPoints = maxHealth;
         } else {
             healthPoints += healthAdd;
+        }
+    }
+
+    public static class CanAttackSet {
+
+        private boolean canAttackDigging, canAttackWalking, canAttackFlying;
+
+        public CanAttackSet(boolean attackDigging, boolean attackWalking, boolean attackFlying) {
+            canAttackDigging = attackDigging;
+            canAttackWalking = attackWalking;
+            canAttackFlying = attackFlying;
+        }
+
+        public boolean canAttackDigging() {
+            return canAttackDigging;
+        }
+
+        public boolean canAttackWalking() {
+            return canAttackWalking;
+        }
+
+        public boolean canAttackFlying() {
+            return canAttackFlying;
+        }
+
+        public void setCanAttackDigging(boolean b) {
+            canAttackDigging = b;
+        }
+
+        public void setCanAttackWalking(boolean b) {
+            canAttackWalking = b;
+        }
+
+        public void setCanAttackFlying(boolean b) {
+            canAttackFlying = b;
         }
     }
 

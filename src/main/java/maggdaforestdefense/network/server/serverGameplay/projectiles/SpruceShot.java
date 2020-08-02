@@ -17,6 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower.CanAttackSet;
 import maggdaforestdefense.util.GameMaths;
 import maggdaforestdefense.util.UpgradeHandler;
 
@@ -38,15 +39,17 @@ public class SpruceShot extends ConstantFlightProjectile {
     private final static double percetageOfHealthRiesenschreck = 0.1;
     private final static double extraDamagePerPixel = 0.01;
     private final static double critChance = 0.2, critMultiplier = 5;
+    private final static double armorPierceDamageMult = 1;
 
     // Upgrade vars
     private boolean isRiesenschreck = false;
-    private Damage.NormalDamage basicDamage, riesenschreckDamage, dominierendeNadelnDamage;
+    private boolean isArmorPierce = false;
+    private Damage.NormalDamage basicDamage, riesenschreckDamage, dominierendeNadelnDamage, armorPierceDamage;
     private Damage.NormalMultiplier nadelStaerkungMult;
     private Damage.CriticalDamage criticalDamageMult;
 
-    public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower) {
-        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower);
+    public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower, Tower.CanAttackSet attackSet) {
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, target, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower, attackSet);
         serverGame = game;
         xPos = x;
         yPos = y;
@@ -59,8 +62,8 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     }
 
-    private SpruceShot(int id, ServerGame game, double x, double y, double xSpd, double ySpd, Tower ownerTower, double pierce, Vector<Mob> mobsDamaged) {
-        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, null, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower);
+    private SpruceShot(int id, ServerGame game, double x, double y, double xSpd, double ySpd, Tower ownerTower, double pierce, Vector<Mob> mobsDamaged, CanAttackSet attackSet) {
+        super(id, GameObjectType.P_SPRUCE_SHOT, DEFAULT_RANGE, null, x, y, DEFAULT_SPEED, game, new HitBox.CircularHitBox(HITBOX_RADIUS, x, y), DEFAULT_PIERCE, ownerTower, attackSet);
         serverGame = game;
         xPos = x;
         yPos = y;
@@ -77,9 +80,10 @@ public class SpruceShot extends ConstantFlightProjectile {
     private final void setUpDamage() {
         damageObject = new Damage(this);
         riesenschreckDamage = new Damage.NormalDamage(0);
-        dominierendeNadelnDamage = new Damage.NormalDamage(0);;
+        dominierendeNadelnDamage = new Damage.NormalDamage(0);
+        armorPierceDamage = new Damage.NormalDamage(0);
         basicDamage = new Damage.NormalDamage(DAMAGE);
-        damageObject.addAllDamage(new Damage.DamageSubclass[]{basicDamage, riesenschreckDamage, dominierendeNadelnDamage});
+        damageObject.addAllDamage(new Damage.DamageSubclass[]{basicDamage, riesenschreckDamage, dominierendeNadelnDamage, armorPierceDamage});
 
         nadelStaerkungMult = new Damage.NormalMultiplier(1);
         criticalDamageMult = new Damage.CriticalDamage(0, 1);
@@ -117,7 +121,11 @@ public class SpruceShot extends ConstantFlightProjectile {
             mobsDamaged.add(target);
 
             if (isRiesenschreck) {       // RIESENSCHRECK UPGRADE
-                riesenschreckDamage.setDamageVal(DAMAGE + percetageOfHealthRiesenschreck * target.getHP());
+                riesenschreckDamage.setDamageVal(percetageOfHealthRiesenschreck * target.getHP());
+            }
+            
+            if(isArmorPierce) {         // ARMOR PIERCE UPGRADE
+                armorPierceDamage.setDamageVal(target.getArmor() * armorPierceDamageMult);
             }
 
             notifyOwnerDamage(target.damage(damageObject));
@@ -139,6 +147,9 @@ public class SpruceShot extends ConstantFlightProjectile {
 
                     }
                 });
+                break;
+            case SPRUCE_1_3:           // Ruestungsdurchdringende Nadeln
+                isArmorPierce = true;
                 break;
             case SPRUCE_1_5:    // Nadelstaerkung
                 afterCollision.add(new UpgradeHandler() {
@@ -198,8 +209,8 @@ public class SpruceShot extends ConstantFlightProjectile {
         newVec2X = newVec2X * totSpd / tot2;
         newVec2Y = newVec2Y * totSpd / tot2;
 
-        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec1X, newVec1Y, owner, pierce + 1, mobsDamaged));
-        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec2X, newVec2Y, owner, pierce + 1, mobsDamaged));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec1X, newVec1Y, owner, pierce + 1, mobsDamaged, canAttackSet));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec2X, newVec2Y, owner, pierce + 1, mobsDamaged, canAttackSet));
 
         pierce = 0;
     }

@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
@@ -26,6 +27,7 @@ public abstract class ClientTower extends ClientGameObject{
     
     protected HealthBar healthBar;
     protected double healthPoints;
+    
     public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range, double health) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
           this.upgradeSet = upgrades;
@@ -62,7 +64,9 @@ public abstract class ClientTower extends ClientGameObject{
     }
     
     @Override
-    public void onRemove(){}
+    public void onRemove(){
+   
+    }
 
     public void buyUpgrade(int tier, int type) {
         upgradeMenu.buyUpgrade(tier,type);

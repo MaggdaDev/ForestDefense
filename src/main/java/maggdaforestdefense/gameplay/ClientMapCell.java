@@ -18,6 +18,7 @@ import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Exceptions;
 
 /**
@@ -124,12 +125,13 @@ public class ClientMapCell extends StackPane {
         }
     }
     
-     void removeTree(ClientTower tree) {
+     public void removeTree(ClientTower tree) {
         if(getChildren().contains(tree)) {
             isPlanted = false;
             currentTower = null;
             getChildren().remove(tree);
             menuState = MENU_STATE.PLANT_MENU;
+            PlayerInputHandler.getInstance().mapCellClicked(this);
         }
     }
 

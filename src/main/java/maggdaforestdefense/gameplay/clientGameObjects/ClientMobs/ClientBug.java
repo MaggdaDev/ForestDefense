@@ -5,11 +5,13 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.ClientMobs;
 
+import javafx.scene.effect.DropShadow;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.GameMaths;
@@ -27,10 +29,12 @@ public class ClientBug extends ClientMob {
 
     private int animationState = 0;
 
-    public ClientBug(int id, double x, double y, double hp) {
-        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, hp);
+    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType) {
+        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, hp, movementType);
         setFitWidth(width);
         setFitHeight(height);
+        
+
 
     }
 
@@ -43,6 +47,7 @@ public class ClientBug extends ClientMob {
         double newY = updateCommand.getNumArgument("y") - height / 2;
         double dX = newX - xPos;
         double dY = newY - yPos;
+        movementType = Mob.MovementType.values()[(int)updateCommand.getNumArgument("movement")];
         distanceSinceLastStep += GameMaths.getAbs(dX, dY);
         if (distanceSinceLastStep >= distance_between_steps) {
             distanceSinceLastStep = 0;
@@ -54,6 +59,7 @@ public class ClientBug extends ClientMob {
         
         setNewPos(newX, newY);
         updateHealth(newHealth);
+        updateShadow();
 
         
 

@@ -35,12 +35,13 @@ public abstract class Projectile extends GameObject {
 
     protected Vector<Mob> mobsDamaged;
 
+    protected Tower.CanAttackSet canAttackSet;
 
-    public Projectile(int id, GameObjectType type, HitBox hitBox, Tower ownerTower) {
+    public Projectile(int id, GameObjectType type, HitBox hitBox, Tower ownerTower, Tower.CanAttackSet attackSet) {
         super(id, type);
         this.hitBox = hitBox;
         this.owner = ownerTower;
-
+        this.canAttackSet = attackSet;
         mobsDamaged = new Vector<Mob>();
         beforeCollision = new Vector<UpgradeHandler>();
         afterCollision = new Vector<UpgradeHandler>();
@@ -56,7 +57,23 @@ public abstract class Projectile extends GameObject {
 
         mobs.forEach((String s, Mob mob) -> {
             if (HitBox.intersects(hitBox, mob.getHitBox())) {
-                dealDamage(mob);
+                switch(mob.getMovementType()) {
+                    case DIG:
+                        if(canAttackSet.canAttackDigging()) {
+                            dealDamage(mob);
+                        }
+                        break;
+                    case FLY:
+                        if(canAttackSet.canAttackFlying()) {
+                            dealDamage(mob);
+                        }
+                        break;
+                    case WALK:
+                        if(canAttackSet.canAttackWalking()) {
+                            dealDamage(mob);
+                        }
+                        break;
+                }
             }
         });
     }

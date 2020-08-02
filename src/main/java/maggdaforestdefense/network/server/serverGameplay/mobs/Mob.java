@@ -27,7 +27,7 @@ import maggdaforestdefense.storage.Logger;
 public abstract class Mob extends GameObject {
 
     protected double xPos, yPos, healthPoints, speed, maxHealth;
-    protected double damage, damageTime, damageTimer = 0;
+    protected double damage, damageTime, damageTimer = 0, armor;
     protected int startXIndex, startYIndex, currentXIndex, currentYIndex, currentXMidIndex, currentYMidIndex;
     protected ServerGame serverGame;
 
@@ -51,8 +51,10 @@ public abstract class Mob extends GameObject {
     protected Damage.NormalDamage basicDamage;
     
     protected MapDistanceSet mapDistanceSet;
+    
+    protected MovementType movementType;
 
-    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet) {
+    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
         super(game.getNextId(), objectType);
         serverGame = game;
         this.hitBox = hitBox;
@@ -61,6 +63,8 @@ public abstract class Mob extends GameObject {
         this.towerVisionRange = towerVision;
         this.damage = damage;
         this.damageTime = damageTime;
+        this.armor = armor;
+        this.movementType = movement;
 
         healthPoints = health;
         maxHealth = healthPoints;
@@ -221,12 +225,13 @@ public abstract class Mob extends GameObject {
     }
 
     public double directDamage(Damage damage) {
+        double oldHealthPoints= healthPoints;
         if (checkAlive()) {
-            healthPoints -= damage.getTotalDamage();
+            healthPoints -= damage.getTotalDamage(armor);
             if (!checkAlive()) {
                 damage.getOwnerProjectile().notifyKill(this);
             }
-            return damage.getTotalDamage();
+            return oldHealthPoints - healthPoints;
         }
         return 0;
     }
@@ -255,5 +260,20 @@ public abstract class Mob extends GameObject {
     public double getHP() {
         return healthPoints;
     }
+    
+    public double getArmor() {
+        return armor;
+    }
+    
+    public MovementType getMovementType() {
+        return movementType;
+    }
+    
+    public static enum MovementType {
+        DIG,
+        WALK,
+        FLY;
+    }
+    
 
 }

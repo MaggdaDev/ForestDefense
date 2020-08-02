@@ -11,6 +11,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientSp
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 
 /**
  *
@@ -43,7 +44,7 @@ public abstract class GameObject {
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
             case M_BUG:
-                return new ClientBug((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"));
+                return new ClientBug((int)command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int)command.getNumArgument("movement")]);
             
                 
                 

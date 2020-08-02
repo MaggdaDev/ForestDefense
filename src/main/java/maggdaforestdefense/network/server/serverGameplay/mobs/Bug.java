@@ -21,13 +21,10 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
  */
 public abstract class Bug extends Mob {
 
-
     public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
 
-    
-
-    public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet) {
-        super(game, GameObjectType.M_BUG, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet);
+    public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet, double armor, MovementType movementType) {
+        super(game, GameObjectType.M_BUG, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet, armor, movementType);
         findStartPos();
     }
 
@@ -37,7 +34,8 @@ public abstract class Bug extends Mob {
             new CommandArgument("y", String.valueOf(yPos)),
             new CommandArgument("type", String.valueOf(GameObjectType.M_BUG.ordinal())),
             new CommandArgument("hp", healthPoints),
-            new CommandArgument("id", String.valueOf(id))};
+            new CommandArgument("id", String.valueOf(id)),
+            new CommandArgument("movement", movementType.ordinal())};
     }
 
     @Override
@@ -50,7 +48,8 @@ public abstract class Bug extends Mob {
                 new CommandArgument("id", String.valueOf(id)),
                 new CommandArgument("x", String.valueOf(xPos)),
                 new CommandArgument("y", String.valueOf(yPos)),
-                new CommandArgument("hp", String.valueOf(healthPoints))});
+                new CommandArgument("hp", String.valueOf(healthPoints)),
+                new CommandArgument("movement", movementType.ordinal())});
         } else {
             return null;
         }

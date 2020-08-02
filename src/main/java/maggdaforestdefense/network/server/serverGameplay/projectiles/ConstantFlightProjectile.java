@@ -11,6 +11,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower.CanAttackSet;
 import maggdaforestdefense.util.GameMaths;
 
 /**
@@ -23,8 +24,8 @@ public abstract class ConstantFlightProjectile extends Projectile{
     protected int towerRange;
     protected Mob targetMob;
     protected ServerGame serverGame;
-    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce, Tower ownerTower) {
-        super(id, type, hitBox, ownerTower);
+    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce, Tower ownerTower, CanAttackSet attackSet) {
+        super(id, type, hitBox, ownerTower, attackSet);
         targetMob = target;
         towerRange = range;
         totalSpeed = totSpd;

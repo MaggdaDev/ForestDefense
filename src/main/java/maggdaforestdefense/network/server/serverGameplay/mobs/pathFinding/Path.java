@@ -50,11 +50,17 @@ public class Path {
 
     public double getCurrentX() {
         int currentWay = (int) (wayWalked / MapCell.CELL_SIZE);
+        if(ways.size() == 0) {
+            return 0;
+        }
         double x = ways.get(currentWay).getXOnWay((wayWalked - currentWay * MapCell.CELL_SIZE) / MapCell.CELL_SIZE);
         return x;
     }
 
     public double getCurrentY() {
+        if(ways.size() == 0) {
+            return 0;
+        }
         int currentWay = (int) (wayWalked / MapCell.CELL_SIZE);
         return ways.get(currentWay).getYOnWay((wayWalked - currentWay * MapCell.CELL_SIZE) / MapCell.CELL_SIZE);
     }

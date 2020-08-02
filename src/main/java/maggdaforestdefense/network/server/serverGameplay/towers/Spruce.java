@@ -29,6 +29,7 @@ public class Spruce extends Tower {
     public final static int DEFAULT_PRIZE = 1;
     public final static double HEALTH = 50;
     public final static double DEFAULT_REGEN = 0;
+    public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
 
     //Balancing stats;
     double xPos, yPos;
@@ -54,10 +55,13 @@ public class Spruce extends Tower {
 
     private int aufruhrDerFichtenCounter = 0;
     private double aufruhrDerFichtenDamagePerSpruce = 0;
+    
+    
+    
 
     // multiplier
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE);
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING));
         xPos = x;
         yPos = y;
 
@@ -117,7 +121,7 @@ public class Spruce extends Tower {
     }
 
     private void shoot(Mob target) {
-        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, getCenterX(), getCenterY(), target, this));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, getCenterX(), getCenterY(), target, this, canAttackSet));
         performUpgradesOnShoot();
     }
 
@@ -136,6 +140,9 @@ public class Spruce extends Tower {
                     });
                     monoculturalMultiplier = Math.sqrt((double) spruceCounter);
                 });
+                break;
+            case SPRUCE_1_4:        // HOEHER WACHSEN
+                canAttackSet.setCanAttackFlying(true);
                 break;
             case SPRUCE_1_6:        // LIFESTEAL
                 lifeSteal = UPGRADE_LIFE_STEAL;
@@ -156,7 +163,9 @@ public class Spruce extends Tower {
                     shootTime *= FICHTEN_WUT_MULTIPLIER;
                 });
                 break;
-
+            case SPRUCE_2_4:        // WURZELHIEB
+                canAttackSet.setCanAttackDigging(true);
+                break;
             case SPRUCE_3_1:        //Serienmoerder
                 onKill.add(() -> {
                     shootTimer = shootTime * 0.99;

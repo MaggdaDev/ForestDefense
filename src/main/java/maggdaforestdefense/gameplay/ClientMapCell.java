@@ -98,6 +98,7 @@ public class ClientMapCell extends StackPane {
     public Parent getMenu() {
         switch(menuState) {
             case PLANT_MENU:
+                plantMenu.setBuyTreeBox(null);
                 return plantMenu;
             case UPGRADE_MENU:
                 return currentTower.getUpgradeMenu();

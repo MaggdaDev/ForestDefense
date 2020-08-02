@@ -21,6 +21,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
@@ -34,76 +35,118 @@ import maggdaforestdefense.util.Exceptions;
  *
  * @author DavidPrivat
  */
-public class PlantTowerButton extends Button{
+public class PlantTowerButton extends Button {
+
     public final static Font font = new Font(20);
     private ImageView imageView;
     private int xIndex, yIndex;
     private GameObjectType gameObjectType;
     private int coinsPrize;
     private PrizeLabel prizeLabel;
-    public PlantTowerButton(GameObjectType type, int x, int y, int prize) throws Exceptions.GameObjectNotCompatibleException {
+
+    private BuyTreeBox buyTreeBox;
+    private PlantMenu plantMenu;
+
+    public PlantTowerButton(GameObjectType type, int x, int y, int prize, PlantMenu plantMenu) throws Exceptions.GameObjectNotCompatibleException {
         gameObjectType = type;
+        this.plantMenu = plantMenu;
         imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(100);
- 
+       
+
         xIndex = x;
         yIndex = y;
         coinsPrize = prize;
-        
 
         prizeLabel = new PrizeLabel(coinsPrize);
-        
-        setOnAction((ActionEvent e)->{
-            plantTower();
+
+        setOnAction((ActionEvent e) -> {
+            plantMenu.setBuyTreeBox(buyTreeBox);
         });
-        
+
         setPrefWidth(100);
         setPrefHeight(100);
-        
-        
+
         VBox graphic = new VBox(imageView, prizeLabel);
         graphic.setAlignment(Pos.CENTER);
         graphic.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
         setGraphic(graphic);
         setAlignment(Pos.CENTER);
         setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(2))));
-        
+
         getStyleClass().clear();
         getStyleClass().add("addTowerButton");
-        
-        switch(type) {
+
+        switch (type) {
             case T_SPRUCE:
-            imageView.setImage(GameImage.TOWER_SPRUCE_1.getImage());
-            break;
+                imageView.setImage(GameImage.TOWER_SPRUCE_1.getImage());
+                buyTreeBox = new BuyTreeBox(Game.language.SPRUCE_NAME, Game.language.SPRUCE_DESCRIPRION, GameImage.TOWER_SPRUCE_1, prize);
+                break;
             default:
                 throw new Exceptions.GameObjectNotCompatibleException();
 
         }
-        
-        
-        
-        
+
     }
-    
+
     private void plantTower() {
         NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.ADD_TOWER, new CommandArgument[]{
-            new CommandArgument("x", String.valueOf(xIndex*MapCell.CELL_SIZE)),
-            new CommandArgument("y", String.valueOf(yIndex*MapCell.CELL_SIZE)),
+            new CommandArgument("x", String.valueOf(xIndex * MapCell.CELL_SIZE)),
+            new CommandArgument("y", String.valueOf(yIndex * MapCell.CELL_SIZE)),
             new CommandArgument("type", String.valueOf(gameObjectType.ordinal()))}));
     }
 
     void updateCoins(double coins) {
-        if(coins < coinsPrize) {
-            setDisable(true);
+        if (coins < coinsPrize) {
             setOpacity(0.5);
         } else {
-            setDisable(false);
             setOpacity(1);
         }
     }
-    
-   
+
+    public class BuyTreeBox extends VBox{
+
+        private Button buyButton;
+        private ImageView treeView;
+        private Label treeName, treeDescription;
+        private PrizeLabel prizeLabel;
+
+        public BuyTreeBox(String name, String description, GameImage image, int prize) {
+            buyButton = new Button("BUY", new PrizeLabel(prize));
+            buyButton.setOnAction((ActionEvent e)->{
+                plantTower();
+            });
+
+            treeView = new ImageView(image.getImage());
+            treeView.setPreserveRatio(true);
+            treeView.setFitHeight(200);
+
+            treeName = new Label(name);
+            treeName.setFont(UpgradeMenu.font);
+
+            treeDescription = new Label(description);
+            treeDescription.setFont(UpgradeMenu.descriptionFont);
+            treeDescription.setWrapText(true);
+            treeDescription.setPrefWidth(400);
+
+            getChildren().addAll(treeName, treeView, treeDescription, buyButton);
+            setAlignment(Pos.CENTER);
             
-            
+
+
+        }
+
+        public void updateCoins(double coins) {
+            if (coins < coinsPrize) {
+                buyButton.setDisable(true);
+                buyButton.setOpacity(0.5);
+            } else {
+                buyButton.setDisable(false);
+                buyButton.setOpacity(1);
+            }
+        }
+
+    }
+
 }

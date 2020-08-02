@@ -5,8 +5,10 @@
  */
 package maggdaforestdefense.gameplay.ingamemenus;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
@@ -18,6 +20,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -31,9 +34,8 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class PlantMenu extends VBox {
+
     private final static Font font = new Font(40);
-    
-    
 
     private MapCell.CellType cellType;
 
@@ -42,23 +44,30 @@ public class PlantMenu extends VBox {
     private Label cellTypeLabel, addTowerLabel;
 
     private GridPane towerButtons;
-    
+
     private int xIndex, yIndex;
+
+    private VBox buyTreeBorderBox;
 
     public PlantMenu(MapCell.CellType type, int x, int y) {
         cellType = type;
-        xIndex =x;
+        xIndex = x;
         yIndex = y;
 
         //CellType
         cellTypeView = new ImageView();
-        cellTypeView.setFitWidth(200);
-        cellTypeView.setFitHeight(200);
+        cellTypeView.setFitWidth(50);
+        cellTypeView.setFitHeight(50);
         BorderPane celltTypeViewBorder = new BorderPane(cellTypeView);
         celltTypeViewBorder.setBorder(new Border(new BorderStroke(Color.web("022202"), BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
 
         cellTypeLabel = new Label();
         cellTypeLabel.setFont(font);
+
+        VBox cellTypeBox = new VBox(cellTypeView, cellTypeLabel);
+        cellTypeBox.setAlignment(Pos.CENTER);
+        cellTypeBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        cellTypeBox.setPadding(new Insets(20));
 
         //towers
         addTowerLabel = new Label("Add plant:");
@@ -66,9 +75,21 @@ public class PlantMenu extends VBox {
 
         towerButtons = new GridPane();
 
+        VBox towerBox = new VBox(addTowerLabel, towerButtons);
+        towerBox.setAlignment(Pos.CENTER);
+        towerBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        towerBox.setPadding(new Insets(20));
+
+        // Buy tree
+        buyTreeBorderBox = new VBox();
+        buyTreeBorderBox.setAlignment(Pos.CENTER);
+        buyTreeBorderBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
+        buyTreeBorderBox.setPadding(new Insets(20));
+        buyTreeBorderBox.setVisible(false);
+
         setAlignment(Pos.CENTER);
         setSpacing(10);
-        getChildren().addAll(cellTypeLabel, celltTypeViewBorder, new Separator(), addTowerLabel, towerButtons);
+        getChildren().addAll(cellTypeBox, towerBox, buyTreeBorderBox);
 
         updateTypeSpecific(type);
     }
@@ -83,7 +104,7 @@ public class PlantMenu extends VBox {
                 case DIRT:
                     cellTypeView.setImage(GameImage.MAP_CELL_DIRT.getImage());
                     cellTypeLabel.setText("Dirt");
-                    towerButtons.add(new PlantTowerButton(GameObjectType.T_SPRUCE, xIndex, yIndex, Spruce.DEFAULT_PRIZE), 0, 0);
+                    towerButtons.add(new PlantTowerButton(GameObjectType.T_SPRUCE, xIndex, yIndex, Spruce.DEFAULT_PRIZE, this), 0, 0);
                     break;
                 case SAND:
                     cellTypeView.setImage(GameImage.MAP_CELL_SAND.getImage());
@@ -104,12 +125,22 @@ public class PlantMenu extends VBox {
         }
     }
 
-
     public void updateCoins(double coins) {
-        for(Node node: towerButtons.getChildren()) {
-            if(node instanceof PlantTowerButton) {
-                ((PlantTowerButton)node).updateCoins(coins);
+        for (Node node : towerButtons.getChildren()) {
+            if (node instanceof PlantTowerButton) {
+                ((PlantTowerButton) node).updateCoins(coins);
             }
         }
     }
+
+    public void setBuyTreeBox(PlantTowerButton.BuyTreeBox buyTreeBox) {
+        buyTreeBorderBox.setVisible(false);
+        buyTreeBorderBox.getChildren().clear();
+        if (buyTreeBox != null) {
+            buyTreeBorderBox.getChildren().add(buyTreeBox);
+            buyTreeBorderBox.setVisible(true);
+        }
+
+    }
+
 }

@@ -12,8 +12,14 @@ package language;
 public class Deutsch extends Language{
 
     public Deutsch() {
-
+    // Tower names
+    SPRUCE_NAME = "Fichte";
     
+    // Tower descriptions
+    SPRUCE_DESCRIPRION = "Die Fichte schießt einfache Nadelgeschosse, die 1 Gegner durchdringen können.";
+        
+        
+    // Upgrade description
     UPGRADE_DESCRIPTION_SPURCE_1_1 = "Nadel Teilung: Trifft eine Nadel auf einen Gegner, teilt sich die Nadel in weitere Nadeln auf, die sich allerdings nicht weiter aufteilen.";
     UPGRADE_DESCRIPTION_SPURCE_1_2 = "Fichten-Monokultur: Je mehr Fichten auf der Karte sind, desto schneller schießt die Fichte.";
     UPGRADE_DESCRIPTION_SPURCE_1_3 = "Rüstungsdurchdringende Nadeln: Fichte verursacht mehr Schaden an Gegnern mit Rüstung.";

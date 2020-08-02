@@ -10,6 +10,12 @@ package language;
  * @author DavidPrivat
  */
 public abstract class Language {
+    // Tower names
+    public String SPRUCE_NAME;
+    
+    
+    // Tower descripition
+    public String SPRUCE_DESCRIPRION;
     
     // Upgrade description
     public  String UPGRADE_DESCRIPTION_SPURCE_1_1;

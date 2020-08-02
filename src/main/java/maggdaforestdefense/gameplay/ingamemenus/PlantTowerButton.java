@@ -18,6 +18,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -107,7 +108,7 @@ public class PlantTowerButton extends Button {
 
     public class BuyTreeBox extends VBox{
 
-        private Button buyButton;
+        private Button buyButton, backButton;
         private ImageView treeView;
         private Label treeName, treeDescription;
         private PrizeLabel prizeLabel;
@@ -117,6 +118,14 @@ public class PlantTowerButton extends Button {
             buyButton.setOnAction((ActionEvent e)->{
                 plantTower();
             });
+            buyButton.setFont(PrizeLabel.FONT);
+            
+            backButton = new Button("BACK");
+            backButton.setOnAction((ActionEvent e)->{
+                plantMenu.setBuyTreeBox(null);
+            });
+            backButton.setFont(PrizeLabel.FONT);
+
 
             treeView = new ImageView(image.getImage());
             treeView.setPreserveRatio(true);
@@ -129,8 +138,13 @@ public class PlantTowerButton extends Button {
             treeDescription.setFont(UpgradeMenu.descriptionFont);
             treeDescription.setWrapText(true);
             treeDescription.setPrefWidth(400);
+            
+            HBox buttonBox = new HBox(backButton, buyButton);
+            buttonBox.setSpacing(20);
+            buttonBox.setFillHeight(true);
+            buttonBox.setAlignment(Pos.CENTER);
 
-            getChildren().addAll(treeName, treeView, treeDescription, buyButton);
+            getChildren().addAll(treeName, treeView, treeDescription, buttonBox);
             setAlignment(Pos.CENTER);
             
 

@@ -28,6 +28,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -47,7 +48,7 @@ public class PlantMenu extends VBox {
 
     private int xIndex, yIndex;
 
-    private VBox buyTreeBorderBox;
+    private VBox cellTypeBox, towerBox, buyTreeBorderBox;
 
     public PlantMenu(MapCell.CellType type, int x, int y) {
         cellType = type;
@@ -56,15 +57,15 @@ public class PlantMenu extends VBox {
 
         //CellType
         cellTypeView = new ImageView();
-        cellTypeView.setFitWidth(50);
-        cellTypeView.setFitHeight(50);
+        cellTypeView.setFitWidth(200);
+        cellTypeView.setFitHeight(200);
         BorderPane celltTypeViewBorder = new BorderPane(cellTypeView);
         celltTypeViewBorder.setBorder(new Border(new BorderStroke(Color.web("022202"), BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
 
         cellTypeLabel = new Label();
         cellTypeLabel.setFont(font);
 
-        VBox cellTypeBox = new VBox(cellTypeView, cellTypeLabel);
+        cellTypeBox = new VBox(cellTypeView, cellTypeLabel);
         cellTypeBox.setAlignment(Pos.CENTER);
         cellTypeBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
         cellTypeBox.setPadding(new Insets(20));
@@ -75,7 +76,7 @@ public class PlantMenu extends VBox {
 
         towerButtons = new GridPane();
 
-        VBox towerBox = new VBox(addTowerLabel, towerButtons);
+        towerBox = new VBox(addTowerLabel, towerButtons);
         towerBox.setAlignment(Pos.CENTER);
         towerBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
         towerBox.setPadding(new Insets(20));
@@ -85,7 +86,6 @@ public class PlantMenu extends VBox {
         buyTreeBorderBox.setAlignment(Pos.CENTER);
         buyTreeBorderBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
         buyTreeBorderBox.setPadding(new Insets(20));
-        buyTreeBorderBox.setVisible(false);
 
         setAlignment(Pos.CENTER);
         setSpacing(10);
@@ -134,13 +134,34 @@ public class PlantMenu extends VBox {
     }
 
     public void setBuyTreeBox(PlantTowerButton.BuyTreeBox buyTreeBox) {
-        buyTreeBorderBox.setVisible(false);
         buyTreeBorderBox.getChildren().clear();
-        if (buyTreeBox != null) {
+
+        if (buyTreeBox == null) {
+            safeAddNode(cellTypeBox);
+            safeAddNode(towerBox);
+            safeRemoveNode(buyTreeBorderBox);
+        } else {
+
             buyTreeBorderBox.getChildren().add(buyTreeBox);
-            buyTreeBorderBox.setVisible(true);
+
+            safeRemoveNode(cellTypeBox);
+            safeRemoveNode(towerBox);
+            safeAddNode(buyTreeBorderBox);
+
         }
 
+    }
+
+    private void safeRemoveNode(Node node) {
+        if (getChildren().contains(node)) {
+            getChildren().remove(node);
+        }
+    }
+
+    private void safeAddNode(Node node) {
+        if (!getChildren().contains(node)) {
+            getChildren().add(node);
+        }
     }
 
 }

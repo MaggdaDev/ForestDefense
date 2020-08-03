@@ -15,7 +15,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
 public class TestBug extends Bug{
     
     public final static double HP = 5, SPEED = 200, DAMAGE = 5, ATTACK_TIME = 0.5, ARMOR = 0;
-    public final static int TOWER_VISION_RANGE = 5;
+    public final static int TOWER_VISION_RANGE = 0;
     public final static int DIRT_DISTANCE_WEIGHT = 100, WATER_DISTANCE_WEIGHT = 1, SAND_DISTANCE_WEIGHT = 10, STONE_DISTANCE_WEIGHT = 3;
     public final static MovementType MOVEMENT_TYPE = MovementType.WALK;
     

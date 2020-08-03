@@ -50,7 +50,7 @@ public abstract class GameObject {
                 
                 //TOWERS
             case T_SPRUCE:
-                return new ClientSpruce((int)command.getNumArgument("id"), (int)command.getNumArgument("xIndex"), (int)command.getNumArgument("yIndex"));
+                return new ClientSpruce((int)command.getNumArgument("id"), (int)command.getNumArgument("xIndex"), (int)command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
                 
                 //PROJECTILES
             case P_SPRUCE_SHOT:

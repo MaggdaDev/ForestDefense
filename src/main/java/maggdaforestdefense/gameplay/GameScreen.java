@@ -183,6 +183,10 @@ public class GameScreen extends Group{
         return sideMenu;
     }
     
+    public ClientMap getMap() {
+        return map;
+    }
+    
     
 
 }

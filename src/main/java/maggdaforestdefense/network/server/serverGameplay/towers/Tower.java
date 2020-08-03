@@ -19,7 +19,9 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
+import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.GameAnimation;
 import maggdaforestdefense.util.UpgradeHandler;
 
 /**
@@ -47,11 +49,17 @@ public abstract class Tower extends GameObject {
     protected boolean isAlive = true;
 
     protected CanAttackSet canAttackSet;
+    
+    protected double growingTime;
 
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges;
+    
+    protected boolean isMature = false;
+    
+    protected GameAnimation growingAnimation;
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range, CanAttackSet attackSet) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range, CanAttackSet attackSet, double growTime) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
@@ -72,7 +80,23 @@ public abstract class Tower extends GameObject {
         this.onUpdate = new Vector<UpgradeHandler>();
         this.onTowerChanges = new Vector<UpgradeHandler>();
         this.canAttackSet = attackSet;
+        this.growingTime = growTime;
+        
+        // Animation
+        GameImage lastImage;
+        switch(gameObjectType) {
+            case T_SPRUCE:
+                lastImage = GameImage.TOWER_SPRUCE_1;
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+        growingAnimation = new GameAnimation(growTime, new GameImage[]{GameImage.TOWERGROWING_ANIMATION_1, GameImage.TOWERGROWING_ANIMATION_2, GameImage.TOWERGROWING_ANIMATION_3, GameImage.TOWERGROWING_ANIMATION_4, GameImage.TOWERGROWING_ANIMATION_5, GameImage.TOWERGROWING_ANIMATION_6, GameImage.TOWERGROWING_ANIMATION_7, GameImage.TOWERGROWING_ANIMATION_8, lastImage});
 
+    }
+    
+    protected GameImage updateGrowing(double timeElapsed) {
+        return growingAnimation.update(timeElapsed);
     }
 
     protected Mob findTarget(int range) {
@@ -181,6 +205,10 @@ public abstract class Tower extends GameObject {
 
     public double getMaxHealthPoints() {
         return maxHealth;
+    }
+    
+    public double getGrowingTime() {
+        return growingTime;
     }
 
     // UpradePerforms

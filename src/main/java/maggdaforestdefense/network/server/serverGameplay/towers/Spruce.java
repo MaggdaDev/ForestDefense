@@ -16,6 +16,7 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
+import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.util.GameMaths;
 
 /**
@@ -27,9 +28,10 @@ public class Spruce extends Tower {
     public final static int DEFAULT_RANGE = 2;              //map cells
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 1;
-    public final static double HEALTH = 50;
+    public final static double HEALTH = 50000;
     public final static double DEFAULT_REGEN = 0;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
+    public final static double GROWING_TIME = 2;
 
     //Balancing stats;
     double xPos, yPos;
@@ -55,13 +57,10 @@ public class Spruce extends Tower {
 
     private int aufruhrDerFichtenCounter = 0;
     private double aufruhrDerFichtenDamagePerSpruce = 0;
-    
-    
-    
 
     // multiplier
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING));
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
         xPos = x;
         yPos = y;
 
@@ -85,11 +84,13 @@ public class Spruce extends Tower {
 
     @Override
     public CommandArgument[] toNetworkCommandArgs() {
-        return new CommandArgument[]{
+        return new CommandArgument[]{/*
             new CommandArgument("x", String.valueOf(xPos)),
             new CommandArgument("y", String.valueOf(yPos)),
             new CommandArgument("type", String.valueOf(GameObjectType.T_SPRUCE.ordinal())),
+            new CommandArgument("growingTime", growingTime),
             new CommandArgument("id", String.valueOf(id))
+           */
         };
     }
 
@@ -99,25 +100,37 @@ public class Spruce extends Tower {
             return null;
         }
 
-        // Regen
-        updateRegen(timeElapsed);
+        if (!isMature) {
+            GameImage currImage = updateGrowing(timeElapsed);
+            isMature = growingAnimation.isFinished();
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+                new CommandArgument("id", id), 
+                new CommandArgument("hp", healthPoints), 
+                new CommandArgument("image", currImage.ordinal()),
+                new CommandArgument("timeLeft", growingAnimation.getTimeLeft())
+            });
+        } else {
 
-        // Shooting
-        shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
+            // Regen
+            updateRegen(timeElapsed);
 
-        if (shootTimer > shootTime) {
-            Mob target = findTarget(range);
-            if (target != null) {
-                shootTimer = 0;
-                shoot(target);
+            // Shooting
+            shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
+
+            if (shootTimer > shootTime) {
+                Mob target = findTarget(range);
+                if (target != null) {
+                    shootTimer = 0;
+                    shoot(target);
+                }
             }
+
+            // Health
+            // Upgrades
+            performUpgradesOnUpdate();
+
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
         }
-
-        // Health
-        // Upgrades
-        performUpgradesOnUpdate();
-
-        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
     }
 
     private void shoot(Mob target) {

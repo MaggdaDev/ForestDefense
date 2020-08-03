@@ -93,7 +93,8 @@ public class ServerGame extends Thread{
             new CommandArgument("id", String.valueOf(tower.getId())),
             new CommandArgument("xIndex", String.valueOf(tower.getXIndex())),
             new CommandArgument("yIndex", String.valueOf(tower.getYIndex())),
-            new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal()))
+            new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal())),
+            new CommandArgument("growingTime", tower.getGrowingTime())
         }));
         
         notifyTowerChanges();

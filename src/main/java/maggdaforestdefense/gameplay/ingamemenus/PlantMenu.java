@@ -65,10 +65,9 @@ public class PlantMenu extends VBox {
         cellTypeLabel = new Label();
         cellTypeLabel.setFont(font);
 
-        cellTypeBox = new VBox(cellTypeView, cellTypeLabel);
-        cellTypeBox.setAlignment(Pos.CENTER);
-        cellTypeBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        cellTypeBox.setPadding(new Insets(20));
+        cellTypeBox = new ContentBox();
+        cellTypeBox.getChildren().addAll(cellTypeView, cellTypeLabel);
+
 
         //towers
         addTowerLabel = new Label("Add plant:");
@@ -76,16 +75,11 @@ public class PlantMenu extends VBox {
 
         towerButtons = new GridPane();
 
-        towerBox = new VBox(addTowerLabel, towerButtons);
-        towerBox.setAlignment(Pos.CENTER);
-        towerBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        towerBox.setPadding(new Insets(20));
+        towerBox = new ContentBox();
+        towerBox.getChildren().addAll(addTowerLabel, towerButtons);
 
         // Buy tree
-        buyTreeBorderBox = new VBox();
-        buyTreeBorderBox.setAlignment(Pos.CENTER);
-        buyTreeBorderBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        buyTreeBorderBox.setPadding(new Insets(20));
+        buyTreeBorderBox = new ContentBox();
 
         setAlignment(Pos.CENTER);
         setSpacing(10);

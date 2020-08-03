@@ -21,8 +21,8 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientSpruce extends ClientTower {
 
-    public ClientSpruce(int id, int xIndex, int yIndex) {
-        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH);
+    public ClientSpruce(int id, int xIndex, int yIndex, double growingTime) {
+        super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH, growingTime);
         setPreserveRatio(true);
         setFitHeight(100);
         
@@ -34,10 +34,20 @@ public class ClientSpruce extends ClientTower {
     public void update(NetworkCommand updateCommand) {
         healthPoints = updateCommand.getNumArgument("hp");
         healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
+        
+        if(updateCommand.containsArgument("image")) {
+            setImage(GameImage.values()[(int)updateCommand.getNumArgument("image")].getImage());
+            updateGrowing(updateCommand.getNumArgument("timeLeft"));
+        } else {
+            if(!isMature) {
+                isMature = true;
+            }
+        }
     }
     
     @Override
     public void setTier(int tier) {
+        tier ++;
         Image image;
         switch(tier) {
             case 4:

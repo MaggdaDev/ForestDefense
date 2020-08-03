@@ -27,6 +27,15 @@ public enum GameImage {
     
     
     // TOWERS
+    TOWERGROWING_ANIMATION_1("maggdaforestdefense/towers/treeGrowing1.png"),
+    TOWERGROWING_ANIMATION_2("maggdaforestdefense/towers/treeGrowing2.png"),
+    TOWERGROWING_ANIMATION_3("maggdaforestdefense/towers/treeGrowing3.png"),
+    TOWERGROWING_ANIMATION_4("maggdaforestdefense/towers/treeGrowing4.png"),
+    TOWERGROWING_ANIMATION_5("maggdaforestdefense/towers/treeGrowing5.png"),
+    TOWERGROWING_ANIMATION_6("maggdaforestdefense/towers/treeGrowing6.png"),
+    TOWERGROWING_ANIMATION_7("maggdaforestdefense/towers/treeGrowing7.png"),
+    TOWERGROWING_ANIMATION_8("maggdaforestdefense/towers/treeGrowing8.png"),
+    
     TOWER_SPRUCE_1("maggdaforestdefense/towers/spruce1.png"),
     TOWER_SPRUCE_2("maggdaforestdefense/towers/spruce2.png"),
     TOWER_SPRUCE_3("maggdaforestdefense/towers/spruce3.png"),

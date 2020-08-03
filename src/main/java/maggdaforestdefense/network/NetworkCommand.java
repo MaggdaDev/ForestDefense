@@ -63,6 +63,15 @@ public class NetworkCommand {
     public double getNumArgument(String name) {
         return Double.parseDouble(getArgument(name));
     }
+    
+    public boolean containsArgument(String name) {
+        for(CommandArgument arg: commandArguments) {
+            if(arg.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static NetworkCommand fromString(String string) {
         String[] splitted = string.split(SEPARATOR_1);
@@ -77,6 +86,8 @@ public class NetworkCommand {
         return new NetworkCommand(type, argsArr);
 
     }
+    
+    
 
     public static boolean testForKeyWord(String s) {
         if (s.startsWith(KEYWORD)) {

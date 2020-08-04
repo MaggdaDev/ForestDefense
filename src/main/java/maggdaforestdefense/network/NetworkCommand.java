@@ -17,7 +17,8 @@ public class NetworkCommand {
     // PREDEF COMMANDS
     public static final NetworkCommand REQUIRE_CONNECTION = new NetworkCommand(CommandType.REQUIRE_CONNECTION, EMPTY_ARGS),
             PERMIT_CONNECTION = new NetworkCommand(CommandType.PERMIT_CONNECTION, EMPTY_ARGS),
-            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS);
+            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
+            END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS);
 
     //CONSTANTS
     public final static String KEYWORD = "__", SEPARATOR_1 = ";";
@@ -113,7 +114,8 @@ public class NetworkCommand {
         UPDATE_GAME_RESSOURCES, // coins, essence
         PLANT_TREE,             //id, type, xIndex, yIndex
         REMOVE_GAME_OBJECT,     //id
-        UPGRADE_BUY_CONFIRMED;  //id, tier, type
+        UPGRADE_BUY_CONFIRMED,  //id, tier, type
+        END_GAME;               // NO ARGS
         
     }
 }

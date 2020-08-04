@@ -22,6 +22,8 @@ public class Map {
     public final static int MAP_SIZE = 25;
 
     private MapCell[][] cellArray;          //MapCell[x][y]
+    
+    private Base base;
 
     //Separators
     public final static String COLLUMN_SEPARATOR = "-", CELL_SEPARATOR = ",";
@@ -40,7 +42,7 @@ public class Map {
         return retMap;
     }
 
-    public static Map generateMap() {
+    public static Map generateMap(ServerGame serverGame) {
         Map returnMap = new Map();
 
         for (int x = 0; x < returnMap.cellArray.length; x++) {          // Generate all cells
@@ -48,6 +50,10 @@ public class Map {
                 returnMap.cellArray[x][y] = new MapCell(returnMap, x, y);
             }
         }
+        
+        int midX = (int) (returnMap.cellArray.length/2);
+        int midY = (int) (returnMap.cellArray[0].length/2);
+        returnMap.setBase(new Base(returnMap, midX, midY, serverGame));
 
         for (int x = 0; x < returnMap.cellArray.length; x++) {           // setUp neighbours
             for (int y = 0; y < returnMap.cellArray[x].length; y++) {
@@ -55,18 +61,24 @@ public class Map {
             }
         }
 
-        int midX = (int) (returnMap.cellArray.length/2);
-        int midY = (int) (returnMap.cellArray[0].length/2);
-        returnMap.cellArray[midX][midY].setCellType(MapCell.CellType.BASE);
-        returnMap.cellArray[midX][midY].generate();
+        
+
+        returnMap.getBase().generate();
         
       
 
         return returnMap;
     }
     
-    public MapCell getBase() {
-        return cellArray[(int)(cellArray.length/2)][(int)(cellArray[0].length/2)];
+    protected void setBase(Base base) {
+        this.base = base;
+        int midX = (int) (cellArray.length/2);
+        int midY = (int) (cellArray[0].length/2);
+        cellArray[midX][midY] = base;
+    }
+    
+    public Base getBase() {
+        return base;
     }
 
     public static ClientMapCell[][] stringToClientMapCells(String mapAsString) {

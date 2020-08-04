@@ -64,4 +64,8 @@ public class ServerLoop{
             }
         }
     }
+    
+    public void endGame() {
+        running = false;
+    }
 }

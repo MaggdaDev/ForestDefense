@@ -49,7 +49,7 @@ public class MainMenu extends VBox {
     }
 
     @FXML private void playBtnOnClick(ActionEvent e) {
-        Game.getInstance().startGame();
+        Game.createGame();
     }
 
     @FXML private void settingsBtnOnClick(ActionEvent e) {

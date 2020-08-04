@@ -28,7 +28,7 @@ public class ClientCommandHandler extends Thread {
     private LinkedBlockingQueue<NetworkCommand> queue;
     private LinkedList<NetworkCommand> workingQueue;
 
-    private boolean isInGame = false;
+    private boolean isInGame = false, running = true;
 
     public ClientCommandHandler(BufferedReader in) {
         input = in;
@@ -41,7 +41,7 @@ public class ClientCommandHandler extends Thread {
     public void run() {
         String line = "";
         try {
-            while ((line = input.readLine()) != null) {
+            while ((line = input.readLine()) != null && running) {
                 if (NetworkCommand.testForKeyWord(line)) {
                     queue.add(NetworkCommand.fromString(line));
                 }
@@ -52,6 +52,15 @@ public class ClientCommandHandler extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+     public void reset() {
+        queue.clear();
+        workingQueue.clear();
+    }
+    
+    public void stopRunning() {
+        running = false;
     }
 
     public void handleInput() {
@@ -64,6 +73,7 @@ public class ClientCommandHandler extends Thread {
 
     private void handleCommand(NetworkCommand command) {
         //Logger.logClient("Command handled: " + command.toString());
+        
 
         switch (command.getCommandType()) {
             case PERMIT_CONNECTION:
@@ -92,10 +102,15 @@ public class ClientCommandHandler extends Thread {
             case UPGRADE_BUY_CONFIRMED:
                 Game.getInstance().buyUpgrade(command);
                 break;
+            case END_GAME:
+                Game.getInstance().endGame(command);
+                break;
         }
     }
 
     void setInGame(boolean b) {
         isInGame = b;
     }
+
+   
 }

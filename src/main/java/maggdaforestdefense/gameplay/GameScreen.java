@@ -40,6 +40,7 @@ public class GameScreen extends Group{
 
     private SideMenu sideMenu;
 
+    private GameOverOverlay gameOverOverlay;
 
     public GameScreen() {
 
@@ -47,11 +48,12 @@ public class GameScreen extends Group{
         gamePlayGroup.setManaged(false);
         
         topOverlay = new TopOverlay(0, 0);
+        gameOverOverlay = new GameOverOverlay();
         
         sideMenu = new SideMenu();
         sideMenu.setVisible(false);
         
-        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay);
+        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay, gameOverOverlay);
         gamePlayGroup.setViewOrder(3);
         sideMenu.setViewOrder(2);
         topOverlay.setViewOrder(1);
@@ -146,6 +148,11 @@ public class GameScreen extends Group{
     private void refreshGameplayGroupPosition() {
         gamePlayGroup.setLayoutX(mapXInset);
         gamePlayGroup.setLayoutY(mapYInset);
+    }
+    
+    public void showGameOverOverlay() {
+        
+        gameOverOverlay.startAnimation();
     }
 
     public void generateMap(ClientMapCell[][] mapCellArray) {

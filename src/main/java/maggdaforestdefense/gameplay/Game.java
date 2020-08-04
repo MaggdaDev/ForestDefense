@@ -41,7 +41,7 @@ public class Game {
 
     private Vector<KeyEventHandler> keyEventHandlers;
 
-    private int essence = 0, coins = 0;
+    private int essence = 0, coins = 0, maxEssence = 0;
 
     public Game() {
         instance = this;
@@ -53,9 +53,18 @@ public class Game {
 
     }
 
+    public static void createGame() {
+        instance = new Game();
+        instance.startGame();
+    }
+
     public void startGame() {
+        gameScreen = new GameScreen();
+        gameObjects = new HashMap<>();
         isInGame = true;
+        NetworkManager.getInstance().resetCommandHandler();
         NetworkManager.getInstance().setInGame(true);
+
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
@@ -65,6 +74,14 @@ public class Game {
             handleKeyEvent(event.getCode());
         });
 
+    }
+
+    public void endGame(NetworkCommand command) {
+        gameLoop.stop();
+        gameLoop.setGameRunning(false);
+        gameScreen.showGameOverOverlay();
+
+        Logger.logClient("GAMEOVER");
     }
 
     // General
@@ -125,7 +142,9 @@ public class Game {
     public void updateRessources(NetworkCommand command) {
         coins = (int) command.getNumArgument("coins");
         essence = (int) command.getNumArgument("essence");
-        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
+        maxEssence = (int) command.getNumArgument("maxEssence");
+
+        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence, maxEssence);
         gameScreen.getSideMenu().updateCoins(coins);
     }
 

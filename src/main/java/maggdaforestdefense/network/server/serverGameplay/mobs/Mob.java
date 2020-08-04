@@ -161,13 +161,17 @@ public abstract class Mob extends GameObject {
                     damageTarget();
                 }
             } else if(serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
-                
+                damageBase();
             }else {
                 targetReached = false;
                 pathToBase();
                 searchForTowers();
             }
         }
+    }
+    
+    protected void damageBase() {
+        serverGame.damageBase(this);
     }
 
     protected void damageTarget() {
@@ -192,7 +196,7 @@ public abstract class Mob extends GameObject {
 
     public boolean updateAlive() {
         if (!checkAlive()) {
-            die();
+            die(true);
             return false;
         } else {
             return true;
@@ -207,10 +211,10 @@ public abstract class Mob extends GameObject {
         }
     }
 
-    public void die() {
+    public void die(boolean getGold) {
         if (!dead) {
             dead = true;
-            serverGame.killMob(this);
+            serverGame.killMob(this, getGold);
         }
     }
 

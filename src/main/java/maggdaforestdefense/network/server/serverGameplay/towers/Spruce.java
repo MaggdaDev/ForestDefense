@@ -28,7 +28,7 @@ public class Spruce extends Tower {
     public final static int DEFAULT_RANGE = 2;              //map cells
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 1;
-    public final static double HEALTH = 50000;
+    public final static double HEALTH = 100;
     public final static double DEFAULT_REGEN = 0;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
     public final static double GROWING_TIME = 2;

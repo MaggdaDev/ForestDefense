@@ -13,7 +13,6 @@ import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
-import maggdaforestdefense.network.server.serverGameplay.mobs.TestBug;
 import maggdaforestdefense.network.server.serverGameplay.spawning.MobWave;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.MobWavesLoader;
@@ -75,6 +74,8 @@ public class ServerLoop {
                 
                 try {Thread.sleep(1);} catch (Exception e) {e.printStackTrace();}
             }
+            
+            serverGame.handleEssenceAfterRound();
             
             currentWaveIndex++;
             

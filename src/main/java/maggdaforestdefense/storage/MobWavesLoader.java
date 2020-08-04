@@ -39,16 +39,39 @@ public class MobWavesLoader {
                     currentWaveVect = new Vector<>();
                 } else {
                     String[] splitted = currentLine.split(" ");
+                    int amount = 1;
                     double delay = Double.parseDouble(splitted[0]);
                     GameObjectType type;
                     switch (splitted[1].toUpperCase()) {
-                        case "BUG":
-                            type = GameObjectType.M_BUG;
+                        case "BORKENKAEFER":
+                            type = GameObjectType.M_BORKENKAEFER;
+                            break;
+                        case "HERKULESKAEFER":
+                            type = GameObjectType.M_HERKULESKAEFER;
+                            break;
+                        case "SCHWIMMKAEFER":
+                            type = GameObjectType.M_SCHWIMMKAEFER;
+                            break;
+                        case "WANDERLAEUFER":
+                            type = GameObjectType.M_WANDERLAUFER;
+                            break;
+                        case "WASSERLAEUFER":
+                            type = GameObjectType.M_WASSERLAEUFER;
                             break;
                         default:
+                            Logger.logServer("ERROR! UNSUPPORTED MOB TYPE IN MOB.WAVES: " + splitted[1]);
                             throw new UnsupportedOperationException();
                     }
+                    if(splitted.length > 2) {
+                        amount = Integer.parseInt(splitted[2]);
+                    }
+                    
                     currentWaveVect.add(new Spawnable(type, delay));
+                    if(amount > 1) {
+                        for(int i = 0; i < amount-1; i++) {
+                            currentWaveVect.add(new Spawnable(type, 0.01));
+                        }
+                    }
                 }
 
             }

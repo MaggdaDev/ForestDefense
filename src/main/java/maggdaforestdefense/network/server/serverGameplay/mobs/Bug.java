@@ -23,8 +23,8 @@ public abstract class Bug extends Mob {
 
     public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
 
-    public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet, double armor, MovementType movementType) {
-        super(game, GameObjectType.M_BUG, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet, armor, movementType);
+    public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet, double armor, MovementType movementType, GameObjectType objectType) {
+        super(game, objectType, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet, armor, movementType);
         findStartPos();
     }
 
@@ -32,7 +32,7 @@ public abstract class Bug extends Mob {
     public CommandArgument[] toNetworkCommandArgs() {
         return new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
             new CommandArgument("y", String.valueOf(yPos)),
-            new CommandArgument("type", String.valueOf(GameObjectType.M_BUG.ordinal())),
+            new CommandArgument("type", String.valueOf(gameObjectType.ordinal())),
             new CommandArgument("hp", healthPoints),
             new CommandArgument("id", String.valueOf(id)),
             new CommandArgument("movement", movementType.ordinal())};

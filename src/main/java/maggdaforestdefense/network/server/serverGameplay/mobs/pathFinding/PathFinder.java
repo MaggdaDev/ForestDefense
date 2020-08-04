@@ -99,7 +99,7 @@ public class PathFinder {
     
     public double calculateDistance(PathCell c1, PathCell c2) {
         switch(mobType) {
-            case M_BUG:
+            default:
                 double distance = 0;
                 for(PathCell cell: new PathCell[]{c1,c2}) {
                     switch(cell.getCellType()) {
@@ -120,6 +120,5 @@ public class PathFinder {
                 }
                 return distance;
         }
-        return 1;
     }
 }

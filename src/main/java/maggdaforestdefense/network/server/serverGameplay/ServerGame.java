@@ -17,11 +17,15 @@ import maggdaforestdefense.network.server.Player;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Herkuleskaefer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
-import maggdaforestdefense.network.server.serverGameplay.mobs.TestBug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Schwimmkaefer;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Wanderlaeufer;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Wasserlaeufer;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.Logger;
@@ -68,16 +72,28 @@ public class ServerGame extends Thread {
 
         serverLoop.run();
     }
-    
+
     public void endGame() {
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
     }
-    
+
     public void spawnMob(Spawnable toSpawn) {
-        switch(toSpawn.getType()) {
-            case M_BUG:
-                addMob(new TestBug(this));
+        switch (toSpawn.getType()) {
+            case M_BORKENKAEFER:
+                addMob(new Borkenkaefer(this));
+                break;
+            case M_HERKULESKAEFER:
+                addMob(new Herkuleskaefer(this));
+                break;
+            case M_SCHWIMMKAEFER:
+                addMob(new Schwimmkaefer(this));
+                break;
+            case M_WANDERLAUFER:
+                addMob(new Wanderlaeufer(this));
+                break;
+            case M_WASSERLAEUFER:
+                addMob(new Wasserlaeufer(this));
                 break;
         }
     }
@@ -120,6 +136,11 @@ public class ServerGame extends Thread {
             }
         });
 
+    }
+
+    public void handleEssenceAfterRound() {
+
+        base.refillEssence();
     }
 
     public void updateRessources() {
@@ -214,7 +235,5 @@ public class ServerGame extends Thread {
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
-
-    
 
 }

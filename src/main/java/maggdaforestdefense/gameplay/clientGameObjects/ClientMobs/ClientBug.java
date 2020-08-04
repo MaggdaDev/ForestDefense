@@ -23,19 +23,21 @@ import maggdaforestdefense.util.GameMaths;
 public class ClientBug extends ClientMob {
 
     public static final double width = 70, height = 70;
-    private final static double distance_between_steps = 5;
+    private double distance_between_steps = 5;
 
-    private double distanceSinceLastStep = 0;
+    protected double distanceSinceLastStep = 0;
 
-    private int animationState = 0;
+    protected int animationState = 0;
 
-    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType) {
-        super(id, GameImage.MOB_BUG_1, GameObjectType.M_BUG, x, y, hp, movementType);
+    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image) {
+        super(id, image, objectType, x, y, hp, movementType);
         setFitWidth(width);
         setFitHeight(height);
-        
-
-
+    }
+    
+    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image, double distanceBetweenSteps) {
+        super(id, image, objectType, x, y, hp, movementType);
+        this.distance_between_steps = distanceBetweenSteps;
     }
 
 

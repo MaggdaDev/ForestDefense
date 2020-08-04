@@ -25,6 +25,14 @@ public enum GameImage {
     MOB_BUG_2("maggdaforestdefense/mobs/bug2.png"),
     MOB_BUG_3("maggdaforestdefense/mobs/bug3.png"),
     
+    MOB_SCHWIMMKAEFER_1("maggdaforestdefense/mobs/kaefer1.png"),
+    MOB_SCHWIMMKAEFER_2("maggdaforestdefense/mobs/kaefer2.png"),
+    MOB_SCHWIMMKAEFER_3("maggdaforestdefense/mobs/kaefer3.png"),
+    MOB_SCHWIMMKAEFER_4("maggdaforestdefense/mobs/kaefer4.png"),
+    MOB_SCHWIMMKAEFER_5("maggdaforestdefense/mobs/kaefer5.png"),
+    MOB_SCHWIMMKAEFER_6("maggdaforestdefense/mobs/kaefer6.png"),
+    MOB_SCHWIMMKAEFER_7("maggdaforestdefense/mobs/kaefer7.png"),
+    
     
     // TOWERS
     TOWERGROWING_ANIMATION_1("maggdaforestdefense/towers/treeGrowing1.png"),

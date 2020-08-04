@@ -40,4 +40,8 @@ public class Base extends MapCell{
     public int getMaxEssence() {
         return maxEssence;
     }
+
+    public void refillEssence() {
+        essence = maxEssence;
+    }
 }

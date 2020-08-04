@@ -156,6 +156,11 @@ public class Game {
         ClientTower tower = (ClientTower) gameObjects.get(id);
         tower.buyUpgrade(tier, type);
     }
+    
+    public void announceWave(NetworkCommand command) {
+        int wave = (int)command.getNumArgument("wave");
+        gameScreen.announceWave(wave);
+    }
 
     public int getCoins() {
         return coins;

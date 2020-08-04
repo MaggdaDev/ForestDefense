@@ -9,62 +9,83 @@ import java.util.HashMap;
 import maggdaforestdefense.network.server.Player;
 
 import java.util.List;
+import java.util.Vector;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.mobs.TestBug;
+import maggdaforestdefense.network.server.serverGameplay.spawning.MobWave;
+import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
+import maggdaforestdefense.storage.MobWavesLoader;
 import maggdaforestdefense.util.GameMaths;
 
 /**
  *
  * @author David
  */
-public class ServerLoop{
+public class ServerLoop {
+
     private boolean running = true;
     private List<Player> players;
 
     private long startTimeNano = 0;
     private double runTime = 0, oldRunTime = 0;
-    
+
     private ServerGame serverGame;
+
+    private int livingMobs = 0, mobsToSpawn = 0;
+    private boolean nextWave = false;
+    private Vector<MobWave> mobWaves;
+    private int currentWaveIndex = 0;
+    private MobWave currentWave;
+
     public ServerLoop(List<Player> playerList, ServerGame game) {
         players = playerList;
         serverGame = game;
+        
+        mobWaves = MobWavesLoader.loadMobWaves();
     }
-    
 
     public void run() {
         startTimeNano = System.nanoTime();
-        oldRunTime = startTimeNano;
-        //Test
-        double secondsBetweenspawns = 1;
-        int spawnAmount = 0;
-        while(running) {
-            runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
-            
-            double timeElapsed = runTime - oldRunTime;
-            oldRunTime = runTime;
-            
-            serverGame.updateGameObjects(timeElapsed);
-            
-            serverGame.updateRessources();
-            
-            
-            //TEST
-            if(secondsBetweenspawns*spawnAmount < runTime) {
-                spawnAmount++;
-                serverGame.addMob(new TestBug(serverGame));
-            }
-            
-            
-            //TEST END
+        oldRunTime = 0;
 
-            try {
-                Thread.sleep(1);
-            } catch(Exception e) {
-                e.printStackTrace();
+        while (running) {
+            currentWave = mobWaves.get(currentWaveIndex);
+            mobsToSpawn = currentWave.getMobAmount();
+            
+            serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex+1)}));
+            while (!(livingMobs == 0 && mobsToSpawn == 0)) {
+                runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
+                double timeElapsed = runTime - oldRunTime;
+                oldRunTime = runTime;
+
+                serverGame.updateGameObjects(timeElapsed);
+                serverGame.updateRessources();
+
+                // MOB SPAWNING
+                Spawnable toSpawn = currentWave.update(timeElapsed);
+                if(toSpawn != null) {
+                    mobsToSpawn --;
+                    livingMobs++;
+                    serverGame.spawnMob(toSpawn);
+                }
+                
+                // MOB SPAWNING END
+                
+                try {Thread.sleep(1);} catch (Exception e) {e.printStackTrace();}
             }
+            
+            currentWaveIndex++;
+            
+            
         }
     }
     
+    public void notifyMobDeath() {
+        livingMobs--;
+    }
+
     public void endGame() {
         running = false;
     }

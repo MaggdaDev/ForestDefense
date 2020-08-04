@@ -115,6 +115,7 @@ public class NetworkCommand {
         PLANT_TREE,             //id, type, xIndex, yIndex
         REMOVE_GAME_OBJECT,     //id
         UPGRADE_BUY_CONFIRMED,  //id, tier, type
+        NEXT_WAVE,              //wave
         END_GAME;               // NO ARGS
         
     }

@@ -105,6 +105,9 @@ public class ClientCommandHandler extends Thread {
             case END_GAME:
                 Game.getInstance().endGame(command);
                 break;
+            case NEXT_WAVE:
+                Game.getInstance().announceWave(command);
+                break;
         }
     }
 

@@ -30,7 +30,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private BufferedReader input;
     private PrintWriter output;
 
-    private boolean running, isInGame=false;
+    private boolean running;
     
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
@@ -71,9 +71,8 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                if(!isInGame) {
                     update();
-                }
+                
             }
         } catch (IOException e) {
             e.printStackTrace();

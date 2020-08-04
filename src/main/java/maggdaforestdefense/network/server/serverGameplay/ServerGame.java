@@ -17,10 +17,13 @@ import maggdaforestdefense.network.server.Player;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.mobs.TestBug;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
+import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -69,6 +72,14 @@ public class ServerGame extends Thread {
     public void endGame() {
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
+    }
+    
+    public void spawnMob(Spawnable toSpawn) {
+        switch(toSpawn.getType()) {
+            case M_BUG:
+                addMob(new TestBug(this));
+                break;
+        }
     }
 
     public void addNewTower(double xPos, double yPos, GameObjectType type) {
@@ -155,6 +166,7 @@ public class ServerGame extends Thread {
         if (getGold) {
             coins += mob.getCoinValue();
         }
+        serverLoop.notifyMobDeath();
     }
 
     public void killTower(Tower tower) {
@@ -202,5 +214,7 @@ public class ServerGame extends Thread {
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
+
+    
 
 }

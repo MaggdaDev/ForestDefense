@@ -41,6 +41,7 @@ public class GameScreen extends Group{
     private SideMenu sideMenu;
 
     private GameOverOverlay gameOverOverlay;
+    private WaveAnnouncer waveAnnouncer;
 
     public GameScreen() {
 
@@ -49,11 +50,12 @@ public class GameScreen extends Group{
         
         topOverlay = new TopOverlay(0, 0);
         gameOverOverlay = new GameOverOverlay();
+        waveAnnouncer = new WaveAnnouncer();
         
         sideMenu = new SideMenu();
         sideMenu.setVisible(false);
         
-        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay, gameOverOverlay);
+        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay, gameOverOverlay, waveAnnouncer);
         gamePlayGroup.setViewOrder(3);
         sideMenu.setViewOrder(2);
         topOverlay.setViewOrder(1);
@@ -123,6 +125,10 @@ public class GameScreen extends Group{
                 refreshGameplayGroupPosition();
             }
         });
+    }
+    
+    public void announceWave(int wave) {
+        waveAnnouncer.nextWave(wave);
     }
 
     public void addGameObject(ClientGameObject gameObject) {

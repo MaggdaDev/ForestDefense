@@ -8,7 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBorkenkaefer;
-import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHerkuleskaefer;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHirschkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientSchwimmkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWanderlaeufer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWasserlaeufer;
@@ -49,8 +49,8 @@ public abstract class GameObject {
             // MOBS
             case M_BORKENKAEFER:
                 return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
-            case M_HERKULESKAEFER:
-                return new ClientHerkuleskaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+            case M_HIRSCHKAEFER:
+                return new ClientHirschkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_SCHWIMMKAEFER:
                 return new ClientSchwimmkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_WANDERLAUFER:

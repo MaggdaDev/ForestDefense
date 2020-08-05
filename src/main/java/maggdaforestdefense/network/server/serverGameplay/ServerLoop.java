@@ -15,6 +15,7 @@ import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.spawning.MobWave;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.storage.MobWavesLoader;
 import maggdaforestdefense.util.GameMaths;
 
@@ -41,7 +42,7 @@ public class ServerLoop {
     public ServerLoop(List<Player> playerList, ServerGame game) {
         players = playerList;
         serverGame = game;
-        
+
         mobWaves = MobWavesLoader.loadMobWaves();
     }
 
@@ -52,37 +53,40 @@ public class ServerLoop {
         while (running) {
             currentWave = mobWaves.get(currentWaveIndex);
             mobsToSpawn = currentWave.getMobAmount();
-            
-            serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex+1)}));
-            while (!(livingMobs == 0 && mobsToSpawn == 0)) {
+
+            serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
+            while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
                 double timeElapsed = runTime - oldRunTime;
                 oldRunTime = runTime;
 
                 serverGame.updateGameObjects(timeElapsed);
+
                 serverGame.updateRessources();
 
                 // MOB SPAWNING
                 Spawnable toSpawn = currentWave.update(timeElapsed);
-                if(toSpawn != null) {
-                    mobsToSpawn --;
+                if (toSpawn != null) {
+                    mobsToSpawn--;
                     livingMobs++;
                     serverGame.spawnMob(toSpawn);
                 }
-                
+
                 // MOB SPAWNING END
-                
-                try {Thread.sleep(1);} catch (Exception e) {e.printStackTrace();}
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            
+
             serverGame.handleEssenceAfterRound();
-            
+
             currentWaveIndex++;
-            
-            
+
         }
     }
-    
+
     public void notifyMobDeath() {
         livingMobs--;
     }

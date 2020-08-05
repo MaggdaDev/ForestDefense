@@ -46,8 +46,8 @@ public class MobWavesLoader {
                         case "BORKENKAEFER":
                             type = GameObjectType.M_BORKENKAEFER;
                             break;
-                        case "HERKULESKAEFER":
-                            type = GameObjectType.M_HERKULESKAEFER;
+                        case "HIRSCHKAEFER":
+                            type = GameObjectType.M_HIRSCHKAEFER;
                             break;
                         case "SCHWIMMKAEFER":
                             type = GameObjectType.M_SCHWIMMKAEFER;

@@ -53,12 +53,12 @@ public class ClientCommandHandler extends Thread {
             e.printStackTrace();
         }
     }
-    
-     public void reset() {
+
+    public void reset() {
         queue.clear();
         workingQueue.clear();
     }
-    
+
     public void stopRunning() {
         running = false;
     }
@@ -67,13 +67,13 @@ public class ClientCommandHandler extends Thread {
         queue.drainTo(workingQueue);
         while (workingQueue.size() != 0) {
             handleCommand(workingQueue.removeFirst());
+
         }
 
     }
 
     private void handleCommand(NetworkCommand command) {
         //Logger.logClient("Command handled: " + command.toString());
-        
 
         switch (command.getCommandType()) {
             case PERMIT_CONNECTION:
@@ -115,5 +115,4 @@ public class ClientCommandHandler extends Thread {
         isInGame = b;
     }
 
-   
 }

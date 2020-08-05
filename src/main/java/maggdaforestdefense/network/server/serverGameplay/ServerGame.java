@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
-import maggdaforestdefense.network.server.serverGameplay.mobs.Herkuleskaefer;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Hirschkaefer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -83,8 +83,8 @@ public class ServerGame extends Thread {
             case M_BORKENKAEFER:
                 addMob(new Borkenkaefer(this));
                 break;
-            case M_HERKULESKAEFER:
-                addMob(new Herkuleskaefer(this));
+            case M_HIRSCHKAEFER:
+                addMob(new Hirschkaefer(this));
                 break;
             case M_SCHWIMMKAEFER:
                 addMob(new Schwimmkaefer(this));

@@ -13,7 +13,7 @@ public enum GameObjectType {
     //MOBS
     M_SCHWIMMKAEFER,
     M_WASSERLAEUFER,
-    M_HERKULESKAEFER,
+    M_HIRSCHKAEFER,
     M_BORKENKAEFER,
     M_WANDERLAUFER,
     

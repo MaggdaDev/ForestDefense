@@ -82,6 +82,7 @@ public class Game {
         gameScreen.showGameOverOverlay();
 
         Logger.logClient("GAMEOVER");
+        NetworkManager.getInstance().resetCommandHandler();
     }
 
     // General

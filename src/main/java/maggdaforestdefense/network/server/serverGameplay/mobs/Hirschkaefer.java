@@ -17,7 +17,7 @@ public class Hirschkaefer extends Bug{
     
    
 
-    public final static double HP = 50, SPEED = 500, DAMAGE = 15, ATTACK_TIME = 2, ARMOR = 20;
+    public final static double HP = 50, SPEED = 80, DAMAGE = 15, ATTACK_TIME = 2, ARMOR = 20;
     public final static int TOWER_VISION_RANGE = 3;
     public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 5, SAND_DISTANCE_WEIGHT = 2, STONE_DISTANCE_WEIGHT = 5;
     public final static Mob.MovementType MOVEMENT_TYPE = Mob.MovementType.WALK;

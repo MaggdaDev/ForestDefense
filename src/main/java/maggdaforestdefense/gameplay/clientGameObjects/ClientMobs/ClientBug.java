@@ -22,7 +22,7 @@ import maggdaforestdefense.util.GameMaths;
  */
 public class ClientBug extends ClientMob {
 
-    public static final double width = 70, height = 70;
+    public static final double width = 90, height = 90;
     private double distance_between_steps = 5;
 
     protected double distanceSinceLastStep = 0;
@@ -31,16 +31,15 @@ public class ClientBug extends ClientMob {
 
     public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image) {
         super(id, image, objectType, x, y, hp, movementType);
-        setFitWidth(width);
+        setPreserveRatio(true);
+
         setFitHeight(height);
     }
-    
+
     public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image, double distanceBetweenSteps) {
-        super(id, image, objectType, x, y, hp, movementType);
+        this(id, x, y, hp, movementType, objectType, image);
         this.distance_between_steps = distanceBetweenSteps;
     }
-
-
 
     @Override
     public void update(NetworkCommand updateCommand) {
@@ -49,7 +48,7 @@ public class ClientBug extends ClientMob {
         double newY = updateCommand.getNumArgument("y") - height / 2;
         double dX = newX - xPos;
         double dY = newY - yPos;
-        movementType = Mob.MovementType.values()[(int)updateCommand.getNumArgument("movement")];
+        movementType = Mob.MovementType.values()[(int) updateCommand.getNumArgument("movement")];
         distanceSinceLastStep += GameMaths.getAbs(dX, dY);
         if (distanceSinceLastStep >= distance_between_steps) {
             distanceSinceLastStep = 0;
@@ -58,12 +57,10 @@ public class ClientBug extends ClientMob {
         if (distanceSinceLastStep != 0) {
             updateRotate(newX, newY);
         }
-        
+
         setNewPos(newX, newY);
         updateHealth(newHealth);
         updateShadow();
-
-        
 
     }
 
@@ -84,7 +81,5 @@ public class ClientBug extends ClientMob {
         }
 
     }
-
-    
 
 }

@@ -52,7 +52,7 @@ public class MobWavesLoader {
                         case "SCHWIMMKAEFER":
                             type = GameObjectType.M_SCHWIMMKAEFER;
                             break;
-                        case "WANDERLAEUFER":
+                        case "LAUFKAEFER":
                             type = GameObjectType.M_WANDERLAUFER;
                             break;
                         case "WASSERLAEUFER":

@@ -15,8 +15,8 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
  */
 public class Wanderlaeufer extends Bug {
 
-    public final static double HP = 5, SPEED = 450, DAMAGE = 2, ATTACK_TIME = 0.2, ARMOR = 5;
-    public final static int TOWER_VISION_RANGE = 1;
+    public final static double HP = 5, SPEED = 300, DAMAGE = 2, ATTACK_TIME = 0.2, ARMOR = 5;
+    public final static int TOWER_VISION_RANGE = 2;
     public final static int DIRT_DISTANCE_WEIGHT = 3, WATER_DISTANCE_WEIGHT = 11, SAND_DISTANCE_WEIGHT = 1, STONE_DISTANCE_WEIGHT = 20;
     public final static MovementType MOVEMENT_TYPE = MovementType.WALK;
 

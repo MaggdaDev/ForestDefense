@@ -15,6 +15,25 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientWanderlaeufer extends ClientBug{
     public ClientWanderlaeufer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_WANDERLAUFER, GameImage.MOB_BUG_1);
+        super(id, x, y, hp, movement, GameObjectType.M_WANDERLAUFER, GameImage.MOB_LAUFKAEFER_1, 20);
+    }
+    
+    @Override
+    public void step() {
+        animationState++;
+        animationState %= 4;
+        switch (animationState) {
+            case 0:
+            case 2:
+                setImage(GameImage.MOB_LAUFKAEFER_1.getImage());
+                break;
+            case 1:
+                setImage(GameImage.MOB_LAUFKAEFER_2.getImage());
+                break;
+            case 3:
+                setImage(GameImage.MOB_LAUFKAEFER_3.getImage());
+                break;
+
+        }
     }
 }

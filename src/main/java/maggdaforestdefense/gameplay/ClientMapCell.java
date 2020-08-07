@@ -42,7 +42,7 @@ public class ClientMapCell extends StackPane {
         imageView = new ImageView(type.getImage());
         imageView.setFitHeight(MapCell.CELL_SIZE);
         imageView.setFitWidth(MapCell.CELL_SIZE);
-
+        
         getChildren().add(imageView);
 
         setLayoutX((((double) (xIndex)) + 0.0d) * MapCell.CELL_SIZE);

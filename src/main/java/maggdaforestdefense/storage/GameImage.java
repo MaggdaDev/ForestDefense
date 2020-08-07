@@ -37,6 +37,11 @@ public enum GameImage {
     MOB_HIRSCHKAEFER_2("maggdaforestdefense/mobs/hirschkaefer2.png"),
     MOB_HIRSCHKAEFER_3("maggdaforestdefense/mobs/hirschkaefer3.png"),
     
+    MOB_LAUFKAEFER_1("maggdaforestdefense/mobs/laufkaefer1.png"),
+    MOB_LAUFKAEFER_2("maggdaforestdefense/mobs/laufkaefer2.png"),
+    MOB_LAUFKAEFER_3("maggdaforestdefense/mobs/laufkaefer3.png"),
+
+    
     
     // TOWERS
     TOWERGROWING_ANIMATION_1("maggdaforestdefense/towers/treeGrowing1.png"),

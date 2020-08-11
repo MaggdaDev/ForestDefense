@@ -50,7 +50,7 @@ public abstract class ClientTower extends ClientGameObject{
         this.growingTime = growingTime;
         
         healthPoints = health;
-        healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER);
+        healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER, 80);
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
       
 

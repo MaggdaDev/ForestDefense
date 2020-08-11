@@ -14,9 +14,10 @@ import maggdaforestdefense.storage.GameImage;
  * @author David
  */
 public class ClientSchwimmkaefer extends ClientBug {
+    public static double SIZE = 50, STEP_DISTANCE = 10;
     public ClientSchwimmkaefer(int id, double x, double y, double hp, Mob.MovementType movement) {
 
-        super(id, x, y, hp, movement, GameObjectType.M_SCHWIMMKAEFER, GameImage.MOB_SCHWIMMKAEFER_1, 10);
+        super(id, x, y, hp, movement, GameObjectType.M_SCHWIMMKAEFER, GameImage.MOB_SCHWIMMKAEFER_1, STEP_DISTANCE, SIZE);
     }
 
     @Override

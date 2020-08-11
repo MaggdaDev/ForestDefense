@@ -13,10 +13,10 @@ import maggdaforestdefense.storage.GameImage;
  *
  * @author David
  */
-public class ClientWanderlaeufer extends ClientBug{
-    public static double SIZE = 70, STEP_DISTANCE = 20;
-    public ClientWanderlaeufer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_WANDERLAUFER, GameImage.MOB_LAUFKAEFER_1, STEP_DISTANCE, SIZE);
+public class ClientBlattlaus extends ClientBug{
+    public static double SIZE = 30, STEP_DISTANCE = 3;
+    public ClientBlattlaus(int id, double x, double y, double hp, Mob.MovementType movement) {
+        super(id, x, y, hp, movement, GameObjectType.M_BLATTLAUS, GameImage.MOB_BLATTLAUS_1, STEP_DISTANCE, SIZE);
     }
     
     @Override
@@ -26,15 +26,15 @@ public class ClientWanderlaeufer extends ClientBug{
         switch (animationState) {
             case 0:
             case 2:
-                setImage(GameImage.MOB_LAUFKAEFER_1.getImage());
+                setImage(GameImage.MOB_BLATTLAUS_1.getImage());
                 break;
             case 1:
-                setImage(GameImage.MOB_LAUFKAEFER_2.getImage());
+                setImage(GameImage.MOB_BLATTLAUS_2.getImage());
                 break;
             case 3:
-                setImage(GameImage.MOB_LAUFKAEFER_3.getImage());
+                setImage(GameImage.MOB_BLATTLAUS_3.getImage());
                 break;
 
         }
-    }
+    } 
 }

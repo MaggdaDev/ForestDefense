@@ -29,22 +29,24 @@ public abstract class ClientMob extends ClientGameObject {
     protected double shadowOffsetY = 20;
     
     protected Mob.MovementType movementType;
+    protected double size;
     
     // Shadow offsets
-    public final static double SHADOW_OFFSET_X_DIG = 0;
-    public final static double SHADOW_OFFSET_Y_DIG = 0;
+    public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
+    public final static double SHADOW_OFFSET_Y_DIG_MULT = 0;
     
-    public final static double SHADOW_OFFSET_X_WALK = 3;
-    public final static double SHADOW_OFFSET_Y_WALK = 9;
+    public final static double SHADOW_OFFSET_X_WALK_MULT = 0.06;
+    public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.18;
     
-    public final static double SHADOW_OFFSET_X_FLY = 9;
-    public final static double SHADOW_OFFSET_Y_FLY = 27;
+    public final static double SHADOW_OFFSET_X_FLY_MULT = 0.18;
+    public final static double SHADOW_OFFSET_Y_FLY_MULT = 0.54;
     
 
-    public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth, Mob.MovementType movement) {
+    public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth, Mob.MovementType movement, double size) {
         super(id, image, type, x, y);
+        this.size = size;
         movementType = movement;
-        healthBar = new HealthBar(maxHealth, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_MOB);
+        healthBar = new HealthBar(maxHealth, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_MOB, size);
 
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
 
@@ -54,23 +56,34 @@ public abstract class ClientMob extends ClientGameObject {
         shadow.setColor(Color.BLACK);
         shadow.setBlurType(BlurType.GAUSSIAN);
         setEffect(shadow);
+        
+        double fitWidth = getImage().getWidth();
+        double fitHeight = getImage().getHeight();
+        setPreserveRatio(true);
+        if(fitWidth > fitHeight) {
+            setFitWidth(size);
+            setFitHeight(fitHeight * (size / fitWidth));
+        } else {
+            setFitHeight(size);
+            setFitWidth(fitWidth * (size / fitHeight));
+        }
     }
 
     protected void updateShadow() {
         switch(movementType) {
             case DIG:
-                shadowOffsetX = SHADOW_OFFSET_X_DIG;
-                shadowOffsetY = SHADOW_OFFSET_Y_DIG;
+                shadowOffsetX = SHADOW_OFFSET_X_DIG_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_DIG_MULT * size;
                 setOpacity(0.4);
                 break;
             case WALK:
-                shadowOffsetX = SHADOW_OFFSET_X_WALK;
-                shadowOffsetY = SHADOW_OFFSET_Y_WALK;
+                shadowOffsetX = SHADOW_OFFSET_X_WALK_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_WALK_MULT * size;
                 setOpacity(1);
                 break;
             case FLY:
-                shadowOffsetX = SHADOW_OFFSET_X_FLY;
-                shadowOffsetY = SHADOW_OFFSET_Y_FLY;
+                shadowOffsetX = SHADOW_OFFSET_X_FLY_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_FLY_MULT * size;
                 setOpacity(1);
                 break;
         }
@@ -98,7 +111,8 @@ public abstract class ClientMob extends ClientGameObject {
     }
 
     protected void updateHealth(double h) {
-        healthBar.update(xPos + getFitWidth() / 2, yPos, h);
+
+        healthBar.update(xPos + (getFitWidth() * 0.5d), yPos, h);
     }
 
     public HealthBar getHealthBar() {

@@ -17,6 +17,7 @@ import maggdaforestdefense.network.server.Player;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Hirschkaefer;
@@ -95,6 +96,11 @@ public class ServerGame extends Thread {
             case M_WASSERLAEUFER:
                 addMob(new Wasserlaeufer(this));
                 break;
+            case M_BLATTLAUS:
+                addMob(new Blattlaus(this));
+                break;
+                default:
+                    throw new UnsupportedOperationException();
         }
     }
 

@@ -16,6 +16,7 @@ public enum GameObjectType {
     M_HIRSCHKAEFER,
     M_BORKENKAEFER,
     M_WANDERLAUFER,
+    M_BLATTLAUS,
     
     //TOWERS
     T_SPRUCE,

@@ -58,17 +58,20 @@ public class MobWavesLoader {
                         case "WASSERLAEUFER":
                             type = GameObjectType.M_WASSERLAEUFER;
                             break;
+                        case "BLATTLAUS":
+                            type = GameObjectType.M_BLATTLAUS;
+                            break;
                         default:
                             Logger.logServer("ERROR! UNSUPPORTED MOB TYPE IN MOB.WAVES: " + splitted[1]);
                             throw new UnsupportedOperationException();
                     }
-                    if(splitted.length > 2) {
+                    if (splitted.length > 2) {
                         amount = Integer.parseInt(splitted[2]);
                     }
-                    
+
                     currentWaveVect.add(new Spawnable(type, delay));
-                    if(amount > 1) {
-                        for(int i = 0; i < amount-1; i++) {
+                    if (amount > 1) {
+                        for (int i = 0; i < amount - 1; i++) {
                             currentWaveVect.add(new Spawnable(type, 0.01));
                         }
                     }

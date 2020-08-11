@@ -14,7 +14,9 @@ import maggdaforestdefense.storage.GameImage;
  * @author David
  */
 public class ClientBorkenkaefer extends ClientBug{
+    public static double size = 90;
+    
     public ClientBorkenkaefer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_BORKENKAEFER, GameImage.MOB_BUG_1);
+        super(id, x, y, hp, movement, GameObjectType.M_BORKENKAEFER, GameImage.MOB_BUG_1, 20, size);
     }
 }

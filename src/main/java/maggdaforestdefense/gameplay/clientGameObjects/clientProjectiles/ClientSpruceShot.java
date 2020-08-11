@@ -17,9 +17,11 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
  */
 public class ClientSpruceShot extends ClientGameObject {
     
-
+    public static double height = 50;
     public ClientSpruceShot(int id, double x, double y) {
         super(id, GameImage.PROJECTILE_SPRUCE_SHOT, GameObjectType.P_SPRUCE_SHOT, x, y);
+        setPreserveRatio(true);
+        setFitHeight(height);
     }
 
     @Override
@@ -30,6 +32,8 @@ public class ClientSpruceShot extends ClientGameObject {
         updateRotate(newX, newY);
         setNewPos(newX, newY);
     }
+    
+    
     
     @Override 
     public void onRemove(){}

@@ -40,6 +40,10 @@ public enum GameImage {
     MOB_LAUFKAEFER_1("maggdaforestdefense/mobs/laufkaefer1.png"),
     MOB_LAUFKAEFER_2("maggdaforestdefense/mobs/laufkaefer2.png"),
     MOB_LAUFKAEFER_3("maggdaforestdefense/mobs/laufkaefer3.png"),
+    
+    MOB_BLATTLAUS_1("maggdaforestdefense/mobs/blattlaus1.png"),
+    MOB_BLATTLAUS_2("maggdaforestdefense/mobs/blattlaus2.png"),
+    MOB_BLATTLAUS_3("maggdaforestdefense/mobs/blattlaus3.png"),
 
     
     

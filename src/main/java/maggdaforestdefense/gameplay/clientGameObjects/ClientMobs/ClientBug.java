@@ -20,32 +20,24 @@ import maggdaforestdefense.util.GameMaths;
  *
  * @author DavidPrivat
  */
-public class ClientBug extends ClientMob {
+public abstract class ClientBug extends ClientMob {
 
-    public static final double width = 90, height = 90;
     private double distance_between_steps = 5;
 
     protected double distanceSinceLastStep = 0;
 
     protected int animationState = 0;
 
-    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image) {
-        super(id, image, objectType, x, y, hp, movementType);
-        setPreserveRatio(true);
-
-        setFitHeight(height);
-    }
-
-    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image, double distanceBetweenSteps) {
-        this(id, x, y, hp, movementType, objectType, image);
+    public ClientBug(int id, double x, double y, double hp, Mob.MovementType movementType, GameObjectType objectType, GameImage image, double distanceBetweenSteps, double size) {
+        super(id, image, objectType, x, y, hp, movementType, size);
         this.distance_between_steps = distanceBetweenSteps;
     }
 
     @Override
     public void update(NetworkCommand updateCommand) {
         double newHealth = updateCommand.getNumArgument("hp");
-        double newX = updateCommand.getNumArgument("x") - width / 2;
-        double newY = updateCommand.getNumArgument("y") - height / 2;
+        double newX = updateCommand.getNumArgument("x") - getFitWidth() / 2;
+        double newY = updateCommand.getNumArgument("y") - getFitHeight() / 2;
         double dX = newX - xPos;
         double dY = newY - yPos;
         movementType = Mob.MovementType.values()[(int) updateCommand.getNumArgument("movement")];

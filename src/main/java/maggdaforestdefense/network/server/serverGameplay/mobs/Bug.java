@@ -21,7 +21,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
  */
 public abstract class Bug extends Mob {
 
-    public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
+    public final static double HIT_BOX_RADIUS = (100 + 100) / 4;
 
     public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet, double armor, MovementType movementType, GameObjectType objectType) {
         super(game, objectType, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet, armor, movementType);

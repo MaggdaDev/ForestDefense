@@ -160,7 +160,12 @@ public class Game {
     
     public void announceWave(NetworkCommand command) {
         int wave = (int)command.getNumArgument("wave");
+        gameScreen.hideReadyCheck();
         gameScreen.announceWave(wave);
+    }
+    
+    public void readyCheck() {
+        gameScreen.showReadyCheck();
     }
 
     public int getCoins() {

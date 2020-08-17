@@ -108,6 +108,9 @@ public class ClientCommandHandler extends Thread {
             case NEXT_WAVE:
                 Game.getInstance().announceWave(command);
                 break;
+            case WAIT_FOR_READY_NEXT_WAVE:
+                Game.getInstance().readyCheck();
+                break;
         }
     }
 

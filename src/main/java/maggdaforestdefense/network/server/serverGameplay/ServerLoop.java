@@ -18,6 +18,7 @@ import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.storage.MobWavesLoader;
 import maggdaforestdefense.util.GameMaths;
+import maggdaforestdefense.util.Waiter;
 
 /**
  *
@@ -54,8 +55,18 @@ public class ServerLoop {
             currentWave = mobWaves.get(currentWaveIndex);
             mobsToSpawn = currentWave.getMobAmount();
 
+            setAllPlayersNotReady();
+            serverGame.sendCommandToAllPlayers(NetworkCommand.WAIR_FOR_READY_NEXT_WAVE);
+
+            Waiter.waitUntil(() -> {      // wait unti
+                return allPlayersReadyForNextRound();
+            });
+
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
-            while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {
+            runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
+            oldRunTime = runTime;
+
+            while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {                         // ONE WAVE!
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
                 double timeElapsed = runTime - oldRunTime;
                 oldRunTime = runTime;
@@ -84,6 +95,24 @@ public class ServerLoop {
 
             currentWaveIndex++;
 
+        }
+    }
+
+    public boolean allPlayersReadyForNextRound() {
+        boolean allReady = true;
+
+        for (Player player : players) {
+            if (!player.isReadyForNextRound()) {
+                allReady = false;
+            }
+        }
+
+        return allReady;
+    }
+    
+    private void setAllPlayersNotReady() {
+        for (Player player : players) {
+            player.setReadyForNextRound(false);
         }
     }
 

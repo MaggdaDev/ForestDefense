@@ -42,6 +42,7 @@ public class GameScreen extends Group{
 
     private GameOverOverlay gameOverOverlay;
     private WaveAnnouncer waveAnnouncer;
+    private ReadyCheckOverlay readyCheckOverlay;
 
     public GameScreen() {
 
@@ -51,11 +52,12 @@ public class GameScreen extends Group{
         topOverlay = new TopOverlay(0, 0);
         gameOverOverlay = new GameOverOverlay();
         waveAnnouncer = new WaveAnnouncer();
+        readyCheckOverlay = new ReadyCheckOverlay();
         
         sideMenu = new SideMenu();
         sideMenu.setVisible(false);
         
-        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay, gameOverOverlay, waveAnnouncer);
+        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay, gameOverOverlay, waveAnnouncer, readyCheckOverlay);
         gamePlayGroup.setViewOrder(3);
         sideMenu.setViewOrder(2);
         topOverlay.setViewOrder(1);
@@ -159,6 +161,14 @@ public class GameScreen extends Group{
     public void showGameOverOverlay() {
         
         gameOverOverlay.startAnimation();
+    }
+    
+    public void showReadyCheck() {
+        readyCheckOverlay.startAnimation();
+    }
+    
+    public void hideReadyCheck() {
+        readyCheckOverlay.back();
     }
 
     public void generateMap(ClientMapCell[][] mapCellArray) {

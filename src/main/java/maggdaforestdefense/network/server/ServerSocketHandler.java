@@ -112,6 +112,10 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 int upgradeType = (int)command.getNumArgument("type");
                 game.buyUpgrade(id, tier, upgradeType);
                 break;
+                
+            case READY_FOR_NEXT_ROUND:
+                owner.setReadyForNextRound(true);
+                break;
         }
         
     }

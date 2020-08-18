@@ -20,6 +20,14 @@ public class Waiter {
             }
         }
     }
+    
+    public static void waitMillis(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static interface WaitCondition {
 

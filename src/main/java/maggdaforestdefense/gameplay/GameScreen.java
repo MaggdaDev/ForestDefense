@@ -132,6 +132,10 @@ public class GameScreen extends Group{
     public void announceWave(int wave) {
         waveAnnouncer.nextWave(wave);
     }
+    
+    public void doEssenceAnimtionTo(ClientTower tower) {
+        gamePlayGroup.getChildren().add(new EssenceAnimation(map.getBaseXIndex(), map.getBaseYIndex(), tower));
+    }
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
@@ -209,6 +213,8 @@ public class GameScreen extends Group{
     public ClientMap getMap() {
         return map;
     }
+
+    
     
     
 

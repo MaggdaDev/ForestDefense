@@ -120,6 +120,7 @@ public class NetworkCommand {
         UPGRADE_BUY_CONFIRMED,  //id, tier, type
         WAIT_FOR_READY_NEXT_WAVE,   // NO ARGS
         NEXT_WAVE,              //wave
+        DO_ESSENCE_ANIMATION,   // id (of tower)
         END_GAME;               // NO ARGS
         
     }

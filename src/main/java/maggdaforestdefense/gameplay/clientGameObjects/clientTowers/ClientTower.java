@@ -5,7 +5,13 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.scene.Parent;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
@@ -37,6 +43,9 @@ public abstract class ClientTower extends ClientGameObject{
     
     protected ClientMapCell mapCell;
     
+    protected DropShadow receiveEssenceShadow;
+    protected PauseTransition removeEssenceShadowAnimation;
+    
     public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range, double health, double growingTime) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
         mapCell = Game.getInstance().getGameScreen().getMap().getCells()[xIndex][yIndex];
@@ -53,6 +62,15 @@ public abstract class ClientTower extends ClientGameObject{
         healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER, 80);
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
       
+        receiveEssenceShadow = new DropShadow();
+        receiveEssenceShadow.setColor(Color.rgb(163, 73, 164));
+        receiveEssenceShadow.setBlurType(BlurType.GAUSSIAN);
+        receiveEssenceShadow.setSpread(1);
+        removeEssenceShadowAnimation = new PauseTransition(Duration.seconds(5));
+        removeEssenceShadowAnimation.setOnFinished((ActionEvent e)->{
+            setEffect(null);
+        });
+       
 
     }
     
@@ -62,6 +80,12 @@ public abstract class ClientTower extends ClientGameObject{
             isMature = true;
             mapCell.notifyTreeMature();
         }
+    }
+    
+    public void doReceiveEssenceAnimation() {
+        setEffect(receiveEssenceShadow);
+        removeEssenceShadowAnimation.play();
+        
     }
     
     public int getXIndex() {
@@ -98,6 +122,8 @@ public abstract class ClientTower extends ClientGameObject{
     }
     
     public abstract void setTier(int tier);
+
+    
 
     
 }

@@ -30,6 +30,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Wasserlaeufer;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.Waiter;
 
 /**
  *
@@ -145,7 +146,16 @@ public class ServerGame extends Thread {
     }
 
     public void handleEssenceAfterRound() {
-
+        
+        gameObjects.forEach((String id, GameObject gameObject)->{
+           if(gameObject instanceof Tower) {
+               Tower tower = (Tower)gameObject;
+               sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.DO_ESSENCE_ANIMATION, new CommandArgument[]{new CommandArgument("id", id)}));
+               Waiter.waitMillis(5);
+               
+           } 
+        });
+        
         base.refillEssence();
     }
 

@@ -22,6 +22,7 @@ import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -164,12 +165,23 @@ public class Game {
         gameScreen.announceWave(wave);
     }
     
+    public void doEssenceAnimtion(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ClientTower tower = (ClientTower)gameObjects.get(id);
+        gameScreen.doEssenceAnimtionTo(tower);
+    }
+    
     public void readyCheck() {
         gameScreen.showReadyCheck();
     }
 
     public int getCoins() {
         return coins;
+    }
+
+    public void essenceAnimationFinished(EssenceAnimation animation, ClientTower tower) {
+        gameScreen.getGamePlayGroup().getChildren().remove(animation);
+        tower.doReceiveEssenceAnimation();
     }
 
 }

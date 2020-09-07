@@ -83,6 +83,8 @@ public enum GameImage {
     DISPLAY_HEALTH_BAR_TOWER("maggdaforestdefense/display/health_bar_tower.png"),
     COIN_ICON("maggdaforestdefense/display/coin_icon.png"),
     ESSENCE_ICON("maggdaforestdefense/display/essence_icon.png"),
+    ESSENCE_BOX("maggdaforestdefense/display/essence_box.png"),
+    ESSENCE_BAR("maggdaforestdefense/display/essence_bar.png"),
     
     ESSENCE_ANIMATION_1("maggdaforestdefense/display/essence_animation_1.png"),
     ESSENCE_ANIMATION_2("maggdaforestdefense/display/essence_animation_2.png"),

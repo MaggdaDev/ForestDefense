@@ -147,6 +147,7 @@ public class Game {
         maxEssence = (int) command.getNumArgument("maxEssence");
 
         gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence, maxEssence);
+        gameScreen.getEssenceMenu().updateEssenceLevel(essence, maxEssence);
         gameScreen.getSideMenu().updateCoins(coins);
     }
 

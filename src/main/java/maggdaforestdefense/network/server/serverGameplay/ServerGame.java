@@ -146,17 +146,19 @@ public class ServerGame extends Thread {
     }
 
     public void handleEssenceAfterRound() {
+        sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
+    }
+    
+    public void requestEssence(String id) {
+         
         
-        gameObjects.forEach((String id, GameObject gameObject)->{
-           if(gameObject instanceof Tower) {
-               Tower tower = (Tower)gameObject;
-               sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.DO_ESSENCE_ANIMATION, new CommandArgument[]{new CommandArgument("id", id)}));
-               Waiter.waitMillis(5);
-               
-           } 
-        });
+        Tower tower = (Tower)gameObjects.get(id);
+        if(base.decreaseEssenceIfPossible()) {
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.DO_ESSENCE_ANIMATION, new CommandArgument[]{new CommandArgument("id", id)}));
+            updateRessources();
+        }
         
-        base.refillEssence();
+
     }
 
     public void updateRessources() {
@@ -251,5 +253,7 @@ public class ServerGame extends Thread {
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
+
+    
 
 }

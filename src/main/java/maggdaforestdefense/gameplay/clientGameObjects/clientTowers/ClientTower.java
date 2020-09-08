@@ -13,16 +13,20 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maggdaforestdefense.gameplay.ClientMapCell;
+import maggdaforestdefense.gameplay.EssenceButton;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.ingamemenus.GrowingWaitingMenu;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.network.client.NetworkManager;
 
 /**
  *
@@ -46,6 +50,8 @@ public abstract class ClientTower extends ClientGameObject{
     protected DropShadow receiveEssenceShadow;
     protected PauseTransition removeEssenceShadowAnimation;
     
+    protected EssenceButton essenceButton;
+    
     public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range, double health, double growingTime) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
         mapCell = Game.getInstance().getGameScreen().getMap().getCells()[xIndex][yIndex];
@@ -60,7 +66,10 @@ public abstract class ClientTower extends ClientGameObject{
         
         healthPoints = health;
         healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER, 80);
-        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
+        
+           
+        essenceButton = new EssenceButton(this);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().addAll(healthBar, essenceButton);
       
         receiveEssenceShadow = new DropShadow();
         receiveEssenceShadow.setColor(Color.rgb(163, 73, 164));
@@ -70,6 +79,8 @@ public abstract class ClientTower extends ClientGameObject{
         removeEssenceShadowAnimation.setOnFinished((ActionEvent e)->{
             setEffect(null);
         });
+        
+     
        
 
     }
@@ -122,6 +133,18 @@ public abstract class ClientTower extends ClientGameObject{
     }
     
     public abstract void setTier(int tier);
+
+    public void requestEssence() {
+        NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUEST_ESSENCE_TOWER, new CommandArgument[]{new CommandArgument("id", id)}));
+    }
+    
+    public void showEssenceButton() {
+        essenceButton.show();
+    }
+
+    public void hideEssenceButton() {
+        essenceButton.hide();
+    }
 
     
 

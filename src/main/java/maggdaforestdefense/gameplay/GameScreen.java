@@ -141,6 +141,7 @@ public class GameScreen extends Group{
     
     public void doEssenceAnimtionTo(ClientTower tower) {
         gamePlayGroup.getChildren().add(new EssenceAnimation(map.getBaseXIndex(), map.getBaseYIndex(), tower));
+        tower.hideEssenceButton();
     }
 
     public void addGameObject(ClientGameObject gameObject) {

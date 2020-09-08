@@ -71,7 +71,7 @@ public class EssenceAnimation extends ImageView {
         Path path = new Path();
         QuadCurveTo quadTo = new QuadCurveTo();
         quadTo.setControlX(startX + 0.5 * dX);
-        quadTo.setControlY(startY + 0.5 * dY + 0.3 * dX * dX / abs);
+        quadTo.setControlY(startY + 0.5 * dY - 0.3 * dX * dX / abs);
         quadTo.setX(endX);
         quadTo.setY(endY);
         path.getElements().addAll(new MoveTo(startX, startY), quadTo);

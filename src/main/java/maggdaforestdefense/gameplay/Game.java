@@ -185,4 +185,13 @@ public class Game {
         tower.doReceiveEssenceAnimation();
     }
 
+    public void waveFinished() {
+        gameObjects.forEach((String key, ClientGameObject gj)->{
+            if(gj instanceof ClientTower) {
+                ClientTower clientTower = (ClientTower)gj;
+                clientTower.showEssenceButton();
+            }
+        });
+    }
+
 }

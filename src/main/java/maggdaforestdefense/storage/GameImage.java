@@ -85,6 +85,7 @@ public enum GameImage {
     ESSENCE_ICON("maggdaforestdefense/display/essence_icon.png"),
     ESSENCE_BOX("maggdaforestdefense/display/essence_box.png"),
     ESSENCE_BAR("maggdaforestdefense/display/essence_bar.png"),
+    ESSENCE_BUTTON("maggdaforestdefense/display/essence_button.png"),
     
     ESSENCE_ANIMATION_1("maggdaforestdefense/display/essence_animation_1.png"),
     ESSENCE_ANIMATION_2("maggdaforestdefense/display/essence_animation_2.png"),

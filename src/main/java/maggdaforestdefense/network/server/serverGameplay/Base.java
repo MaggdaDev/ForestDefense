@@ -44,4 +44,13 @@ public class Base extends MapCell{
     public void refillEssence() {
         essence = maxEssence;
     }
+
+    boolean decreaseEssenceIfPossible() {
+        if(essence > 0) {
+            essence--;
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

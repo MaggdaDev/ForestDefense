@@ -117,6 +117,9 @@ public class ClientCommandHandler extends Thread {
             case WAVE_FINISHED:
                 Game.getInstance().waveFinished();
                 break;
+            case TOWER_NEED_ESSENCE:
+                Game.getInstance().towerNeedEssence(command);
+                break;
         }
     }
 

@@ -14,6 +14,7 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -31,8 +32,8 @@ public class EssenceMenu extends SideMenu {
 
     public EssenceMenu() {
         super(false);
-        maxEssence = 20;
-        essenceLevel = 20;
+        maxEssence = ServerGame.START_ESSENCE;
+        essenceLevel = ServerGame.START_ESSENCE;
 
         essenceBar = new ImageView(GameImage.ESSENCE_BAR.getImage());
         essenceBox = new ImageView(GameImage.ESSENCE_BOX.getImage());
@@ -91,6 +92,10 @@ public class EssenceMenu extends SideMenu {
         double newBorder = ORIGINAL_BOX_BORDER * ratio;
         double newBarHeight =  (newBoxHeight - 2 * newBorder) * ((double) newVal / (double) maxEssence);
         double newYPos =  essenceBoxY + SPACING + newBoxHeight - (newBarHeight + newBorder);
+        
+        if(newVal <= 0) {
+            newBarHeight = 1;
+        }
         
         
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceBar.fitHeightProperty(), newBarHeight, Interpolator.EASE_BOTH)),

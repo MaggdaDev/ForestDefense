@@ -186,12 +186,12 @@ public class Game {
     }
 
     public void waveFinished() {
-        gameObjects.forEach((String key, ClientGameObject gj)->{
-            if(gj instanceof ClientTower) {
-                ClientTower clientTower = (ClientTower)gj;
-                clientTower.showEssenceButton();
-            }
-        });
+        
+    }
+
+    public void towerNeedEssence(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientTower)gameObjects.get(id)).essenceNeeded();
     }
 
 }

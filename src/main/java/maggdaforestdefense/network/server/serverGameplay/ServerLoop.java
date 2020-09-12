@@ -61,8 +61,13 @@ public class ServerLoop {
             Waiter.waitUntil(() -> {      // wait unti
                 return allPlayersReadyForNextRound();
             });
+            
+            serverGame.handleTreesDieing();
 
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
+            
+            serverGame.handleEssenceNewRound();
+            
             runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
             oldRunTime = runTime;
 

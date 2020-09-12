@@ -96,8 +96,17 @@ public abstract class ClientTower extends ClientGameObject{
     public void doReceiveEssenceAnimation() {
         setEffect(receiveEssenceShadow);
         removeEssenceShadowAnimation.play();
+        setOpacity(1);
+        healthBar.setOpacity(1);
         
     }
+    
+    public void essenceNeeded() {
+        showEssenceButton();
+        setOpacity(0.2);
+        healthBar.setOpacity(0.2);
+    }
+    
     
     public int getXIndex() {
         return xIndex;
@@ -125,7 +134,8 @@ public abstract class ClientTower extends ClientGameObject{
     
     @Override
     public void onRemove(){
-   
+        Game.getInstance().getGameScreen().safeRemoveGameplayNode(healthBar);
+        Game.getInstance().getGameScreen().safeRemoveGameplayNode(essenceButton);
     }
 
     public void buyUpgrade(int tier, int type) {
@@ -145,6 +155,10 @@ public abstract class ClientTower extends ClientGameObject{
     public void hideEssenceButton() {
         essenceButton.hide();
     }
+
+    
+
+    
 
     
 

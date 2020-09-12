@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
+import javafx.scene.Node;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
@@ -223,6 +224,12 @@ public class GameScreen extends Group{
     
     public ClientMap getMap() {
         return map;
+    }
+    
+    public void safeRemoveGameplayNode(Node node) {
+        if(gamePlayGroup.getChildren().contains(node)) {
+            gamePlayGroup.getChildren().remove(node);
+        }
     }
 
     

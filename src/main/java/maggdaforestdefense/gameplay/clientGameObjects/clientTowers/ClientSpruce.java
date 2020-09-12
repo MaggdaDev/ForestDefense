@@ -68,14 +68,7 @@ public class ClientSpruce extends ClientTower {
         upgradeMenu.setTreeImage(image);
     }
     
-    @Override
-    public void onRemove() {
-        if(Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().contains(healthBar)) {
-            Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().remove(healthBar);
-        }
-        
-    }
-    
+ 
     
     
     

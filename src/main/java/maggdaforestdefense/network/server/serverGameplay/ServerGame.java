@@ -38,7 +38,7 @@ import maggdaforestdefense.util.Waiter;
  */
 public class ServerGame extends Thread {
 
-    public final static int START_COINS = 100, START_ESSENCE = 20;
+    public final static int START_COINS = 100, START_ESSENCE = 5;
 
     private int coins = START_COINS;
     private Base base;
@@ -147,6 +147,12 @@ public class ServerGame extends Thread {
 
     public void handleEssenceAfterRound() {
         sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
+        gameObjects.forEach((String id, GameObject gObj)->{
+            if(gObj instanceof Tower) {
+                Tower tower = (Tower)gObj;
+                tower.handleAfterWave();
+            }
+        });
     }
     
     public void requestEssence(String id) {
@@ -156,9 +162,23 @@ public class ServerGame extends Thread {
         if(base.decreaseEssenceIfPossible()) {
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.DO_ESSENCE_ANIMATION, new CommandArgument[]{new CommandArgument("id", id)}));
             updateRessources();
+            tower.supplyEssence();
         }
         
 
+    }
+    
+    public void handleTreesDieing() {
+        gameObjects.forEach((String id, GameObject gObj)->{
+            if(gObj instanceof Tower) {
+                Tower tower = (Tower) gObj;
+                tower.checkEssenceFed();
+            }
+        });
+    }
+    
+    public void handleEssenceNewRound() {
+        base.refillEssence();
     }
 
     public void updateRessources() {
@@ -253,6 +273,10 @@ public class ServerGame extends Thread {
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
     }
+
+   
+
+    
 
     
 

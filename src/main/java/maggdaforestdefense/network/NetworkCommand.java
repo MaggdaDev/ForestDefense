@@ -121,6 +121,7 @@ public class NetworkCommand {
         REMOVE_GAME_OBJECT,     //id
         UPGRADE_BUY_CONFIRMED,  //id, tier, type
         WAVE_FINISHED,          // NO ARGS
+        TOWER_NEED_ESSENCE,     // id
         WAIT_FOR_READY_NEXT_WAVE,   // NO ARGS
         NEXT_WAVE,              //wave
         DO_ESSENCE_ANIMATION,   // id (of tower)

@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -51,6 +53,8 @@ public abstract class Tower extends GameObject {
     protected CanAttackSet canAttackSet;
     
     protected double growingTime;
+    
+    protected boolean isEssenceFed = false;
 
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges;
@@ -58,6 +62,7 @@ public abstract class Tower extends GameObject {
     protected boolean isMature = false;
     
     protected GameAnimation growingAnimation;
+    
 
     public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range, CanAttackSet attackSet, double growTime) {
         super(game.getNextId(), type);
@@ -165,6 +170,24 @@ public abstract class Tower extends GameObject {
         serverGame.killTower(this);
         isAlive = false;
     }
+    
+    public void handleAfterWave() {
+        if(isMature) {
+        isEssenceFed = false;
+        serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.TOWER_NEED_ESSENCE, new CommandArgument[]{new CommandArgument("id", id)}));
+        
+        }
+    }
+    
+    public void supplyEssence() {
+        isEssenceFed = true;
+    }
+    
+      public void checkEssenceFed() {
+        if(isMature && (!isEssenceFed)) {
+            serverGame.killTower(this);
+        }
+    }
 
     //Get/Set
     public int getXIndex() {
@@ -264,6 +287,10 @@ public abstract class Tower extends GameObject {
             healthPoints += healthAdd;
         }
     }
+
+  
+
+    
 
     public static class CanAttackSet {
 

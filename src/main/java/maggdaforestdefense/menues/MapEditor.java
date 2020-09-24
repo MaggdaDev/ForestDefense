@@ -27,6 +27,7 @@ import maggdaforestdefense.gameplay.playerinput.RangeRect;
 import maggdaforestdefense.gameplay.playerinput.SelectionClickedSquare;
 import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.GenerateableMap;
+import maggdaforestdefense.network.server.serverGameplay.Map;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.storage.MapLoader;
@@ -127,7 +128,7 @@ public class MapEditor extends VBox {
     /**
      * Initializes the editor.
      */
-    public void firstInit() {
+    /*public void firstInit() {
         MaggdaForestDefense.getInstance().getScene().getRoot().minHeight(700);
         MaggdaForestDefense.getInstance().getScene().getRoot().minWidth(1000);
         mapGroup = (Group) (((SplitPane) this.getChildren().get(1)).getItems().get(0)); // TODO: Get the group in a better way!
@@ -154,6 +155,33 @@ public class MapEditor extends VBox {
         });
 
         newMap();
+    }*/
+    public void firstInit() {
+        MaggdaForestDefense.getInstance().getScene().getRoot().minHeight(700);
+        MaggdaForestDefense.getInstance().getScene().getRoot().minWidth(1000);
+
+        MapEditor.getInstance().setCursor(Cursor.OPEN_HAND);
+        MapEditor.getInstance().setOnMousePressed((MouseEvent e)->{
+            PlayerInputHandler.getInstance().setMousePressed(true, e);
+        });
+        MapEditor.getInstance().setOnMouseReleased((MouseEvent e)->{
+            PlayerInputHandler.getInstance().setMousePressed(false, e);
+            setCursor(Cursor.OPEN_HAND);
+        });
+        MapEditor.getInstance().setOnMouseDragged((MouseEvent e)->{
+            PlayerInputHandler.getInstance().mouseMoved(e);
+            setCursor(Cursor.CLOSED_HAND);
+        });
+
+        MapEditor.getInstance().mapGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), 0, 0));
+        MaggdaForestDefense.getInstance().getScene().setOnScroll((ScrollEvent e) -> {
+            MapEditor.getInstance().scrolling += e.getDeltaY();
+            MapEditor.getInstance().mapGroup.getTransforms().clear();
+            MapEditor.getInstance().mapGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), maggdaforestdefense.MaggdaForestDefense.getWindowWidth() / 2, maggdaforestdefense.MaggdaForestDefense.getWindowHeight() / 2));
+
+        });
+
+        MapEditor.getInstance().newMap();
     }
 
     private double scrolling = 0;
@@ -243,6 +271,7 @@ public class MapEditor extends VBox {
      * @param sizeY New Y size
      */
     private void populateMap(GenerateableMap.PresetCellInterface[][] oldCells, int sizeX, int sizeY) {
+        mapGroup.getChildren().clear();
         EditorPresetCell[][] newCells = new EditorPresetCell[sizeX][sizeY];
         for (int x = 0; x < newCells.length; x++) {
             EditorPresetCell[] yArray = new EditorPresetCell[sizeY];
@@ -287,7 +316,7 @@ public class MapEditor extends VBox {
     @FXML private void applyMapSize() {
         int newSize = 0;
         try {
-            newSize = Integer.getInteger(textMapSize.getText());
+            newSize = Integer.parseInt(textMapSize.getCharacters().toString());
         } catch (NumberFormatException e) {}
         if(newSize>1 && newSize<500) {
             MapEditor.getInstance().populateMap(presetCells, newSize, newSize);
@@ -300,8 +329,15 @@ public class MapEditor extends VBox {
 
     private static MapEditor instance;
 
-    public MapEditor() {
+    /*public MapEditor() {
         instance = this;
+    }*/
+    /**
+     * Initializes the instance.
+     * Populated after fxml-loading.
+     */
+    public void initialize() {
+        MapEditor.instance = this;
     }
 
     public static MapEditor getInstance() {

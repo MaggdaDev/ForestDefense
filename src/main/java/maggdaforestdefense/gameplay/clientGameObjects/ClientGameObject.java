@@ -17,7 +17,7 @@ import maggdaforestdefense.util.GameMaths;
  */
 public abstract class ClientGameObject extends ImageView {
 
-    private final int id;
+    protected final int id;
     private final GameObjectType gameObjectType;
 
     protected double xPos, yPos;

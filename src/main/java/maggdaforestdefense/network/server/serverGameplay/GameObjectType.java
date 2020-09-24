@@ -11,7 +11,12 @@ package maggdaforestdefense.network.server.serverGameplay;
  */
 public enum GameObjectType {
     //MOBS
-    M_BUG,
+    M_SCHWIMMKAEFER,
+    M_WASSERLAEUFER,
+    M_HIRSCHKAEFER,
+    M_BORKENKAEFER,
+    M_WANDERLAUFER,
+    M_BLATTLAUS,
     
     //TOWERS
     T_SPRUCE,

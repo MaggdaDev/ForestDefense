@@ -31,7 +31,7 @@ public class RessourceDisplay extends HBox{
     private final static Font font = new Font(30);
     private final static double ICON_SIZE = 40;
     
-    private Label valueLabel;
+    protected Label valueLabel;
     private ImageView icon;
     private int value;
     
@@ -62,5 +62,28 @@ public class RessourceDisplay extends HBox{
     public void setValue(int d) {
         value = d;
         valueLabel.setText(String.valueOf(d));
+    }
+    
+    public static class EssenceDisplay extends RessourceDisplay {
+        private int essence, maxEssence;
+        public EssenceDisplay(GameImage iconGameImage, int essence, int maxEssence) {
+            super(iconGameImage, essence);
+            this.essence = essence;
+            this.maxEssence = maxEssence;
+        }
+        
+        @Override
+        public void setValue(int v) {
+            essence = v;
+            valueLabel.setText(essence + " / " + maxEssence);
+        }
+        
+        public void setMaxEssence(int m) {
+            maxEssence = m;
+            valueLabel.setText(essence + " / " + maxEssence);
+        }
+        
+        
+        
     }
 }

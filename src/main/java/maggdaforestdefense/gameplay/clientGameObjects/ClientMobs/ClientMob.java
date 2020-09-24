@@ -5,43 +5,126 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.ClientMobs;
 
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
 
 /**
  *
  * @author DavidPrivat
  */
-public abstract class ClientMob extends ClientGameObject{
-    
+public abstract class ClientMob extends ClientGameObject {
+
     protected HealthBar healthBar;
-    public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth) {
+    protected DropShadow shadow;
+
+    protected double shadowOffsetX = 5;
+    protected double shadowOffsetY = 20;
+    
+    protected Mob.MovementType movementType;
+    protected double size;
+    
+    // Shadow offsets
+    public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
+    public final static double SHADOW_OFFSET_Y_DIG_MULT = 0;
+    
+    public final static double SHADOW_OFFSET_X_WALK_MULT = 0.06;
+    public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.18;
+    
+    public final static double SHADOW_OFFSET_X_FLY_MULT = 0.18;
+    public final static double SHADOW_OFFSET_Y_FLY_MULT = 0.54;
+    
+
+    public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth, Mob.MovementType movement, double size) {
         super(id, image, type, x, y);
-        
-        healthBar = new HealthBar(maxHealth);
-        
+        this.size = size;
+        movementType = movement;
+        healthBar = new HealthBar(maxHealth, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_MOB, size);
+
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
+
+        shadow = new DropShadow();
+        shadow.setOffsetX(shadowOffsetX);
+        shadow.setOffsetY(shadowOffsetY);
+        shadow.setColor(Color.BLACK);
+        shadow.setBlurType(BlurType.GAUSSIAN);
+        setEffect(shadow);
+        
+        double fitWidth = getImage().getWidth();
+        double fitHeight = getImage().getHeight();
+        setPreserveRatio(true);
+        if(fitWidth > fitHeight) {
+            setFitWidth(size);
+            setFitHeight(fitHeight * (size / fitWidth));
+        } else {
+            setFitHeight(size);
+            setFitWidth(fitWidth * (size / fitHeight));
+        }
     }
-    
+
+    protected void updateShadow() {
+        switch(movementType) {
+            case DIG:
+                shadowOffsetX = SHADOW_OFFSET_X_DIG_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_DIG_MULT * size;
+                setOpacity(0.4);
+                break;
+            case WALK:
+                shadowOffsetX = SHADOW_OFFSET_X_WALK_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_WALK_MULT * size;
+                setOpacity(1);
+                break;
+            case FLY:
+                shadowOffsetX = SHADOW_OFFSET_X_FLY_MULT * size;
+                shadowOffsetY = SHADOW_OFFSET_Y_FLY_MULT * size;
+                setOpacity(1);
+                break;
+        }
+        
+        int direction = (int) ((getRotate() / 90) + 0.5);
+        switch (direction) {
+            case 0: case 4:
+                shadow.setOffsetX(shadowOffsetX);
+                shadow.setOffsetY(shadowOffsetY);
+                break;
+            case 1: case -3:
+                shadow.setOffsetX(shadowOffsetY);
+                shadow.setOffsetY(-shadowOffsetX);
+                break;
+            case 2: case -2:
+                shadow.setOffsetX(-shadowOffsetX);
+                shadow.setOffsetY(-shadowOffsetY);
+                break;
+            case 3: case -1:
+                shadow.setOffsetX(-shadowOffsetY);
+                shadow.setOffsetY(shadowOffsetX);
+                break;
+
+        }
+    }
+
     protected void updateHealth(double h) {
-        healthBar.update(xPos + getFitWidth()/2, yPos, h);
+
+        healthBar.update(xPos + (getFitWidth() * 0.5d), yPos, h);
     }
-    
+
     public HealthBar getHealthBar() {
         return healthBar;
     }
-    
+
     @Override
     public void onRemove() {
-        if(Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().contains(healthBar)) {
+        if (Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().contains(healthBar)) {
             Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().remove(healthBar);
         }
-        
+
     }
-    
-    
+
 }

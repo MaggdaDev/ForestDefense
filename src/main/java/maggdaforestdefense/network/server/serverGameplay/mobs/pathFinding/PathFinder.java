@@ -13,6 +13,8 @@ import java.util.Queue;
 import java.util.Set;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -22,11 +24,14 @@ public class PathFinder {
     private PriorityQueue<PathCell> openList;
     private HashSet<PathCell> closedList;
     private PathCell start, end;
+    private  MapDistanceSet mapDistanceSet;
     
     private GameObjectType mobType;
-    public PathFinder(PathCell start, PathCell end, PathCell[][] map, GameObjectType objectType) {
+    public PathFinder(PathCell start, PathCell end, PathCell[][] map, GameObjectType objectType, MapDistanceSet distanceSet) {
         mobType = objectType;
         
+        mapDistanceSet = distanceSet;
+
         
         //Pathfind
         closedList = new HashSet();
@@ -94,27 +99,26 @@ public class PathFinder {
     
     public double calculateDistance(PathCell c1, PathCell c2) {
         switch(mobType) {
-            case M_BUG:
+            default:
                 double distance = 0;
                 for(PathCell cell: new PathCell[]{c1,c2}) {
                     switch(cell.getCellType()) {
                         case BASE: case DIRT: case UNDEFINED:
-                            distance += 1;
+                            distance += mapDistanceSet.getDirt();
                             break;
                         case WATER:
-                            distance += 20;
+                            distance += mapDistanceSet.getWater();
                             break;
                         case STONE:
-                            distance += 10;
+                            distance += mapDistanceSet.getStone();
                             break;
                         case SAND:
-                            distance += 3;
+                            distance += mapDistanceSet.getSand();
                             break;
                             
                     }
                 }
                 return distance;
         }
-        return 1;
     }
 }

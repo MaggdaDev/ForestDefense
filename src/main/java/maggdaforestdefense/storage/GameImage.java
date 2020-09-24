@@ -25,8 +25,38 @@ public enum GameImage {
     MOB_BUG_2("maggdaforestdefense/mobs/bug2.png"),
     MOB_BUG_3("maggdaforestdefense/mobs/bug3.png"),
     
+    MOB_SCHWIMMKAEFER_1("maggdaforestdefense/mobs/kaefer1.png"),
+    MOB_SCHWIMMKAEFER_2("maggdaforestdefense/mobs/kaefer2.png"),
+    MOB_SCHWIMMKAEFER_3("maggdaforestdefense/mobs/kaefer3.png"),
+    MOB_SCHWIMMKAEFER_4("maggdaforestdefense/mobs/kaefer4.png"),
+    MOB_SCHWIMMKAEFER_5("maggdaforestdefense/mobs/kaefer5.png"),
+    MOB_SCHWIMMKAEFER_6("maggdaforestdefense/mobs/kaefer6.png"),
+    MOB_SCHWIMMKAEFER_7("maggdaforestdefense/mobs/kaefer7.png"),
+    
+    MOB_HIRSCHKAEFER_1("maggdaforestdefense/mobs/hirschkaefer1.png"),
+    MOB_HIRSCHKAEFER_2("maggdaforestdefense/mobs/hirschkaefer2.png"),
+    MOB_HIRSCHKAEFER_3("maggdaforestdefense/mobs/hirschkaefer3.png"),
+    
+    MOB_LAUFKAEFER_1("maggdaforestdefense/mobs/laufkaefer1.png"),
+    MOB_LAUFKAEFER_2("maggdaforestdefense/mobs/laufkaefer2.png"),
+    MOB_LAUFKAEFER_3("maggdaforestdefense/mobs/laufkaefer3.png"),
+    
+    MOB_BLATTLAUS_1("maggdaforestdefense/mobs/blattlaus1.png"),
+    MOB_BLATTLAUS_2("maggdaforestdefense/mobs/blattlaus2.png"),
+    MOB_BLATTLAUS_3("maggdaforestdefense/mobs/blattlaus3.png"),
+
+    
     
     // TOWERS
+    TOWERGROWING_ANIMATION_1("maggdaforestdefense/towers/treeGrowing1.png"),
+    TOWERGROWING_ANIMATION_2("maggdaforestdefense/towers/treeGrowing2.png"),
+    TOWERGROWING_ANIMATION_3("maggdaforestdefense/towers/treeGrowing3.png"),
+    TOWERGROWING_ANIMATION_4("maggdaforestdefense/towers/treeGrowing4.png"),
+    TOWERGROWING_ANIMATION_5("maggdaforestdefense/towers/treeGrowing5.png"),
+    TOWERGROWING_ANIMATION_6("maggdaforestdefense/towers/treeGrowing6.png"),
+    TOWERGROWING_ANIMATION_7("maggdaforestdefense/towers/treeGrowing7.png"),
+    TOWERGROWING_ANIMATION_8("maggdaforestdefense/towers/treeGrowing8.png"),
+    
     TOWER_SPRUCE_1("maggdaforestdefense/towers/spruce1.png"),
     TOWER_SPRUCE_2("maggdaforestdefense/towers/spruce2.png"),
     TOWER_SPRUCE_3("maggdaforestdefense/towers/spruce3.png"),
@@ -49,9 +79,18 @@ public enum GameImage {
     
     //DISPLAY 
     DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),
-    DISPLAY_HEALTH_BAR("maggdaforestdefense/display/health_bar.png"),
+    DISPLAY_HEALTH_BAR_MOB("maggdaforestdefense/display/health_bar_mob.png"),
+    DISPLAY_HEALTH_BAR_TOWER("maggdaforestdefense/display/health_bar_tower.png"),
     COIN_ICON("maggdaforestdefense/display/coin_icon.png"),
-    ESSENCE_ICON("maggdaforestdefense/display/essence_icon.png");
+    ESSENCE_ICON("maggdaforestdefense/display/essence_icon.png"),
+    ESSENCE_BOX("maggdaforestdefense/display/essence_box.png"),
+    ESSENCE_BAR("maggdaforestdefense/display/essence_bar.png"),
+    ESSENCE_BUTTON("maggdaforestdefense/display/essence_button.png"),
+    
+    ESSENCE_ANIMATION_1("maggdaforestdefense/display/essence_animation_1.png"),
+    ESSENCE_ANIMATION_2("maggdaforestdefense/display/essence_animation_2.png"),
+    ESSENCE_ANIMATION_3("maggdaforestdefense/display/essence_animation_3.png"),
+    ESSENCE_ANIMATION_4("maggdaforestdefense/display/essence_animation_4.png");
 
     private Image image;
     

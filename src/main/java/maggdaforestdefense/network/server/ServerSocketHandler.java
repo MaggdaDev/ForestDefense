@@ -30,7 +30,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private BufferedReader input;
     private PrintWriter output;
 
-    private boolean running, isInGame=false;
+    private boolean running;
     
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
@@ -71,9 +71,8 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                if(!isInGame) {
                     update();
-                }
+                
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,6 +111,15 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 int tier = (int)command.getNumArgument("tier");
                 int upgradeType = (int)command.getNumArgument("type");
                 game.buyUpgrade(id, tier, upgradeType);
+                break;
+                
+            case READY_FOR_NEXT_ROUND:
+                owner.setReadyForNextRound(true);
+                break;
+                
+            case REQUEST_ESSENCE_TOWER:
+                
+                game.requestEssence(command.getArgument("id"));
                 break;
         }
         

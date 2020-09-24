@@ -10,6 +10,8 @@ import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower.CanAttackSet;
 import maggdaforestdefense.util.GameMaths;
 
 /**
@@ -22,8 +24,8 @@ public abstract class ConstantFlightProjectile extends Projectile{
     protected int towerRange;
     protected Mob targetMob;
     protected ServerGame serverGame;
-    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce) {
-        super(id, type, hitBox);
+    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce, Tower ownerTower, CanAttackSet attackSet) {
+        super(id, type, hitBox, ownerTower, attackSet);
         targetMob = target;
         towerRange = range;
         totalSpeed = totSpd;
@@ -37,11 +39,16 @@ public abstract class ConstantFlightProjectile extends Projectile{
     }
     
     protected void calculateSpeed(Mob target) {
+        if(target != null) {
         double deltaXMob = target.getXPos() - xPos;
         double deltaYMob = target.getYPos() - yPos;
         double deltaAbs = GameMaths.getAbs(deltaXMob, deltaYMob);
         xSpd = totalSpeed * deltaXMob / deltaAbs;
         ySpd = totalSpeed * deltaYMob / deltaAbs;
+        } else {
+            xSpd = totalSpeed;
+            ySpd = 0;
+        }
 
     }
     
@@ -68,4 +75,6 @@ public abstract class ConstantFlightProjectile extends Projectile{
         }
         return true;
     }
+    
+    
 }

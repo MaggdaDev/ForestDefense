@@ -10,6 +10,12 @@ package language;
  * @author DavidPrivat
  */
 public abstract class Language {
+    // Tower names
+    public String SPRUCE_NAME;
+    
+    
+    // Tower descripition
+    public String SPRUCE_DESCRIPRION;
     
     // Upgrade description
     public  String UPGRADE_DESCRIPTION_SPURCE_1_1;
@@ -33,11 +39,5 @@ public abstract class Language {
     public  String UPGRADE_DESCRIPTION_SPURCE_3_5;
     public  String UPGRADE_DESCRIPTION_SPURCE_3_6;
     
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_1;
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_2;
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_3;
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_4;
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_5;
-    public  String UPGRADE_DESCRIPTION_SPURCE_4_6;
     
 }

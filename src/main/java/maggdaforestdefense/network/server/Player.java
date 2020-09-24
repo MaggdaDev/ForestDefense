@@ -14,10 +14,9 @@ import maggdaforestdefense.network.NetworkCommand;
  */
 public class Player {
 
-    private boolean loopRunning = true;
+
     private ServerSocketHandler commandHandler;
-    
-    private double testCounter = 0;
+    private boolean readyForNextRound = false;
 
     public Player(ServerSocketHandler handler) {
         commandHandler = handler;
@@ -27,6 +26,14 @@ public class Player {
 
     public void sendCommand(NetworkCommand command) {
         commandHandler.sendCommand(command);
+    }
+    
+    public void setReadyForNextRound(boolean b) {
+        readyForNextRound = b;
+    }
+    
+    public boolean isReadyForNextRound() {
+        return readyForNextRound;
     }
 
 }

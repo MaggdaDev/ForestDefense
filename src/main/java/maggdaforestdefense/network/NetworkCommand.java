@@ -17,7 +17,11 @@ public class NetworkCommand {
     // PREDEF COMMANDS
     public static final NetworkCommand REQUIRE_CONNECTION = new NetworkCommand(CommandType.REQUIRE_CONNECTION, EMPTY_ARGS),
             PERMIT_CONNECTION = new NetworkCommand(CommandType.PERMIT_CONNECTION, EMPTY_ARGS),
-            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS);
+            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
+            END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
+            READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS), 
+            WAIR_FOR_READY_NEXT_WAVE = new NetworkCommand(CommandType.WAIT_FOR_READY_NEXT_WAVE, EMPTY_ARGS),
+            WAVE_FINISHED = new NetworkCommand(CommandType.WAVE_FINISHED, EMPTY_ARGS);
 
     //CONSTANTS
     public final static String KEYWORD = "__", SEPARATOR_1 = ";";
@@ -63,6 +67,15 @@ public class NetworkCommand {
     public double getNumArgument(String name) {
         return Double.parseDouble(getArgument(name));
     }
+    
+    public boolean containsArgument(String name) {
+        for(CommandArgument arg: commandArguments) {
+            if(arg.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static NetworkCommand fromString(String string) {
         String[] splitted = string.split(SEPARATOR_1);
@@ -77,6 +90,8 @@ public class NetworkCommand {
         return new NetworkCommand(type, argsArr);
 
     }
+    
+    
 
     public static boolean testForKeyWord(String s) {
         if (s.startsWith(KEYWORD)) {
@@ -93,6 +108,8 @@ public class NetworkCommand {
         START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type
+        READY_FOR_NEXT_ROUND,   // NO ARGS
+        REQUEST_ESSENCE_TOWER,  //id
         
         //  SERVER TO CLIENT
         PERMIT_CONNECTION, // NO ARGS
@@ -102,7 +119,13 @@ public class NetworkCommand {
         UPDATE_GAME_RESSOURCES, // coins, essence
         PLANT_TREE,             //id, type, xIndex, yIndex
         REMOVE_GAME_OBJECT,     //id
-        UPGRADE_BUY_CONFIRMED;  //id, tier, type
+        UPGRADE_BUY_CONFIRMED,  //id, tier, type
+        WAVE_FINISHED,          // NO ARGS
+        TOWER_NEED_ESSENCE,     // id
+        WAIT_FOR_READY_NEXT_WAVE,   // NO ARGS
+        NEXT_WAVE,              //wave
+        DO_ESSENCE_ANIMATION,   // id (of tower)
+        END_GAME;               // NO ARGS
         
     }
 }

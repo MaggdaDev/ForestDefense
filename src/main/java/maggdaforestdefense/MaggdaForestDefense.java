@@ -43,8 +43,6 @@ public class MaggdaForestDefense extends Application {
     //Networks
     private NetworkManager networkManager;
     
-    // Game
-    private Game game;
 
     /**
      * Starts the program/GUI
@@ -94,9 +92,8 @@ public class MaggdaForestDefense extends Application {
         primaryStage.setTitle(
                 "MaggdaForestDefense");
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(false);
-        primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(1000);
+        primaryStage.setMaximized(false);  
+        primaryStage.setMaximized(true);
         primaryStage.show();
         // Main
 
@@ -107,9 +104,9 @@ public class MaggdaForestDefense extends Application {
         // Graphics
         menueManager = new MenuManager(root);
         menueManager.start();
+        
 
         // Game
-        game = new Game();
     }
 
     public void exit() {
@@ -127,6 +124,7 @@ public class MaggdaForestDefense extends Application {
         launch(args);
     }
     
+
     public void addOnSceneResize(ChangeListener<? super Number> l) {
         scene.widthProperty().addListener(l);
         scene.heightProperty().addListener(l);
@@ -137,11 +135,11 @@ public class MaggdaForestDefense extends Application {
     }
     
     public static double getWindowWidth() {
-        return instance.scene.getWidth();
+        return instance.primStage.getWidth();
     }
     
     public static double getWindowHeight() {
-        return instance.scene.getHeight();
+        return instance.primStage.getHeight();
     }
 
 }

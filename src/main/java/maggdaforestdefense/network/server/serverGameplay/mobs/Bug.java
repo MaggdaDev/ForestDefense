@@ -13,20 +13,18 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 
 /**
  *
  * @author DavidPrivat
  */
-public class Bug extends Mob {
+public abstract class Bug extends Mob {
 
-    public final static double DEFAULT_HP = 1;
-    public final static double HIT_BOX_RADIUS = (ClientBug.width + ClientBug.height) / 4;
+    public final static double HIT_BOX_RADIUS = (100 + 100) / 4;
 
-    public final static double DEFAULT_SPEED = 200;
-
-    public Bug(ServerGame game) {
-        super(game, GameObjectType.M_BUG, DEFAULT_HP, DEFAULT_SPEED, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0));
+    public Bug(ServerGame game, double hp, double speed, int towerVisionRange, double damage, double attackTime, MapDistanceSet distanceSet, double armor, MovementType movementType, GameObjectType objectType) {
+        super(game, objectType, hp, speed, new HitBox.CircularHitBox(HIT_BOX_RADIUS, 0, 0), towerVisionRange, damage, attackTime, distanceSet, armor, movementType);
         findStartPos();
     }
 
@@ -34,23 +32,24 @@ public class Bug extends Mob {
     public CommandArgument[] toNetworkCommandArgs() {
         return new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),
             new CommandArgument("y", String.valueOf(yPos)),
-            new CommandArgument("type", String.valueOf(GameObjectType.M_BUG.ordinal())),
-            new CommandArgument("id", String.valueOf(id))};
+            new CommandArgument("type", String.valueOf(gameObjectType.ordinal())),
+            new CommandArgument("hp", healthPoints),
+            new CommandArgument("id", String.valueOf(id)),
+            new CommandArgument("movement", movementType.ordinal())};
     }
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        if (checkAlive()) {
-
-            path.walk(timeElapsed * speed);
-            xPos = path.getCurrentX();
-            yPos = path.getCurrentY();
-            hitBox.updatePos(xPos, yPos);
+        if (updateAlive()) {
+            updateIndexPosition();
+            updateMovement(timeElapsed);
+            updateDamageTarget(timeElapsed);
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
                 new CommandArgument("id", String.valueOf(id)),
                 new CommandArgument("x", String.valueOf(xPos)),
                 new CommandArgument("y", String.valueOf(yPos)),
-                new CommandArgument("hp", String.valueOf(healthPoints))});
+                new CommandArgument("hp", String.valueOf(healthPoints)),
+                new CommandArgument("movement", movementType.ordinal())});
         } else {
             return null;
         }

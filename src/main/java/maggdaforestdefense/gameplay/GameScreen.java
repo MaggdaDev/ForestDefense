@@ -16,9 +16,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
+import javafx.scene.Node;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.gameplay.ingamemenus.EssenceMenu;
 import maggdaforestdefense.gameplay.ingamemenus.SideMenu;
 import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -38,8 +40,12 @@ public class GameScreen extends Group{
 
     private double scrolling = 0, mapXInset = 0, mapYInset = 0;
 
-    private SideMenu sideMenu;
+    private SideMenu rightSideMenu;
+    private EssenceMenu essenceMenu;
 
+    private GameOverOverlay gameOverOverlay;
+    private WaveAnnouncer waveAnnouncer;
+    private ReadyCheckOverlay readyCheckOverlay;
 
     public GameScreen() {
 
@@ -47,13 +53,20 @@ public class GameScreen extends Group{
         gamePlayGroup.setManaged(false);
         
         topOverlay = new TopOverlay(0, 0);
+        gameOverOverlay = new GameOverOverlay();
+        waveAnnouncer = new WaveAnnouncer();
+        readyCheckOverlay = new ReadyCheckOverlay();
         
-        sideMenu = new SideMenu();
-        sideMenu.setVisible(false);
+        rightSideMenu = new SideMenu(true);
+        rightSideMenu.setVisible(false);
         
-        getChildren().addAll(gamePlayGroup, sideMenu, topOverlay);
+        essenceMenu = new EssenceMenu();
+        essenceMenu.setVisible(true);
+        
+        getChildren().addAll(gamePlayGroup, rightSideMenu, essenceMenu, topOverlay, gameOverOverlay, waveAnnouncer, readyCheckOverlay);
         gamePlayGroup.setViewOrder(3);
-        sideMenu.setViewOrder(2);
+        rightSideMenu.setViewOrder(2);
+        essenceMenu.setViewOrder(2);
         topOverlay.setViewOrder(1);
 
         setManaged(false);
@@ -122,6 +135,15 @@ public class GameScreen extends Group{
             }
         });
     }
+    
+    public void announceWave(int wave) {
+        waveAnnouncer.nextWave(wave);
+    }
+    
+    public void doEssenceAnimtionTo(ClientTower tower) {
+        gamePlayGroup.getChildren().add(new EssenceAnimation(map.getBaseXIndex(), map.getBaseYIndex(), tower));
+        tower.hideEssenceButton();
+    }
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
@@ -132,6 +154,9 @@ public class GameScreen extends Group{
     void removeGameObject(ClientGameObject remove) {
         if (gamePlayGroup.getChildren().contains(remove)) {
             gamePlayGroup.getChildren().remove(remove);
+        }
+        if(remove instanceof ClientTower) {
+            removeTower((ClientTower)remove);
         }
         remove.onRemove();
     }
@@ -144,6 +169,19 @@ public class GameScreen extends Group{
         gamePlayGroup.setLayoutX(mapXInset);
         gamePlayGroup.setLayoutY(mapYInset);
     }
+    
+    public void showGameOverOverlay() {
+        
+        gameOverOverlay.startAnimation();
+    }
+    
+    public void showReadyCheck() {
+        readyCheckOverlay.startAnimation();
+    }
+    
+    public void hideReadyCheck() {
+        readyCheckOverlay.back();
+    }
 
     public void generateMap(ClientMapCell[][] mapCellArray) {
         map = new ClientMap(mapCellArray);
@@ -153,14 +191,19 @@ public class GameScreen extends Group{
     }
 
     public void setNewContentSideMenu(Parent p) {
-        sideMenu.setContent(p);
-        sideMenu.show();
-        sideMenu.setVisible(true);
+        rightSideMenu.setContent(p);
+        rightSideMenu.show();
+        rightSideMenu.setVisible(true);
     }
 
     void addTower(ClientTower tree) {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.plantTree(tree);
+    }
+    
+    public void removeTower(ClientTower tree) {
+        ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
+        cell.removeTree(tree);
     }
 
     public Group getGamePlayGroup() {
@@ -171,9 +214,25 @@ public class GameScreen extends Group{
         return topOverlay;
     }
     
-    public SideMenu getSideMenu() {
-        return sideMenu;
+    public EssenceMenu getEssenceMenu() {
+        return essenceMenu;
     }
+    
+    public SideMenu getSideMenu() {
+        return rightSideMenu;
+    }
+    
+    public ClientMap getMap() {
+        return map;
+    }
+    
+    public void safeRemoveGameplayNode(Node node) {
+        if(gamePlayGroup.getChildren().contains(node)) {
+            gamePlayGroup.getChildren().remove(node);
+        }
+    }
+
+    
     
     
 

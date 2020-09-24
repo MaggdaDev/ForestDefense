@@ -25,13 +25,17 @@ public class NetworkManager {
     public void update() {
         commandHandler.handleInput();
     }
+    
+    public void resetCommandHandler() {
+        commandHandler.reset();
+    }
 
     public void connect() {
         synchronized (this) {
             serverConnection = new ServerConnection();
             sendCommand(NetworkCommand.REQUIRE_CONNECTION);
             commandHandler = new ClientCommandHandler(serverConnection.getInput());
-            commandHandler.start();
+        commandHandler.start();
             try {
                 wait();     // FOR ANSWER
             } catch (Exception e) {

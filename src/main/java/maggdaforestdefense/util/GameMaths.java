@@ -37,4 +37,12 @@ public class GameMaths {
         }
         return radToDegrees(radToX + 0.5*Math.PI);
     }
+    
+    public static boolean isInSquareRange(double x1, double y1, double x2, double y2, double range) {
+        if(Math.abs(x1 - x2) <= range && Math.abs(y1 - y2) <= range) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

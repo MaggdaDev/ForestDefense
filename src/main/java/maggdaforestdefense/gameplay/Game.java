@@ -22,6 +22,7 @@ import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -29,8 +30,9 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class Game {
+
     public static Language language = new Deutsch();
-    
+
     private GameLoop gameLoop;
     private boolean isInGame;
     private GameScreen gameScreen;
@@ -39,8 +41,8 @@ public class Game {
     private static Game instance;
 
     private Vector<KeyEventHandler> keyEventHandlers;
-    
-    private int essence = 0, coins = 0;
+
+    private int essence = 0, coins = 0, maxEssence = 0;
 
     public Game() {
         instance = this;
@@ -52,9 +54,18 @@ public class Game {
 
     }
 
+    public static void createGame() {
+        instance = new Game();
+        instance.startGame();
+    }
+
     public void startGame() {
+        gameScreen = new GameScreen();
+        gameObjects = new HashMap<>();
         isInGame = true;
+        NetworkManager.getInstance().resetCommandHandler();
         NetworkManager.getInstance().setInGame(true);
+
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
         NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
@@ -64,6 +75,15 @@ public class Game {
             handleKeyEvent(event.getCode());
         });
 
+    }
+
+    public void endGame(NetworkCommand command) {
+        gameLoop.stop();
+        gameLoop.setGameRunning(false);
+        gameScreen.showGameOverOverlay();
+
+        Logger.logClient("GAMEOVER");
+        NetworkManager.getInstance().resetCommandHandler();
     }
 
     // General
@@ -109,35 +129,69 @@ public class Game {
 
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
+        if (gObj != null) {
             gObj.update(command);
+        }
     }
-    
- 
+
     public void plantTree(NetworkCommand command) {
         ClientTower tree = (ClientTower) GameObject.generateClientGameObject(command);
         gameObjects.put(String.valueOf(tree.getGameObjectId()), tree);
 
         gameScreen.addTower(tree);
     }
-       public void updateRessources(NetworkCommand command) {
-        coins = (int)command.getNumArgument("coins");
-        essence = (int)command.getNumArgument("essence");
-        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence);
+
+    public void updateRessources(NetworkCommand command) {
+        coins = (int) command.getNumArgument("coins");
+        essence = (int) command.getNumArgument("essence");
+        maxEssence = (int) command.getNumArgument("maxEssence");
+
+        gameScreen.getTopOverlay().updateRessourceDisplays(coins, essence, maxEssence);
+        gameScreen.getEssenceMenu().updateEssenceLevel(essence, maxEssence);
         gameScreen.getSideMenu().updateCoins(coins);
     }
 
     public void buyUpgrade(NetworkCommand command) {
         String id = command.getArgument("id");
-        int tier = (int)command.getNumArgument("tier");
-        int type = (int)command.getNumArgument("type");
-        
+        int tier = (int) command.getNumArgument("tier");
+        int type = (int) command.getNumArgument("type");
+
         ClientTower tower = (ClientTower) gameObjects.get(id);
         tower.buyUpgrade(tier, type);
     }
     
+    public void announceWave(NetworkCommand command) {
+        int wave = (int)command.getNumArgument("wave");
+        gameScreen.hideReadyCheck();
+        gameScreen.announceWave(wave);
+    }
+    
+    public void doEssenceAnimtion(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ClientTower tower = (ClientTower)gameObjects.get(id);
+        gameScreen.doEssenceAnimtionTo(tower);
+    }
+    
+    public void readyCheck() {
+        gameScreen.showReadyCheck();
+    }
+
     public int getCoins() {
         return coins;
     }
 
+    public void essenceAnimationFinished(EssenceAnimation animation, ClientTower tower) {
+        gameScreen.getGamePlayGroup().getChildren().remove(animation);
+        tower.doReceiveEssenceAnimation();
+    }
+
+    public void waveFinished() {
+        
+    }
+
+    public void towerNeedEssence(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientTower)gameObjects.get(id)).essenceNeeded();
+    }
 
 }

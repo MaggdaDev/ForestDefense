@@ -7,6 +7,7 @@ package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -35,6 +36,15 @@ public class ClientMap extends Group {
 
     public ClientMapCell[][] getCells() {
         return cells;
+    }
+    
+    public int getBaseXIndex() {
+
+        return (int)(cells.length / 2);
+    }
+    
+    public int getBaseYIndex() {
+        return (int)(cells[0].length /2);
     }
 
     public double getHeight() {

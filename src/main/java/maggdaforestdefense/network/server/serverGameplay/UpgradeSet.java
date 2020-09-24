@@ -32,13 +32,6 @@ public enum UpgradeSet {
             Upgrade.SPRUCE_3_4,
             Upgrade.SPRUCE_3_5,
             Upgrade.SPRUCE_3_6
-        }, new Upgrade[]{
-            Upgrade.SPRUCE_4_1,
-            Upgrade.SPRUCE_4_2,
-            Upgrade.SPRUCE_4_3,
-            Upgrade.SPRUCE_4_4,
-            Upgrade.SPRUCE_4_5,
-            Upgrade.SPRUCE_4_6
         }});
 
     private Upgrade[][] upgrades;

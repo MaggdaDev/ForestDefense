@@ -12,7 +12,9 @@ import maggdaforestdefense.network.client.NetworkManager;
  *
  * @author David
  */
-public class GameLoop extends AnimationTimer{
+public class GameLoop extends AnimationTimer {
+
+    private boolean gameRunning = true;
 
     public GameLoop() {
 
@@ -20,9 +22,13 @@ public class GameLoop extends AnimationTimer{
 
     @Override
     public void handle(long now) {
-        NetworkManager.getInstance().update();
+        if (gameRunning) {
+            NetworkManager.getInstance().update();
+        } 
     }
     
-   
-    
+    public void setGameRunning(boolean b) {
+        gameRunning = b;
+    }
+
 }

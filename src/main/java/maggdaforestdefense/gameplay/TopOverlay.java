@@ -15,13 +15,14 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class TopOverlay extends HBox{
-    private RessourceDisplay coinsDisplay, essenceDisplay;
+    private RessourceDisplay coinsDisplay;
+    private RessourceDisplay.EssenceDisplay essenceDisplay;
     
     
     public TopOverlay(int startCoins, int startEssence) {
         coinsDisplay = new RessourceDisplay(GameImage.COIN_ICON, startCoins);
         
-        essenceDisplay = new RessourceDisplay(GameImage.ESSENCE_ICON, startEssence);
+        essenceDisplay = new RessourceDisplay.EssenceDisplay(GameImage.ESSENCE_ICON, startEssence, startEssence);
         
         setSpacing(200);
         setAlignment(Pos.CENTER);
@@ -30,8 +31,9 @@ public class TopOverlay extends HBox{
         getChildren().addAll(coinsDisplay, essenceDisplay);
     }
     
-    public void updateRessourceDisplays(int coins, int essence) {
+    public void updateRessourceDisplays(int coins, int essence, int maxEssence) {
         coinsDisplay.setValue(coins);
         essenceDisplay.setValue(essence);
+        essenceDisplay.setMaxEssence(maxEssence);
     }
 }

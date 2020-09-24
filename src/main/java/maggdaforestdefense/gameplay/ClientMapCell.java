@@ -18,6 +18,7 @@ import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Exceptions;
 
 /**
@@ -33,16 +34,15 @@ public class ClientMapCell extends StackPane {
     private PlantMenu plantMenu;
 
     private ClientTower currentTower = null;
-    
-    private MENU_STATE menuState = MENU_STATE.PLANT_MENU;
 
+    private MENU_STATE menuState = MENU_STATE.PLANT_MENU;
 
     public ClientMapCell(MapCell.CellType type, int xIndex, int yIndex) {
         cellType = type;
         imageView = new ImageView(type.getImage());
         imageView.setFitHeight(MapCell.CELL_SIZE);
         imageView.setFitWidth(MapCell.CELL_SIZE);
-
+        
         getChildren().add(imageView);
 
         setLayoutX((((double) (xIndex)) + 0.0d) * MapCell.CELL_SIZE);
@@ -59,11 +59,9 @@ public class ClientMapCell extends StackPane {
             PlayerInputHandler.getInstance().mapCellClicked(this);
             SelectionClickedSquare.getInstance().addToMapCell(this);
         });
-        
 
         plantMenu = new PlantMenu(type, xIndex, yIndex);
 
- 
     }
 
     public void addSelectionSquare() {
@@ -75,14 +73,14 @@ public class ClientMapCell extends StackPane {
 
     public void addSelectionClickedSquare() {
         isSelectionClickedSquare = true;
-        if(!getChildren().contains(SelectionClickedSquare.getInstance())) {
+        if (!getChildren().contains(SelectionClickedSquare.getInstance())) {
             getChildren().add(SelectionClickedSquare.getInstance());
         }
     }
-    
+
     public void removeSelectionClickedSquare() {
         isSelectionClickedSquare = false;
-        if(getChildren().contains(SelectionClickedSquare.getInstance())) {
+        if (getChildren().contains(SelectionClickedSquare.getInstance())) {
             getChildren().remove(SelectionClickedSquare.getInstance());
         }
     }
@@ -95,11 +93,14 @@ public class ClientMapCell extends StackPane {
     }
 
     public Parent getMenu() {
-        switch(menuState) {
+        switch (menuState) {
             case PLANT_MENU:
+                plantMenu.setBuyTreeBox(null);
                 return plantMenu;
             case UPGRADE_MENU:
                 return currentTower.getUpgradeMenu();
+            case GROWING_WAITING_MENU:
+                return currentTower.getGrowingWaitingMenu();
             default:
                 throw new UnsupportedOperationException();
         }
@@ -113,14 +114,24 @@ public class ClientMapCell extends StackPane {
             }
             getChildren().add(tree);
             currentTower = tree;
-            menuState = MENU_STATE.UPGRADE_MENU;
-            
-            if(isSelectionClickedSquare) {
+            menuState = MENU_STATE.GROWING_WAITING_MENU;
+
+            if (isSelectionClickedSquare) {
                 PlayerInputHandler.getInstance().mapCellClicked(this);
             }
 
         } catch (Exceptions.MultipleTowersOnCellException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeTree(ClientTower tree) {
+        if (getChildren().contains(tree)) {
+            isPlanted = false;
+            currentTower = null;
+            getChildren().remove(tree);
+            menuState = MENU_STATE.PLANT_MENU;
+            PlayerInputHandler.getInstance().mapCellClicked(this);
         }
     }
 
@@ -135,9 +146,17 @@ public class ClientMapCell extends StackPane {
         return false;
 
     }
-    
+
+    public void notifyTreeMature() {
+        menuState = MENU_STATE.UPGRADE_MENU;
+        if (isSelectionClickedSquare) {
+            PlayerInputHandler.getInstance().mapCellClicked(this);
+        }
+    }
+
     public static enum MENU_STATE {
         PLANT_MENU,
+        GROWING_WAITING_MENU,
         UPGRADE_MENU;
     }
 }

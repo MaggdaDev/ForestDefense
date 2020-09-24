@@ -178,6 +178,10 @@ public class UpgradeMenu extends VBox{
         }
     }
     
+    public String getTreeName() {
+        return treeNameLabel.getText();
+    }
+    
     public void updateCoins(double coins) {
         boxes.forEach((UpgradeButtonTierBox box)->{
             box.updateCoins(coins);

@@ -5,7 +5,7 @@ RUN gradle build --no-daemon && tar -xf /home/gradle/src/build/distributions/For
 
 FROM openjdk:8-jre-slim
 
-EXPOSE 8080
+EXPOSE 27767
 
 RUN mkdir /app
 

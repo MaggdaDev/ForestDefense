@@ -18,7 +18,7 @@ import java.net.Socket;
  */
 public class Server {
 
-    public final static int PORT = 26656;
+    public final static int PORT = 27757;
 
     private ObservableList<Player> playerList;
     private SocketAcceptor acceptor;

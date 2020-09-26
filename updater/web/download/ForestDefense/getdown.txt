@@ -1,0 +1,17 @@
+# The URL from which the client is downloaded
+appbase = https://forestdefense.minortom.net/updater/ForestDefense/
+# UI Configuration
+ui.name = Forest Defense
+ui.background = FFFFFF
+#ui.error_background = FF0000
+#ui.progress = 10, 100, 400, 50
+#ui.progress_text = 000000
+#ui.progress_bar = 0000FF
+ui.progress = 17, 321, 458, 23
+ui.progress_bar = 336600
+##ui.progress_bar = 45ba0e
+##ui.progress_text = 000000
+ui.progress_text = FFFFFF
+#ui.status = 57, 245, 373, 68
+ui.status = 17, 245, 458, 68
+ui.status_text = 000000

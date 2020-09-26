@@ -124,8 +124,6 @@ public class MaggdaForestDefense extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Logger.logClient("AJAJJAJJAJJAJAJAJJAJAJAJJA");
-        Logger.logClient(args[0]);
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
         //System.setProperty("java.library.path", "natives");
         Logger.logClient("Java version: " + System.getProperty("java.version"));
@@ -173,6 +171,10 @@ public class MaggdaForestDefense extends Application {
     
     public static boolean isServer() {
         return isServer;
+    }
+    
+    public static boolean isDev() {
+        return isDev;
     }
 
 }

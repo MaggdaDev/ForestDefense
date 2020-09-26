@@ -18,14 +18,18 @@ import java.net.Socket;
  * @author David
  */
 public class ServerConnection {
-
+    public static String SERVER_IP = "192.168.2.109";
+    
     private Socket socket;
     private BufferedReader input;
     private PrintWriter output;
 
     public ServerConnection() {
+        if(maggdaforestdefense.MaggdaForestDefense.isDev()) {
+            SERVER_IP = "localhost";
+        }
         try {
-            socket = new Socket("localhost", Server.PORT);
+            socket = new Socket(SERVER_IP, Server.PORT);
 
             Logger.logClient("Socket: " + socket.toString());
             Logger.logClient("Used Port to create Socket: " + socket.getLocalPort());

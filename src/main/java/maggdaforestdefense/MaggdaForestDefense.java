@@ -170,5 +170,9 @@ public class MaggdaForestDefense extends Application {
     public static double getWindowHeight() {
         return instance.primStage.getHeight();
     }
+    
+    public static boolean isServer() {
+        return isServer;
+    }
 
 }

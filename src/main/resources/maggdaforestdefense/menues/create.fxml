@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import maggdaforestdefense.menues.CreateGameMenu?>
+<CreateGameMenu xmlns="http://javafx.com/javafx"
+                xmlns:fx="http://javafx.com/fxml"
+                fx:controller="maggdaforestdefense.menues.CreateGameMenu"
+                alignment="CENTER_LEFT" spacing="10">
+    <padding>
+        <Insets bottom="10" left="10" top="10" right="10" />
+    </padding>
+
+    <VBox spacing="10">
+        <padding>
+            <Insets bottom="10" left="10" top="10" right="10" />
+        </padding>
+        <TextField fx:id="playerAmountTF"/>
+        
+        <Separator />
+
+        <HBox spacing="10">
+            <padding>
+                <Insets bottom="10" left="10" top="10" right="10" />
+            </padding>
+            <Button fx:id="backBtn" text="back" onAction="#backBtnOnClick"/>
+            <Button fx:id="okBtn" text="ok" onAction="#okBtnOnClick"/>
+        </HBox>
+
+    </VBox>
+
+</CreateGameMenu>

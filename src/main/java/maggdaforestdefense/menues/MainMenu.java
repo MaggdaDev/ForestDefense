@@ -49,7 +49,8 @@ public class MainMenu extends VBox {
     }
 
     @FXML private void playBtnOnClick(ActionEvent e) {
-        Game.createGame();
+        //Game.createGame();
+        MenuManager.getInstance().setScreenShown(MenuManager.Screen.PLAY);
     }
 
     @FXML private void settingsBtnOnClick(ActionEvent e) {

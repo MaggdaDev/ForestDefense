@@ -9,7 +9,7 @@ RUN cd updater/ && ./build-docker.sh
 
 FROM adoptopenjdk:11-jdk-openj9
 
-EXPOSE 27767
+EXPOSE 27757
 
 RUN mkdir /app
 

@@ -18,7 +18,7 @@ import java.net.Socket;
  * @author David
  */
 public class ServerConnection {
-    public static String SERVER_IP = "192.168.2.109";
+    public static String SERVER_IP = "vs5.minortom.net";
     
     private Socket socket;
     private BufferedReader input;

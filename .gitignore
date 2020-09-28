@@ -4,6 +4,8 @@ natives/
 natives2/
 updater/tmp
 updater/packedresources
+gradle.properties
+gradleDEV.properties
 
 
 !updater/getdown-core-1.8.6.jar

@@ -20,7 +20,7 @@ import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.storage.Logger;
 
-public class MainMenu extends VBox {
+public class MainMenu extends VBox{
     private FXMLLoader loader;
 
     @FXML private Button playBtn;
@@ -32,12 +32,9 @@ public class MainMenu extends VBox {
     @FXML private Text emailTxt;
 
     
-    public MainMenu() {
-        Logger.debugClient("FXML loading works");
-    }
+   
 
     public void initialize() {
-        Logger.debugClient("FXML loading actually works");
         setPadding(new Insets(10, 10, 10, 10));
         userNameTxt.setText(ConfigurationManager.getConfig().getAuth().getUserName());
         if (ConfigurationManager.getConfig().getAuth().getMwUser().getEmail().equals("")) {

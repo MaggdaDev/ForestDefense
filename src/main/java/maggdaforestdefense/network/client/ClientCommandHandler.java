@@ -24,14 +24,12 @@ import sun.rmi.runtime.Log;
  */
 public class ClientCommandHandler extends Thread {
 
-    private BufferedReader input;
     private LinkedBlockingQueue<NetworkCommand> queue;
     private LinkedList<NetworkCommand> workingQueue;
 
     private boolean isInGame = false, running = true;
 
-    public ClientCommandHandler(BufferedReader in) {
-        input = in;
+    public ClientCommandHandler() {
         queue = new LinkedBlockingQueue<>();
         workingQueue = new LinkedList();
 
@@ -39,18 +37,18 @@ public class ClientCommandHandler extends Thread {
 
     @Override
     public void run() {
-        String line = "";
-        try {
-            while ((line = input.readLine()) != null && running) {
-                if (NetworkCommand.testForKeyWord(line)) {
-                    queue.add(NetworkCommand.fromString(line));
-                }
-                if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
-                    handleInput();
-                }
+        while(true) {
+            if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
+                handleInput();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+    }
+
+    public void onMessage(String message) {
+        if (NetworkCommand.testForKeyWord(message)) {
+            queue.add(NetworkCommand.fromString(message));
+        } else {
+            Logger.errClient("Received an invalid message from the server (KeywordNotFound): " + message);
         }
     }
 
@@ -67,7 +65,6 @@ public class ClientCommandHandler extends Thread {
         queue.drainTo(workingQueue);
         while (workingQueue.size() != 0) {
             handleCommand(workingQueue.removeFirst());
-
         }
 
     }
@@ -77,7 +74,7 @@ public class ClientCommandHandler extends Thread {
 
         switch (command.getCommandType()) {
             case PERMIT_CONNECTION:
-                NetworkManager.getInstance().notifyForAnswer();
+                NetworkManager.getInstance().onReady(false);
                 break;
             case SHOW_MAP:
                 ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));

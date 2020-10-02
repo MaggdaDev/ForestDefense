@@ -19,6 +19,9 @@ import java.net.Socket;
 public class Server {
 
     public final static int PORT = 27757;
+    public final static int WS_PORT = 27756;
+    public final static String WS_FILENAME = "api/gamesocket/";
+    public final static String WS_URL = "wss://forestdefense.minortom.net/";
 
     private ObservableList<Player> playerList;
     private SocketAcceptor acceptor;

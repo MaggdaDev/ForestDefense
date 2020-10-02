@@ -25,7 +25,7 @@ public class LaunchingScreen extends StackPane{
     public void start() {
         // Connect to server
         textLabel.setText("Connecting to server...");
-        NetworkManager.getInstance().connect();
+        NetworkManager.getInstance().startConnection();
         textLabel.setText("Connected!");
         
         // Finished!

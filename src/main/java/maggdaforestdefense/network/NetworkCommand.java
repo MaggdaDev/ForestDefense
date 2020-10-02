@@ -128,4 +128,11 @@ public class NetworkCommand {
         END_GAME;               // NO ARGS
         
     }
+
+    public static enum CommandArguments {
+        // REQUIRE_CONNECTION
+        AUTH,
+        // PERMIT_CONNECTION
+        IS_AUTHENTICATED;
+    }
 }

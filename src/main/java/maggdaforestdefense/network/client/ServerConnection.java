@@ -39,8 +39,10 @@ public class ServerConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
-    
+
     public BufferedReader getInput() {
         return input;
     }

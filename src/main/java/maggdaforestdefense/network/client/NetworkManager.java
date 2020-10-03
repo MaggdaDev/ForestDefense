@@ -52,14 +52,14 @@ public class NetworkManager extends WebSocketClient {
        try {
            waitLatch.await();
        } catch (InterruptedException e) {
-           Logger.errClient("Connection failed", e);
+           Logger.debugClient("Connection failed: " + e.getMessage());
        }
    }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         Logger.debugClient("Connected!");
-        sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument(NetworkCommand.CommandArguments.AUTH.toString(), new Gson().toJson(ConfigurationManager.getConfig().getAuth()))}));
+        sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("auth", new Gson().toJson(ConfigurationManager.getConfig().getAuth()))}));
         commandHandler.start();
     }
 

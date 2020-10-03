@@ -7,10 +7,16 @@ package maggdaforestdefense.network.server;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.storage.Logger;
+import org.java_websocket.WebSocket;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  *
@@ -23,7 +29,7 @@ public class Server {
     public final static String WS_FILENAME = "api/gamesocket/";
     public final static String WS_URL = "wss://forestdefense.minortom.net/";
 
-    private ObservableList<Player> playerList;
+    private ObservableMap<Integer, Player> playerList;
     private SocketAcceptor acceptor;
 
     private GameHandler gameHandler;
@@ -31,28 +37,59 @@ public class Server {
 
     public Server() throws IOException {
         instance = this;
-        playerList = FXCollections.observableArrayList();
+        playerList = FXCollections.observableHashMap();
 
-        acceptor = new SocketAcceptor();
-        
+        acceptor = new SocketAcceptor(new InetSocketAddress("localhost", Server.WS_PORT));
+
         gameHandler = new GameHandler();
 
-        Thread thread = new Thread(acceptor);
-        thread.start();
+        acceptor.start();
 
     }
 
-    public void addNewSocket(Socket socket) {
+    public void addNewSocket(WebSocket conn) {
         ServerSocketHandler addSocketHandler;
-        try {
-            addSocketHandler = new ServerSocketHandler(socket);
-            Player player = new Player(addSocketHandler);
-            playerList.add(player);
-            
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        addSocketHandler = new ServerSocketHandler(conn);
+        Player player = new Player(addSocketHandler, playerList.size());
+        playerList.put(player.getID(), player);
+        conn.setAttachment(player.getID());
+    }
 
+    public void handleMessage(WebSocket conn, String message) {
+        if(conn.getAttachment()!=null) {
+            if(playerList.get(conn.getAttachment())!=null) {
+                playerList.get(conn.getAttachment()).handleMessage(conn, message);
+            } else {
+                Logger.logServer("Received a message from an unknown player! " + message);
+            }
+        } else {
+            Logger.logServer("Received a message from an unknown client! " + message);
+        }
+    }
+
+    public void handleException(WebSocket conn, Exception e) {
+        if(conn.getAttachment()!=null) {
+            if(playerList.get(conn.getAttachment())!=null) {
+                playerList.get(conn.getAttachment()).handleException(conn, e);
+            } else {
+                Logger.logServer("Received an exception from an unknown player! " + e.getMessage());
+            }
+        } else {
+            Logger.logServer("Received an exception from an unknown client! " + e.getMessage());
+        }
+    }
+
+    public void handleDisconnect(WebSocket conn, int code, String reason) {
+        if(conn.getAttachment()!=null) {
+            if(playerList.get(conn.getAttachment())!=null) {
+                playerList.get(conn.getAttachment()).handleDisconnect(conn, code, reason);
+                playerList.remove(conn.getAttachment());
+            } else {
+                Logger.logServer("Received a disconnect from an unknown player! ");
+            }
+        } else {
+            Logger.logServer("Received a disconnect from an unknown client! ");
+        }
     }
 
     public void addGame(ServerGame game) {

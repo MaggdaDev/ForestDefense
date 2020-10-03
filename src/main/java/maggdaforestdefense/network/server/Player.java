@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server;
 
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import org.java_websocket.WebSocket;
 
 /**
  *
@@ -18,7 +19,10 @@ public class Player {
     private ServerSocketHandler commandHandler;
     private boolean readyForNextRound = false;
 
-    public Player(ServerSocketHandler handler) {
+    private int id;
+
+    public Player(ServerSocketHandler handler, int id) {
+        this.id = id;
         commandHandler = handler;
         handler.setOwner(this);
         new Thread(commandHandler).start();
@@ -36,4 +40,19 @@ public class Player {
         return readyForNextRound;
     }
 
+    public void handleMessage(WebSocket conn, String message) {
+        commandHandler.handleMessage(conn, message);
+    }
+
+    public void handleException(WebSocket conn, Exception e) {
+        commandHandler.handleException(conn, e, true);
+    }
+
+    public void handleDisconnect(WebSocket conn, int code, String reason) {
+        commandHandler.stop();
+    }
+
+    public int getID() {
+        return id;
+    }
 }

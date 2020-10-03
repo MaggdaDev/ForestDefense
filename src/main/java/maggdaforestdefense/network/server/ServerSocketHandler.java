@@ -5,19 +5,19 @@
  */
 package maggdaforestdefense.network.server;
 
+import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.Logger;
+import org.java_websocket.WebSocket;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 
 /**
  *
@@ -25,12 +25,10 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
  */
 public class ServerSocketHandler implements Runnable, Stoppable {
 
-    private Socket socket;
+    private WebSocket conn;
     //private BufferedReader input;
     private BufferedReader input;
     private PrintWriter output;
-
-    private boolean running;
     
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
@@ -38,51 +36,49 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     
     private ServerGame game;
 
-    public ServerSocketHandler(Socket socket) throws IOException {
+    public ServerSocketHandler(WebSocket conn) {
         
-        this.socket = socket;
-
-        // input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        output = new PrintWriter(socket.getOutputStream(), true);
+        this.conn = conn;
         
         // Queues
         queue = new LinkedBlockingQueue();
         workingList = new LinkedList();
 
-        System.out.println("[SERVER] New ServerSocketHandler generated");
-        
-        
+        Logger.debugServer("New ServerSocketHandler created");
     }
 
     @Override
     public void run() {
-        running = true;
-        String inputLine = "";
-        try {
-            System.out.println("[SERVER] Now reading");
-            while (running && (inputLine = input.readLine()) != null) {
-                    Logger.logServer("Line read: " + inputLine);
-
-                try {
-                    if(NetworkCommand.testForKeyWord(inputLine)) {
-                        queue.add(NetworkCommand.fromString(inputLine));
-                    }
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                    update();
-                
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        while(true) {
+            update();
         }
     }
-    
+
+    public void handleMessage(WebSocket conn, String message) {
+        if(NetworkCommand.testForKeyWord(message)) {
+            queue.add(NetworkCommand.fromString(message));
+        } else {
+            Logger.errServer("Received an invalid command.");
+            sendCommand(new NetworkCommand(NetworkCommand.CommandType.INVALID_MESSAGE, NetworkCommand.EMPTY_ARGS));
+        }
+    }
+
+    public void handleException(WebSocket conn, Exception e, boolean isWs) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("name", e.getMessage()), new CommandArgument("stack", sw.toString())}));
+    }
+
     public void update() {
         queue.drainTo(workingList);
         while(workingList.size() != 0) {
-            handleCommand(workingList.poll());
+            try {
+                handleCommand(workingList.poll());
+            } catch (Exception e) {
+                Logger.errServer("Exception while handling a command", e);
+                handleException(conn, e, false);
+            }
         }
     }
     
@@ -126,18 +122,13 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
     
     public void sendCommand(NetworkCommand command) {
-        //Logger.logServer("Command sent: " + command.toString());
-        output.println(command.toString());
+        Logger.debugServer("Command sent: " + command.toString());
+        conn.send(command.toString());
     }
 
     @Override
     public void stop() {
-        running = false;
-        try {
-            input.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+
     }
     
     public void setOwner(Player o) {

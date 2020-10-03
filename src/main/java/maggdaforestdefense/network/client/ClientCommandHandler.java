@@ -64,9 +64,12 @@ public class ClientCommandHandler extends Thread {
     public void handleInput() {
         queue.drainTo(workingQueue);
         while (workingQueue.size() != 0) {
-            handleCommand(workingQueue.removeFirst());
+            try {
+                handleCommand(workingQueue.removeFirst());
+            } catch (Exception e) {
+                Logger.errClient("Exception while handling a command", e);
+            }
         }
-
     }
 
     private void handleCommand(NetworkCommand command) {

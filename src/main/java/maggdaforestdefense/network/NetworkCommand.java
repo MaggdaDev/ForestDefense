@@ -104,7 +104,7 @@ public class NetworkCommand {
     public static enum CommandType {
 
         //  CLIENT TO SERVER
-        REQUIRE_CONNECTION, // NO ARGS
+        REQUIRE_CONNECTION, // auth
         START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type
@@ -113,6 +113,8 @@ public class NetworkCommand {
         
         //  SERVER TO CLIENT
         PERMIT_CONNECTION, // NO ARGS
+        INVALID_MESSAGE, // NO ARGS      The message sent by the client is invalid, will disconnect
+        HANDLE_EXCEPTION, // name, stack
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
@@ -127,12 +129,5 @@ public class NetworkCommand {
         DO_ESSENCE_ANIMATION,   // id (of tower)
         END_GAME;               // NO ARGS
         
-    }
-
-    public static enum CommandArguments {
-        // REQUIRE_CONNECTION
-        AUTH,
-        // PERMIT_CONNECTION
-        IS_AUTHENTICATED;
     }
 }

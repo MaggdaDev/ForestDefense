@@ -77,7 +77,7 @@ public class ClientCommandHandler extends Thread {
 
         switch (command.getCommandType()) {
             case PERMIT_CONNECTION:
-                NetworkManager.getInstance().onReady(false);
+                NetworkManager.getInstance().onReady(Boolean.parseBoolean(command.getArgument("auth_ok")));
                 break;
             case SHOW_MAP:
                 ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));

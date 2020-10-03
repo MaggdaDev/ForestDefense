@@ -5,6 +5,11 @@
  */
 package maggdaforestdefense.network.server;
 
+import com.google.gson.Gson;
+import maggdaforestdefense.auth.AuthWindow;
+import maggdaforestdefense.auth.Credentials;
+import maggdaforestdefense.auth.MWUser;
+import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -86,7 +91,31 @@ public class ServerSocketHandler implements Runnable, Stoppable {
         //Logger.logServer("Command handled: " + command);
         switch(command.getCommandType()) {
             case REQUIRE_CONNECTION:
-                sendCommand(NetworkCommand.PERMIT_CONNECTION);
+                Credentials credentials = new Gson().fromJson(command.getArgument("auth"), Credentials.class);
+                boolean anonymous = true;
+                String userId = "";
+                String userName = "";
+                if(credentials.isSignedIn()) {
+                    MWUser user = AuthWindow.getUserFromToken(credentials.getAuthToken());
+                    anonymous = false;
+                    userId = user.getUsername() + "@wiki.minortom.net";
+                    userName = user.getUsername();
+                } else if (credentials.getUserName().startsWith("Anonymous")&&credentials.getMwUser().getUsername().equals("Anonymous")) {
+                    anonymous = true;
+                    userId = "Anonymous@forestdefense.minortom.net";
+                    userName = credentials.getUserName();
+                } else {
+                    userId = null;
+                }
+                if(userId==null) {
+                    sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(false))}));
+                    conn.close(); // TODO: Find a better way to close a connection
+                } else {
+                    sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(true))}));
+                    owner.setUserId(userId);
+                    owner.setUserName(userName);
+                    owner.setAnonymous(!credentials.isSignedIn());
+                }
                 break;
             case START_GAME:
                 game = new ServerGame(owner);

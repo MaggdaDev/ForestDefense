@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network;
 
+import com.google.gson.Gson;
 import maggdaforestdefense.util.Exceptions;
 
 /**
@@ -15,8 +16,7 @@ public class NetworkCommand {
 
     public static final CommandArgument[] EMPTY_ARGS = new CommandArgument[]{};
     // PREDEF COMMANDS
-    public static final NetworkCommand REQUIRE_CONNECTION = new NetworkCommand(CommandType.REQUIRE_CONNECTION, EMPTY_ARGS),
-            PERMIT_CONNECTION = new NetworkCommand(CommandType.PERMIT_CONNECTION, EMPTY_ARGS),
+    public static final NetworkCommand
             START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
             READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS), 
@@ -24,7 +24,7 @@ public class NetworkCommand {
             WAVE_FINISHED = new NetworkCommand(CommandType.WAVE_FINISHED, EMPTY_ARGS);
 
     //CONSTANTS
-    public final static String KEYWORD = "__", SEPARATOR_1 = ";";
+    public final static String KEYWORD = "FD;";
 
     private CommandType commandType;
     private CommandArgument[] commandArguments;
@@ -40,14 +40,7 @@ public class NetworkCommand {
 
     @Override
     public String toString() {
-        String retString = "";
-        retString += KEYWORD + SEPARATOR_1 + commandType.ordinal();
-
-        for (CommandArgument arg : commandArguments) {
-            retString += SEPARATOR_1 + arg.toString();
-        }
-
-        return retString;
+        return KEYWORD + new Gson().toJson(this);
     }
 
     public String getArgument(String name) {
@@ -78,17 +71,7 @@ public class NetworkCommand {
     }
 
     public static NetworkCommand fromString(String string) {
-        String[] splitted = string.split(SEPARATOR_1);
-
-        int commandTypeIndex = Integer.parseInt(splitted[1]);
-        CommandType type = CommandType.values()[commandTypeIndex];
-
-        CommandArgument[] argsArr = new CommandArgument[splitted.length - 2];
-        for (int i = 0; i < argsArr.length; i++) {
-            argsArr[i] = CommandArgument.fromString(splitted[i + 2]);
-        }
-        return new NetworkCommand(type, argsArr);
-
+        return new Gson().fromJson(string.replace(KEYWORD, ""), NetworkCommand.class);
     }
     
     
@@ -112,7 +95,7 @@ public class NetworkCommand {
         REQUEST_ESSENCE_TOWER,  //id
         
         //  SERVER TO CLIENT
-        PERMIT_CONNECTION, // NO ARGS
+        PERMIT_CONNECTION, // auth_ok
         INVALID_MESSAGE, // NO ARGS      The message sent by the client is invalid, will disconnect
         HANDLE_EXCEPTION, // name, stack
         SHOW_MAP, // map

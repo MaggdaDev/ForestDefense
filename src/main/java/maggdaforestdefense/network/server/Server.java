@@ -29,7 +29,8 @@ public class Server {
     public final static String WS_FILENAME = "api/gamesocket/";
     public final static String WS_HOST = "forestdefense.minortom.net";
     public final static String WS_HOST2 = "0.0.0.0";
-    public final static String WS_URL = "wss://" + WS_HOST + "/";
+    //public final static String WS_URL = "wss://" + WS_HOST + "/";
+    public final static String WS_URL = "ws://" + WS_HOST + ":" + WS_PORT + "/";
 
     private ObservableMap<Integer, Player> playerList;
     private SocketAcceptor acceptor;

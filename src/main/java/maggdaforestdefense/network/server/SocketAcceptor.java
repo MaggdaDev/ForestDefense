@@ -17,48 +17,6 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-/**
- *
- * @author David
- */
-/*public class SocketAcceptor implements Runnable, Stoppable {
-
-    private ServerSocket serverSocket;
-    private boolean isOpen;
-    public SocketAcceptor() throws IOException {
-        serverSocket = new ServerSocket(Server.PORT);
-        Logger.logServer("ServerSocket generated: "+ serverSocket.toString());
-        Logger.logServer("ServerSocket localport: " + serverSocket.getLocalPort());
-        isOpen = false;
-    }
-
-    @Override
-    public void run() {
-        isOpen = true;
-        while (isOpen) {
-            try {
-                Socket newSocket = serverSocket.accept();
-                Logger.logServer("New Socket accepted!");
-                Logger.logServer("Socket: " + newSocket.toString());
-                Logger.logServer("Socket port: " + newSocket.getPort());
-                Server.getInstance().addNewSocket(newSocket);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void stop() {
-        isOpen = false;
-        try {  
-            serverSocket.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-}*/
-
 public class SocketAcceptor extends WebSocketServer {
 
     public SocketAcceptor(InetSocketAddress address) {

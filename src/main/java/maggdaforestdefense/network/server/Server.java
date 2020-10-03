@@ -27,7 +27,9 @@ public class Server {
     public final static int PORT = 27757;
     public final static int WS_PORT = 27756;
     public final static String WS_FILENAME = "api/gamesocket/";
-    public final static String WS_URL = "wss://forestdefense.minortom.net/";
+    public final static String WS_HOST = "forestdefense.minortom.net";
+    public final static String WS_HOST2 = "0.0.0.0";
+    public final static String WS_URL = "wss://" + WS_HOST + "/";
 
     private ObservableMap<Integer, Player> playerList;
     private SocketAcceptor acceptor;
@@ -39,7 +41,7 @@ public class Server {
         instance = this;
         playerList = FXCollections.observableHashMap();
 
-        acceptor = new SocketAcceptor(new InetSocketAddress("localhost", Server.WS_PORT));
+        acceptor = new SocketAcceptor(new InetSocketAddress(WS_HOST2, Server.WS_PORT));
 
         gameHandler = new GameHandler();
 

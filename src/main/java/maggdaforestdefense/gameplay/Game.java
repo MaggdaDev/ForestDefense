@@ -15,6 +15,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.util.KeyEventHandler;
 
 import java.util.Vector;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import language.Deutsch;
@@ -44,20 +45,23 @@ public class Game {
 
     private int essence = 0, coins = 0, maxEssence = 0;
 
-    public Game() {
+    private Game() {
         instance = this;
         isInGame = false;
         keyEventHandlers = new Vector();
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
+        
+        NetworkManager.getInstance().sendCommand(NetworkCommand.CREATE_GAME);
 
     }
 
-    public static void createGame() {
+    public static Game createGame() {
         instance = new Game();
-        instance.startGame();
+        return instance;
     }
+    
 
     public void startGame() {
         gameScreen = new GameScreen();
@@ -126,6 +130,16 @@ public class Game {
     public static Game getInstance() {
         return instance;
     }
+    
+    // COMMAND HANDLES
+    
+    public void gameCreated() {
+        MenuManager.getInstance().createWaitScreen();
+        Platform.runLater(()->{
+            MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
+        });
+        
+    }
 
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
@@ -193,5 +207,7 @@ public class Game {
         String id = command.getArgument("id");
         ((ClientTower)gameObjects.get(id)).essenceNeeded();
     }
+
+    
 
 }

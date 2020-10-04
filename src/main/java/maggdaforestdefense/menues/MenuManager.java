@@ -25,9 +25,12 @@ public class MenuManager {
 
     private Screen showingScreen, previousScreen;
     private static MenuManager instance;
+    
+    private FXMLMenuLoader menuLoader;
 
     // Menues
     private Parent mainMenu, playMenu, findGameMenu, createGameMenu;
+    private WaitForPlayersMenu waitForPlayersMenu;
     private MapEditor mapEditor;
 
     private LaunchingScreen launchingScreen;
@@ -38,11 +41,12 @@ public class MenuManager {
         showingScreen = Screen.LAUNCHING_SCREEN;
 
         //Menues
-        FXMLMenuLoader menuLoader = new FXMLMenuLoader();
+        menuLoader = new FXMLMenuLoader();
 
         mainMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.MAIN_MENU);
         playMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.PLAY_MENU);
         createGameMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.CREATE_GAME_MENU);
+        createWaitScreen();
         mapEditor = (MapEditor)menuLoader.loadMenu(FXMLMenuLoader.Menu.EDITOR);
         findGameMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.FIND_GAME_MENU);
 
@@ -81,6 +85,10 @@ public class MenuManager {
                 break;
             case PLAY:
                 showScreen(playMenu);
+                break;
+            case WAIT_FOR_PLAYERS:
+                showScreen(waitForPlayersMenu);
+                break;
         }
     }
 
@@ -93,6 +101,10 @@ public class MenuManager {
         mainRoot.getChildren().add(parent);
     }
 
+    public void createWaitScreen() {
+        waitForPlayersMenu = (WaitForPlayersMenu)menuLoader.loadMenu(FXMLMenuLoader.Menu.WAIT_FOR_PLAYERS_MENU);
+    }
+
     public enum Screen {
 
         LAUNCHING_SCREEN,
@@ -101,7 +113,8 @@ public class MenuManager {
         GAME,
         PLAY,
         FIND_GAME,
-        CREATE_GAME;
+        CREATE_GAME, 
+        WAIT_FOR_PLAYERS;
     }
 
     public static MenuManager getInstance() {

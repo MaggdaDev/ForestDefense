@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import maggdaforestdefense.menues.CreateGameMenu?>
-<CreateGameMenu xmlns="http://javafx.com/javafx"
+<?import maggdaforestdefense.menues.WaitForPlayersMenu?>
+<WaitForPlayersMenu xmlns="http://javafx.com/javafx"
                 xmlns:fx="http://javafx.com/fxml"
-                fx:controller="maggdaforestdefense.menues.CreateGameMenu"
+                fx:controller="maggdaforestdefense.menues.WaitForPlayersMenu"
                 alignment="CENTER_LEFT" spacing="10">
     <padding>
         <Insets bottom="10" left="10" top="10" right="10" />
@@ -28,10 +28,10 @@
             <padding>
                 <Insets bottom="10" left="10" top="10" right="10" />
             </padding>
-            <Button fx:id="backBtn" text="back" onAction="#backBtnOnClick"/>
-            <Button fx:id="okBtn" text="ok" onAction="#okBtnOnClick"/>
+            <Button fx:id="cancelBtn" text="cancel" onAction="#cancel"/>
+            <Button fx:id="startBtn" text="start" onAction="#startGame"/>
         </HBox>
 
     </VBox>
 
-</CreateGameMenu>
+</WaitForPlayersMenu>

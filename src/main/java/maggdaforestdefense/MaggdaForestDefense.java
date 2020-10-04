@@ -50,6 +50,8 @@ public class MaggdaForestDefense extends Application {
     
     private static Server server;
 
+    
+    private static Game game;
     /**
      * Starts the program/GUI
      *
@@ -150,6 +152,10 @@ public class MaggdaForestDefense extends Application {
         } else {
             launch(args);
         }
+    }
+    
+    public static void launchGame() {
+        game = Game.createGame();
     }
 
     public void addOnSceneResize(ChangeListener<? super Number> l) {

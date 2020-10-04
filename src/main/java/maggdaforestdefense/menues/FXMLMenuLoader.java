@@ -42,7 +42,8 @@ public class FXMLMenuLoader {
         CREATE_GAME_MENU("create.fxml"),
         FIND_GAME_MENU("find.fxml"),
         
-        EDITOR("mapeditor.fxml");
+        EDITOR("mapeditor.fxml"),
+        WAIT_FOR_PLAYERS_MENU("wait.fxml");
 
         private final String fxmlName;
 

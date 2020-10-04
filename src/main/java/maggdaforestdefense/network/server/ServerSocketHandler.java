@@ -34,17 +34,17 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     //private BufferedReader input;
     private BufferedReader input;
     private PrintWriter output;
-    
+
     private LinkedBlockingQueue<NetworkCommand> queue;
     private Queue<NetworkCommand> workingList;
     private Player owner;
-    
+
     private ServerGame game;
 
     public ServerSocketHandler(WebSocket conn) {
-        
+
         this.conn = conn;
-        
+
         // Queues
         queue = new LinkedBlockingQueue();
         workingList = new LinkedList();
@@ -54,13 +54,13 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             update();
         }
     }
 
     public void handleMessage(WebSocket conn, String message) {
-        if(NetworkCommand.testForKeyWord(message)) {
+        if (NetworkCommand.testForKeyWord(message)) {
             queue.add(NetworkCommand.fromString(message));
         } else {
             Logger.errServer("Received an invalid command.");
@@ -77,7 +77,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     public void update() {
         queue.drainTo(workingList);
-        while(workingList.size() != 0) {
+        while (workingList.size() != 0) {
             try {
                 handleCommand(workingList.poll());
             } catch (Exception e) {
@@ -86,28 +86,28 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             }
         }
     }
-    
+
     private void handleCommand(NetworkCommand command) {
         //Logger.logServer("Command handled: " + command);
-        switch(command.getCommandType()) {
+        switch (command.getCommandType()) {
             case REQUIRE_CONNECTION:
                 Credentials credentials = new Gson().fromJson(command.getArgument("auth"), Credentials.class);
                 boolean anonymous = true;
                 String userId = "";
                 String userName = "";
-                if(credentials.isSignedIn()) {
+                if (credentials.isSignedIn()) {
                     MWUser user = AuthWindow.getUserFromToken(credentials.getAuthToken());
                     anonymous = false;
                     userId = user.getUsername() + "@wiki.minortom.net";
                     userName = user.getUsername();
-                } else if (credentials.getUserName().startsWith("Anonymous")&&credentials.getMwUser().getUsername().equals("Anonymous")) {
+                } else if (credentials.getUserName().startsWith("Anonymous") && credentials.getMwUser().getUsername().equals("Anonymous")) {
                     anonymous = true;
                     userId = "Anonymous@forestdefense.minortom.net";
                     userName = credentials.getUserName();
                 } else {
                     userId = null;
                 }
-                if(userId==null) {
+                if (userId == null) {
                     sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(false))}));
                     conn.close(); // TODO: Find a better way to close a connection
                 } else {
@@ -117,39 +117,46 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                     owner.setAnonymous(!credentials.isSignedIn());
                 }
                 break;
+            case CREATE_GAME:
+                createGame();
+                break;
             case START_GAME:
-                game = new ServerGame(owner);
-                Server.getInstance().addGame(game);
                 game.start();
                 break;
             case ADD_TOWER:
                 double xPos = command.getNumArgument("x");
                 double yPos = command.getNumArgument("y");
-                GameObjectType type = GameObjectType.values()[(int)command.getNumArgument("type")];
-                
+                GameObjectType type = GameObjectType.values()[(int) command.getNumArgument("type")];
+
                 game.addNewTower(xPos, yPos, type);
-                
+
                 break;
-                
+
             case UPGRADE_BUTTON_CLICKED:
                 String id = command.getArgument("id");
-                int tier = (int)command.getNumArgument("tier");
-                int upgradeType = (int)command.getNumArgument("type");
+                int tier = (int) command.getNumArgument("tier");
+                int upgradeType = (int) command.getNumArgument("type");
                 game.buyUpgrade(id, tier, upgradeType);
                 break;
-                
+
             case READY_FOR_NEXT_ROUND:
                 owner.setReadyForNextRound(true);
                 break;
-                
+
             case REQUEST_ESSENCE_TOWER:
-                
+
                 game.requestEssence(command.getArgument("id"));
                 break;
         }
-        
+
     }
-    
+
+    private void createGame() {
+        game = new ServerGame(owner);
+        Server.getInstance().addGame(game);
+        sendCommand(NetworkCommand.GAME_CREATED);
+    }
+
     public void sendCommand(NetworkCommand command) {
         Logger.debugServer("Command sent: " + command.toString());
         conn.send(command.toString());
@@ -159,7 +166,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     public void stop() {
 
     }
-    
+
     public void setOwner(Player o) {
         owner = o;
     }

@@ -158,7 +158,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     public void sendCommand(NetworkCommand command) {
-        Logger.debugServer("Command sent: " + command.toString());
+        //Logger.debugServer("Command sent: " + command.toString());
         conn.send(command.toString());
     }
 

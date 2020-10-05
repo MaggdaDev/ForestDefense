@@ -38,7 +38,7 @@ public class SocketAcceptor extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        Logger.debugServer("received message from "	+ conn.getRemoteSocketAddress() + "|" + conn.getAttachment() + ": " + message);
+        //Logger.debugServer("received message from "	+ conn.getRemoteSocketAddress() + "|" + conn.getAttachment() + ": " + message);
         Server.getInstance().handleMessage(conn, message);
     }
 

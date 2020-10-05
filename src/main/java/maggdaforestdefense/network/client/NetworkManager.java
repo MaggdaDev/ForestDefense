@@ -70,7 +70,8 @@ public class NetworkManager extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        Logger.debugClient("Received: " + message);
+        
+        //Logger.debugClient("Received: " + message);
         commandHandler.onMessage(message);
     }
 
@@ -100,7 +101,7 @@ public class NetworkManager extends WebSocketClient {
     public void sendCommand(NetworkCommand command) {
         //Logger.logClient("Command sent: " + command.toString());
         this.send(command.toString());
-        Logger.debugClient("Sent: " + command.toString());
+        //Logger.debugClient("Sent: " + command.toString());
     }
     
     public void setInGame(boolean b) {

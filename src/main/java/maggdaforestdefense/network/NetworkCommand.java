@@ -22,6 +22,7 @@ public class NetworkCommand {
             START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
             READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS),
+            LIST_AVAILABLE_GAMES = new NetworkCommand(CommandType.LIST_AVAILABLE_GAMES, EMPTY_ARGS),
             WAIR_FOR_READY_NEXT_WAVE = new NetworkCommand(CommandType.WAIT_FOR_READY_NEXT_WAVE, EMPTY_ARGS),
             WAVE_FINISHED = new NetworkCommand(CommandType.WAVE_FINISHED, EMPTY_ARGS);
 
@@ -89,6 +90,7 @@ public class NetworkCommand {
         //  CLIENT TO SERVER
         REQUIRE_CONNECTION, // auth
         CREATE_GAME, // NO ARGS
+        LIST_AVAILABLE_GAMES,   // NO ARGS
         START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type

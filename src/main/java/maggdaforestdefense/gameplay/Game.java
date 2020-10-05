@@ -89,6 +89,10 @@ public class Game {
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().resetCommandHandler();
     }
+    
+    public void requestGames() {
+        NetworkManager.getInstance().sendCommand(NetworkCommand.LIST_AVAILABLE_GAMES);
+    }
 
     // General
     public void addGameObject(ClientGameObject gameObject) {
@@ -207,6 +211,8 @@ public class Game {
         String id = command.getArgument("id");
         ((ClientTower)gameObjects.get(id)).essenceNeeded();
     }
+
+    
 
     
 

@@ -6,19 +6,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import maggdaforestdefense.menues.PlayMenu?>
-<PlayMenu xmlns="http://javafx.com/javafx"
+<?import maggdaforestdefense.menues.FindGameMenu?>
+<FindGameMenu xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="maggdaforestdefense.menues.PlayMenu"
+          fx:controller="maggdaforestdefense.menues.FindGameMenu"
           alignment="CENTER_LEFT" spacing="10">
     <padding><Insets bottom="10" left="10" top="10" right="10" /></padding>
 
     <VBox spacing="10">
-        <padding><Insets bottom="10" left="10" top="10" right="10" /></padding>
-        <Button fx:id="findGameBtn" text="find game" onAction="#findGameBtnOnClick"/>
-        <Button fx:id="createGameBtn" text="create game" onAction="#createGameBtnOnClick"/>
+        <VBox fx:id="contentVBox" spacing="10">
+            
+            
+        </VBox>
         <Separator />
         <Button fx:id="backBtn" text="back" onAction="#backBtnOnClick" />
     </VBox>
 
-</PlayMenu>
+</FindGameMenu>

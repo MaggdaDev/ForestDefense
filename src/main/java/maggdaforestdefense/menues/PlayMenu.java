@@ -20,6 +20,7 @@ import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -46,6 +47,7 @@ public class PlayMenu extends VBox{
 
     @FXML private void findGameBtnOnClick(ActionEvent e) {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.FIND_GAME);
+        Game.getInstance().requestGames();
     }
 
     @FXML private void backBtnOnClick(ActionEvent e) {

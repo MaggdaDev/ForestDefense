@@ -17,7 +17,7 @@ public class NetworkCommand {
     public static final CommandArgument[] EMPTY_ARGS = new CommandArgument[]{};
     // PREDEF COMMANDS
     public static final NetworkCommand 
-            CREATE_GAME = new NetworkCommand(CommandType.CREATE_GAME, EMPTY_ARGS),
+
             GAME_CREATED = new NetworkCommand(CommandType.GAME_CREATED, EMPTY_ARGS),
             START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
@@ -59,6 +59,10 @@ public class NetworkCommand {
         }
         return "";
     }
+    
+    public CommandArgument[] getAllArguments() {
+        return commandArguments;
+    }
 
     public double getNumArgument(String name) {
         return Double.parseDouble(getArgument(name));
@@ -99,6 +103,7 @@ public class NetworkCommand {
 
         //  SERVER TO CLIENT
         PERMIT_CONNECTION, // auth_ok
+        SHOW_GAMES,         // list of games
         GAME_CREATED,       // NO ARGS
         INVALID_MESSAGE, // NO ARGS      The message sent by the client is invalid, will disconnect
         HANDLE_EXCEPTION, // name, stack

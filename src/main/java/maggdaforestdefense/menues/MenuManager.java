@@ -12,6 +12,8 @@ import maggdaforestdefense.gameplay.Game;
 
 import java.io.IOException;
 import javafx.scene.text.Font;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
 
 /**
  *
@@ -29,8 +31,9 @@ public class MenuManager {
     private FXMLMenuLoader menuLoader;
 
     // Menues
-    private Parent mainMenu, playMenu, findGameMenu, createGameMenu;
+    private Parent mainMenu, playMenu, createGameMenu;
     private WaitForPlayersMenu waitForPlayersMenu;
+    private FindGameMenu findGameMenu;
     private MapEditor mapEditor;
 
     private LaunchingScreen launchingScreen;
@@ -48,7 +51,7 @@ public class MenuManager {
         createGameMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.CREATE_GAME_MENU);
         createWaitScreen();
         mapEditor = (MapEditor)menuLoader.loadMenu(FXMLMenuLoader.Menu.EDITOR);
-        findGameMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.FIND_GAME_MENU);
+        findGameMenu = (FindGameMenu)menuLoader.loadMenu(FXMLMenuLoader.Menu.FIND_GAME_MENU);
 
         launchingScreen = new LaunchingScreen();
 
@@ -103,6 +106,12 @@ public class MenuManager {
 
     public void createWaitScreen() {
         waitForPlayersMenu = (WaitForPlayersMenu)menuLoader.loadMenu(FXMLMenuLoader.Menu.WAIT_FOR_PLAYERS_MENU);
+    }
+
+    public void showJoinableGames(NetworkCommand command) {
+        for(CommandArgument arg: command.getAllArguments()) {
+            findGameMenu.addEntry(arg.getName(), arg.getValue());
+        }
     }
 
     public enum Screen {

@@ -19,7 +19,7 @@
             
         </VBox>
         <Separator />
-        <Button fx:id="backBtn" text="back" onAction="#backBtnOnClick" />
+        <Button fx:id="backBtn" text="back" onAction="#back" />
     </VBox>
 
 </FindGameMenu>

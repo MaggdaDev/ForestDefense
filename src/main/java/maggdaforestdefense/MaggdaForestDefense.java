@@ -122,9 +122,7 @@ public class MaggdaForestDefense extends Application {
         System.exit(0);
     }
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String[] args) {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
         //System.setProperty("java.library.path", "natives");
@@ -154,8 +152,8 @@ public class MaggdaForestDefense extends Application {
         }
     }
     
-    public static void launchGame() {
-        game = Game.createGame();
+    public static void launchGame(String gameName) {
+        game = Game.createGame(gameName);
     }
 
     public void addOnSceneResize(ChangeListener<? super Number> l) {

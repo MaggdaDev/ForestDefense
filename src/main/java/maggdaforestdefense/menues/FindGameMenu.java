@@ -5,7 +5,9 @@
  */
 package maggdaforestdefense.menues;
 
-import java.awt.Button;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
@@ -35,8 +37,8 @@ public class FindGameMenu extends VBox{
 
     }
     
-    public void addEntry(String id) {
-        contentVBox.getChildren().addAll(new Separator(), new JoinGameEntry(id));
+    public void addEntry(String id, String name) {
+        contentVBox.getChildren().addAll(new Separator(), new JoinGameEntry(id, name));
     }
     
     @FXML private void back(ActionEvent e) {
@@ -44,17 +46,19 @@ public class FindGameMenu extends VBox{
     }
     
     public static class JoinGameEntry extends HBox{
-        private String gameId;
-        private Label idLabel;
+        private String gameId, gameName;
+        private Label idLabel, nameLabel;
         private Button joinBtn;
-        public JoinGameEntry(String id) {
+        public JoinGameEntry(String id, String name) {
             gameId = id;
+            gameName = name;
             idLabel = new Label("Game-ID: " + id);
+            nameLabel = new Label("Name: " + name);
             joinBtn = new Button("JOIN");
             
             setSpacing(50);
             
-            getChildren().addAll(idLabel, joinBtn);
+            getChildren().addAll(idLabel, nameLabel, joinBtn);
         }
     }
 

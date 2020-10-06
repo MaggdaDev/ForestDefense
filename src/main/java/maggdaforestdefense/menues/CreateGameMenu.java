@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.menues;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+
 import maggdaforestdefense.storage.Logger;
 import org.panda_lang.panda.framework.language.parser.implementation.general.number.NumberUtils;
 
@@ -23,6 +26,8 @@ public class CreateGameMenu extends VBox {
 
     private FXMLLoader loader;
 
+    @FXML
+    private TextField gameNameTF;
 
     @FXML
     private Button okBtn;
@@ -36,15 +41,22 @@ public class CreateGameMenu extends VBox {
     public void initialize() {
         Logger.debugClient("FXML loading actually works");
 
+        gameNameTF.textProperty().addListener((ChangeListener<String>) (a, b, c) -> {
+            okBtn.setDisable(gameNameTF.getText().isBlank());
+        });
+        okBtn.setDisable(true);
+
     }
-    
-    @FXML private void okBtnOnClick(ActionEvent e) {
-        maggdaforestdefense.MaggdaForestDefense.launchGame();
+
+    @FXML
+    private void okBtnOnClick(ActionEvent e) {
+        String gameName = gameNameTF.getText();
+        maggdaforestdefense.MaggdaForestDefense.launchGame(gameName);
     }
-    
-    @FXML private void backBtnOnClick(ActionEvent e) {
+
+    @FXML
+    private void backBtnOnClick(ActionEvent e) {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.PLAY);
     }
 
-   
 }

@@ -5,22 +5,41 @@
  */
 package maggdaforestdefense.network.server;
 
+import java.util.HashMap;
+import java.util.Vector;
+import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 
-import java.util.Vector;
+import maggdaforestdefense.network.NetworkCommand;
 
 /**
  *
  * @author David
  */
 public class GameHandler {
-    private Vector<ServerGame> games;
+    private static int currentGameId = 0;
+    
+    private HashMap<String, ServerGame> games;
+    private Vector<CommandArgument> gamesAsArgs;
     
     public GameHandler() {
-        games = new Vector<>();
+        games = new HashMap<>();
     }
     
     public void addGame(ServerGame game) {
-        games.add(game);
+        games.put(getNextGameId(), game);
+    }
+    
+    public NetworkCommand getGamesAsCommand() {
+        gamesAsArgs = new Vector<>();
+        games.forEach((String id, ServerGame game)->{
+            gamesAsArgs.add(new CommandArgument(id, game.getGameName()));
+        });
+        return new NetworkCommand(NetworkCommand.CommandType.SHOW_GAMES, (CommandArgument[])gamesAsArgs.toArray());
+    }
+    
+    public final static synchronized String getNextGameId() {
+        currentGameId++;
+        return String.valueOf(currentGameId);
     }
 }

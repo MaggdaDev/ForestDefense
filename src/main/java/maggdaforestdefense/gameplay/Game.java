@@ -23,6 +23,7 @@ import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
+import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
@@ -45,23 +46,22 @@ public class Game {
 
     private int essence = 0, coins = 0, maxEssence = 0;
 
-    private Game() {
+    private Game(String gameName) {
         instance = this;
         isInGame = false;
         keyEventHandlers = new Vector();
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
-        
-        NetworkManager.getInstance().sendCommand(NetworkCommand.CREATE_GAME);
+
+        NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.CREATE_GAME, new CommandArgument[]{new CommandArgument("name", gameName)}));
 
     }
 
-    public static Game createGame() {
-        instance = new Game();
+    public static Game createGame(String gameName) {
+        instance = new Game(gameName);
         return instance;
     }
-    
 
     public void startGame() {
         gameScreen = new GameScreen();
@@ -89,11 +89,8 @@ public class Game {
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().resetCommandHandler();
     }
-    
-    public void requestGames() {
-        NetworkManager.getInstance().sendCommand(NetworkCommand.LIST_AVAILABLE_GAMES);
-    }
 
+    
     // General
     public void addGameObject(ClientGameObject gameObject) {
         gameObjects.put(String.valueOf(gameObject.getGameObjectId()), gameObject);
@@ -134,15 +131,22 @@ public class Game {
     public static Game getInstance() {
         return instance;
     }
-    
+
     // COMMAND HANDLES
-    
+    public void showJoinableGames(NetworkCommand command) {
+
+        Platform.runLater(() -> {
+            MenuManager.getInstance().showJoinableGames(command);
+        });
+
+    }
+
     public void gameCreated() {
         MenuManager.getInstance().createWaitScreen();
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
         });
-        
+
     }
 
     public void updateGameObject(NetworkCommand command) {
@@ -177,19 +181,19 @@ public class Game {
         ClientTower tower = (ClientTower) gameObjects.get(id);
         tower.buyUpgrade(tier, type);
     }
-    
+
     public void announceWave(NetworkCommand command) {
-        int wave = (int)command.getNumArgument("wave");
+        int wave = (int) command.getNumArgument("wave");
         gameScreen.hideReadyCheck();
         gameScreen.announceWave(wave);
     }
-    
+
     public void doEssenceAnimtion(NetworkCommand command) {
         String id = command.getArgument("id");
-        ClientTower tower = (ClientTower)gameObjects.get(id);
+        ClientTower tower = (ClientTower) gameObjects.get(id);
         gameScreen.doEssenceAnimtionTo(tower);
     }
-    
+
     public void readyCheck() {
         gameScreen.showReadyCheck();
     }
@@ -204,16 +208,12 @@ public class Game {
     }
 
     public void waveFinished() {
-        
+
     }
 
     public void towerNeedEssence(NetworkCommand command) {
         String id = command.getArgument("id");
-        ((ClientTower)gameObjects.get(id)).essenceNeeded();
+        ((ClientTower) gameObjects.get(id)).essenceNeeded();
     }
-
-    
-
-    
 
 }

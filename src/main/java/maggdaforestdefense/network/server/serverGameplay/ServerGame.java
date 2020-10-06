@@ -39,7 +39,11 @@ import maggdaforestdefense.util.Waiter;
 public class ServerGame extends Thread {
 
     public final static int START_COINS = 100, START_ESSENCE = 5;
-
+    
+    // MANAGEMENT
+    private final String name;
+    
+    // GAMEPLAY
     private int coins = START_COINS;
     private Base base;
 
@@ -52,7 +56,8 @@ public class ServerGame extends Thread {
 
     private HashMap<String, Mob> mobsList;
 
-    public ServerGame(Player firstPlayer) {
+    public ServerGame(Player firstPlayer, String name) {
+        this.name = name;
         currentGameObjectId = 0;
         players = new Vector<>();
         players.add(firstPlayer);
@@ -272,6 +277,10 @@ public class ServerGame extends Thread {
 
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
+    }
+    
+    public String getGameName() {
+        return name;
     }
 
    

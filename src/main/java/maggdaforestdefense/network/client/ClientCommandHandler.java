@@ -79,6 +79,9 @@ public class ClientCommandHandler extends Thread {
             case PERMIT_CONNECTION:
                 NetworkManager.getInstance().onReady(Boolean.parseBoolean(command.getArgument("auth_ok")));
                 break;
+            case SHOW_GAMES:
+                Game.getInstance().showJoinableGames(command);
+                break;
             case GAME_CREATED:
                 Game.getInstance().gameCreated();
                 break;

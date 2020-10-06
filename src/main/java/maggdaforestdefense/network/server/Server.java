@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import maggdaforestdefense.network.NetworkCommand;
 
 /**
  *
@@ -101,5 +102,9 @@ public class Server {
     
     public static Server getInstance() {
         return instance;
+    }
+
+    public NetworkCommand getGamesAsCommand() {
+        return gameHandler.getGamesAsCommand();
     }
 }

@@ -155,6 +155,8 @@ public class MaggdaForestDefense extends Application {
     public static void launchGame(String gameName) {
         game = Game.createGame(gameName);
     }
+    
+    
 
     public void addOnSceneResize(ChangeListener<? super Number> l) {
         scene.widthProperty().addListener(l);

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import maggdaforestdefense.menues.FindGameMenu?>
-<FindGameMenu xmlns="http://javafx.com/javafx"
+<VBox xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           fx:controller="maggdaforestdefense.menues.FindGameMenu"
           alignment="CENTER_LEFT" spacing="10">
@@ -15,11 +15,12 @@
 
     <VBox spacing="10">
         <VBox fx:id="contentVBox" spacing="10">
-            
+            <children>
+            </children>
             
         </VBox>
         <Separator />
         <Button fx:id="backBtn" text="back" onAction="#back" />
     </VBox>
 
-</FindGameMenu>
+</VBox>

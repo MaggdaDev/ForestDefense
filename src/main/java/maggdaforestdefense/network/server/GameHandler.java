@@ -35,7 +35,11 @@ public class GameHandler {
         games.forEach((String id, ServerGame game)->{
             gamesAsArgs.add(new CommandArgument(id, game.getGameName()));
         });
-        return new NetworkCommand(NetworkCommand.CommandType.SHOW_GAMES, (CommandArgument[])gamesAsArgs.toArray());
+        CommandArgument[] argsArr = new CommandArgument[gamesAsArgs.size()];
+        for(int i = 0; i < gamesAsArgs.size(); i++) {
+            argsArr[i] = gamesAsArgs.get(i);
+        }
+        return new NetworkCommand(NetworkCommand.CommandType.SHOW_GAMES, argsArr);
     }
     
     public final static synchronized String getNextGameId() {

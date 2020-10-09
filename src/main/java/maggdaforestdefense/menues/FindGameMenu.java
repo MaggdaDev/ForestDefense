@@ -19,45 +19,54 @@ import maggdaforestdefense.storage.Logger;
  *
  * @author DavidPrivat
  */
-public class FindGameMenu extends VBox{
-    private FXMLLoader loader;
+public class FindGameMenu {
 
     @FXML
     private Button backBtn;
-    
+
     @FXML
     private VBox contentVBox;
 
-    public FindGameMenu() {
-        Logger.debugClient("FXML loading works");
-    }
-
-    public void initialize() {
-        Logger.debugClient("FXML loading actually works");
-
-    }
-    
     public void addEntry(String id, String name) {
         contentVBox.getChildren().addAll(new Separator(), new JoinGameEntry(id, name));
     }
-    
-    @FXML private void back(ActionEvent e) {
-        MenuManager.getInstance().setScreenShown(MenuManager.Screen.PLAY);
+
+    public void showEmpty() {
+        Label l = new Label("No joinable games available!");
+        contentVBox.getChildren().add(l);
     }
     
-    public static class JoinGameEntry extends HBox{
+    public void reset() {
+        contentVBox.getChildren().clear();
+    }
+
+    @FXML
+    public void initialize() {
+        Logger.debugClient("Find game menu initialized!");
+        System.out.println(contentVBox.getChildren().size());
+
+    }
+
+    @FXML
+    private void back(ActionEvent e) {
+        MenuManager.getInstance().setScreenShown(MenuManager.Screen.PLAY);
+    }
+
+    public static class JoinGameEntry extends HBox {
+
         private String gameId, gameName;
         private Label idLabel, nameLabel;
         private Button joinBtn;
+
         public JoinGameEntry(String id, String name) {
             gameId = id;
             gameName = name;
             idLabel = new Label("Game-ID: " + id);
             nameLabel = new Label("Name: " + name);
             joinBtn = new Button("JOIN");
-            
+
             setSpacing(50);
-            
+
             getChildren().addAll(idLabel, nameLabel, joinBtn);
         }
     }

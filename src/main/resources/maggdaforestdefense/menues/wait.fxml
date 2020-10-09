@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import maggdaforestdefense.menues.WaitForPlayersMenu?>
-<WaitForPlayersMenu xmlns="http://javafx.com/javafx"
+<VBox xmlns="http://javafx.com/javafx"
                 xmlns:fx="http://javafx.com/fxml"
                 fx:controller="maggdaforestdefense.menues.WaitForPlayersMenu"
                 alignment="CENTER_LEFT" spacing="10">
@@ -34,4 +34,4 @@
 
     </VBox>
 
-</WaitForPlayersMenu>
+</VBox>

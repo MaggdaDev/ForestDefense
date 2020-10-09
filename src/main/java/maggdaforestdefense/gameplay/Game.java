@@ -133,16 +133,10 @@ public class Game {
     }
 
     // COMMAND HANDLES
-    public void showJoinableGames(NetworkCommand command) {
-
-        Platform.runLater(() -> {
-            MenuManager.getInstance().showJoinableGames(command);
-        });
-
-    }
+   
 
     public void gameCreated() {
-        MenuManager.getInstance().createWaitScreen();
+        MenuManager.getInstance().resetWaitScreen();
         Platform.runLater(() -> {
             MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
         });

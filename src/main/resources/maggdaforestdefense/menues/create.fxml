@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import maggdaforestdefense.menues.CreateGameMenu?>
-<CreateGameMenu xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx"              
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx"              
                 fx:controller="maggdaforestdefense.menues.CreateGameMenu"
                 alignment="CENTER_LEFT" spacing="10">
     <padding>
@@ -36,4 +36,4 @@
 
     </VBox>
 
-</CreateGameMenu>
+</VBox>

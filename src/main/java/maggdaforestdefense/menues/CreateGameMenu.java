@@ -22,22 +22,18 @@ import org.panda_lang.panda.framework.language.parser.implementation.general.num
  *
  * @author DavidPrivat
  */
-public class CreateGameMenu extends VBox {
-
-    private FXMLLoader loader;
+public class CreateGameMenu {
 
     @FXML
     private TextField gameNameTF;
 
     @FXML
     private Button okBtn;
+
     @FXML
     private Button backBtn;
 
-    public CreateGameMenu() {
-        Logger.debugClient("FXML loading works");
-    }
-
+    @FXML
     public void initialize() {
         Logger.debugClient("FXML loading actually works");
 

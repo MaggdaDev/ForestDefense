@@ -6,48 +6,55 @@
 package maggdaforestdefense.menues;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author DavidPrivat
+ * @param <E>
  */
-public class FXMLMenuLoader {
+public class FXMLMenu <E> {
 
     public static final String PATH_TO_FXML = "maggdaforestdefense/menues/";
+
     private FXMLLoader loader;
 
-    public FXMLMenuLoader() {
-        loader = new FXMLLoader();
-    }
-
-    public Parent loadMenu(Menu menu) {
-        Parent ret = null;
+    private Parent root;
+    private E controller;
+    public FXMLMenu(MenuType type) {
+        loader = new FXMLLoader(getClass().getClassLoader().getResource(PATH_TO_FXML + type.getFXMLName()));
         try {
-            ret = loader.load(getClass().getClassLoader().getResource(PATH_TO_FXML + menu.getFXMLName()));
+            loader.load();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return ret;
+        controller = (E) loader.getController();
+        root = loader.getRoot();
 
     }
+    
+    public Parent getRoot() {
+        return root;
+    }
+    
+    public E getController() {
+        return controller;
+    }
 
-    public static enum Menu {
+    public static enum MenuType {
 
         MAIN_MENU("main.fxml"),
         PLAY_MENU("play.fxml"),
         CREATE_GAME_MENU("create.fxml"),
         FIND_GAME_MENU("find.fxml"),
-        
         EDITOR("mapeditor.fxml"),
         WAIT_FOR_PLAYERS_MENU("wait.fxml");
 
         private final String fxmlName;
 
-        Menu(String name) {
+        MenuType(String name) {
             fxmlName = name;
 
         }

@@ -29,37 +29,39 @@ import maggdaforestdefense.storage.Logger;
  *
  * @author DavidPrivat
  */
-public class PlayMenu extends VBox{
-    private FXMLLoader loader;
+public class PlayMenu {
 
-    @FXML private Button findGameBtn;
+    @FXML
+    private Button findGameBtn;
 
-    @FXML private Button createGameBtn;
-    @FXML private Button backBtn;
+    @FXML
+    private Button createGameBtn;
+    @FXML
+    private Button backBtn;
 
-    public PlayMenu() {
-        Logger.debugClient("FXML loading works");
-    }
-
+    @FXML
     public void initialize() {
         Logger.debugClient("FXML loading actually works");
-        setPadding(new Insets(10, 10, 10, 10));
-      
+        
+
     }
 
-    @FXML private void findGameBtnOnClick(ActionEvent e) {
+    @FXML
+    private void findGameBtnOnClick(ActionEvent e) {
+        MenuManager.getInstance().resetFindGameMenu();
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.FIND_GAME);
+        
         NetworkManager.getInstance().sendCommand(NetworkCommand.LIST_AVAILABLE_GAMES);
     }
 
-    @FXML private void backBtnOnClick(ActionEvent e) {
+    @FXML
+    private void backBtnOnClick(ActionEvent e) {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.MAIN_MENU);
     }
 
-    @FXML private void createGameBtnOnClick(ActionEvent e) {
+    @FXML
+    private void createGameBtnOnClick(ActionEvent e) {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.CREATE_GAME);
     }
 
-   
-    
 }

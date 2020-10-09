@@ -9,9 +9,11 @@ import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import javafx.application.Platform;
 import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.Map;
@@ -37,7 +39,7 @@ public class ClientCommandHandler extends Thread {
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
                 handleInput();
             }
@@ -80,7 +82,9 @@ public class ClientCommandHandler extends Thread {
                 NetworkManager.getInstance().onReady(Boolean.parseBoolean(command.getArgument("auth_ok")));
                 break;
             case SHOW_GAMES:
-                Game.getInstance().showJoinableGames(command);
+                Platform.runLater(() -> {
+                    MenuManager.getInstance().showJoinableGames(command);
+                });
                 break;
             case GAME_CREATED:
                 Game.getInstance().gameCreated();

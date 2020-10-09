@@ -17,29 +17,30 @@ import maggdaforestdefense.storage.Logger;
  *
  * @author DavidPrivat
  */
-public class WaitForPlayersMenu extends HBox{
-     private FXMLLoader loader;
-
+public class WaitForPlayersMenu {
 
     @FXML
     private Button startBtn;
     @FXML
     private Button cancelBtn;
 
-    public WaitForPlayersMenu() {
-        Logger.debugClient("FXML loading works");
-    }
-
+    @FXML
     public void initialize() {
         Logger.debugClient("FXML loading actually works");
 
     }
-    
-    @FXML private void startGame(ActionEvent e) {
+
+    @FXML
+    private void startGame(ActionEvent e) {
         Game.getInstance().startGame();
     }
-    
-    @FXML private void cancel(ActionEvent e) {
+
+    @FXML
+    private void cancel(ActionEvent e) {
+
+    }
+
+    public void reset() {
        
     }
 

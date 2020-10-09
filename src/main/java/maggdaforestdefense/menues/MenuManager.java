@@ -11,9 +11,11 @@ import javafx.scene.layout.StackPane;
 import maggdaforestdefense.gameplay.Game;
 
 import java.io.IOException;
+import javafx.application.Platform;
 import javafx.scene.text.Font;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.menues.FXMLMenu;
 
 /**
  *
@@ -27,13 +29,16 @@ public class MenuManager {
 
     private Screen showingScreen, previousScreen;
     private static MenuManager instance;
-    
-    private FXMLMenuLoader menuLoader;
+
+
 
     // Menues
-    private Parent mainMenu, playMenu, createGameMenu;
-    private WaitForPlayersMenu waitForPlayersMenu;
-    private FindGameMenu findGameMenu;
+    private FXMLMenu<CreateGameMenu> createGameMenu;
+    private FXMLMenu<FindGameMenu> findGameMenu;
+    private FXMLMenu<MainMenu> mainMenu;
+    private FXMLMenu<PlayMenu> playMenu;
+    private FXMLMenu<WaitForPlayersMenu> waitForPlayersMenu;
+    
     private MapEditor mapEditor;
 
     private LaunchingScreen launchingScreen;
@@ -44,14 +49,14 @@ public class MenuManager {
         showingScreen = Screen.LAUNCHING_SCREEN;
 
         //Menues
-        menuLoader = new FXMLMenuLoader();
+ 
 
-        mainMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.MAIN_MENU);
-        playMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.PLAY_MENU);
-        createGameMenu = menuLoader.loadMenu(FXMLMenuLoader.Menu.CREATE_GAME_MENU);
-        createWaitScreen();
-        mapEditor = (MapEditor)menuLoader.loadMenu(FXMLMenuLoader.Menu.EDITOR);
-        findGameMenu = (FindGameMenu)menuLoader.loadMenu(FXMLMenuLoader.Menu.FIND_GAME_MENU);
+        mainMenu = new FXMLMenu<>(FXMLMenu.MenuType.MAIN_MENU);
+        playMenu = new FXMLMenu<>(FXMLMenu.MenuType.PLAY_MENU);
+        createGameMenu = new FXMLMenu<>(FXMLMenu.MenuType.CREATE_GAME_MENU);
+        waitForPlayersMenu = new FXMLMenu<>(FXMLMenu.MenuType.WAIT_FOR_PLAYERS_MENU);
+        //mapEditor = (MapEditor) menuLoader.loadMenu(FXMLMenuLoader.Menu.EDITOR);
+        findGameMenu = new FXMLMenu<>(FXMLMenu.MenuType.FIND_GAME_MENU);
 
         launchingScreen = new LaunchingScreen();
 
@@ -71,7 +76,7 @@ public class MenuManager {
                 showScreen(launchingScreen);
                 break;
             case MAIN_MENU:
-                showScreen(mainMenu);
+                showScreen(mainMenu.getRoot());
                 break;
             case MAP_EDITOR:
                 mapEditor.firstInit();
@@ -81,16 +86,16 @@ public class MenuManager {
                 showScreen(Game.getInstance().getGameScreen());
                 break;
             case CREATE_GAME:
-                showScreen(createGameMenu);
+                showScreen(createGameMenu.getRoot());
                 break;
             case FIND_GAME:
-                showScreen(findGameMenu);
+                showScreen(findGameMenu.getRoot());
                 break;
             case PLAY:
-                showScreen(playMenu);
+                showScreen(playMenu.getRoot());
                 break;
             case WAIT_FOR_PLAYERS:
-                showScreen(waitForPlayersMenu);
+                showScreen(waitForPlayersMenu.getRoot());
                 break;
         }
     }
@@ -104,14 +109,24 @@ public class MenuManager {
         mainRoot.getChildren().add(parent);
     }
 
-    public void createWaitScreen() {
-        waitForPlayersMenu = (WaitForPlayersMenu)menuLoader.loadMenu(FXMLMenuLoader.Menu.WAIT_FOR_PLAYERS_MENU);
+    
+    public void showJoinableGames(NetworkCommand command) {
+        CommandArgument[] args = command.getAllArguments();
+        if (args.length == 0) {
+            findGameMenu.getController().showEmpty();
+        } else {
+            for (CommandArgument arg : args) {
+               findGameMenu.getController().addEntry(arg.getName(), arg.getValue());
+            }
+        }
     }
 
-    public void showJoinableGames(NetworkCommand command) {
-        for(CommandArgument arg: command.getAllArguments()) {
-            findGameMenu.addEntry(arg.getName(), arg.getValue());
-        }
+    public void resetWaitScreen() {
+        waitForPlayersMenu.getController().reset();
+    }
+
+    public void resetFindGameMenu() {
+        findGameMenu.getController().reset();
     }
 
     public enum Screen {
@@ -122,7 +137,7 @@ public class MenuManager {
         GAME,
         PLAY,
         FIND_GAME,
-        CREATE_GAME, 
+        CREATE_GAME,
         WAIT_FOR_PLAYERS;
     }
 

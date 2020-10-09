@@ -123,7 +123,12 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             case LIST_AVAILABLE_GAMES:
                 listGames();
                 break;
-            case START_GAME:
+            case REQUEST_JOIN_GAME:
+                requestJoinGame(command.getArgument("id"));
+                break;
+                
+            case REQUEST_START_GAME:
+                game.sendCommandToAllPlayers(NetworkCommand.START_GAME);
                 game.start();
                 break;
             case ADD_TOWER:
@@ -157,7 +162,6 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private void createGame(String name) {
         game = new ServerGame(owner, name);
         Server.getInstance().addGame(game);
-        sendCommand(NetworkCommand.GAME_CREATED);
     }
 
     private void listGames() {
@@ -176,6 +180,11 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     public void setOwner(Player o) {
         owner = o;
+    }
+
+    private void requestJoinGame(String gameId) {
+        game = Server.getInstance().getGameHandler().getGame(gameId);
+        game.addPlayer(owner);
     }
 
 }

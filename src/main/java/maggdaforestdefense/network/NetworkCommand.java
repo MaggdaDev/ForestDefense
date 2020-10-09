@@ -17,9 +17,8 @@ public class NetworkCommand {
     public static final CommandArgument[] EMPTY_ARGS = new CommandArgument[]{};
     // PREDEF COMMANDS
     public static final NetworkCommand 
-
-            GAME_CREATED = new NetworkCommand(CommandType.GAME_CREATED, EMPTY_ARGS),
             START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
+            REQUEST_START_GAME = new NetworkCommand(CommandType.REQUEST_START_GAME, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
             READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS),
             LIST_AVAILABLE_GAMES = new NetworkCommand(CommandType.LIST_AVAILABLE_GAMES, EMPTY_ARGS),
@@ -95,18 +94,23 @@ public class NetworkCommand {
         REQUIRE_CONNECTION, // auth
         CREATE_GAME, // NO ARGS
         LIST_AVAILABLE_GAMES,   // NO ARGS
-        START_GAME, // NO ARGS
+        REQUEST_JOIN_GAME,      // GAME ID
+        
+        REQUEST_START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type
         READY_FOR_NEXT_ROUND, // NO ARGS
         REQUEST_ESSENCE_TOWER, //id
 
         //  SERVER TO CLIENT
+        LAUNCH_GAME,        // NO ARGS
         PERMIT_CONNECTION, // auth_ok
         SHOW_GAMES,         // list of games
-        GAME_CREATED,       // NO ARGS
+        SHOW_WAITING_PLAYERS,   // list of playernames
         INVALID_MESSAGE, // NO ARGS      The message sent by the client is invalid, will disconnect
         HANDLE_EXCEPTION, // name, stack
+        
+        START_GAME, //NO ARGS
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)

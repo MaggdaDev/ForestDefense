@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -64,6 +65,11 @@ public class FindGameMenu {
             idLabel = new Label("Game-ID: " + id);
             nameLabel = new Label("Name: " + name);
             joinBtn = new Button("JOIN");
+            
+            joinBtn.setOnAction((ActionEvent e)->{
+                maggdaforestdefense.MaggdaForestDefense.getInstance().joinGame(id);
+                MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
+            });
 
             setSpacing(50);
 

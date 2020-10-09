@@ -22,6 +22,9 @@ import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
 import javafx.beans.value.ChangeListener;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.NetworkCommand.CommandType;
 
 /**
  * Main class.
@@ -36,6 +39,8 @@ public class MaggdaForestDefense extends Application {
     public static MaggdaForestDefense getInstance() {
         return instance;
     }
+
+    
 
     //Graphics
     private MenuManager menueManager;
@@ -152,8 +157,10 @@ public class MaggdaForestDefense extends Application {
         }
     }
     
-    public static void launchGame(String gameName) {
-        game = Game.createGame(gameName);
+
+    
+    public void joinGame(String id) {
+        networkManager.sendCommand(new NetworkCommand(CommandType.REQUEST_JOIN_GAME, new CommandArgument[]{new CommandArgument("id", id)}));
     }
     
     

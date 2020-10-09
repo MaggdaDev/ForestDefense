@@ -54,7 +54,7 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
 
-        NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.CREATE_GAME, new CommandArgument[]{new CommandArgument("name", gameName)}));
+        
 
     }
 
@@ -72,7 +72,7 @@ public class Game {
 
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
-        NetworkManager.getInstance().sendCommand(NetworkCommand.START_GAME);
+        
 
         // Key Events
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
@@ -90,7 +90,6 @@ public class Game {
         NetworkManager.getInstance().resetCommandHandler();
     }
 
-    
     // General
     public void addGameObject(ClientGameObject gameObject) {
         gameObjects.put(String.valueOf(gameObject.getGameObjectId()), gameObject);
@@ -133,15 +132,7 @@ public class Game {
     }
 
     // COMMAND HANDLES
-   
 
-    public void gameCreated() {
-        MenuManager.getInstance().resetWaitScreen();
-        Platform.runLater(() -> {
-            MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
-        });
-
-    }
 
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));

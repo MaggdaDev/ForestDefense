@@ -81,13 +81,23 @@ public class ClientCommandHandler extends Thread {
             case PERMIT_CONNECTION:
                 NetworkManager.getInstance().onReady(Boolean.parseBoolean(command.getArgument("auth_ok")));
                 break;
+            case LAUNCH_GAME:
+                Game.createGame(command.getArgument("name"));
+                break;
             case SHOW_GAMES:
                 Platform.runLater(() -> {
                     MenuManager.getInstance().showJoinableGames(command);
                 });
                 break;
-            case GAME_CREATED:
-                Game.getInstance().gameCreated();
+            case SHOW_WAITING_PLAYERS:
+                Platform.runLater(() -> {
+                    MenuManager.getInstance().showWaitingPlayers(command);
+                });
+                break;
+            case START_GAME:
+                Platform.runLater(() -> {
+                    Game.getInstance().startGame();
+                });
                 break;
             case SHOW_MAP:
                 ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));

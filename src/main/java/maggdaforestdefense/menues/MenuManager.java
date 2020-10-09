@@ -111,6 +111,7 @@ public class MenuManager {
 
     
     public void showJoinableGames(NetworkCommand command) {
+        resetFindGameMenu();
         CommandArgument[] args = command.getAllArguments();
         if (args.length == 0) {
             findGameMenu.getController().showEmpty();
@@ -118,6 +119,14 @@ public class MenuManager {
             for (CommandArgument arg : args) {
                findGameMenu.getController().addEntry(arg.getName(), arg.getValue());
             }
+        }
+    }
+    
+    public void showWaitingPlayers(NetworkCommand command) {
+        resetWaitScreen();
+        CommandArgument[] args = command.getAllArguments();
+        for(CommandArgument arg: args) {
+            waitForPlayersMenu.getController().addPlayerEntry(arg.getValue());
         }
     }
 
@@ -128,6 +137,8 @@ public class MenuManager {
     public void resetFindGameMenu() {
         findGameMenu.getController().reset();
     }
+
+    
 
     public enum Screen {
 

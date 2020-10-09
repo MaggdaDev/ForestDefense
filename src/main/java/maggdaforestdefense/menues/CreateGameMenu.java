@@ -14,6 +14,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.client.NetworkManager;
 
 import maggdaforestdefense.storage.Logger;
 import org.panda_lang.panda.framework.language.parser.implementation.general.number.NumberUtils;
@@ -47,7 +50,8 @@ public class CreateGameMenu {
     @FXML
     private void okBtnOnClick(ActionEvent e) {
         String gameName = gameNameTF.getText();
-        maggdaforestdefense.MaggdaForestDefense.launchGame(gameName);
+        NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.CREATE_GAME, new CommandArgument[]{new CommandArgument("name", gameName)}));
+        MenuManager.getInstance().setScreenShown(MenuManager.Screen.WAIT_FOR_PLAYERS);
     }
 
     @FXML

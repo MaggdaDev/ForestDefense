@@ -107,4 +107,8 @@ public class Server {
     public NetworkCommand getGamesAsCommand() {
         return gameHandler.getGamesAsCommand();
     }
+    
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
 }

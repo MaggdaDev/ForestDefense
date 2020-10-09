@@ -60,7 +60,7 @@ public class ServerGame extends Thread {
         this.name = name;
         currentGameObjectId = 0;
         players = new Vector<>();
-        players.add(firstPlayer);
+        addPlayer(firstPlayer);
 
         serverLoop = new ServerLoop(players, this);
 
@@ -75,9 +75,20 @@ public class ServerGame extends Thread {
     @Override
     public void run() {     //Start game!
         // Map!
+        
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_MAP, new CommandArgument[]{new CommandArgument("map", map.toString())}));
 
         serverLoop.run();
+    }
+    
+    public void addPlayer(Player player) {
+        players.add(player);
+        CommandArgument[] args = new CommandArgument[players.size()];
+        for(int i = 0; i < players.size(); i++) {
+            args[i] = new CommandArgument("name", players.get(i).getUserName());
+        }
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_WAITING_PLAYERS, args));
+        player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
     }
 
     public void endGame() {
@@ -282,6 +293,8 @@ public class ServerGame extends Thread {
     public String getGameName() {
         return name;
     }
+
+    
 
    
 

@@ -42,6 +42,14 @@ public class GameHandler {
         return new NetworkCommand(NetworkCommand.CommandType.SHOW_GAMES, argsArr);
     }
     
+    public void addPlayerToGame(String gameId, Player player) {
+        games.get(gameId).addPlayer(player);
+    }
+    
+    public ServerGame getGame(String gameId) {
+        return games.get(gameId);
+    }
+    
     public final static synchronized String getNextGameId() {
         currentGameId++;
         return String.valueOf(currentGameId);

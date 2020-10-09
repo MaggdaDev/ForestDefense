@@ -8,6 +8,8 @@ package maggdaforestdefense.storage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Vector;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -26,8 +28,8 @@ public class MobWavesLoader {
         try {
             Vector<MobWave> retVect = new Vector<>();
 
-            file = new File(GameImage.class.getClassLoader().getResource("maggdaforestdefense/config/mob.waves").toURI());
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            InputStream stream = GameImage.class.getClassLoader().getResourceAsStream("maggdaforestdefense/config/mob.waves");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
             Vector<Spawnable> currentWaveVect = new Vector<>();
             while (reader.ready()) {

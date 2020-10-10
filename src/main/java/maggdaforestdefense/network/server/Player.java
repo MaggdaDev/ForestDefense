@@ -54,6 +54,7 @@ public class Player {
 
     public void handleDisconnect(WebSocket conn, int code, String reason) {
         commandHandler.stop();
+        
     }
 
     public int getID() {

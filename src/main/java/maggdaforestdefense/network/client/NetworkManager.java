@@ -110,8 +110,8 @@ public class NetworkManager extends WebSocketClient {
 
     public static NetworkManager getInstance() {
         if (instance == null) {
-            String WS_STRING = maggdaforestdefense.MaggdaForestDefense.isDev() ? "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME : Server.WS_URL + Server.WS_FILENAME;
-            //String WS_STRING = "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME;
+            //String WS_STRING = maggdaforestdefense.MaggdaForestDefense.isDev() ? "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME : Server.WS_URL + Server.WS_FILENAME;
+            String WS_STRING = "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME;
             Logger.debugClient("WebSocket URI is " + WS_STRING);
             try {
                 instance = new NetworkManager(new URI(WS_STRING));

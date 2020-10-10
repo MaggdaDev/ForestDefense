@@ -65,6 +65,8 @@ public class ServerLoop {
 
             setAllPlayersNotReady();
             serverGame.sendCommandToAllPlayers(NetworkCommand.WAIR_FOR_READY_NEXT_WAVE);
+            
+            serverGame.checkPlayers();
 
             Waiter.waitUntil(() -> {      // wait unti
                 return allPlayersReadyForNextRound();

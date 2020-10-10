@@ -45,10 +45,11 @@ public class FPSLimiter {
         }
         try {
             sleep = TIME_BETWEEN_FRAMES + behind - (newTime - oldTime);
+            behind = 0;
             if (sleep > 0) {
                 Thread.sleep((long) sleep);
             } else {
-                behind += sleep;
+                behind = sleep;
             }
         } catch (Exception e) {
             e.printStackTrace();

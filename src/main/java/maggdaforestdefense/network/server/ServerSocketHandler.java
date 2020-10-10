@@ -175,7 +175,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     @Override
     public void stop() {
-
+        game.removePlayer(owner);
     }
 
     public void setOwner(Player o) {

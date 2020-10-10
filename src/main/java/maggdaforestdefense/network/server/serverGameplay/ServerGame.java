@@ -17,6 +17,7 @@ import maggdaforestdefense.network.server.Player;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
@@ -42,6 +43,8 @@ public class ServerGame extends Thread {
     
     // MANAGEMENT
     private final String name;
+    private boolean isStarted = false;
+    private String gameId = null;
     
     // GAMEPLAY
     private int coins = START_COINS;
@@ -79,7 +82,7 @@ public class ServerGame extends Thread {
     @Override
     public void run() {     //Start game!
         // Map!
-        
+        isStarted = true;
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_MAP, new CommandArgument[]{new CommandArgument("map", map.toString())}));
 
         serverLoop.run();
@@ -94,10 +97,16 @@ public class ServerGame extends Thread {
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_WAITING_PLAYERS, args));
         player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
     }
+    
+    public void removePlayer(Player owner) {
+        players.remove(owner);
+        checkPlayers();
+    }
 
     public void endGame() {
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
+        Server.getInstance().getGameHandler().removeGame(gameId);
     }
     
     public void flushCommands() {
@@ -109,6 +118,13 @@ public class ServerGame extends Thread {
         
         NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.UPDATE, args);
         sendCommandToAllPlayers(command);
+    }
+    
+    public void checkPlayers() {
+        if(players.size() == 0) {
+            Logger.logServer("GAME ABANDONED BECAUSE OF NO PLAYERS!!!   GAME ID: " + gameId + "      GAME NAME: " + name);
+            endGame();
+        }
     }
 
     public void spawnMob(Spawnable toSpawn) {
@@ -316,6 +332,18 @@ public class ServerGame extends Thread {
     public String getGameName() {
         return name;
     }
+    
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setGameId(String id) {
+        this.gameId = id;
+    }
+
+    
+
+    
 
   
 

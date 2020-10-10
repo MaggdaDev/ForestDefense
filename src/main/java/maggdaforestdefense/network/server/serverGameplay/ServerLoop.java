@@ -17,6 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.spawning.MobWave;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.storage.MobWavesLoader;
+import maggdaforestdefense.util.FPSLimiter;
 import maggdaforestdefense.util.GameMaths;
 import maggdaforestdefense.util.Waiter;
 
@@ -40,11 +41,17 @@ public class ServerLoop {
     private int currentWaveIndex = 0;
     private MobWave currentWave;
 
+    private boolean isInWave = false;
+    
+    
+    private FPSLimiter fpsLimiter;
+    
     public ServerLoop(List<Player> playerList, ServerGame game) {
         players = playerList;
         serverGame = game;
 
         mobWaves = MobWavesLoader.loadMobWaves();
+        fpsLimiter = new FPSLimiter();
     }
 
     public void run() {
@@ -52,6 +59,7 @@ public class ServerLoop {
         oldRunTime = 0;
 
         while (running) {
+            
             currentWave = mobWaves.get(currentWaveIndex);
             mobsToSpawn = currentWave.getMobAmount();
 
@@ -70,8 +78,10 @@ public class ServerLoop {
             
             runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
             oldRunTime = runTime;
-
+            
+            isInWave = true;
             while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {                         // ONE WAVE!
+                fpsLimiter.startOfIteration();
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
                 double timeElapsed = runTime - oldRunTime;
                 oldRunTime = runTime;
@@ -89,12 +99,13 @@ public class ServerLoop {
                 }
 
                 // MOB SPAWNING END
-                try {
-                    Thread.sleep(1);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                
+                serverGame.flushCommands();
+                
+                fpsLimiter.endOfIteration();
+                fpsLimiter.doSleep();
             }
+            isInWave = false;
 
             serverGame.handleEssenceAfterRound();
 
@@ -127,5 +138,9 @@ public class ServerLoop {
 
     public void endGame() {
         running = false;
+    }
+    
+    public boolean isInWave() {
+        return isInWave;
     }
 }

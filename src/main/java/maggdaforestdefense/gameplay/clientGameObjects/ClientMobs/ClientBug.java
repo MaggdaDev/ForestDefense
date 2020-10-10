@@ -42,12 +42,12 @@ public abstract class ClientBug extends ClientMob {
         double dY = newY - yPos;
         movementType = Mob.MovementType.values()[(int) updateCommand.getNumArgument("movement")];
         distanceSinceLastStep += GameMaths.getAbs(dX, dY);
+        if (dX != 0 || dY != 0) {
+            updateRotate(newX, newY);
+        }
         if (distanceSinceLastStep >= distance_between_steps) {
             distanceSinceLastStep = 0;
             step();
-        }
-        if (distanceSinceLastStep != 0) {
-            updateRotate(newX, newY);
         }
 
         setNewPos(newX, newY);

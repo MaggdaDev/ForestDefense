@@ -14,6 +14,7 @@ import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.menues.MenuManager;
+import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.Map;
@@ -78,6 +79,12 @@ public class ClientCommandHandler extends Thread {
         //Logger.logClient("Command handled: " + command.toString());
 
         switch (command.getCommandType()) {
+            case UPDATE:
+                for (CommandArgument arg : command.getAllArguments()) {
+                    handleCommand(arg.getInnerCommand());
+                }
+                break;
+
             case PERMIT_CONNECTION:
                 NetworkManager.getInstance().onReady(Boolean.parseBoolean(command.getArgument("auth_ok")));
                 break;

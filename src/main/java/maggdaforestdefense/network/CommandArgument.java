@@ -18,6 +18,15 @@ public class CommandArgument {
         value = val;
     }
     
+    public CommandArgument(String n, NetworkCommand innerCommand) {
+        name = n;
+        value = innerCommand.toString();
+    }
+    
+    public NetworkCommand getInnerCommand() {
+        return NetworkCommand.fromString(value);
+    }
+    
     public CommandArgument(String n, int val) {
         this(n, String.valueOf(val));
     }

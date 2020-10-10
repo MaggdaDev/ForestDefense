@@ -55,6 +55,8 @@ public class ServerGame extends Thread {
     private int currentGameObjectId;
 
     private HashMap<String, Mob> mobsList;
+    
+    private Vector<NetworkCommand> commandsToSend;
 
     public ServerGame(Player firstPlayer, String name) {
         this.name = name;
@@ -70,6 +72,8 @@ public class ServerGame extends Thread {
         gameObjects = new ConcurrentHashMap<>();
 
         mobsList = new HashMap<>();
+        
+        commandsToSend = new Vector<>();
     }
 
     @Override
@@ -94,6 +98,17 @@ public class ServerGame extends Thread {
     public void endGame() {
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
+    }
+    
+    public void flushCommands() {
+        CommandArgument[] args = new CommandArgument[commandsToSend.size()];
+        for(int i = 0; i < commandsToSend.size(); i++) {
+            args[i] = new CommandArgument(String.valueOf(i), commandsToSend.get(i));
+        }
+        commandsToSend.clear();
+        
+        NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.UPDATE, args);
+        sendCommandToAllPlayers(command);
     }
 
     public void spawnMob(Spawnable toSpawn) {
@@ -155,7 +170,7 @@ public class ServerGame extends Thread {
         gameObjects.forEach((String key, GameObject g) -> {
             NetworkCommand comm = g.update(timeElapsed);
             if (comm != null) {
-                sendCommandToAllPlayers(comm);
+                queueUpdateCommand(comm);
             }
         });
 
@@ -198,11 +213,19 @@ public class ServerGame extends Thread {
     }
 
     public void updateRessources() {
-        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
     }
 
     public void damageBase(Mob mob) {
         base.damageBase(mob);
+    }
+    
+    public void queueUpdateCommand(NetworkCommand command) {
+        if(serverLoop.isInWave()) {
+        commandsToSend.add(command);
+        } else {
+            sendCommandToAllPlayers(command);
+        }
     }
 
     public void sendCommandToAllPlayers(NetworkCommand command) {
@@ -213,12 +236,12 @@ public class ServerGame extends Thread {
 
     private void addGameObject(GameObject g) {
         gameObjects.put(String.valueOf(g.getId()), g);
-        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
+        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
     }
 
     private void removeGameObject(GameObject g) {
         gameObjects.remove(String.valueOf(g.getId()));
-        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
+        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
 
     }
 
@@ -293,6 +316,8 @@ public class ServerGame extends Thread {
     public String getGameName() {
         return name;
     }
+
+  
 
     
 

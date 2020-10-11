@@ -6,13 +6,15 @@ plugins {
 
 group 'maggdaforestdefense'
 version 'app'
-mainClassName = 'maggdaforestdefense.Main'
+mainClassName = 'maggdaforestdefense.MaggdaForestDefense'
 
 applicationDefaultJvmArgs = ["-Djava.library.path=natives"]
 
 sourceCompatibility = 1.8
 
 compileJava.options.encoding = 'ISO-8859-1'
+
+
 
 repositories {
     mavenCentral()
@@ -31,6 +33,13 @@ dependencies {
     //compile 'com.jfoenix:jfoenix:8.0.8' // For Java 8
     //compile 'com.jfoenix:jfoenix:9.0.8' // For Java 9
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'MaggdaForestDefense'
+    }
+}
+
 
 javafx {
     version = "13"

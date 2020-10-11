@@ -21,7 +21,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -31,14 +30,15 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Exceptions;
+import maggdaforestdefense.util.NodeSizer;
 
 /**
  *
  * @author DavidPrivat
  */
 public class PlantTowerButton extends Button {
+    public final static double IMAGE_SIZE = 100;
 
-    public final static Font font = new Font(20);
     private ImageView imageView;
     private int xIndex, yIndex;
     private GameObjectType gameObjectType;
@@ -53,7 +53,7 @@ public class PlantTowerButton extends Button {
         this.plantMenu = plantMenu;
         imageView = new ImageView();
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(100);
+        imageView.setFitHeight(IMAGE_SIZE);
        
 
         xIndex = x;
@@ -66,8 +66,7 @@ public class PlantTowerButton extends Button {
             plantMenu.setBuyTreeBox(buyTreeBox);
         });
 
-        setPrefWidth(100);
-        setPrefHeight(100);
+        
 
         VBox graphic = new VBox(imageView, prizeLabel);
         graphic.setAlignment(Pos.CENTER);
@@ -88,6 +87,8 @@ public class PlantTowerButton extends Button {
                 throw new Exceptions.GameObjectNotCompatibleException();
 
         }
+        
+        new NodeSizer<ImageView>(imageView, imageView.getImage().getHeight() * (IMAGE_SIZE / imageView.getImage().getWidth()), IMAGE_SIZE, true);
 
     }
 
@@ -107,6 +108,7 @@ public class PlantTowerButton extends Button {
     }
 
     public class BuyTreeBox extends VBox{
+        public static final double TREE_VIEW_HEIGHT = 400;
 
         private Button buyButton, backButton;
         private ImageView treeView;
@@ -118,13 +120,12 @@ public class PlantTowerButton extends Button {
             buyButton.setOnAction((ActionEvent e)->{
                 plantTower();
             });
-            buyButton.setFont(PrizeLabel.FONT);
             
             backButton = new Button("BACK");
             backButton.setOnAction((ActionEvent e)->{
                 plantMenu.setBuyTreeBox(null);
             });
-            backButton.setFont(PrizeLabel.FONT);
+
 
 
             treeView = new ImageView(image.getImage());
@@ -132,10 +133,8 @@ public class PlantTowerButton extends Button {
             treeView.setFitHeight(200);
 
             treeName = new Label(name);
-            treeName.setFont(UpgradeMenu.font);
 
             treeDescription = new Label(description);
-            treeDescription.setFont(UpgradeMenu.descriptionFont);
             treeDescription.setWrapText(true);
             treeDescription.setPrefWidth(400);
             
@@ -148,6 +147,7 @@ public class PlantTowerButton extends Button {
             setAlignment(Pos.CENTER);
             
 
+            new NodeSizer(treeView, NodeSizer.CALC_WIDTH_FROM_HEIGHT(treeView), TREE_VIEW_HEIGHT, true);
 
         }
 

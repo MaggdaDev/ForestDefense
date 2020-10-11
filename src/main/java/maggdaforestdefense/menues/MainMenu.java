@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
 import javafx.scene.text.Text;
 import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.auth.AuthWindow;

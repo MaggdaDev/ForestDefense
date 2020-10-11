@@ -18,7 +18,6 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.GameScreen;
 import maggdaforestdefense.storage.GameImage;
@@ -37,7 +36,6 @@ public class GrowingWaitingMenu extends VBox {
         treeView.setFitHeight(100);
         
         Label treeLabel = new Label(treeName);
-        treeLabel.setFont(UpgradeMenu.font);
         
         treeBox = new ContentBox();
         treeBox.getChildren().addAll(treeLabel, treeView);
@@ -56,10 +54,9 @@ public class GrowingWaitingMenu extends VBox {
     }
     
     class Timer extends Label {
-        private final Font font = new Font(60);
+
         
         public Timer(double duration) {
-            setFont(font);
             setBackground(new Background(new BackgroundFill(Color.SADDLEBROWN, new CornerRadii(10), Insets.EMPTY)));
             setTextFill(Color.LIGHTGREEN);
             setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));

@@ -23,20 +23,20 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.NodeSizer;
 
 /**
  *
  * @author DavidPrivat
  */
 public class PlantMenu extends VBox {
+    public static final double CELL_TYPE_VIEW_SIZE = 200;
 
-    private final static Font font = new Font(40);
 
     private MapCell.CellType cellType;
 
@@ -57,13 +57,12 @@ public class PlantMenu extends VBox {
 
         //CellType
         cellTypeView = new ImageView();
-        cellTypeView.setFitWidth(200);
-        cellTypeView.setFitHeight(200);
+        cellTypeView.setFitWidth(CELL_TYPE_VIEW_SIZE);
+        cellTypeView.setFitHeight(CELL_TYPE_VIEW_SIZE);
         BorderPane celltTypeViewBorder = new BorderPane(cellTypeView);
         celltTypeViewBorder.setBorder(new Border(new BorderStroke(Color.web("022202"), BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
 
         cellTypeLabel = new Label();
-        cellTypeLabel.setFont(font);
 
         cellTypeBox = new ContentBox();
         cellTypeBox.getChildren().addAll(cellTypeView, cellTypeLabel);
@@ -71,7 +70,6 @@ public class PlantMenu extends VBox {
 
         //towers
         addTowerLabel = new Label("Add plant:");
-        addTowerLabel.setFont(font);
 
         towerButtons = new GridPane();
 
@@ -86,6 +84,8 @@ public class PlantMenu extends VBox {
         getChildren().addAll(cellTypeBox, towerBox, buyTreeBorderBox);
 
         updateTypeSpecific(type);
+        
+        new NodeSizer<ImageView>(cellTypeView, CELL_TYPE_VIEW_SIZE, CELL_TYPE_VIEW_SIZE, true);
     }
 
     public void updateTypeSpecific(MapCell.CellType t) {

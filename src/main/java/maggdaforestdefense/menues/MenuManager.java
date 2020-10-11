@@ -12,7 +12,6 @@ import maggdaforestdefense.gameplay.Game;
 
 import java.io.IOException;
 import javafx.application.Platform;
-import javafx.scene.text.Font;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.menues.FXMLMenu;
@@ -23,7 +22,6 @@ import maggdaforestdefense.menues.FXMLMenu;
  */
 public class MenuManager {
 
-    public static Font headingFont = new Font(40);
 
     private StackPane mainRoot;
 

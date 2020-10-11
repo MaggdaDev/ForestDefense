@@ -25,7 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
@@ -35,14 +34,15 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.NodeSizer;
+import org.graalvm.compiler.nodeinfo.NodeSize;
 
 /**
  *
  * @author DavidPrivat
  */
 public class UpgradeMenu extends VBox{
-    public final static Font font = new Font(40);
-    public final static Font descriptionFont = new Font(25);
+    public final static double ARROW_SIZE = 40, TREE_VIEW_WIDTH = 100;
     
     private GameObjectType gameObjectType;
     private ClientTower ownerTower;
@@ -72,13 +72,12 @@ public class UpgradeMenu extends VBox{
         gameObjectType = ownerTower.getType();
         
         treeView = new ImageView();
-        treeView.setFitWidth(100);
+        treeView.setFitWidth(TREE_VIEW_WIDTH);
         treeView.setPreserveRatio(true);
         boughtUpgradesBox = new BoughtUpgradesBox(owner.getUpgradeSet().getMaxTier());
         
         
         treeNameLabel = new Label();
-        treeNameLabel.setFont(font);
         treePane = new VBox();
         treePane.getChildren().addAll(treeNameLabel, treeView, boughtUpgradesBox);
         
@@ -96,8 +95,8 @@ public class UpgradeMenu extends VBox{
         // Set up upgrades scroll
         ImageView rightArrow = new ImageView(GameImage.MENUICON_ARROW_RIGHT.getImage());
         ImageView leftArrow = new ImageView(GameImage.MENUICON_ARROW_LEFT.getImage());
-        rightArrow.setFitWidth(40);
-        leftArrow.setFitWidth(40);
+        rightArrow.setFitWidth(ARROW_SIZE);
+        leftArrow.setFitWidth(ARROW_SIZE);
         rightArrow.setPreserveRatio(true);
         leftArrow.setPreserveRatio(true);
         previousUpgradeTierButton = new Button("", leftArrow);
@@ -146,6 +145,9 @@ public class UpgradeMenu extends VBox{
           
           selectedUpgradeBox.setVisible(false);
           
+          new NodeSizer<ImageView>(rightArrow, ARROW_SIZE, ARROW_SIZE, true);
+          new NodeSizer<ImageView>(leftArrow, ARROW_SIZE, ARROW_SIZE, true);
+          new NodeSizer<ImageView>(treeView, TREE_VIEW_WIDTH, NodeSizer.CALC_HEIGHT_FROM_WIDTH(treeView), true);
           
           
     }
@@ -248,6 +250,7 @@ public class UpgradeMenu extends VBox{
     }
     
     public class UpgradeButtonTierBox extends FlowPane {
+        public final static double GAP = 30;
         private ObservableList<BuyUpgradeButton> buttons;
         
         public ObservableList<BuyUpgradeButton> getButtons() {
@@ -265,8 +268,12 @@ public class UpgradeMenu extends VBox{
             }
             
             setAlignment(Pos.CENTER);
-            setHgap(30);
-            setVgap(30);
+            setHgap(GAP);
+            setVgap(GAP);
+            
+            maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize((a,b,c)->{
+            setPrefWrapLength(maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact() * 3 * BuyUpgradeButton.SIZE + 3 * GAP);
+            });
             
         }
 
@@ -310,6 +317,8 @@ public class UpgradeMenu extends VBox{
                 setBorder(new Border(new BorderStroke(Color.DARKMAGENTA, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
                 
                 getChildren().add(imageView);
+                
+                new NodeSizer<ImageView>(imageView, SIZE, SIZE, true);
             }
             public ImageView getImageView() {
                 return imageView;
@@ -326,14 +335,12 @@ public class UpgradeMenu extends VBox{
         
         public SelectedUpgradeBox() {
             buyButton = new Button("BUY");
-            buyButton.setFont(font);
             
             upgradeIcon = new ImageView();
             upgradeIcon.setFitHeight(ICON_SIZE);
             upgradeIcon.setFitWidth(ICON_SIZE);
             
             descriptionLabel = new Label();
-            descriptionLabel.setFont(descriptionFont);
             descriptionLabel.setWrapText(true);
             
             getChildren().addAll(upgradeIcon, descriptionLabel, buyButton);
@@ -343,6 +350,8 @@ public class UpgradeMenu extends VBox{
             
             setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
             setPadding(new Insets(20));
+            
+            new NodeSizer<ImageView>(upgradeIcon, ICON_SIZE, ICON_SIZE, true);
         }
         
         public void setUpgrade(BuyUpgradeButton button, boolean buyable) {

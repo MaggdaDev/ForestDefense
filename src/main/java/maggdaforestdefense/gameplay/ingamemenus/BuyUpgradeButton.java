@@ -24,6 +24,7 @@ import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.NodeSizer;
 
 /**
  *
@@ -41,15 +42,19 @@ public class BuyUpgradeButton extends StackPane {
     private boolean bought, locked, tierBought;
 
     public BuyUpgradeButton(ClientTower owner, Upgrade upgrade, boolean locked, int tier, int type) {
+        
         this.upgrade = upgrade;
         this.tier = tier;
         this.type = type;
         tower = owner;
-
+        
+       
 
         upgradeIcon = new ImageView(upgrade.getIcon());
         upgradeIcon.setFitHeight(SIZE);
         upgradeIcon.setFitWidth(SIZE);
+        
+        
 
         lockedIcon = new ImageView(GameImage.MENUICON_LOCK.getImage());
         lockedIcon.setFitHeight(SIZE / 2);
@@ -81,6 +86,11 @@ public class BuyUpgradeButton extends StackPane {
         clickState = CLICK_STATES.USUAL;
 
         update();
+        
+        new NodeSizer<ImageView>(upgradeIcon, SIZE, SIZE, true);
+        new NodeSizer<ImageView>(checkIcon, SIZE/2, SIZE/2, true);
+        new NodeSizer<ImageView>(lockedIcon, SIZE/2, SIZE/2, true);
+        new NodeSizer<ImageView>(notAvailableIcon, SIZE/2, SIZE/2, true);
 
 
         setOnMousePressed((MouseEvent e) -> {

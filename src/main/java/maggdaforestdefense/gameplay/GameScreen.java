@@ -5,6 +5,9 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -17,6 +20,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import javafx.scene.Node;
+import javafx.scene.text.Font;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
@@ -32,6 +37,8 @@ import maggdaforestdefense.util.KeyEventHandler;
  * @author David
  */
 public class GameScreen extends Group{
+    public final static double DEFAULT_FONT = 30;
+    private DoubleProperty fontSize = new SimpleDoubleProperty(DEFAULT_FONT);
 
     private ClientMap map;
     private Group gamePlayGroup;
@@ -100,7 +107,18 @@ public class GameScreen extends Group{
                    PlayerInputHandler.getInstance().mouseMoved(e);
                    setCursor(Cursor.CLOSED_HAND);
         });
+        
+        MaggdaForestDefense.getInstance().addOnSceneResize((a,b,c)->{
+            updateFont();
+        });
+        
+        styleProperty().bind(Bindings.format("-fx-font-size: %.2fpt;", fontSize));
+        
 
+    }
+    
+    public void updateFont() {
+        fontSize.set(DEFAULT_FONT * maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact());
     }
 
     private final void setUpInputListeners() {

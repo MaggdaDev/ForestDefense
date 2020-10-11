@@ -27,12 +27,14 @@ import javafx.scene.transform.Rotate;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.NodeSizer;
 
 /**
  *
  * @author DavidPrivat
  */
 public class SideMenu extends GridPane {
+    public static double EXPAND_ICON_WIDTH = 20;
 
     protected Button expandButton;
     protected ImageView expandIcon;
@@ -43,8 +45,8 @@ public class SideMenu extends GridPane {
     public SideMenu(boolean rightSide) {
         isRightSide = rightSide;
         expandIcon = new ImageView(GameImage.MENUICON_EXPAND.getImage());
-        expandIcon.setFitWidth(20);
-        expandIcon.setFitHeight(20);
+        expandIcon.setFitWidth(EXPAND_ICON_WIDTH);
+        expandIcon.setFitHeight(EXPAND_ICON_WIDTH);
 
         expandButton = new Button("", expandIcon);
         if (rightSide) {
@@ -74,6 +76,7 @@ public class SideMenu extends GridPane {
         super.widthProperty().addListener(((observable, oldValue, newValue) -> {
             refreshPosition();
         }));
+        
 
     }
 

@@ -7,7 +7,7 @@ package maggdaforestdefense.menues;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
+
 import maggdaforestdefense.network.client.NetworkManager;
 
 /**
@@ -18,7 +18,6 @@ public class LaunchingScreen extends StackPane{
     Label textLabel;
     public LaunchingScreen() {
         textLabel = new Label("Launching...");
-        textLabel.setFont(new Font(30));
         getChildren().add(textLabel);
     }
     

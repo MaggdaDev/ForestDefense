@@ -22,6 +22,8 @@ import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.control.Button;
+import javafx.scene.control.Labeled;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.NetworkCommand.CommandType;
@@ -33,14 +35,14 @@ import maggdaforestdefense.network.NetworkCommand.CommandType;
  */
 public class MaggdaForestDefense extends Application {
 
+    public static double DEFAULT_HEIGHT = 0, DEFAULT_WIDTH = 0;
+
     //Main
     private static MaggdaForestDefense instance;
 
     public static MaggdaForestDefense getInstance() {
         return instance;
     }
-
-    
 
     //Graphics
     private MenuManager menueManager;
@@ -52,11 +54,11 @@ public class MaggdaForestDefense extends Application {
     private NetworkManager networkManager;
 
     private static boolean isServer, isDev;
-    
+
     private static Server server;
 
-    
     private static Game game;
+
     /**
      * Starts the program/GUI
      *
@@ -127,7 +129,6 @@ public class MaggdaForestDefense extends Application {
         System.exit(0);
     }
 
-
     public static void main(String[] args) {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
         //System.setProperty("java.library.path", "natives");
@@ -148,22 +149,35 @@ public class MaggdaForestDefense extends Application {
 
         if (isServer) {
             try {
-            server = new Server();
-            } catch(Exception e) {
+                server = new Server();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             launch(args);
         }
     }
-    
 
-    
     public void joinGame(String id) {
         networkManager.sendCommand(new NetworkCommand(CommandType.REQUEST_JOIN_GAME, new CommandArgument[]{new CommandArgument("id", id)}));
     }
-    
-    
+
+    public double getHeightFact() {
+        return getWindowHeight() / DEFAULT_HEIGHT;
+
+    }
+
+    public double getWidthFact() {
+        return getWindowWidth() / DEFAULT_WIDTH;
+    }
+
+    public double getSizeFact() {
+        if (getHeightFact() < getWidthFact()) {
+            return getHeightFact();
+        } else {
+            return getWidthFact();
+        }
+    }
 
     public void addOnSceneResize(ChangeListener<? super Number> l) {
         scene.widthProperty().addListener(l);
@@ -175,17 +189,23 @@ public class MaggdaForestDefense extends Application {
     }
 
     public static double getWindowWidth() {
-        return instance.primStage.getWidth();
+        if(instance.scene.getWidth() > DEFAULT_WIDTH) {
+            DEFAULT_WIDTH = instance.scene.getWidth();
+        }
+        return instance.scene.getWidth();
     }
 
     public static double getWindowHeight() {
-        return instance.primStage.getHeight();
+        if(instance.scene.getHeight() > DEFAULT_HEIGHT) {
+            DEFAULT_HEIGHT = instance.scene.getHeight();
+        }
+        return instance.scene.getHeight();
     }
-    
+
     public static boolean isServer() {
         return isServer;
     }
-    
+
     public static boolean isDev() {
         return isDev;
     }

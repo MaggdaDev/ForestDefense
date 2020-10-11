@@ -15,8 +15,11 @@
     -fx-effect: none;
 }
 
-.button,.menu-button,.toggle-button,.split-menu-button {
-    -fx-font-size: 14;
+.root {
+    -fx-font-size: 20;
+}
+
+.button,.menu-button,.toggle-button,.split-menu-button{
     -fx-background-radius: 4;
     -fx-border-radius: 4;
     -fx-pref-height: 30;
@@ -72,6 +75,8 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
 
 }
+
+
 
 
 /* MAGGDA ENDE */

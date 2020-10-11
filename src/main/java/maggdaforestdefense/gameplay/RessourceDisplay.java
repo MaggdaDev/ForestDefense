@@ -28,7 +28,6 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class RessourceDisplay extends HBox{
-    private final static Font font = new Font(30);
     private final static double ICON_SIZE = 40;
     
     protected Label valueLabel;
@@ -39,7 +38,6 @@ public class RessourceDisplay extends HBox{
     public RessourceDisplay(GameImage iconGameImage, int value) {
         this.value = value;
         valueLabel = new Label(String.valueOf(value));
-        valueLabel.setFont(font);
         
         icon = new ImageView(iconGameImage.getImage());
         icon.setFitHeight(ICON_SIZE);
@@ -57,6 +55,8 @@ public class RessourceDisplay extends HBox{
         setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(5), Insets.EMPTY)));
         setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(5), BorderWidths.DEFAULT)));
         getChildren().addAll(icon, valueLabel);
+        
+
     }
     
     public void setValue(int d) {

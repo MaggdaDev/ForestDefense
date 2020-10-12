@@ -32,6 +32,7 @@
         </HBox>
 
         <Button fx:id="mapEditorBtn" text="Open Map Editor" onAction="#mapEditorBtnOnClick" />
+        <Text fx:id="gameVersion" />
     </VBox>
 
 </VBox>

@@ -18,6 +18,7 @@ import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
+import maggdaforestdefense.config.Version;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.storage.Logger;
 
@@ -30,6 +31,7 @@ public class MainMenu {
     @FXML private Button mapEditorBtn;
     @FXML private Text userNameTxt;
     @FXML private Text emailTxt;
+    @FXML private Text gameVersion;
 
     
    
@@ -43,6 +45,8 @@ public class MainMenu {
             emailTxt.setText(ConfigurationManager.getConfig().getAuth().getMwUser().getEmail());
         }
         emailTxt.setFont(new Font(emailTxt.getFont().getName(), emailTxt.getFont().getSize()*0.8));
+        gameVersion.setText(Version.getVersion());
+        gameVersion.setFont(new Font(gameVersion.getFont().getName(), gameVersion.getFont().getSize()*0.75));
     }
 
     @FXML private void playBtnOnClick(ActionEvent e) {

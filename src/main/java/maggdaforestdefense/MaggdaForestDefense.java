@@ -14,6 +14,7 @@ import javafx.stage.WindowEvent;
 import maggdaforestdefense.auth.Afterwards;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.config.ConfigurationManager;
+import maggdaforestdefense.config.Version;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.client.NetworkManager;
@@ -133,6 +134,7 @@ public class MaggdaForestDefense extends Application {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
         //System.setProperty("java.library.path", "natives");
         Logger.logClient("Java version: " + System.getProperty("java.version"));
+        Logger.logClient("Game version: " + Version.getVersion());
         //SvgImageLoaderFactory.install();
 
         isServer = false;

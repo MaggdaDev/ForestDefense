@@ -3,6 +3,10 @@
 # Do gradle build
 cd ..
 
+echo "# Setting version"
+rm src/main/resources/maggdaforestdefense/config/version.txt
+date +"Version %y%m%d-%H%M%S (alpha)" > src/main/resources/maggdaforestdefense/config/version.txt
+
 echo "# Building"
 ./gradlew build --no-daemon
 

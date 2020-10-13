@@ -149,6 +149,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
             case READY_FOR_NEXT_ROUND:
                 owner.setReadyForNextRound(true);
+                game.updateReadyProgress();
                 break;
 
             case REQUEST_ESSENCE_TOWER:

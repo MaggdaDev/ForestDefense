@@ -106,6 +106,8 @@ public class NetworkCommand {
         READY_FOR_NEXT_ROUND, // NO ARGS
         REQUEST_ESSENCE_TOWER, //id
 
+        
+        
         //  SERVER TO CLIENT
         LAUNCH_GAME,        // NO ARGS
         PERMIT_CONNECTION, // auth_ok
@@ -128,6 +130,7 @@ public class NetworkCommand {
         WAIT_FOR_READY_NEXT_WAVE, // NO ARGS
         NEXT_WAVE, //wave
         DO_ESSENCE_ANIMATION, // id (of tower)
+        UPDATE_READY_CHECK,     // readycheck progress
         END_GAME;               // NO ARGS
 
     }

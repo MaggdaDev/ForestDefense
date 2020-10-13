@@ -126,6 +126,17 @@ public class ServerGame extends Thread {
             endGame();
         }
     }
+    
+    public void updateReadyProgress() {
+        int counter = 0;
+        for(Player player: players) {
+            if(player.isReadyForNextRound()) {
+                counter++;
+            }
+        }
+        double progress = ((double)counter)/((double)players.size());
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_READY_CHECK, new CommandArgument[]{new CommandArgument("progress", progress)}));
+    }
 
     public void spawnMob(Spawnable toSpawn) {
         switch (toSpawn.getType()) {
@@ -340,6 +351,8 @@ public class ServerGame extends Thread {
     public void setGameId(String id) {
         this.gameId = id;
     }
+
+   
 
     
 

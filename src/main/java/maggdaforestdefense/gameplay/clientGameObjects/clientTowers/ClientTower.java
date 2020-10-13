@@ -80,6 +80,8 @@ public abstract class ClientTower extends ClientGameObject{
             setEffect(null);
         });
         
+        setOpacity(0.4);
+        
      
        
 
@@ -90,6 +92,7 @@ public abstract class ClientTower extends ClientGameObject{
         if(isMature != true && timeLeft == 0) {
             isMature = true;
             mapCell.notifyTreeMature();
+            setOpacity(1);
         }
     }
     

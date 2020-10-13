@@ -7,6 +7,9 @@ package maggdaforestdefense.gameplay;
 
 import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -24,6 +27,8 @@ public class ReadyCheckOverlay extends InformationOverlay {
 
     private ToggleButton readyButton;
     private final static double DISTANCE_TO_SCREEN_BOT = 200;
+    private ProgressBar readyProgress;
+    private Label progressLabel;
 
     private boolean animationRunning = false;
 
@@ -33,12 +38,20 @@ public class ReadyCheckOverlay extends InformationOverlay {
             sendReadyCheck();
 
         });
+        
+        progressLabel = new Label("Players ready:");
+        readyProgress = new ProgressBar(0);
+        
 
-        getChildren().add(readyButton);
+        getChildren().addAll(progressLabel, readyProgress, new Separator(), readyButton);
 
         maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize((a, b, c) -> {
             updatePos();
         });
+    }
+    
+    public void updateProgress(double progress) {
+        readyProgress.setProgress(progress);
     }
 
     private void sendReadyCheck() {
@@ -47,6 +60,7 @@ public class ReadyCheckOverlay extends InformationOverlay {
 
     @Override
     public void startAnimation() {
+        readyProgress.setProgress(0);
         animationRunning = true;
         double windowWidth = maggdaforestdefense.MaggdaForestDefense.getWindowWidth();
         double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();

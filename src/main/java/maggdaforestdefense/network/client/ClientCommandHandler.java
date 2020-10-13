@@ -147,6 +147,9 @@ public class ClientCommandHandler extends Thread {
             case TOWER_NEED_ESSENCE:
                 Game.getInstance().towerNeedEssence(command);
                 break;
+            case UPDATE_READY_CHECK:
+                Game.getInstance().updateReadyCheck(command);
+                break;
         }
     }
 

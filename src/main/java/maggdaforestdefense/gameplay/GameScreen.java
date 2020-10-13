@@ -250,6 +250,10 @@ public class GameScreen extends Group{
         }
     }
 
+    public void updateReadyCheck(double progress) {
+        readyCheckOverlay.updateProgress(progress);
+    }
+
     
     
     

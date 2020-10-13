@@ -201,4 +201,10 @@ public class Game {
         ((ClientTower) gameObjects.get(id)).essenceNeeded();
     }
 
+    public void updateReadyCheck(NetworkCommand command) {
+        Platform.runLater(()->{
+            gameScreen.updateReadyCheck(command.getNumArgument("progress"));
+        });
+    }
+
 }

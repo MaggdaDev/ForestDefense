@@ -108,7 +108,10 @@ public class ClientCommandHandler extends Thread {
                 break;
             case SHOW_MAP:
                 ClientMapCell[][] cells = Map.stringToClientMapCells(command.getArgument("map"));
-                Game.getInstance().generateMap(cells);
+                Platform.runLater(() -> {
+                    Game.getInstance().generateMap(cells);
+                });
+
                 break;
             case NEW_GAME_OBJECT:
                 ClientGameObject gameObject = GameObject.generateClientGameObject(command);

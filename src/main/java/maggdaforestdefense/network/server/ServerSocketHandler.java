@@ -41,6 +41,8 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     private ServerGame game;
 
+    private boolean gameStarted = false;
+
     public ServerSocketHandler(WebSocket conn) {
 
         this.conn = conn;
@@ -126,11 +128,21 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             case REQUEST_JOIN_GAME:
                 requestJoinGame(command.getArgument("id"));
                 break;
-                
+
             case REQUEST_START_GAME:
-                game.sendCommandToAllPlayers(NetworkCommand.START_GAME);
-                game.start();
+                synchronized (this) {
+                    if (!gameStarted) {
+                        gameStarted = true;
+
+                        game.sendCommandToAllPlayers(NetworkCommand.START_GAME);
+                        game.start();
+
+                    }
+
+                }
+
                 break;
+
             case ADD_TOWER:
                 double xPos = command.getNumArgument("x");
                 double yPos = command.getNumArgument("y");

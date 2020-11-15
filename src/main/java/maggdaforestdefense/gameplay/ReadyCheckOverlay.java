@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *

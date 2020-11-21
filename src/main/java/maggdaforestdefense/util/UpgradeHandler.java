@@ -11,5 +11,5 @@ package maggdaforestdefense.util;
  */
 public interface UpgradeHandler {
 
-    public abstract void handleUpgrade();
+    public abstract void handleUpgrade(Object context);
 }

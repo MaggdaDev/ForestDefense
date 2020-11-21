@@ -110,6 +110,7 @@ public class ServerLoop {
             isInWave = false;
 
             serverGame.handleEssenceAfterRound();
+            serverGame.notifyTowersNewRound();
 
             currentWaveIndex++;
 

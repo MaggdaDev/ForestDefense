@@ -32,7 +32,7 @@ public enum Upgrade {
     SPRUCE_3_1(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Serienmörder", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_1;})),
     SPRUCE_3_2(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Rasende Fichte", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_2;})),
     SPRUCE_3_3(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Riesenschreck", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_3;})),
-    SPRUCE_3_4(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Exekutierer", 1000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_4;})),
+    SPRUCE_3_4(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Fichtenforschung", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_4;})),
     SPRUCE_3_5(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Dominierende Nadeln", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_5;})),
     SPRUCE_3_6(GameImage.UPGRADE_SPRUCE_01_01.getImage(), "Aufruhr der Fichten", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_6;}));
 

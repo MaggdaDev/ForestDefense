@@ -57,7 +57,7 @@ public abstract class Tower extends GameObject {
     protected boolean isEssenceFed = false;
 
     // Upgrade events
-    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges;
+    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound;
     
     protected boolean isMature = false;
     
@@ -84,6 +84,7 @@ public abstract class Tower extends GameObject {
         this.onKill = new Vector<UpgradeHandler>();
         this.onUpdate = new Vector<UpgradeHandler>();
         this.onTowerChanges = new Vector<UpgradeHandler>();
+        this.onNewRound = new Vector<UpgradeHandler>();
         this.canAttackSet = attackSet;
         this.growingTime = growTime;
         
@@ -238,36 +239,47 @@ public abstract class Tower extends GameObject {
     public void performUpgradesOnShoot() {                  // MUST BE IN EVERY SUB CLASS SHOOT METHOD
         for (int i = 0; i < onShoot.size(); i++) {
             UpgradeHandler u = onShoot.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(null);
         }
     }
 
-    public void performUpgradesOnKill() {
+    public void performUpgradesOnKill(Mob killed) {
         for (int i = 0; i < onKill.size(); i++) {
             UpgradeHandler u = onKill.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(killed);
         }
     }
 
     public void performUpgradesOnUpdate() {                  // MUST BE IN EVERY SUB CLASS UPDATE METHOD
         for (int i = 0; i < onUpdate.size(); i++) {
             UpgradeHandler u = onUpdate.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(null);
         }
     }
 
     public void performUpgradesOnTowerChanges() {
         for (int i = 0; i < onTowerChanges.size(); i++) {
             UpgradeHandler u = onTowerChanges.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(null);
+        }
+    }
+    
+     public void performUpgradesOnNewRound() {
+        for (int i = 0; i < onNewRound.size(); i++) {
+            UpgradeHandler u = onNewRound.get(i);
+            u.handleUpgrade(null);
         }
     }
 
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);
 
-    public void notifyKill() {
-        performUpgradesOnKill();
+    public void notifyNextRound() {
+        performUpgradesOnNewRound();
+    }
+    
+    public void notifyKill(Mob killed) {
+        performUpgradesOnKill(killed);
     }
 
     public void notifyTowerChanges() {

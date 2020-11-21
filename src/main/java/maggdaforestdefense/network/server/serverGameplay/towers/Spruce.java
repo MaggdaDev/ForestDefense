@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.towers;
 
+import java.util.HashMap;
 import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -17,7 +18,9 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.GameMaths;
+import maggdaforestdefense.util.Randomizer;
 
 /**
  *
@@ -38,12 +41,15 @@ public class Spruce extends Tower {
     double shootTimer = 0, shootTime = DEFAULT_SHOOT_TIME;
 
     // UPGRADE CONSTANTS
-    public final static double FICHTEN_WUT_MULTIPLIER = 0.999;
+    public final static double FICHTEN_WUT_MULTIPLIER = 0.97;
     public final static double NADEL_STAERKUNG_MULT = 3;
     public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.2;
     public final static double UPGRADE_LIFE_STEAL = 0.5;
+    public final static double RESEARCH_PROBABILITY = 0.05;
 
     // UPGRADE VARIABLES
+    private double fichtenWutBuff = 1;
+    
     private double monoculturalMultiplier = 1;  // *deltaT => >1
     private int spruceCounter = 0;
 
@@ -58,6 +64,8 @@ public class Spruce extends Tower {
     private int aufruhrDerFichtenCounter = 0;
     private double aufruhrDerFichtenDamagePerSpruce = 0;
 
+    private HashMap<String, Integer> researchStacks;
+
     // multiplier
     public Spruce(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
@@ -65,7 +73,7 @@ public class Spruce extends Tower {
         yPos = y;
 
         // Fichtenfreundschaft
-        onTowerChanges.add(() -> {
+        onTowerChanges.add((o) -> {
             fichtenFreundschaftCounter = 0;
             serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
                 if (gameObject != this && gameObject instanceof Tower) {
@@ -80,6 +88,11 @@ public class Spruce extends Tower {
             regenerationPerSecond = fichtenFreundschaftCounter * 5;
         });
 
+        researchStacks = new HashMap<String, Integer>();
+        for (GameObjectType type : GameObject.getMobs()) {
+            researchStacks.put(type.name(), 0);
+        }
+
     }
 
     @Override
@@ -90,8 +103,7 @@ public class Spruce extends Tower {
             new CommandArgument("type", String.valueOf(GameObjectType.T_SPRUCE.ordinal())),
             new CommandArgument("growingTime", growingTime),
             new CommandArgument("id", String.valueOf(id))
-           */
-        };
+         */};
     }
 
     @Override
@@ -104,8 +116,8 @@ public class Spruce extends Tower {
             GameImage currImage = updateGrowing(timeElapsed);
             isMature = growingAnimation.isFinished();
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", id), 
-                new CommandArgument("hp", healthPoints), 
+                new CommandArgument("id", id),
+                new CommandArgument("hp", healthPoints),
                 new CommandArgument("image", currImage.ordinal()),
                 new CommandArgument("timeLeft", growingAnimation.getTimeLeft())
             });
@@ -117,7 +129,7 @@ public class Spruce extends Tower {
             // Shooting
             shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
 
-            if (shootTimer > shootTime) {
+            if (shootTimer > shootTime * fichtenWutBuff) {
                 Mob target = findTarget(range);
                 if (target != null) {
                     shootTimer = 0;
@@ -144,7 +156,7 @@ public class Spruce extends Tower {
 
         switch (upgrade) {
             case SPRUCE_1_2:        // Fichtenmonokultur
-                onTowerChanges.add(() -> {
+                onTowerChanges.add((o) -> {
                     spruceCounter = 0;
                     serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
                         if (gameObject.getGameObjectType() == (GameObjectType.T_SPRUCE)) {
@@ -161,7 +173,7 @@ public class Spruce extends Tower {
                 lifeSteal = UPGRADE_LIFE_STEAL;
                 break;
             case SPRUCE_2_1:        // AUFRUESTUNG
-                onShoot.add(() -> {
+                onShoot.add((o) -> {
                     aufruestungCounter = 0;
                     serverGame.getMobs().forEach((String key, Mob mob) -> {
                         if (isInRange(mob, range)) {
@@ -172,27 +184,42 @@ public class Spruce extends Tower {
                 });
                 break;
             case SPRUCE_2_2:        // Fichtenwut
-                onShoot.add(() -> {
-                    shootTime *= FICHTEN_WUT_MULTIPLIER;
+                onShoot.add((o) -> {
+                    fichtenWutBuff *= FICHTEN_WUT_MULTIPLIER;
+                });
+                onNewRound.add((o)->{
+                    fichtenWutBuff = 1;
                 });
                 break;
             case SPRUCE_2_4:        // WURZELHIEB
                 canAttackSet.setCanAttackDigging(true);
                 break;
             case SPRUCE_3_1:        //Serienmoerder
-                onKill.add(() -> {
+                onKill.add((o) -> {
                     shootTimer = shootTime * 0.99;
                 });
                 break;
 
             case SPRUCE_3_2:        //rasende fichte
-                onKill.add(() -> {
+                onKill.add((o) -> {
                     rasendeFichteKillCounter++;
                     rasendeFichteMultiplier = Math.sqrt(0.1 * (int) rasendeFichteKillCounter + 1.0d);
                 });
                 break;
+            case SPRUCE_3_4:        // fichtenforschung
+                onKill.add((obj) -> {
+                    Mob killed = (Mob) obj;
+                    GameObjectType type = killed.getGameObjectType();
+
+                    Randomizer.performWithProb(() -> {
+                        researchStacks.replace(type.name(), researchStacks.get(type.name()) + 1);
+                        Logger.logServer("(Spruce): Added researchstack for: " + type.name());
+                    }, RESEARCH_PROBABILITY);
+
+                });
+                break;
             case SPRUCE_3_6:        // aufruhr der fickten
-                onUpdate.add(() -> {
+                onUpdate.add((o) -> {
                     if (healthPoints < maxHealth * 0.3) {
                         double diff = maxHealth * 0.3 - healthPoints;
                         aufruhrDerFichtenCounter = 0;
@@ -227,6 +254,10 @@ public class Spruce extends Tower {
             healthPoints -= sugg;
         }
         return oldHealth - healthPoints;
+    }
+
+    public HashMap<String,Integer> getResearchStacks() {
+        return researchStacks;
     }
 
 }

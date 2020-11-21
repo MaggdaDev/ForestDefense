@@ -39,4 +39,15 @@ public class Randomizer {
         }
         return 0;
     }
+    
+    public static void performWithProb(RandomHandler h, double prob) {
+        double ran = Math.random();
+        if(prob > ran) {
+            h.handle();
+        }
+    }
+    
+    public static interface RandomHandler {
+        public abstract void handle();
+    }
 }

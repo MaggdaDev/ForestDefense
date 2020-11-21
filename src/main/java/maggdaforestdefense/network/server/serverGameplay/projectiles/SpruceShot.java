@@ -44,8 +44,9 @@ public class SpruceShot extends ConstantFlightProjectile {
     // Upgrade vars
     private boolean isRiesenschreck = false;
     private boolean isArmorPierce = false;
+    private boolean isFichtenForschung = false;
     private Damage.NormalDamage basicDamage, riesenschreckDamage, dominierendeNadelnDamage, armorPierceDamage;
-    private Damage.NormalMultiplier nadelStaerkungMult;
+    private Damage.NormalMultiplier nadelStaerkungMult, fichtenForschungMultiplier;
     private Damage.CriticalDamage criticalDamageMult;
 
     public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower, Tower.CanAttackSet attackSet) {
@@ -87,7 +88,8 @@ public class SpruceShot extends ConstantFlightProjectile {
 
         nadelStaerkungMult = new Damage.NormalMultiplier(1);
         criticalDamageMult = new Damage.CriticalDamage(0, 1);
-        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{nadelStaerkungMult, criticalDamageMult});
+        fichtenForschungMultiplier = new Damage.NormalMultiplier(1);
+        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{nadelStaerkungMult, criticalDamageMult, fichtenForschungMultiplier});
     }
 
     @Override
@@ -116,6 +118,7 @@ public class SpruceShot extends ConstantFlightProjectile {
     @Override
     public void dealDamage(Mob target) {
         if (pierce > 0 && (!mobsDamaged.contains(target))) {
+            fichtenForschungMultiplier.setMultiplier(1);
             performUpgradesBeforeCollision();
             pierce--;
             mobsDamaged.add(target);
@@ -126,6 +129,10 @@ public class SpruceShot extends ConstantFlightProjectile {
             
             if(isArmorPierce) {         // ARMOR PIERCE UPGRADE
                 armorPierceDamage.setDamageVal(target.getArmor() * armorPierceDamageMult);
+            }
+            
+            if(isFichtenForschung) {
+                fichtenForschungMultiplier.setMultiplier(1 + Math.sqrt(((Spruce)owner).getResearchStacks().get(target.getGameObjectType().name())));
             }
 
             notifyOwnerDamage(target.damage(damageObject));
@@ -139,26 +146,22 @@ public class SpruceShot extends ConstantFlightProjectile {
     private void addUpgrade(Upgrade upgrade) {
         switch (upgrade) {
             case SPRUCE_1_1:    // nadelteilung
-                beforeCollision.add(new UpgradeHandler() {
-                    @Override
-                    public void handleUpgrade() {
+                beforeCollision.add((o)-> {
                         performNeedleSplit();
                         beforeCollision.remove(this);
 
                     }
-                });
+                );
                 break;
             case SPRUCE_1_3:           // Ruestungsdurchdringende Nadeln
                 isArmorPierce = true;
                 break;
             case SPRUCE_1_5:    // Nadelstaerkung
-                afterCollision.add(new UpgradeHandler() {
-                    @Override
-                    public void handleUpgrade() {
+                afterCollision.add((o)-> {
                         performNeedlesStronger();
                         afterCollision.remove(this);
 
-                    }
+                    
                 });
                 break;
             case SPRUCE_2_3:    // kritische nadeln
@@ -166,19 +169,20 @@ public class SpruceShot extends ConstantFlightProjectile {
                 criticalDamageMult.setCritMult(critMultiplier);
                 break;
             case SPRUCE_2_5:    // Erbarmungslose fichte
-                onKill.add(new UpgradeHandler() {
-                    @Override
-                    public void handleUpgrade() {
+                onKill.add((o)->{
                         performErbarmungslos();
 
-                    }
+                    
                 });
                 break;
             case SPRUCE_3_3:   //RIESENSCHRECK
                 isRiesenschreck = true;
                 break;
+            case SPRUCE_3_4:    //FICHTENFORSCHUNG
+                isFichtenForschung = true;
+                break;
             case SPRUCE_3_5:    // Dominierende nadeln
-                beforeCollision.add(() -> {
+                beforeCollision.add((o) -> {
                     dominierendeNadelnDamage.setDamageVal(extraDamagePerPixel * distanceTravelled);
                 });
                 break;

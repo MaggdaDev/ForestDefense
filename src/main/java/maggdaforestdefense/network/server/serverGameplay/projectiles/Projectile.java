@@ -88,27 +88,27 @@ public abstract class Projectile extends GameObject {
     protected void performUpgradesBeforeCollision() {
         for (int i = 0; i < beforeCollision.size(); i++) {
             UpgradeHandler u = (UpgradeHandler) beforeCollision.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(null);
         }
     }
     
     protected void performUpgradesAfterCollision() {
         for (int i = 0; i < afterCollision.size(); i++) {
             UpgradeHandler u = (UpgradeHandler) afterCollision.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(null);
         }
     }
 
-    protected void performUpgradesOnKill() {
+    protected void performUpgradesOnKill(Mob killed) {
         for (int i = 0; i < onKill.size(); i++) {
             UpgradeHandler u = (UpgradeHandler) onKill.get(i);
-            u.handleUpgrade();
+            u.handleUpgrade(killed);
         }
     }
     
     public void notifyKill(Mob target) {
-        owner.notifyKill();
-        performUpgradesOnKill();
+        owner.notifyKill(target);
+        performUpgradesOnKill(target);
     }
     
     protected void notifyOwnerDamage(double damage) {

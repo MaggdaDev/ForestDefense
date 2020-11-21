@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBlattlaus;
@@ -25,12 +27,30 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
  */
 public abstract class GameObject {
 
+  
+
     protected final int id;
     protected final GameObjectType gameObjectType;
+    private static GameObjectType[] mobs;
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;
         gameObjectType = t;
+        
+        // SetUpMobs
+        if(mobs == null) {
+        ObservableList<GameObjectType> retlist = FXCollections.observableArrayList();
+        for(GameObjectType type:GameObjectType.values()) {
+            if(type.name().startsWith("M_")) {
+                retlist.add(type);
+            }
+        }
+        GameObjectType[] arr = new GameObjectType[retlist.size()];
+        for(int i = 0; i < retlist.size(); i++) {
+            arr[i] = retlist.get(i);
+        }
+        mobs = arr;
+        }
     }
 
     public abstract CommandArgument[] toNetworkCommandArgs();
@@ -43,6 +63,10 @@ public abstract class GameObject {
 
     public GameObjectType getGameObjectType() {
         return gameObjectType;
+    }
+    
+    public static GameObjectType[] getMobs() {
+        return mobs;
     }
 
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB

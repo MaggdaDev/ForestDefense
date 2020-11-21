@@ -37,7 +37,7 @@ public class Deutsch extends Language{
     UPGRADE_DESCRIPTION_SPURCE_3_1 = "Serienmörder: Schießt neue Nadeln pro getötetem Gegner.";
     UPGRADE_DESCRIPTION_SPURCE_3_2 = "Rasende Fichte: Getötete Gegner erhöhen die Schussrate permanent.";
     UPGRADE_DESCRIPTION_SPURCE_3_3 = "Riesenschreck: Zusätzlicher Schaden wird abhängig vom verbleibenden Leben des Gegners hinzugefügt.";
-    UPGRADE_DESCRIPTION_SPURCE_3_4 = "Exekutierer: Kann die Fichte einen Gegner in Reichweite einer anderen Fichte exekutieren, so schießt sie eine Nadel auf diesen.";
+    UPGRADE_DESCRIPTION_SPURCE_3_4 = "Fichtenforschung: Die Fichte erkennt Schwachpunkte einger getöteter Gegner und erhöht ihren Schaden gegen diese Gegnergruppe permanent.";
     UPGRADE_DESCRIPTION_SPURCE_3_5 = "Dominierende Nadeln: Je länger die Nadeln fliegen, desto mehr Schaden verursachen sie.";
     UPGRADE_DESCRIPTION_SPURCE_3_6 = "Aufruhr der Fichten: Fällt die Fichte unter 30% Leben, so opfern andere Fichten auf der Karte Leben, um die Fichte zu heilen";
 }

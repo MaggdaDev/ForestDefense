@@ -352,6 +352,14 @@ public class ServerGame extends Thread {
         this.gameId = id;
     }
 
+    public void notifyTowersNewRound() {
+        gameObjects.forEach((String key, GameObject gameObject)->{
+            if(gameObject instanceof Tower) {
+                ((Tower)gameObject).notifyNextRound();
+            }
+        });
+    }
+
    
 
     

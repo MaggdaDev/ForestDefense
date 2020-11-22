@@ -76,7 +76,7 @@ public class BuyUpgradeButton extends StackPane {
         
         prizeLabel = new PrizeLabel(upgrade.getPrize());
         
-        setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        setBackground(new Background(new BackgroundFill(Color.DARKGREEN, new CornerRadii(20), Insets.EMPTY)));
         
         VBox vbox = new VBox(upgradeIcon, prizeLabel);
         vbox.setAlignment(Pos.CENTER);

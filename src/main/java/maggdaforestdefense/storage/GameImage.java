@@ -52,8 +52,15 @@ public enum GameImage {
     TOWER_SPRUCE_2("maggdaforestdefense/towers/spruce2.png"),
     TOWER_SPRUCE_3("maggdaforestdefense/towers/spruce3.png"),
     TOWER_SPRUCE_4("maggdaforestdefense/towers/spruce4.png"),
+    TOWER_MAPLE_1("maggdaforestdefense/towers/maple1.png"),
+    TOWER_MAPLE_2("maggdaforestdefense/towers/maple2.png"),
+    TOWER_MAPLE_3("maggdaforestdefense/towers/maple3.png"),
+    TOWER_MAPLE_4("maggdaforestdefense/towers/maple4.png"),
+    
+
     // PROJECTILES
     PROJECTILE_SPRUCE_SHOT("maggdaforestdefense/projectiles/spruce_shot.png"),
+    PROJECTILE_MAPLE_SHOT("maggdaforestdefense/projectiles/maple_shot.png"),
     // UPGRADE ICONS
     UPGRADE_SPRUCE_01_01("maggdaforestdefense/upgrade_icons/spruce_01_01.png"),
     UPGRADE_SPRUCE_01_02("maggdaforestdefense/upgrade_icons/spruce_01_02.png"),

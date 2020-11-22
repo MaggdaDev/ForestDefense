@@ -35,6 +35,22 @@ public abstract class HitBox {
             return radius;
         }
     }
+    
+    public static class DonutHitBox extends HitBox{
+        double innerRadius, outerRadius, width;
+        
+        public DonutHitBox(double width, double centerX, double centerY) {
+            super(HitBoxType.DONUT, centerX, centerY);
+            innerRadius = 0;
+            outerRadius = width;
+        }
+        
+        public void setInnerRadius(double r) {
+            innerRadius = r;
+            outerRadius = innerRadius + width;
+        }
+        
+    }
 
     public static boolean intersects(HitBox h1, HitBox h2) {
         switch (h1.getType()) {
@@ -48,11 +64,31 @@ public abstract class HitBox {
                         } else {
                             return true;
                         }
-                    
+                        
+                    case DONUT:
+                        DonutHitBox dBox = (DonutHitBox) h2;
+                        double dist = Math.sqrt(Math.pow(h1.getX()-h2.getX(),2.0d) + Math.pow(h1.getY() - h2.getY(),2.0d));
+                        
+                        if((dBox.innerRadius < dist&& dist < dBox.outerRadius) ||
+                                (dBox.innerRadius < dist + c1.getRadius() && dist + c1.getRadius() < dBox.outerRadius) ||
+                                (dBox.innerRadius < dist - c1.getRadius() && dist - c1.getRadius() < dBox.outerRadius)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                        
                     default: 
                         throw new UnsupportedOperationException();
                 }
-            
+           
+            case DONUT:
+                switch(h2.getType()) {
+                    case CIRCLE:
+                        return intersects(h2, h1);
+                        
+                }
+                
+                
             default:
                 throw new UnsupportedOperationException();
         }
@@ -77,6 +113,7 @@ public abstract class HitBox {
     }
 
     public static enum HitBoxType {
-        CIRCLE;
+        CIRCLE,
+        DONUT;
     }
 }

@@ -30,6 +30,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Wanderlaeufer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Wasserlaeufer;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
+import maggdaforestdefense.network.server.serverGameplay.towers.Maple;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Waiter;
 
@@ -172,7 +173,12 @@ public class ServerGame extends Thread {
                 }
                 newTower = new Spruce(this, xPos, yPos);
                 break;
-
+            case T_MAPLE:
+                if(coins < Maple.DEFAULT_PRIZE) {
+                    return;
+                }
+                newTower = new Maple(this, xPos, yPos);
+                break;
             default:
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }

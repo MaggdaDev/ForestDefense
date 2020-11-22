@@ -15,7 +15,9 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHirschkae
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientSchwimmkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWanderlaeufer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWasserlaeufer;
+import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientMapleShot;
 import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientSpruceShot;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientMaple;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -87,8 +89,13 @@ public abstract class GameObject {
             //TOWERS
             case T_SPRUCE:
                 return new ClientSpruce((int) command.getNumArgument("id"), (int) command.getNumArgument("xIndex"), (int) command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
+                
+            case T_MAPLE:
+                return new ClientMaple(((int)command.getNumArgument("id")), (int) command.getNumArgument("xIndex"), (int) command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
 
             //PROJECTILES
+            case P_MAPLE_SHOT:
+                return new ClientMapleShot((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
             case P_SPRUCE_SHOT:
 
                 return new ClientSpruceShot((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));

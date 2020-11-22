@@ -94,6 +94,9 @@ public abstract class Tower extends GameObject {
             case T_SPRUCE:
                 lastImage = GameImage.TOWER_SPRUCE_1;
                 break;
+            case T_MAPLE:
+                lastImage = GameImage.TOWER_MAPLE_1;
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

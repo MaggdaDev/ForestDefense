@@ -12,10 +12,12 @@ package language;
 public abstract class Language {
     // Tower names
     public String SPRUCE_NAME;
+    public String MAPLE_NAME;
     
     
     // Tower descripition
-    public String SPRUCE_DESCRIPRION;
+    public String SPRUCE_DESCRIPTION;
+    public String MAPLE_DESCRIPTION;
     
     // Upgrade description
     public  String UPGRADE_DESCRIPTION_SPURCE_1_1;

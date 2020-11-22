@@ -136,6 +136,11 @@ public class UpgradeMenu extends VBox{
  
                 break;
             
+            case T_MAPLE:
+                treeNameLabel.setText("Maple");
+                treeView.setImage(GameImage.TOWER_MAPLE_1.getImage());
+                
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

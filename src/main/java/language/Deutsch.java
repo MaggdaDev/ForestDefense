@@ -14,9 +14,11 @@ public class Deutsch extends Language{
     public Deutsch() {
     // Tower names
     SPRUCE_NAME = "Fichte";
+    MAPLE_NAME = "Ahorn";
     
     // Tower descriptions
-    SPRUCE_DESCRIPRION = "Die Fichte schießt einfache Nadelgeschosse, die 1 Gegner durchdringen können.";
+    SPRUCE_DESCRIPTION = "Die Fichte schießt einfache Nadelgeschosse, die 1 Gegner durchdringen können.";
+    MAPLE_DESCRIPTION = "Der Ahorn schießt Ringe aus Blättern um sich, die Flächenschaden verursachen.";
         
         
     // Upgrade description

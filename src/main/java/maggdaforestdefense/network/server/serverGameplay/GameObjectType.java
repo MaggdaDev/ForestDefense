@@ -20,7 +20,8 @@ public enum GameObjectType {
     
     //TOWERS
     T_SPRUCE,
-    
+    T_MAPLE,
     //PROJECTILES
-    P_SPRUCE_SHOT;
+    P_SPRUCE_SHOT,
+    P_MAPLE_SHOT;
 }

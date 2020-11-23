@@ -21,10 +21,10 @@ import maggdaforestdefense.util.GameMaths;
 public abstract class ConstantFlightProjectile extends Projectile{
     
     protected double startX, startY, xPos, yPos, xSpd, ySpd, totalSpeed, distanceTravelled = 0, pierce;
-    protected int towerRange;
+    protected double towerRange;
     protected Mob targetMob;
     protected ServerGame serverGame;
-    public ConstantFlightProjectile(int id, GameObjectType type, int range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce, Tower ownerTower, CanAttackSet attackSet) {
+    public ConstantFlightProjectile(int id, GameObjectType type, double range, Mob target, double x, double y, double totSpd, ServerGame game, HitBox hitBox, double pierce, Tower ownerTower, CanAttackSet attackSet) {
         super(id, type, hitBox, ownerTower, attackSet);
         targetMob = target;
         towerRange = range;

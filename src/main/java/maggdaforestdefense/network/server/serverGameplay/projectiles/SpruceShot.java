@@ -28,7 +28,7 @@ import maggdaforestdefense.util.UpgradeHandler;
 public class SpruceShot extends ConstantFlightProjectile {
 
     private final static double DEFAULT_SPEED = 1000;
-    private final static int DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
+    private final static double DEFAULT_RANGE = Spruce.DEFAULT_RANGE;
     private final static double HITBOX_RADIUS = 10;
     private final static double DAMAGE = 10;
     private final static int DEFAULT_PIERCE = 2;

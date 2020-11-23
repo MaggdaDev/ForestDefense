@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.GameMaths;
 
 /**
@@ -37,17 +38,28 @@ public abstract class HitBox {
     }
     
     public static class DonutHitBox extends HitBox{
-        double innerRadius, outerRadius, width;
+        private double innerRadius, outerRadius, width;
         
         public DonutHitBox(double width, double centerX, double centerY) {
             super(HitBoxType.DONUT, centerX, centerY);
             innerRadius = 0;
             outerRadius = width;
+            this.width = width;
         }
         
         public void setInnerRadius(double r) {
             innerRadius = r;
             outerRadius = innerRadius + width;
+           
+        }
+        
+        public double getInnerRadius() {
+            return innerRadius;
+        }
+        
+        public double getOuterRadius() {
+            outerRadius = innerRadius + width;
+            return outerRadius;
         }
         
     }
@@ -66,12 +78,14 @@ public abstract class HitBox {
                         }
                         
                     case DONUT:
+                        
                         DonutHitBox dBox = (DonutHitBox) h2;
                         double dist = Math.sqrt(Math.pow(h1.getX()-h2.getX(),2.0d) + Math.pow(h1.getY() - h2.getY(),2.0d));
                         
+                        
                         if((dBox.innerRadius < dist&& dist < dBox.outerRadius) ||
-                                (dBox.innerRadius < dist + c1.getRadius() && dist + c1.getRadius() < dBox.outerRadius) ||
-                                (dBox.innerRadius < dist - c1.getRadius() && dist - c1.getRadius() < dBox.outerRadius)) {
+                                (dBox.getInnerRadius() < dist + c1.getRadius() && dist + c1.getRadius() < dBox.getOuterRadius()) ||
+                                (dBox.getInnerRadius() < dist - c1.getRadius() && dist - c1.getRadius() < dBox.getOuterRadius())) {
                             return true;
                         } else {
                             return false;

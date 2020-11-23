@@ -22,7 +22,7 @@ public class PlayerInputHandler {
 
     private SelectionSqare selectionSquare;
     private SelectionClickedSquare selectionClickedSquare;
-    private RangeRect rangeRect;
+    private RangeIndicator rangeIndicator;
     private ClientMap map;
 
     private static PlayerInputHandler instance;
@@ -39,8 +39,8 @@ public class PlayerInputHandler {
         this.map = map;
         selectionSquare = new SelectionSqare(map);
         selectionClickedSquare = new SelectionClickedSquare(map);
-        rangeRect = new RangeRect(map);
-        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(rangeRect);
+        rangeIndicator = new RangeIndicator(map);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(rangeIndicator);
 
     }
 
@@ -50,7 +50,7 @@ public class PlayerInputHandler {
             showRange(clickedCell);
 
         } else {
-            rangeRect.setVisible(false);
+            rangeIndicator.setVisible(false);
         }
 
     }
@@ -61,7 +61,7 @@ public class PlayerInputHandler {
 
     public void showRange(ClientMapCell cell) {
         if (cell.getCurrentTower() != null) {
-            rangeRect.adjustRange(cell.getCurrentTower());
+            rangeIndicator.adjustRange(cell.getCurrentTower());
 
         }
     }

@@ -34,7 +34,18 @@ public enum Upgrade {
     SPRUCE_3_3(GameImage.UPGRADE_SPRUCE_03_03.getImage(), "Riesenschreck", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_3;})),
     SPRUCE_3_4(GameImage.UPGRADE_SPRUCE_03_04.getImage(), "Fichtenforschung", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_4;})),
     SPRUCE_3_5(GameImage.UPGRADE_SPRUCE_03_05.getImage(), "Dominierende Nadeln", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_5;})),
-    SPRUCE_3_6(GameImage.UPGRADE_SPRUCE_03_06.getImage(), "Aufruhr der Fichten", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_6;}));
+    SPRUCE_3_6(GameImage.UPGRADE_SPRUCE_03_06.getImage(), "Aufruhr der Fichten", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_SPURCE_3_6;})),
+    
+    // MAPLE
+    MAPLE_1_1(GameImage.UPGRADE_MAPLE_01_01.getImage(), "Ausbau", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_1;})),
+    MAPLE_1_2(GameImage.UPGRADE_MAPLE_01_02.getImage(), "Bund der Ahorne", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_2;})),
+    MAPLE_1_3(GameImage.UPGRADE_MAPLE_01_03.getImage(), "Niederschmetternde Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_3;})),
+    MAPLE_2_1(GameImage.UPGRADE_MAPLE_02_01.getImage(), "Eskalation", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_1;})),
+    MAPLE_2_2(GameImage.UPGRADE_MAPLE_02_02.getImage(), "Reißende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_2;})),
+    MAPLE_2_3(GameImage.UPGRADE_MAPLE_02_03.getImage(), "Erschöpfende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_3;})),
+    MAPLE_3_1(GameImage.UPGRADE_MAPLE_03_01.getImage(), "Zerlegende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_1;})),
+    MAPLE_3_2(GameImage.UPGRADE_MAPLE_03_02.getImage(), "Rekursive Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_2;})),
+    MAPLE_3_3(GameImage.UPGRADE_MAPLE_03_03.getImage(), "Daan ist ein Spast laal", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_3;}));
 
 
     private final Image icon;

@@ -28,13 +28,14 @@ import maggdaforestdefense.util.Randomizer;
  */
 public class Spruce extends Tower {
 
-    public final static int DEFAULT_RANGE = 2;              //map cells
+    public final static double DEFAULT_RANGE = 2;              //map cells
     public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
     public final static int DEFAULT_PRIZE = 1;
     public final static double HEALTH = 100;
     public final static double DEFAULT_REGEN = 0;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
     public final static double GROWING_TIME = 2;
+    public final static RangeType RANGE_TYPE = RangeType.SQUARED;
 
     //Balancing stats;
     double xPos, yPos;
@@ -258,6 +259,11 @@ public class Spruce extends Tower {
 
     public HashMap<String,Integer> getResearchStacks() {
         return researchStacks;
+    }
+    
+    @Override
+    public RangeType getRangeType() {
+        return RANGE_TYPE;
     }
 
 }

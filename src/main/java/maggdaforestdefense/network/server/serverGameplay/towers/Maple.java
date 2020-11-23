@@ -15,31 +15,37 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.MapleShot;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
+import static maggdaforestdefense.network.server.serverGameplay.towers.Spruce.RANGE_TYPE;
 import maggdaforestdefense.storage.GameImage;
 
 /**
  *
  * @author DavidPrivat
  */
+public class Maple extends Tower {
 
-public class Maple extends Tower{
-    
     //BALANCING
     public final static int DEFAULT_PRIZE = 1;
     public final static double DEFAULT_HEALTH = 100;
     public final static double DEFAULT_REGEN = 1;
-    public final static int DEFAULT_RANGE = 2;
+    public final static double DEFAULT_RANGE = 1.5d;
     public final static double GROWING_TIME = 3;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
-
+    public final static RangeType RANGE_TYPE = RangeType.CIRCLE;
 
     private double shootTime = 2, shootTimer = 0;
+
     public Maple(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
+        super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
     }
+
     @Override
     public void addUpgrade(Upgrade upgrade) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        upgrades.add(upgrade);
+        
+        switch(upgrade) {
+            
+        }
     }
 
     @Override
@@ -69,12 +75,14 @@ public class Maple extends Tower{
 
             // Shooting
             shootTimer += timeElapsed;
-            
-            if(shootTimer > shootTime) {
-                shootTimer = 0;
-                shoot();
+
+            if (shootTimer > shootTime) {
+                if (isAnyMobInRange(range, canAttackSet)) {
+                    shootTimer = 0;
+                    shoot();
+                }
             }
-            
+
             // Health
             // Upgrades
             performUpgradesOnUpdate();
@@ -82,11 +90,15 @@ public class Maple extends Tower{
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
         }
     }
-    
+
     private void shoot() {
         serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame));
         performUpgradesOnShoot();
     }
-    
-}
 
+    @Override
+    public RangeType getRangeType() {
+        return RANGE_TYPE;
+    }
+
+}

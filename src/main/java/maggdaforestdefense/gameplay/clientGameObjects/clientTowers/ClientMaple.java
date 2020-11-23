@@ -12,6 +12,7 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Maple;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -19,8 +20,9 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class ClientMaple extends ClientTower{
+    public final static Tower.RangeType RANGE_TYPE = Maple.RANGE_TYPE;
     public ClientMaple(int id, int xIndex, int yIndex, double growingTime) {
-        super(id, GameImage.TOWER_MAPLE_1, GameObjectType.T_MAPLE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Maple.DEFAULT_RANGE, Maple.DEFAULT_HEALTH, growingTime);
+        super(id, GameImage.TOWER_MAPLE_1, GameObjectType.T_MAPLE, UpgradeSet.MAPLE_SET, xIndex, yIndex, Maple.DEFAULT_RANGE, Maple.DEFAULT_HEALTH, growingTime);
         setPreserveRatio(true);
         setFitHeight(100);
         
@@ -64,5 +66,10 @@ public class ClientMaple extends ClientTower{
         
         setImage(image);
         upgradeMenu.setTreeImage(image);
+    }
+    
+    @Override
+    public Tower.RangeType getRangeType() {
+        return RANGE_TYPE;
     }
 }

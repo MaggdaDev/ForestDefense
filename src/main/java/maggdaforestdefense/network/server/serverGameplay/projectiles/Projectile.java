@@ -19,6 +19,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.UpgradeHandler;
 
 /**

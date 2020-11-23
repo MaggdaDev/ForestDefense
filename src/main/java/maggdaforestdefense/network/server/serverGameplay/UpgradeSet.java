@@ -32,7 +32,21 @@ public enum UpgradeSet {
             Upgrade.SPRUCE_3_4,
             Upgrade.SPRUCE_3_5,
             Upgrade.SPRUCE_3_6
-        }});
+        }}),
+    MAPLE_SET(new Upgrade[][]{
+        new Upgrade[]{
+            Upgrade.MAPLE_1_1,
+            Upgrade.MAPLE_1_2,
+            Upgrade.MAPLE_1_3,
+        }, new Upgrade[]{
+            Upgrade.MAPLE_2_1,
+            Upgrade.MAPLE_2_2,
+            Upgrade.MAPLE_2_3,
+        }, new Upgrade[]{
+            Upgrade.MAPLE_3_1,
+            Upgrade.MAPLE_3_2,
+            Upgrade.MAPLE_3_3,}
+    });
 
     private Upgrade[][] upgrades;
 
@@ -47,11 +61,11 @@ public enum UpgradeSet {
     public Upgrade[][] getUpgrades() {
         return upgrades;
     }
-    
+
     public Upgrade[] getAllFromTier(int tier) {
-        return upgrades[tier-1];
+        return upgrades[tier - 1];
     }
-    
+
     public int getMaxTier() {
         return upgrades.length;
     }

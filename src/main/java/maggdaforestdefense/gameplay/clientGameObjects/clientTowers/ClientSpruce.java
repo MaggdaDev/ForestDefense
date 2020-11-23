@@ -8,11 +8,13 @@ package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 import javafx.scene.image.Image;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
+import static maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientMaple.RANGE_TYPE;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -20,7 +22,7 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class ClientSpruce extends ClientTower {
-
+    public final static Tower.RangeType RANGE_TYPE = Spruce.RANGE_TYPE;
     public ClientSpruce(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH, growingTime);
         setPreserveRatio(true);
@@ -66,6 +68,11 @@ public class ClientSpruce extends ClientTower {
         
         setImage(image);
         upgradeMenu.setTreeImage(image);
+    }
+    
+    @Override
+    public Tower.RangeType getRangeType() {
+        return RANGE_TYPE;
     }
     
  

@@ -23,7 +23,7 @@ import maggdaforestdefense.gameplay.ClientMapCell;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.gameplay.playerinput.PlayerInputHandler;
-import maggdaforestdefense.gameplay.playerinput.RangeRect;
+import maggdaforestdefense.gameplay.playerinput.RangeIndicator;
 import maggdaforestdefense.gameplay.playerinput.SelectionClickedSquare;
 import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.GenerateableMap;

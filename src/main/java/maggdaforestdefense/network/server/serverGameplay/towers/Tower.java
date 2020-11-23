@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import javafx.scene.shape.Circle;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -44,7 +45,7 @@ public abstract class Tower extends GameObject {
 
     protected double lifeSteal = 0;
 
-    protected int range;
+    protected double range;
 
     protected MapCell mapCell;
 
@@ -64,7 +65,7 @@ public abstract class Tower extends GameObject {
     protected GameAnimation growingAnimation;
     
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, int range, CanAttackSet attackSet, double growTime) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, double range, CanAttackSet attackSet, double growTime) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
@@ -108,7 +109,7 @@ public abstract class Tower extends GameObject {
         return growingAnimation.update(timeElapsed);
     }
 
-    protected Mob findTarget(int range) {
+    protected Mob findTarget(double range) {
 
         LinkedList<Mob> mobs = new LinkedList(serverGame.getMobs().values());
         Collections.sort(mobs, new Comparator<Mob>() {
@@ -147,12 +148,40 @@ public abstract class Tower extends GameObject {
         }
     }
 
-    protected boolean isInRange(Mob mob, int range) {
-        double deltaX = Math.abs(getCenterX() - mob.getXPos());
-        double deltaY = Math.abs(getCenterY() - mob.getYPos());
+    protected boolean isInRange(Mob mob, double range) {
         double pixelRange = (range + 0.5) * MapCell.CELL_SIZE;
-        if (deltaX <= pixelRange && deltaY <= pixelRange) {
-            return true;
+        switch(getRangeType()) {
+            case SQUARED:
+                double deltaX = Math.abs(getCenterX() - mob.getXPos());
+                double deltaY = Math.abs(getCenterY() - mob.getYPos());
+                
+                if (deltaX <= pixelRange && deltaY <= pixelRange) {
+                    return true;
+                }
+                return false;
+            case CIRCLE:
+                return pixelRange > Math.sqrt(Math.pow(getCenterX() - mob.getXPos(),2.0d) + Math.pow(getCenterY() - mob.getYPos(),2.0d));
+                
+                
+                
+            }
+        return false;
+    }
+    
+    protected boolean isAnyMobInRange(double range, CanAttackSet canAttackSet) {
+        for(Mob mob: serverGame.getMobs().values()) {
+            if(isInRange(mob, range)) {
+                Logger.logServer("IN RANGE!!!!!!");
+                if(canAttackSet.canAttackDigging && (mob.getMovementType() == Mob.MovementType.DIG)) {
+                    return true;
+                }
+                if(canAttackSet.canAttackFlying == (mob.getMovementType() == Mob.MovementType.FLY)) {
+                    return true;
+                }
+                if(canAttackSet.canAttackWalking == (mob.getMovementType() == Mob.MovementType.WALK)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -276,6 +305,8 @@ public abstract class Tower extends GameObject {
 
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);
+    
+    abstract public RangeType getRangeType();
 
     public void notifyNextRound() {
         performUpgradesOnNewRound();
@@ -289,7 +320,7 @@ public abstract class Tower extends GameObject {
         performUpgradesOnTowerChanges();
     }
 
-    public int getRange() {
+    public double getRange() {
         return range;
     }
 
@@ -340,6 +371,11 @@ public abstract class Tower extends GameObject {
         public void setCanAttackFlying(boolean b) {
             canAttackFlying = b;
         }
+    }
+    
+    public static enum RangeType {
+        SQUARED,
+        CIRCLE;
     }
 
 }

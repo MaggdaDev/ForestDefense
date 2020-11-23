@@ -27,13 +27,15 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower.RangeType;
 
 /**
  *
  * @author DavidPrivat
  */
 public abstract class ClientTower extends ClientGameObject{
-    protected int xIndex, yIndex, range;
+    protected int xIndex, yIndex;
+    protected double range;
     protected UpgradeMenu upgradeMenu;
     protected GrowingWaitingMenu growingMenu;
     protected final UpgradeSet upgradeSet;
@@ -52,7 +54,7 @@ public abstract class ClientTower extends ClientGameObject{
     
     protected EssenceButton essenceButton;
     
-    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, int range, double health, double growingTime) {
+    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, double range, double health, double growingTime) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
         mapCell = Game.getInstance().getGameScreen().getMap().getCells()[xIndex][yIndex];
         
@@ -86,6 +88,8 @@ public abstract class ClientTower extends ClientGameObject{
        
 
     }
+    
+    public abstract RangeType getRangeType();
     
     protected void updateGrowing(double timeLeft) {
         growingMenu.update(timeLeft);
@@ -127,7 +131,7 @@ public abstract class ClientTower extends ClientGameObject{
         return growingMenu;
     }
     
-    public int getRange() {
+    public double getRange() {
         return range;
     }
     

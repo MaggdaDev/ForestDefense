@@ -20,6 +20,7 @@ public abstract class Language {
     public String MAPLE_DESCRIPTION;
     
     // Upgrade description
+    // Spruce
     public  String UPGRADE_DESCRIPTION_SPURCE_1_1;
     public  String UPGRADE_DESCRIPTION_SPURCE_1_2;
     public  String UPGRADE_DESCRIPTION_SPURCE_1_3;
@@ -40,6 +41,21 @@ public abstract class Language {
     public  String UPGRADE_DESCRIPTION_SPURCE_3_4;
     public  String UPGRADE_DESCRIPTION_SPURCE_3_5;
     public  String UPGRADE_DESCRIPTION_SPURCE_3_6;
+    // MAPLE
+    public String UPGRADE_DESCRIPTION_MAPLE_1_1;
+    public String UPGRADE_DESCRIPTION_MAPLE_1_2;
+    public String UPGRADE_DESCRIPTION_MAPLE_1_3;
+    
+    public String UPGRADE_DESCRIPTION_MAPLE_2_1;
+    public String UPGRADE_DESCRIPTION_MAPLE_2_2;
+    public String UPGRADE_DESCRIPTION_MAPLE_2_3;
+    
+    public String UPGRADE_DESCRIPTION_MAPLE_3_1;
+    public String UPGRADE_DESCRIPTION_MAPLE_3_2;
+    public String UPGRADE_DESCRIPTION_MAPLE_3_3;
+    
+    
+    
     
     
 }

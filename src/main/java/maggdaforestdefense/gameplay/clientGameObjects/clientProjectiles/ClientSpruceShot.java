@@ -15,7 +15,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
  *
  * @author DavidPrivat
  */
-public class ClientSpruceShot extends ClientGameObject {
+public class ClientSpruceShot extends ClientProjectile {
     
     public static double height = 50;
     public ClientSpruceShot(int id, double x, double y) {

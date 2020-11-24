@@ -17,6 +17,7 @@ import maggdaforestdefense.gameplay.playerinput.SelectionClickedSquare;
 import maggdaforestdefense.gameplay.playerinput.SelectionSqare;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Exceptions;
@@ -25,9 +26,8 @@ import maggdaforestdefense.util.Exceptions;
  *
  * @author DavidPrivat
  */
-public class ClientMapCell extends StackPane {
+public class ClientMapCell extends ImageView {
 
-    private ImageView imageView;
     private MapCell.CellType cellType;
     private boolean isSelectionQuare = false, isPlanted = false, isSelectionClickedSquare = false;
 
@@ -36,60 +36,38 @@ public class ClientMapCell extends StackPane {
     private ClientTower currentTower = null;
 
     private MENU_STATE menuState = MENU_STATE.PLANT_MENU;
+    
+    private final int xIndex, yIndex;
 
     public ClientMapCell(MapCell.CellType type, int xIndex, int yIndex) {
+        super(type.getImage());
         cellType = type;
-        imageView = new ImageView(type.getImage());
-        imageView.setFitHeight(MapCell.CELL_SIZE);
-        imageView.setFitWidth(MapCell.CELL_SIZE);
         
-        getChildren().add(imageView);
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
+        
+        setFitHeight(MapCell.CELL_SIZE);
+        setFitWidth(MapCell.CELL_SIZE);
+        
+
 
         setLayoutX((((double) (xIndex)) + 0.0d) * MapCell.CELL_SIZE);
         setLayoutY((((double) (yIndex)) + 0.0d) * MapCell.CELL_SIZE);
 
         setOnMouseEntered((MouseEvent e) -> {
-            addSelectionSquare();
+            SelectionSqare.getInstance().updatePosition(xIndex, yIndex);
         });
 
-        setOnMouseExited((MouseEvent e) -> {
-            removeSelectionSquare();
-        });
         setOnMouseClicked((MouseEvent e) -> {
+            Logger.logClient("KLICK   x:" + xIndex + "              y:" + yIndex);
             PlayerInputHandler.getInstance().mapCellClicked(this);
-            SelectionClickedSquare.getInstance().addToMapCell(this);
+            SelectionClickedSquare.getInstance().updatePosition(xIndex, yIndex);
         });
 
         plantMenu = new PlantMenu(type, xIndex, yIndex);
+        
+        
 
-    }
-
-    public void addSelectionSquare() {
-        if (!isSelectionQuare) {
-            isSelectionQuare = true;
-            getChildren().add(SelectionSqare.getInstance());
-        }
-    }
-
-    public void addSelectionClickedSquare() {
-        isSelectionClickedSquare = true;
-        if (!getChildren().contains(SelectionClickedSquare.getInstance())) {
-            getChildren().add(SelectionClickedSquare.getInstance());
-        }
-    }
-
-    public void removeSelectionClickedSquare() {
-        isSelectionClickedSquare = false;
-        if (getChildren().contains(SelectionClickedSquare.getInstance())) {
-            getChildren().remove(SelectionClickedSquare.getInstance());
-        }
-    }
-
-    public void removeSelectionSquare() {
-        if (isSelectionQuare) {
-            isSelectionQuare = false;
-            getChildren().remove(SelectionSqare.getInstance());
-        }
     }
 
     public Parent getMenu() {
@@ -112,11 +90,10 @@ public class ClientMapCell extends StackPane {
             if (currentTower != null) {
                 throw new Exceptions.MultipleTowersOnCellException();
             }
-            getChildren().add(tree);
             currentTower = tree;
             menuState = MENU_STATE.GROWING_WAITING_MENU;
 
-            if (isSelectionClickedSquare) {
+            if (SelectionClickedSquare.getInstance().isIndexClicked(xIndex, yIndex)) {
                 PlayerInputHandler.getInstance().mapCellClicked(this);
             }
 
@@ -126,13 +103,12 @@ public class ClientMapCell extends StackPane {
     }
 
     public void removeTree(ClientTower tree) {
-        if (getChildren().contains(tree)) {
+
             isPlanted = false;
             currentTower = null;
-            getChildren().remove(tree);
             menuState = MENU_STATE.PLANT_MENU;
             PlayerInputHandler.getInstance().mapCellClicked(this);
-        }
+        
     }
 
     public ClientTower getCurrentTower() {

@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import maggdaforestdefense.gameplay.ClientMap;
 import maggdaforestdefense.gameplay.ClientMapCell;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -56,6 +57,8 @@ public class RangeIndicator extends Group{
         
         
         getChildren().addAll(rect,circle);
+        
+        setViewOrder(ViewOrder.POPUP);
 
     }
 
@@ -78,7 +81,7 @@ public class RangeIndicator extends Group{
                 rect.setHeight(size);
                 rect.setLayoutX((xIndex * MapCell.CELL_SIZE - size / 2) + 0.5 * MapCell.CELL_SIZE);
                 rect.setLayoutY((yIndex * MapCell.CELL_SIZE - size / 2) + 0.5 * MapCell.CELL_SIZE);
-                rect.setViewOrder(-100);
+                rect.setViewOrder(ViewOrder.POPUP);
                 rect.setVisible(true);
                 break;
 
@@ -86,7 +89,7 @@ public class RangeIndicator extends Group{
                 circle.setRadius(range * MapCell.CELL_SIZE);
                 circle.setLayoutX(((double)xIndex + 0.5d) * MapCell.CELL_SIZE);
                 circle.setLayoutY(((double)yIndex + 0.5d) * MapCell.CELL_SIZE);
-                circle.setViewOrder(-101);
+                circle.setViewOrder(ViewOrder.POPUP);
                 circle.setVisible(true);
                 break;
 

@@ -17,6 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.MapleShot;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 import static maggdaforestdefense.network.server.serverGameplay.towers.Spruce.RANGE_TYPE;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -77,9 +78,11 @@ public class Maple extends Tower {
             shootTimer += timeElapsed;
 
             if (shootTimer > shootTime) {
-                if (isAnyMobInRange(range, canAttackSet)) {
+                int mobsInRange = howManyMobsInRange(range, canAttackSet);
+                if (mobsInRange > 0) {
+                    Logger.logServer(mobsInRange + "mobs in range detected");
                     shootTimer = 0;
-                    shoot();
+                    shoot(mobsInRange);
                 }
             }
 
@@ -91,8 +94,8 @@ public class Maple extends Tower {
         }
     }
 
-    private void shoot() {
-        serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame));
+    private void shoot(int mobsInRange) {
+        serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame, mobsInRange));
         performUpgradesOnShoot();
     }
 

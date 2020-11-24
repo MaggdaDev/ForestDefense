@@ -36,7 +36,8 @@ import maggdaforestdefense.util.KeyEventHandler;
  *
  * @author David
  */
-public class GameScreen extends Group{
+public class GameScreen extends Group {
+
     public final static double DEFAULT_FONT = 30;
     private DoubleProperty fontSize = new SimpleDoubleProperty(DEFAULT_FONT);
 
@@ -58,18 +59,18 @@ public class GameScreen extends Group{
 
         gamePlayGroup = new Group();
         gamePlayGroup.setManaged(false);
-        
+
         topOverlay = new TopOverlay(0, 0);
         gameOverOverlay = new GameOverOverlay();
         waveAnnouncer = new WaveAnnouncer();
         readyCheckOverlay = new ReadyCheckOverlay();
-        
+
         rightSideMenu = new SideMenu(true);
         rightSideMenu.setVisible(false);
-        
+
         essenceMenu = new EssenceMenu();
         essenceMenu.setVisible(true);
-        
+
         getChildren().addAll(gamePlayGroup, rightSideMenu, essenceMenu, topOverlay, gameOverOverlay, waveAnnouncer, readyCheckOverlay);
         gamePlayGroup.setViewOrder(3);
         rightSideMenu.setViewOrder(2);
@@ -91,32 +92,27 @@ public class GameScreen extends Group{
 
         setUpInputListeners();
 
-        
-        
-        
-        
         setCursor(Cursor.OPEN_HAND);
-        setOnMousePressed((MouseEvent e)->{
-           PlayerInputHandler.getInstance().setMousePressed(true, e);
+        setOnMousePressed((MouseEvent e) -> {
+            PlayerInputHandler.getInstance().setMousePressed(true, e);
         });
-        setOnMouseReleased((MouseEvent e)->{
-           PlayerInputHandler.getInstance().setMousePressed(false, e);
-           setCursor(Cursor.OPEN_HAND);
+        setOnMouseReleased((MouseEvent e) -> {
+            PlayerInputHandler.getInstance().setMousePressed(false, e);
+            setCursor(Cursor.OPEN_HAND);
         });
-        setOnMouseDragged((MouseEvent e)->{
-                   PlayerInputHandler.getInstance().mouseMoved(e);
-                   setCursor(Cursor.CLOSED_HAND);
+        setOnMouseDragged((MouseEvent e) -> {
+            PlayerInputHandler.getInstance().mouseMoved(e);
+            setCursor(Cursor.CLOSED_HAND);
         });
-        
-        MaggdaForestDefense.getInstance().addOnSceneResize((a,b,c)->{
+
+        MaggdaForestDefense.getInstance().addOnSceneResize((a, b, c) -> {
             updateFont();
         });
-        
+
         styleProperty().bind(Bindings.format("-fx-font-size: %.2fpt;", fontSize));
-        
 
     }
-    
+
     public void updateFont() {
         fontSize.set(DEFAULT_FONT * maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact());
     }
@@ -153,11 +149,11 @@ public class GameScreen extends Group{
             }
         });
     }
-    
+
     public void announceWave(int wave) {
         waveAnnouncer.nextWave(wave);
     }
-    
+
     public void doEssenceAnimtionTo(ClientTower tower) {
         gamePlayGroup.getChildren().add(new EssenceAnimation(map.getBaseXIndex(), map.getBaseYIndex(), tower));
         tower.hideEssenceButton();
@@ -165,16 +161,15 @@ public class GameScreen extends Group{
 
     public void addGameObject(ClientGameObject gameObject) {
         gamePlayGroup.getChildren().add(gameObject);
-        
-        
+
     }
 
     void removeGameObject(ClientGameObject remove) {
         if (gamePlayGroup.getChildren().contains(remove)) {
             gamePlayGroup.getChildren().remove(remove);
         }
-        if(remove instanceof ClientTower) {
-            removeTower((ClientTower)remove);
+        if (remove instanceof ClientTower) {
+            removeTower((ClientTower) remove);
         }
         remove.onRemove();
     }
@@ -187,16 +182,16 @@ public class GameScreen extends Group{
         gamePlayGroup.setLayoutX(mapXInset);
         gamePlayGroup.setLayoutY(mapYInset);
     }
-    
+
     public void showGameOverOverlay() {
-        
+
         gameOverOverlay.startAnimation();
     }
-    
+
     public void showReadyCheck() {
         readyCheckOverlay.startAnimation();
     }
-    
+
     public void hideReadyCheck() {
         readyCheckOverlay.back();
     }
@@ -214,38 +209,42 @@ public class GameScreen extends Group{
         rightSideMenu.setVisible(true);
     }
 
-    void addTower(ClientTower tree) {
+    public void addTower(ClientTower tree) {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.plantTree(tree);
+        gamePlayGroup.getChildren().add(tree);
     }
-    
+
     public void removeTower(ClientTower tree) {
         ClientMapCell cell = map.getCells()[tree.getXIndex()][tree.getYIndex()];
         cell.removeTree(tree);
+        if (gamePlayGroup.getChildren().contains(tree)) {
+            gamePlayGroup.getChildren().remove(tree);
+        }
     }
 
     public Group getGamePlayGroup() {
         return gamePlayGroup;
     }
-    
+
     public TopOverlay getTopOverlay() {
         return topOverlay;
     }
-    
+
     public EssenceMenu getEssenceMenu() {
         return essenceMenu;
     }
-    
+
     public SideMenu getSideMenu() {
         return rightSideMenu;
     }
-    
+
     public ClientMap getMap() {
         return map;
     }
-    
+
     public void safeRemoveGameplayNode(Node node) {
-        if(gamePlayGroup.getChildren().contains(node)) {
+        if (gamePlayGroup.getChildren().contains(node)) {
             gamePlayGroup.getChildren().remove(node);
         }
     }
@@ -253,9 +252,5 @@ public class GameScreen extends Group{
     public void updateReadyCheck(double progress) {
         readyCheckOverlay.updateProgress(progress);
     }
-
-    
-    
-    
 
 }

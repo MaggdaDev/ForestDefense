@@ -25,11 +25,7 @@ public class ClientSpruce extends ClientTower {
     public final static Tower.RangeType RANGE_TYPE = Spruce.RANGE_TYPE;
     public ClientSpruce(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH, growingTime);
-        setPreserveRatio(true);
-        setFitHeight(100);
         
-        setLayoutX(xIndex*MapCell.CELL_SIZE);
-        setLayoutY(yIndex*MapCell.CELL_SIZE);
     }
 
     @Override

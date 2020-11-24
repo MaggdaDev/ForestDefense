@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import maggdaforestdefense.gameplay.ClientMap;
 import maggdaforestdefense.gameplay.ClientMapCell;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
@@ -18,30 +19,42 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  */
 public class SelectionClickedSquare extends Rectangle {
 
-    private ClientMap map;
-    private ClientMapCell mapCell;
 
     private static SelectionClickedSquare instance;
+    private int currentXInd, currentYInd;
+    
 
-    public SelectionClickedSquare(ClientMap map) {
+    public SelectionClickedSquare() {
         instance = this;
-        this.map = map;
-        mapCell = map.getCells()[0][0];
 
-        setWidth(MapCell.CELL_SIZE - 6);
-        setHeight(MapCell.CELL_SIZE - 6);
+
+        setWidth(MapCell.CELL_SIZE);
+        setHeight(MapCell.CELL_SIZE);
         setFill(Color.TRANSPARENT);
         setStroke(Color.web("484848"));
         setStrokeWidth(6);
+        
+        setViewOrder(ViewOrder.MAP_CONTROLL);
+        setVisible(false);
+        setMouseTransparent(true);
     }
 
     public static SelectionClickedSquare getInstance() {
         return instance;
     }
 
-    public void addToMapCell(ClientMapCell c) {
-        mapCell.removeSelectionClickedSquare();
-        mapCell = c;
-        mapCell.addSelectionClickedSquare();
+   public void updatePosition(int xIndex, int yIndex) {
+        setVisible(true);
+        currentXInd = xIndex;
+        currentYInd = yIndex;
+        
+        setLayoutX(xIndex * MapCell.CELL_SIZE);
+        setLayoutY(yIndex * MapCell.CELL_SIZE);
+
     }
+   
+   public boolean isIndexClicked(int xIndex, int yIndex) {
+        return (xIndex == currentXInd && yIndex == currentYInd);
+    }
+    
 }

@@ -26,7 +26,7 @@ public class MapleShot extends Projectile {
     public final static double WIDTH = 10;
     public final static double MAX_RADIUS = Maple.DEFAULT_RANGE * MapCell.CELL_SIZE;
     public final static double DAMAGE = 40;
-    private double EXPANSION = 600;
+    private double EXPANSION = 500;
 
 
     private double xPos, yPos;
@@ -40,17 +40,20 @@ public class MapleShot extends Projectile {
     
     //upgrade
     private boolean isAusbau = false;
-    private Damage.DamageMultiplier ausbauDamage;
+    private Damage.NormalMultiplier ausbauDamage;
+    private final int mobsInRange;
     
     //upgrade constants
     public final static double MAX_AUSBAU_MULTIPLIER = 2;
 
-    public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame) {
+    public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange) {
         super(id, GameObjectType.P_MAPLE_SHOT, new HitBox.DonutHitBox(WIDTH, xPos, yPos), owner, attackSet);
         currentRadius = 0;
         this.xPos = xPos;
         this.yPos = yPos;
         this.serverGame = serverGame;
+        
+        this.mobsInRange = mobsInRange;
         
         
         donutHitBox = (HitBox.DonutHitBox)super.hitBox;
@@ -61,9 +64,10 @@ public class MapleShot extends Projectile {
         
         
         usualDamage = new Damage.NormalDamage(DAMAGE);
-        ausbauDamage = new Damage.DamageMultiplier(1);
+        ausbauDamage = new Damage.NormalMultiplier(1);
         
-        damageObject.addAllDamage(new Damage.DamageSubclass[]{usualDamage, ausbauDamage});
+        damageObject.addAllDamage(new Damage.DamageSubclass[]{usualDamage});
+        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{ausbauDamage});
         
         
         owner.getUpgrades().forEach((Upgrade upgrade) -> {
@@ -77,7 +81,7 @@ public class MapleShot extends Projectile {
             mobsDamaged.add(target);
             
             if(isAusbau) {
-                ausbauDamage.setDamageVal(WIDTH);
+                ausbauDamage.setMultiplier(4.0d / Math.pow((double)mobsInRange + 1.0d,2.0d) + 1.0d);
             }
             
             notifyOwnerDamage(target.damage(damageObject));

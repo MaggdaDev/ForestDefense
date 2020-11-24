@@ -58,7 +58,7 @@ public class FPSLimiter {
 
     private void printFPS() {
         if (FPS_TEST_MODE) {
-            if (counter % MAX_FPS == 0) {
+            if (counter % ((int)(MAX_FPS*5)) == 0) {
                 Logger.logServer("FPS:   " + (counter / (timeElapsedTotal / 1000)));
             }
         }

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import maggdaforestdefense.gameplay.ClientMap;
 import maggdaforestdefense.gameplay.ClientMapCell;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
@@ -18,40 +19,33 @@ import maggdaforestdefense.network.server.serverGameplay.MapCell;
  */
 public class SelectionSqare extends Rectangle {
 
-    private ClientMap map;
-    private ClientMapCell mapCell;
-    
+
     private static SelectionSqare instance;
 
-    public SelectionSqare(ClientMap map) {
+    public SelectionSqare() {
         instance = this;
-        this.map = map;
-        mapCell = map.getCells()[0][0];
-
-        setWidth(MapCell.CELL_SIZE-4);
-        setHeight(MapCell.CELL_SIZE-4);
+        setWidth(MapCell.CELL_SIZE);
+        setHeight(MapCell.CELL_SIZE);
         setFill(Color.TRANSPARENT);
         setStroke(Color.GRAY);
         setStrokeWidth(4);
+        
+        setViewOrder(ViewOrder.MAP_CONTROLL);
+        
+        setVisible(false);
+        setMouseTransparent(true);
     }
 
-    public void updatePosition(MouseEvent e) {
-        int xIndex = (int) Math.round(e.getSceneX() / MapCell.CELL_SIZE -1);
-        int yIndex = (int) Math.round(e.getSceneY() / MapCell.CELL_SIZE -1);
-        if (xIndex >= map.getCells().length) {
-            xIndex = map.getCells().length - 1;
-        }
-        if (yIndex >= map.getCells()[xIndex].length) {
-            yIndex = map.getCells()[xIndex].length - 1;
-        }
-        ClientMapCell newCell = map.getCells()[xIndex][yIndex];
-        if(newCell != mapCell) {
-            mapCell.removeSelectionSquare();
-            mapCell = newCell;
-            mapCell.addSelectionSquare();
-        }        
+    public void updatePosition(int xIndex, int yIndex) {
+        setVisible(true);
+        
+        setLayoutX(xIndex * MapCell.CELL_SIZE);
+        setLayoutY(yIndex * MapCell.CELL_SIZE);
+
     }
     
+
+
     public static SelectionSqare getInstance() {
         return instance;
     }

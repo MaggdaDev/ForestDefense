@@ -63,5 +63,30 @@ public class NodeSizer<E extends Node> {
     public static double CALC_HEIGHT_FROM_WIDTH(ImageView i) {
         return i.getImage().getHeight() * (i.getFitWidth() / i.getImage().getWidth());
     }
+    
+    public static void setCenterOfImageView(ImageView im, double layoutCenterX, double layoutCenterY) {
+        double wOld = im.getImage().getWidth();
+        double hOld = im.getImage().getHeight();
+        
+        double ratio = 0;
+        if(hOld != 0) {
+            ratio = wOld / hOld;
+        }
+        
+        if(im.getFitWidth() != 0) {
+            double wNew = im.getFitWidth();
+            double hNew = wNew / ratio;
+            im.setLayoutX(layoutCenterX - wNew/2.0d);
+            im.setLayoutY(layoutCenterY - hNew/2.0d);
+        } else if(im.getFitHeight() != 0) {
+            double hNew = im.getFitHeight();
+            double wNew = hNew * ratio;
+            im.setLayoutX(layoutCenterX - wNew/2.0d);
+            im.setLayoutY(layoutCenterY - hNew/2.0d);
+        } else {
+            im.setLayoutX(layoutCenterX - wOld/2.0d);
+            im.setLayoutY(layoutCenterY - hOld/2.0d);
+        }
+    }
   
 }

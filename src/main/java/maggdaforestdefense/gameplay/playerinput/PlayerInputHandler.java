@@ -37,10 +37,10 @@ public class PlayerInputHandler {
 
     public void setMap(ClientMap map) {
         this.map = map;
-        selectionSquare = new SelectionSqare(map);
-        selectionClickedSquare = new SelectionClickedSquare(map);
+        selectionSquare = new SelectionSqare();
+        selectionClickedSquare = new SelectionClickedSquare();
         rangeIndicator = new RangeIndicator(map);
-        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(rangeIndicator);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().addAll(rangeIndicator, selectionSquare, selectionClickedSquare);
 
     }
 

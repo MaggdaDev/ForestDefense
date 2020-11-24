@@ -17,6 +17,7 @@ import maggdaforestdefense.gameplay.EssenceButton;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.gameplay.ingamemenus.GrowingWaitingMenu;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
 import maggdaforestdefense.network.CommandArgument;
@@ -28,6 +29,7 @@ import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower.RangeType;
+import maggdaforestdefense.util.NodeSizer;
 
 /**
  *
@@ -66,6 +68,11 @@ public abstract class ClientTower extends ClientGameObject{
         this.range = range;
         this.growingTime = growingTime;
         
+        
+        setPreserveRatio(true);
+        setFitHeight(100);
+        NodeSizer.setCenterOfImageView(this, (xIndex + 0.5) * MapCell.CELL_SIZE, (yIndex + 0.5) * MapCell.CELL_SIZE);
+        
         healthPoints = health;
         healthBar = new HealthBar(healthPoints, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_TOWER, 80);
         
@@ -85,7 +92,7 @@ public abstract class ClientTower extends ClientGameObject{
         setOpacity(0.4);
         
      
-       
+        setViewOrder(ViewOrder.TOWER);
 
     }
     

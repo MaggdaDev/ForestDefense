@@ -6,6 +6,7 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.Logger;
 
@@ -32,6 +33,8 @@ public class ClientMap extends Group {
                 getChildren().add(currentCell);
             }
         }
+        
+        setViewOrder(ViewOrder.MAP_CELL);
     }
 
     public ClientMapCell[][] getCells() {

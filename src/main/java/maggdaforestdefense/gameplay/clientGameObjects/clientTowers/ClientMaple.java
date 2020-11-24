@@ -6,6 +6,8 @@
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -21,14 +23,14 @@ import maggdaforestdefense.storage.GameImage;
  */
 public class ClientMaple extends ClientTower{
     public final static Tower.RangeType RANGE_TYPE = Maple.RANGE_TYPE;
+
     public ClientMaple(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_MAPLE_1, GameObjectType.T_MAPLE, UpgradeSet.MAPLE_SET, xIndex, yIndex, Maple.DEFAULT_RANGE, Maple.DEFAULT_HEALTH, growingTime);
-        setPreserveRatio(true);
-        setFitHeight(100);
-        
-        setLayoutX(xIndex*MapCell.CELL_SIZE);
-        setLayoutY(yIndex*MapCell.CELL_SIZE);
+
+
     }
+    
+    
 
     @Override
     public void update(NetworkCommand updateCommand) {
@@ -72,4 +74,6 @@ public class ClientMaple extends ClientTower{
     public Tower.RangeType getRangeType() {
         return RANGE_TYPE;
     }
+    
+    
 }

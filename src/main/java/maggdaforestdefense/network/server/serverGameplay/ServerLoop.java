@@ -57,6 +57,12 @@ public class ServerLoop {
     public void run() {
         startTimeNano = System.nanoTime();
         oldRunTime = 0;
+        
+        try {
+            Thread.sleep(500);
+        } catch(Exception e) {
+            
+        }
 
         while (running) {
             

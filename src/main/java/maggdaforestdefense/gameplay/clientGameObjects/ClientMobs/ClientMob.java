@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
@@ -67,6 +68,9 @@ public abstract class ClientMob extends ClientGameObject {
             setFitHeight(size);
             setFitWidth(fitWidth * (size / fitHeight));
         }
+        
+        
+        setViewOrder(ViewOrder.MOB);
     }
 
     protected void updateShadow() {

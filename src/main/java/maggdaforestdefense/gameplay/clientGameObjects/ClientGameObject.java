@@ -23,12 +23,14 @@ public abstract class ClientGameObject extends ImageView {
     protected double xPos, yPos;
 
     protected ClientGameObject(int id, GameImage gameImage, GameObjectType objectType, double x, double y) {
-        setImage(gameImage.getImage());
+        if (gameImage != null) {
+            setImage(gameImage.getImage());
+        }
         gameObjectType = objectType;
         this.id = id;
         xPos = x;
         yPos = y;
-        
+
         setMouseTransparent(true);
     }
 
@@ -49,15 +51,14 @@ public abstract class ClientGameObject extends ImageView {
         setRotate(GameMaths.getDegAngleToYAxis(dX, dY));
 
     }
-    
+
     public void setNewPos(double x, double y) {
         xPos = x;
         yPos = y;
         setLayoutX(x);
         setLayoutY(y);
     }
-    
-    public abstract void onRemove();
 
+    public abstract void onRemove();
 
 }

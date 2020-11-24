@@ -11,6 +11,7 @@ import javafx.animation.ScaleTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
@@ -47,6 +48,8 @@ public class EssenceButton extends ImageView{
         });
         
         setVisible(false);
+        
+        setViewOrder(ViewOrder.POPUP);
     }
     
     public void show() {

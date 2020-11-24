@@ -168,22 +168,22 @@ public abstract class Tower extends GameObject {
         return false;
     }
     
-    protected boolean isAnyMobInRange(double range, CanAttackSet canAttackSet) {
+    protected int howManyMobsInRange(double range, CanAttackSet canAttackSet) {
+        int amount = 0;
         for(Mob mob: serverGame.getMobs().values()) {
             if(isInRange(mob, range)) {
-                Logger.logServer("IN RANGE!!!!!!");
+                
                 if(canAttackSet.canAttackDigging && (mob.getMovementType() == Mob.MovementType.DIG)) {
-                    return true;
-                }
-                if(canAttackSet.canAttackFlying == (mob.getMovementType() == Mob.MovementType.FLY)) {
-                    return true;
-                }
-                if(canAttackSet.canAttackWalking == (mob.getMovementType() == Mob.MovementType.WALK)) {
-                    return true;
+                    amount++;
+                } else if(canAttackSet.canAttackFlying && (mob.getMovementType() == Mob.MovementType.FLY)) {
+                    amount++;
+                } else if(canAttackSet.canAttackWalking && (mob.getMovementType() == Mob.MovementType.WALK)) {
+                    amount++;
                 }
             }
         }
-        return false;
+        
+        return amount;
     }
 
     public void damage(Damage damageObject) {

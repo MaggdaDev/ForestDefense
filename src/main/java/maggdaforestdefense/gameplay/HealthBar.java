@@ -7,6 +7,7 @@ package maggdaforestdefense.gameplay;
 
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
+import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.storage.GameImage;
 
 /**
@@ -42,6 +43,8 @@ public class HealthBar extends Group{
         setVisible(false);
         
         getChildren().addAll(box, bar);
+        
+        setViewOrder(ViewOrder.POPUP);
     }
     
     public void update(double x, double y, double health) {

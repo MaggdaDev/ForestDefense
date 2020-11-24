@@ -45,6 +45,10 @@ public class ClientMaple extends ClientTower{
                 isMature = true;
             }
         }
+        
+
+            super.range = updateCommand.getNumArgument("range");
+        
     }
     
     @Override

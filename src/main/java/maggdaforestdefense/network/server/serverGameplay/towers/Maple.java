@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay.towers;
 
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
@@ -18,6 +19,7 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 import static maggdaforestdefense.network.server.serverGameplay.towers.Spruce.RANGE_TYPE;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.GameMaths;
 
 /**
  *
@@ -36,16 +38,38 @@ public class Maple extends Tower {
 
     private double shootTime = 2, shootTimer = 0;
 
+    // UPGRADE CONSTANTS
+    public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_MULT = 0.2;
+
+    // UPGRADe
+    private int bundDerAhorneCounter;
+
     public Maple(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
+
+        onTowerChanges.add((o) -> {
+            bundDerAhorneCounter = 0;
+            serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
+                if (gameObject != this && gameObject instanceof Tower) {
+                    Tower tower = (Tower) gameObject;
+                    if (tower.getUpgrades().contains(Upgrade.MAPLE_1_2)) {
+                        if (GameMaths.isInSquareRange(xIndex, yIndex, tower.getXIndex(), tower.getYIndex(), BUND_DER_AHORNE_RANGE)) {
+                            bundDerAhorneCounter++;
+                        }
+                    }
+                }
+            });
+            super.range = DEFAULT_RANGE + BUND_DER_AHORNE_MULT * Math.sqrt(bundDerAhorneCounter);
+        });
+
     }
 
     @Override
     public void addUpgrade(Upgrade upgrade) {
         upgrades.add(upgrade);
-        
-        switch(upgrade) {
-            
+
+        switch (upgrade) {
+
         }
     }
 
@@ -67,7 +91,8 @@ public class Maple extends Tower {
                 new CommandArgument("id", id),
                 new CommandArgument("hp", healthPoints),
                 new CommandArgument("image", currImage.ordinal()),
-                new CommandArgument("timeLeft", growingAnimation.getTimeLeft())
+                new CommandArgument("timeLeft", growingAnimation.getTimeLeft()), 
+                new CommandArgument("range", range)
             });
         } else {
 
@@ -90,12 +115,12 @@ public class Maple extends Tower {
             // Upgrades
             performUpgradesOnUpdate();
 
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints), new CommandArgument("range", range)});
         }
     }
 
     private void shoot(int mobsInRange) {
-        serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame, mobsInRange));
+        serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame, mobsInRange, range));
         performUpgradesOnShoot();
     }
 

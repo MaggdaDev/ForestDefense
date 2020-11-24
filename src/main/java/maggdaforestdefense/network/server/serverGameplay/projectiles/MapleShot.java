@@ -24,7 +24,6 @@ import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 public class MapleShot extends Projectile {
 
     public final static double WIDTH = 10;
-    public final static double MAX_RADIUS = Maple.DEFAULT_RANGE * MapCell.CELL_SIZE;
     public final static double DAMAGE = 40;
     private double EXPANSION = 500;
 
@@ -38,6 +37,8 @@ public class MapleShot extends Projectile {
     
     private HitBox.DonutHitBox donutHitBox;
     
+    private double maxRadius;
+    
     //upgrade
     private boolean isAusbau = false;
     private Damage.NormalMultiplier ausbauDamage;
@@ -46,13 +47,13 @@ public class MapleShot extends Projectile {
     //upgrade constants
     public final static double MAX_AUSBAU_MULTIPLIER = 2;
 
-    public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange) {
+    public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange, double range) {
         super(id, GameObjectType.P_MAPLE_SHOT, new HitBox.DonutHitBox(WIDTH, xPos, yPos), owner, attackSet);
         currentRadius = 0;
         this.xPos = xPos;
         this.yPos = yPos;
         this.serverGame = serverGame;
-        
+        this.maxRadius = range * MapCell.CELL_SIZE;
         this.mobsInRange = mobsInRange;
         
         
@@ -109,7 +110,7 @@ public class MapleShot extends Projectile {
         currentRadius += timeElapsed * EXPANSION;
         donutHitBox.setInnerRadius(currentRadius);
         hitBox.updatePos(xPos, yPos);
-        return currentRadius < MAX_RADIUS;
+        return currentRadius < maxRadius;
     }
 
     @Override

@@ -22,7 +22,7 @@ import maggdaforestdefense.storage.Logger;
  */
 public class ClientMapleShot extends ClientProjectile {
 
-    public final static int LEAF_AMOUNT = 12;
+    public final static int LEAF_AMOUNT = 16;
 
     private MapleLeaf[] leafs;
 
@@ -65,7 +65,7 @@ public class ClientMapleShot extends ClientProjectile {
     public static class MapleLeaf extends ImageView {
 
         private Image image;
-        private static final double SIZE = 90;
+        private static final double SIZE = 100;
         
         private final double startCenterX, startCenterY, xMovementFact, yMovementFact;
         

@@ -97,5 +97,5 @@ code = lib/log4j-api-2.11.0.jar
 uresource = natives.jar
 
 # The main entry point for the application
-class = maggdaforestdefense.Main
+class = maggdaforestdefense.ClientLauncher
 # version=1

@@ -183,12 +183,18 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     public void sendCommand(NetworkCommand command) {
         //Logger.debugServer("Command sent: " + command.toString());
-        conn.send(command.toString());
+        if(conn.isOpen()) {
+            conn.send(command.toString());
+        } else {
+            Logger.errServer("A command was sent but the client is not connected.");
+        }
     }
 
     @Override
     public void stop() {
-        game.removePlayer(owner);
+        if(game!=null) {
+            game.removePlayer(owner);
+        }
     }
 
     public void setOwner(Player o) {

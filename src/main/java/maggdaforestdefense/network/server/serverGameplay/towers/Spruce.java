@@ -44,7 +44,7 @@ public class Spruce extends Tower {
     // UPGRADE CONSTANTS
     public final static double FICHTEN_WUT_MULTIPLIER = 0.97;
     public final static double NADEL_STAERKUNG_MULT = 3;
-    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.2;
+    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.5;
     public final static double UPGRADE_LIFE_STEAL = 0.5;
     public final static double RESEARCH_PROBABILITY = 0.05;
 
@@ -86,7 +86,7 @@ public class Spruce extends Tower {
                     }
                 }
             });
-            regenerationPerSecond = fichtenFreundschaftCounter * 5;
+            regenerationPerSecond = fichtenFreundschaftCounter * REGEN_ADD_FICHTENFREUNDSCHAFT;
         });
 
         researchStacks = new HashMap<String, Integer>();

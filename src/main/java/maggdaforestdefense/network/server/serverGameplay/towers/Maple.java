@@ -39,7 +39,7 @@ public class Maple extends Tower {
     private double shootTime = 2, shootTimer = 0;
 
     // UPGRADE CONSTANTS
-    public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 1;
+    public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 0.5;
     public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.1;
 
     // UPGRADe

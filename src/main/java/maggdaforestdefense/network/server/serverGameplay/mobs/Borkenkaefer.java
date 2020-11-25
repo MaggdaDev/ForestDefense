@@ -17,7 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
 public class Borkenkaefer extends Bug {
     
 
-    public final static double HP = 50, SPEED = 50, DAMAGE = 33, ATTACK_TIME = 1, ARMOR = 15;
+    public final static double HP = 500, SPEED = 50, DAMAGE = 100, ATTACK_TIME = 3, ARMOR = 30;
     public final static int TOWER_VISION_RANGE = Map.MAP_SIZE;
     public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 1, SAND_DISTANCE_WEIGHT = 1, STONE_DISTANCE_WEIGHT = 1;
     public final static MovementType MOVEMENT_TYPE = MovementType.WALK;
@@ -26,6 +26,11 @@ public class Borkenkaefer extends Bug {
 
     public Borkenkaefer(ServerGame serverGame) {
         super(serverGame, HP, SPEED, TOWER_VISION_RANGE, DAMAGE, ATTACK_TIME, MAP_DISTANCES, ARMOR, MOVEMENT_TYPE, GameObjectType.M_BORKENKAEFER);
+    }
+    
+    @Override
+    public double getCoinValue() {
+        return 200;
     }
 
 

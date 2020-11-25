@@ -16,7 +16,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
  */
 public class Blattlaus extends Bug{
     
-    public final static double HP = 100, SPEED = 100, DAMAGE = 1, ATTACK_TIME = 1, ARMOR = 0;
+    public final static double HP = 10, SPEED = 100, DAMAGE = 1, ATTACK_TIME = 1, ARMOR = 0;
     public final static int TOWER_VISION_RANGE = Map.MAP_SIZE;
     public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 100, SAND_DISTANCE_WEIGHT = 10, STONE_DISTANCE_WEIGHT = 1000;
     public final static MovementType MOVEMENT_TYPE = MovementType.WALK;
@@ -25,6 +25,11 @@ public class Blattlaus extends Bug{
 
     public Blattlaus(ServerGame serverGame) {
         super(serverGame, HP, SPEED, TOWER_VISION_RANGE, DAMAGE, ATTACK_TIME, MAP_DISTANCES, ARMOR, MOVEMENT_TYPE, GameObjectType.M_BLATTLAUS);
+    }
+    
+    @Override
+    public double getCoinValue() {
+        return 10;
     }
 
 }

@@ -28,9 +28,9 @@ import maggdaforestdefense.util.GameMaths;
 public class Maple extends Tower {
 
     //BALANCING
-    public final static int DEFAULT_PRIZE = 1;
+    public final static int DEFAULT_PRIZE = 150;
     public final static double DEFAULT_HEALTH = 100;
-    public final static double DEFAULT_REGEN = 1;
+    public final static double DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 1.5d;
     public final static double GROWING_TIME = 3;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;

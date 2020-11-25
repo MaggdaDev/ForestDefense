@@ -86,7 +86,7 @@ public class ClientMapleShot extends ClientProjectile {
             yMovementFact = Math.sin(rotate);
             
             setViewOrder(ViewOrder.PROJECTILE);
-            
+            setMouseTransparent(true);
             setVisible(true);
 
         }

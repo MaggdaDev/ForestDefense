@@ -19,6 +19,7 @@ public abstract class ClientProjectile extends ClientGameObject{
     public ClientProjectile(int id, GameImage gameImage, GameObjectType objectType, double x, double y) {
         super(id, gameImage, objectType, x, y);
         setViewOrder(ViewOrder.PROJECTILE);
+        setMouseTransparent(true);
     }
     
 }

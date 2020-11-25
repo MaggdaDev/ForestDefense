@@ -74,7 +74,7 @@ public class ServerLoop {
             
             serverGame.checkPlayers();
 
-            Waiter.waitUntil(() -> {      // wait unti
+            Waiter.waitUntil(() -> {      // wait until
                 return allPlayersReadyForNextRound();
             });
             

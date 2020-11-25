@@ -40,7 +40,7 @@ public class Maple extends Tower {
 
     // UPGRADE CONSTANTS
     public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 1;
-    public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.3;
+    public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.1;
 
     // UPGRADe
     private boolean isBundDerAhorn = false;

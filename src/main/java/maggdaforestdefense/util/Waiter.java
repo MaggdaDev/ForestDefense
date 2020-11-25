@@ -14,7 +14,7 @@ public class Waiter {
     public static void waitUntil(WaitCondition condition) {
         while (!condition.isCondition()) {
             try {
-                Thread.sleep(1);
+                Thread.sleep(100);
             } catch (Exception e) {
                 e.printStackTrace();
             }

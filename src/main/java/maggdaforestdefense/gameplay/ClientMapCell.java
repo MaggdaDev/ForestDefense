@@ -29,7 +29,7 @@ import maggdaforestdefense.util.Exceptions;
 public class ClientMapCell extends ImageView {
 
     private MapCell.CellType cellType;
-    private boolean isSelectionQuare = false, isPlanted = false, isSelectionClickedSquare = false;
+    private boolean isPlanted = false;
 
     private PlantMenu plantMenu;
 
@@ -125,7 +125,7 @@ public class ClientMapCell extends ImageView {
 
     public void notifyTreeMature() {
         menuState = MENU_STATE.UPGRADE_MENU;
-        if (isSelectionClickedSquare) {
+        if (SelectionClickedSquare.getInstance().isIndexClicked(xIndex, yIndex)) {
             PlayerInputHandler.getInstance().mapCellClicked(this);
         }
     }

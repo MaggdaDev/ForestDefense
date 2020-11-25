@@ -20,4 +20,4 @@ COPY --from=build /build/updater/run-docker.sh /app
 
 RUN ls /app && chmod +x /app/bin/ForestDefense && chmod +x /app/run-docker.sh
 
-ENTRYPOINT ["/app/run-docker.sh"]
+CMD ["/app/run-docker.sh"]

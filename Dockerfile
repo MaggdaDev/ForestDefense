@@ -7,7 +7,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 RUN cd updater/ && ./build-docker.sh
 
-FROM adoptopenjdk:11-jdk-openj9
+#FROM adoptopenjdk:11-jdk-openj9
+FROM amazoncorretto:15
 
 EXPOSE 27756
 

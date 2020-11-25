@@ -2,7 +2,7 @@ FROM adoptopenjdk:11-jdk-openj9 as build
 
 COPY . /build
 WORKDIR /build
-RUN apt-get update && apt-get upgrade && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     pandoc unzip \
   && rm -rf /var/lib/apt/lists/*
 RUN cd updater/ && ./build-docker.sh

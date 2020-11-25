@@ -46,15 +46,15 @@ public class Deutsch extends Language{
     
     UPGRADE_DESCRIPTION_MAPLE_1_1 = "Ausbau: Je weniger Gegner in der Reichweite sind, desto mehr Schaden verursacht der Ahorn.";
     UPGRADE_DESCRIPTION_MAPLE_1_2 = "Bund der Ahorne: Erhöht die Reichweite anderer Ahorne in der Nähe.";
-    UPGRADE_DESCRIPTION_MAPLE_1_3 = "Niederschmetternde Blätter: Blätter verursachen mehr Schaden an bewegungseingeschränkten Gegnern.";
+    UPGRADE_DESCRIPTION_MAPLE_1_3 = "Tod den Gierigen: Je schneller die Gegner sind, desto mehr Schaden verursacht der Ahorn.";
     
     UPGRADE_DESCRIPTION_MAPLE_2_1 = "Eskalation: Stehen viele Gegner in der Reichweite des Ahorns, aktiviert dieser Eskalation und schießt für eine beschränkte Zeit schneller.";
-    UPGRADE_DESCRIPTION_MAPLE_2_2 = "Reißende Blätter: Jeder Gegner in der Reichweite des Ahorns vergrößert diese.";
+    UPGRADE_DESCRIPTION_MAPLE_2_2 = "Aufladen: Nachdem der Ahorn eine bestimmte Zeit nicht angegriffen hat, macht der erste Angriff mehr Schaden.";
     UPGRADE_DESCRIPTION_MAPLE_2_3 = "Erschöpfende Blätter: Von Ahorn getroffene Gegner bekommen mehr Schaden aus allen Quellen.";
     
-    UPGRADE_DESCRIPTION_MAPLE_3_1 = "Zerlegende Blätter: Pro getroffenem Gegner wird die Abklingzeit für den nächsten Schuss verringert.";
-    UPGRADE_DESCRIPTION_MAPLE_3_2 = "Rekursive Blätter: Trifft ein Blatt vom Ahorn einen Gegner, sendet dieser von sich eine neue Welle aus Blättern weiter.";
-    UPGRADE_DESCRIPTION_MAPLE_3_3 = "Daan ist ein häseliger Inter";
+    UPGRADE_DESCRIPTION_MAPLE_3_1 = "Zerschmetternde Blätter: Anstatt Schaden zu verursachen, zerstört der Ahorn die Entsprechende Menge an Rüstungspunkten bei Gegnern permanent.";
+    UPGRADE_DESCRIPTION_MAPLE_3_2 = "Reißende Blätter: Jeder Gegner lässt die Blätter etwas weiter fliegen ";
+    UPGRADE_DESCRIPTION_MAPLE_3_3 = "Zerlegende Blätter: Pro getroffenem Gegner wird die Abklingzeit für den nächsten Schuss verringert.";
 }
     
 }

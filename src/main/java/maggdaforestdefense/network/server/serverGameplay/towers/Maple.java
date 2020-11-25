@@ -39,27 +39,31 @@ public class Maple extends Tower {
     private double shootTime = 2, shootTimer = 0;
 
     // UPGRADE CONSTANTS
-    public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_MULT = 0.2;
+    public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 1;
+    public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.3;
 
     // UPGRADe
-    private int bundDerAhorneCounter;
+    private boolean isBundDerAhorn = false;
+    private boolean isZerlegend = false;
 
     public Maple(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
 
         onTowerChanges.add((o) -> {
-            bundDerAhorneCounter = 0;
+            isBundDerAhorn = false;
             serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
                 if (gameObject != this && gameObject instanceof Tower) {
                     Tower tower = (Tower) gameObject;
                     if (tower.getUpgrades().contains(Upgrade.MAPLE_1_2)) {
                         if (GameMaths.isInSquareRange(xIndex, yIndex, tower.getXIndex(), tower.getYIndex(), BUND_DER_AHORNE_RANGE)) {
-                            bundDerAhorneCounter++;
+                            isBundDerAhorn = true;
                         }
                     }
                 }
             });
-            super.range = DEFAULT_RANGE + BUND_DER_AHORNE_MULT * Math.sqrt(bundDerAhorneCounter);
+            if (isBundDerAhorn) {
+                range = DEFAULT_RANGE + 1.0d;
+            }
         });
 
     }
@@ -69,7 +73,9 @@ public class Maple extends Tower {
         upgrades.add(upgrade);
 
         switch (upgrade) {
-
+            case MAPLE_3_3:
+                isZerlegend = true;
+                break;
         }
     }
 
@@ -91,7 +97,7 @@ public class Maple extends Tower {
                 new CommandArgument("id", id),
                 new CommandArgument("hp", healthPoints),
                 new CommandArgument("image", currImage.ordinal()),
-                new CommandArgument("timeLeft", growingAnimation.getTimeLeft()), 
+                new CommandArgument("timeLeft", growingAnimation.getTimeLeft()),
                 new CommandArgument("range", range)
             });
         } else {
@@ -116,6 +122,12 @@ public class Maple extends Tower {
             performUpgradesOnUpdate();
 
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints), new CommandArgument("range", range)});
+        }
+    }
+
+    public void notifyEnemyHit() {
+        if(isZerlegend) {
+            shootTimer += (shootTime - shootTimer) * ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING;
         }
     }
 

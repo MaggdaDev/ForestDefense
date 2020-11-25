@@ -44,8 +44,17 @@ public class MapleShot extends Projectile {
     private Damage.NormalMultiplier ausbauDamage;
     private final int mobsInRange;
     
+    private Damage.NormalMultiplier greedoDamage;
+    private boolean isGreedo = false;
+    
+    private boolean isGnadenlos = false;
+    
+    private boolean isZerschmetternd = false;
+    
+   
     //upgrade constants
     public final static double MAX_AUSBAU_MULTIPLIER = 2;
+    public final static double GNADENLOS_RANGE_PER_ENEMY_HIT = 0.2;
 
     public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange, double range) {
         super(id, GameObjectType.P_MAPLE_SHOT, new HitBox.DonutHitBox(WIDTH, xPos, yPos), owner, attackSet);
@@ -66,9 +75,10 @@ public class MapleShot extends Projectile {
         
         usualDamage = new Damage.NormalDamage(DAMAGE);
         ausbauDamage = new Damage.NormalMultiplier(1);
+        greedoDamage = new Damage.NormalMultiplier(1);
         
         damageObject.addAllDamage(new Damage.DamageSubclass[]{usualDamage});
-        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{ausbauDamage});
+        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{ausbauDamage, greedoDamage});
         
         
         owner.getUpgrades().forEach((Upgrade upgrade) -> {
@@ -79,13 +89,28 @@ public class MapleShot extends Projectile {
     @Override
     public void dealDamage(Mob target) {
         if (!mobsDamaged.contains(target)) {
+            ((Maple)owner).notifyEnemyHit();
             mobsDamaged.add(target);
-            
+            greedoDamage.setMultiplier(1);
             if(isAusbau) {
                 ausbauDamage.setMultiplier(4.0d / Math.pow((double)mobsInRange + 1.0d,2.0d) + 1.0d);
             }
             
+            if(isGreedo) {
+                double x = 0.03d * target.getSpeed() - 5;
+                greedoDamage.setMultiplier(1 + (Math.pow(2.0d, x))/(2.5d + Math.pow(2.0d,x)));
+            }
+            
+            if(isGnadenlos) {
+                maxRadius += GNADENLOS_RANGE_PER_ENEMY_HIT * MapCell.CELL_SIZE;
+            }
+            
+            if(isZerschmetternd) {
+                target.destroyArmor(damageObject.getTotalDamage(0));
+                notifyOwnerDamage(0);
+            } else {
             notifyOwnerDamage(target.damage(damageObject));
+            }
         }
     }
 
@@ -102,6 +127,16 @@ public class MapleShot extends Projectile {
         switch(upgrade) {
             case MAPLE_1_1:     //AUSBAU
                 isAusbau = true;
+                break;
+            case MAPLE_1_3:     // GRETTO
+                isGreedo = true;
+                break;
+                
+            case MAPLE_3_1:     // ZERSCHMETTERND
+                isZerschmetternd = true;
+                break;
+            case MAPLE_3_2:     // gnadenlos
+                isGnadenlos = true;
                 break;
         }
     }

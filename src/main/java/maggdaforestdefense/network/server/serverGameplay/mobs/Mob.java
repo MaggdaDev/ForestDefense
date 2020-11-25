@@ -265,12 +265,23 @@ public abstract class Mob extends GameObject {
         return healthPoints;
     }
     
+    public void destroyArmor(double arm) {
+        armor -= arm;
+        if(armor < 0) {
+            armor = 0;
+        }
+    }
+    
     public double getArmor() {
         return armor;
     }
     
     public MovementType getMovementType() {
         return movementType;
+    }
+
+    public double getSpeed() {
+        return speed;
     }
     
     public static enum MovementType {

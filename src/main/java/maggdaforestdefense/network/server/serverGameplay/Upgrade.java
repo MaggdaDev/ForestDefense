@@ -39,13 +39,13 @@ public enum Upgrade {
     // MAPLE
     MAPLE_1_1(GameImage.UPGRADE_MAPLE_01_01.getImage(), "Ausbau", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_1;})),
     MAPLE_1_2(GameImage.UPGRADE_MAPLE_01_02.getImage(), "Bund der Ahorne", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_2;})),
-    MAPLE_1_3(GameImage.UPGRADE_MAPLE_01_03.getImage(), "Niederschmetternde Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_3;})),
+    MAPLE_1_3(GameImage.UPGRADE_MAPLE_01_03.getImage(), "Tod den Gierigen", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_1_3;})),
     MAPLE_2_1(GameImage.UPGRADE_MAPLE_02_01.getImage(), "Eskalation", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_1;})),
-    MAPLE_2_2(GameImage.UPGRADE_MAPLE_02_02.getImage(), "Reißende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_2;})),
+    MAPLE_2_2(GameImage.UPGRADE_MAPLE_02_02.getImage(), "Aufladen", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_2;})),
     MAPLE_2_3(GameImage.UPGRADE_MAPLE_02_03.getImage(), "Erschöpfende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_2_3;})),
-    MAPLE_3_1(GameImage.UPGRADE_MAPLE_03_01.getImage(), "Zerlegende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_1;})),
-    MAPLE_3_2(GameImage.UPGRADE_MAPLE_03_02.getImage(), "Rekursive Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_2;})),
-    MAPLE_3_3(GameImage.UPGRADE_MAPLE_03_03.getImage(), "Daan ist ein Spast laal", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_3;}));
+    MAPLE_3_1(GameImage.UPGRADE_MAPLE_03_01.getImage(), "Zerschmetternde Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_1;})),
+    MAPLE_3_2(GameImage.UPGRADE_MAPLE_03_02.getImage(), "Gnadenlose Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_2;})),
+    MAPLE_3_3(GameImage.UPGRADE_MAPLE_03_03.getImage(), "Zerlegende Blätter", 1, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_MAPLE_3_3;}));
 
 
     private final Image icon;

@@ -34,6 +34,11 @@ public class ClientSpruce extends ClientTower {
         healthPoints = updateCommand.getNumArgument("hp");
         healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
         
+        if(isMature) {
+            EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
+            handleEffects(e);
+        }
+        
         if(updateCommand.containsArgument("image")) {
             setImage(GameImage.values()[(int)updateCommand.getNumArgument("image")].getImage());
             updateGrowing(updateCommand.getNumArgument("timeLeft"));
@@ -43,10 +48,7 @@ public class ClientSpruce extends ClientTower {
             }
         }
         
-        if(isMature) {
-            EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
-            handleEffects(e);
-        }
+        
     }
     
     @Override

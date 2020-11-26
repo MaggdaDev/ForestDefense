@@ -11,6 +11,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
@@ -49,10 +50,12 @@ public abstract class Mob extends GameObject {
 
     protected Damage damageObject;
     protected Damage.NormalDamage basicDamage;
-    
+
     protected MapDistanceSet mapDistanceSet;
-    
+
     protected MovementType movementType;
+
+    protected EffectSet effectSet;
 
     public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
         super(game.getNextId(), objectType);
@@ -65,6 +68,7 @@ public abstract class Mob extends GameObject {
         this.damageTime = damageTime;
         this.armor = armor;
         this.movementType = movement;
+        this.effectSet = new EffectSet();
 
         healthPoints = health;
         maxHealth = healthPoints;
@@ -107,12 +111,17 @@ public abstract class Mob extends GameObject {
         hitBox.updatePos(xPos, yPos);
         initializePathFinder();
     }
+    
+    protected void updateEffects(double timeElapsed) {
+        effectSet.update(timeElapsed);
+    }
 
     protected void updateMovement(double timeElapsed) {
-        if(targetTower != null && (!targetTower.isAlive())) {
+        if (targetTower != null && (!targetTower.isAlive())) {
             targetTower = null;
         }
         if (!targetReached) {
+            
             targetReached = path.walk(timeElapsed * speed);
 
             xPos = path.getCurrentX();
@@ -153,33 +162,33 @@ public abstract class Mob extends GameObject {
 
     protected void updateDamageTarget(double timeElapsed) {
         if (targetReached) {
-            
+
             if (targetTower != null) {
                 damageTimer += timeElapsed;
                 if (damageTimer > damageTime) {
                     damageTimer = 0;
                     damageTarget();
                 }
-            } else if(serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
+            } else if (serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
                 damageBase();
-            }else {
+            } else {
                 targetReached = false;
                 pathToBase();
                 searchForTowers();
             }
         }
     }
-    
+
     protected void damageBase() {
         serverGame.damageBase(this);
     }
 
     protected void damageTarget() {
         if (targetTower != null) {
-           targetTower.damage(damageObject);
+            targetTower.damage(damageObject);
         }
     }
-    
+
     protected void pathToBase() {
         pathFinder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
         path = pathFinder.findPath();
@@ -229,9 +238,13 @@ public abstract class Mob extends GameObject {
     }
 
     public double directDamage(Damage damage) {
-        double oldHealthPoints= healthPoints;
+        double oldHealthPoints = healthPoints;
         if (checkAlive()) {
-            healthPoints -= damage.getTotalDamage(armor);
+            double damageVal = damage.getTotalDamage(armor);
+            if (effectSet.isActive(EffectSet.EffectType.SENSITIVE)) {        // EFFECT: SENSITIVE
+                damageVal *= EffectSet.Effect.EFFECT_SENSITIVE_MULT;
+            }
+            healthPoints -= damageVal;
             if (!checkAlive()) {
                 damage.getOwnerProjectile().notifyKill(this);
             }
@@ -264,18 +277,18 @@ public abstract class Mob extends GameObject {
     public double getHP() {
         return healthPoints;
     }
-    
+
     public void destroyArmor(double arm) {
         armor -= arm;
-        if(armor < 0) {
+        if (armor < 0) {
             armor = 0;
         }
     }
-    
+
     public double getArmor() {
         return armor;
     }
-    
+
     public MovementType getMovementType() {
         return movementType;
     }
@@ -283,12 +296,15 @@ public abstract class Mob extends GameObject {
     public double getSpeed() {
         return speed;
     }
-    
+
+    public EffectSet getEffectSet() {
+        return effectSet;
+    }
+
     public static enum MovementType {
         DIG,
         WALK,
         FLY;
     }
-    
 
 }

@@ -44,6 +44,7 @@ public abstract class Bug extends Mob {
             updateIndexPosition();
             updateMovement(timeElapsed);
             updateDamageTarget(timeElapsed);
+            updateEffects(timeElapsed);
             return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
                 new CommandArgument("id", String.valueOf(id)),
                 new CommandArgument("x", String.valueOf(xPos)),

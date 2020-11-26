@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay.projectiles;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -27,34 +28,39 @@ public class MapleShot extends Projectile {
     public final static double DAMAGE = 20;
     private double EXPANSION = 500;
 
-
     private double xPos, yPos;
     private double currentRadius;
     private ServerGame serverGame;
-    
+
     private Damage damageObject;
     private Damage.NormalDamage usualDamage;
-    
+
     private HitBox.DonutHitBox donutHitBox;
-    
+
     private double maxRadius;
-    
+
     //upgrade
     private boolean isAusbau = false;
     private Damage.NormalMultiplier ausbauDamage;
     private final int mobsInRange;
-    
+
     private Damage.NormalMultiplier greedoDamage;
+
+    private boolean isCharged = false;
+    private Damage.NormalMultiplier chargedDamage;
+
+    private boolean isErschoepfend = false;
+
     private boolean isGreedo = false;
-    
+
     private boolean isGnadenlos = false;
-    
+
     private boolean isZerschmetternd = false;
-    
-   
+
     //upgrade constants
     public final static double MAX_AUSBAU_MULTIPLIER = 2;
     public final static double GNADENLOS_RANGE_PER_ENEMY_HIT = 0.2;
+    public final static double ERSCHOEPFEND_DURATION = 3;
 
     public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange, double range) {
         super(id, GameObjectType.P_MAPLE_SHOT, new HitBox.DonutHitBox(WIDTH, xPos, yPos), owner, attackSet);
@@ -64,23 +70,20 @@ public class MapleShot extends Projectile {
         this.serverGame = serverGame;
         this.maxRadius = range * MapCell.CELL_SIZE;
         this.mobsInRange = mobsInRange;
-        
-        
-        donutHitBox = (HitBox.DonutHitBox)super.hitBox;
-        
-        
+
+        donutHitBox = (HitBox.DonutHitBox) super.hitBox;
+
         //Damage objects
         damageObject = new Damage(this);
-        
-        
+
         usualDamage = new Damage.NormalDamage(DAMAGE);
         ausbauDamage = new Damage.NormalMultiplier(1);
         greedoDamage = new Damage.NormalMultiplier(1);
-        
+        chargedDamage = new Damage.NormalMultiplier(1);
+
         damageObject.addAllDamage(new Damage.DamageSubclass[]{usualDamage});
-        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{ausbauDamage, greedoDamage});
-        
-        
+        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{ausbauDamage, greedoDamage, chargedDamage});
+
         owner.getUpgrades().forEach((Upgrade upgrade) -> {
             addUpgrade(upgrade);
         });
@@ -89,27 +92,34 @@ public class MapleShot extends Projectile {
     @Override
     public void dealDamage(Mob target) {
         if (!mobsDamaged.contains(target)) {
-            ((Maple)owner).notifyEnemyHit();
+            ((Maple) owner).notifyEnemyHit();
             mobsDamaged.add(target);
             greedoDamage.setMultiplier(1);
-            if(isAusbau) {
-                ausbauDamage.setMultiplier(4.0d / Math.pow((double)mobsInRange + 1.0d,2.0d) + 1.0d);
+            if (isAusbau) {
+                ausbauDamage.setMultiplier(4.0d / Math.pow((double) mobsInRange + 1.0d, 2.0d) + 1.0d);
             }
-            
-            if(isGreedo) {
+
+            if (isGreedo) {
                 double x = 0.03d * target.getSpeed() - 5;
-                greedoDamage.setMultiplier(1 + (Math.pow(2.0d, x))/(2.5d + Math.pow(2.0d,x)));
+                greedoDamage.setMultiplier(1 + (Math.pow(2.0d, x)) / (2.5d + Math.pow(2.0d, x)));
             }
-            
-            if(isGnadenlos) {
+
+            if (isCharged) {
+                chargedDamage.setMultiplier(Maple.CHARGED_FACT);
+            }
+
+            if (isGnadenlos) {
                 maxRadius += GNADENLOS_RANGE_PER_ENEMY_HIT * MapCell.CELL_SIZE;
             }
-            
-            if(isZerschmetternd) {
+
+            if (isZerschmetternd) {
                 target.destroyArmor(damageObject.getTotalDamage(0));
                 notifyOwnerDamage(0);
             } else {
-            notifyOwnerDamage(target.damage(damageObject));
+                notifyOwnerDamage(target.damage(damageObject));
+            }
+            if (isErschoepfend) {
+                target.getEffectSet().addEffect(new EffectSet.Effect(EffectSet.EffectType.SENSITIVE, ERSCHOEPFEND_DURATION));
             }
         }
     }
@@ -122,16 +132,20 @@ public class MapleShot extends Projectile {
             new CommandArgument("id", String.valueOf(id)),
             new CommandArgument("radius", String.valueOf(currentRadius))};
     }
-    
+
     public void addUpgrade(Upgrade upgrade) {
-        switch(upgrade) {
+        switch (upgrade) {
             case MAPLE_1_1:     //AUSBAU
                 isAusbau = true;
                 break;
             case MAPLE_1_3:     // GRETTO
                 isGreedo = true;
                 break;
-                
+
+            case MAPLE_2_3:     // ERSCHOEPFENDE BLAETTER
+                isErschoepfend = true;
+                break;
+
             case MAPLE_3_1:     // ZERSCHMETTERND
                 isZerschmetternd = true;
                 break;
@@ -163,4 +177,9 @@ public class MapleShot extends Projectile {
             return null;
         }
     }
+
+    public void setCharged() {
+        isCharged = true;
+    }
+
 }

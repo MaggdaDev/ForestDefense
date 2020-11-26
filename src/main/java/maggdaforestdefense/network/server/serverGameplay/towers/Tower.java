@@ -15,6 +15,7 @@ import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
@@ -57,6 +58,7 @@ public abstract class Tower extends GameObject {
     
     protected boolean isEssenceFed = false;
 
+    protected EffectSet effectSet;
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound;
     
@@ -88,6 +90,7 @@ public abstract class Tower extends GameObject {
         this.onNewRound = new Vector<UpgradeHandler>();
         this.canAttackSet = attackSet;
         this.growingTime = growTime;
+        this.effectSet = new EffectSet();
         
         // Animation
         GameImage lastImage;
@@ -146,6 +149,10 @@ public abstract class Tower extends GameObject {
         } else {
             healthPoints += timeElapsed * regenerationPerSecond;
         }
+    }
+    
+    protected void updateEffects(double timeElapsed) {
+        effectSet.update(timeElapsed);
     }
 
     protected boolean isInRange(Mob mob, double range) {
@@ -241,6 +248,10 @@ public abstract class Tower extends GameObject {
 
     public int getPrize() {
         return prize;
+    }
+    
+    public EffectSet getEffectSet() {
+        return effectSet;
     }
 
     public UpgradeSet getUpgradeSet() {

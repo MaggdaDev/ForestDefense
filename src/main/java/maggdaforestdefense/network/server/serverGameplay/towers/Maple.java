@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay.towers;
 
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -41,10 +42,19 @@ public class Maple extends Tower {
     // UPGRADE CONSTANTS
     public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 0.5;
     public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.1;
+    public final static double ESCALATION_FACT = 4;
+    public final static double CHARGED_FACT = 5;
+    public final static double CHARGED_COOLDOWN = 10;
+    public final static double ESCALATION_COOLDOWN = 20, ESCALATION_DURATION = 4, ESCALATION_MOB_AMAOUNT = 5;
 
     // UPGRADe
     private boolean isBundDerAhorn = false;
     private boolean isZerlegend = false;
+    private double chargedShotCooldownTimer = 0;
+    private boolean isChargedShots = false;
+    private double escalationCooldownTimer = 0;
+    private boolean isEscalation = false, escalationReady = false;
+
 
     public Maple(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
@@ -73,6 +83,12 @@ public class Maple extends Tower {
         upgrades.add(upgrade);
 
         switch (upgrade) {
+            case MAPLE_2_1:
+                isEscalation = true;
+                break;
+            case MAPLE_2_2:
+                isChargedShots = true;
+                break;
             case MAPLE_3_3:
                 isZerlegend = true;
                 break;
@@ -107,13 +123,44 @@ public class Maple extends Tower {
 
             // Shooting
             shootTimer += timeElapsed;
+            
+            // Effects
+            updateEffects(timeElapsed);
+            
+            if(isEscalation && (!escalationReady) && (!effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION))) {        // Effect: Escalation
+                escalationCooldownTimer += timeElapsed;
+                if(escalationCooldownTimer > ESCALATION_COOLDOWN) {
+                    escalationReady = true;
+                    escalationCooldownTimer = 0;
+                }
+            }
+            if(isChargedShots && (!effectSet.isActive(EffectSet.EffectType.MAPLE_CHARGED))) {   // Effect: Charged shot
+                chargedShotCooldownTimer += timeElapsed;
+                if(chargedShotCooldownTimer > CHARGED_COOLDOWN) {
+                    effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_CHARGED, EffectSet.Effect.UNLIMITED));
+                    escalationCooldownTimer = 0;
+                }
+            }
+            
+            
+            if (effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION)) {     // Effect: Escalation
+                shootTimer += timeElapsed * (ESCALATION_FACT -1);
+            }
 
             if (shootTimer > shootTime) {
                 int mobsInRange = howManyMobsInRange(range, canAttackSet);
+                
+                if(mobsInRange >= ESCALATION_MOB_AMAOUNT && escalationReady && isEscalation) {     //Effect: Escalation
+                    escalationReady = false;
+                    effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_ESCALATION, ESCALATION_DURATION));
+                }
+                
                 if (mobsInRange > 0) {
                     Logger.logServer(mobsInRange + "mobs in range detected");
                     shootTimer = 0;
                     shoot(mobsInRange);
+                    
+                    chargedShotCooldownTimer = 0;       // Effect: charged
                 }
             }
 
@@ -126,13 +173,18 @@ public class Maple extends Tower {
     }
 
     public void notifyEnemyHit() {
-        if(isZerlegend) {
+        if (isZerlegend) {
             shootTimer += (shootTime - shootTimer) * ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING;
         }
     }
 
     private void shoot(int mobsInRange) {
-        serverGame.addProjectile(new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame, mobsInRange, range));
+        MapleShot shot = new MapleShot(serverGame.getNextId(), getCenterX(), getCenterY(), this, canAttackSet, serverGame, mobsInRange, range);
+        if (effectSet.isActive(EffectSet.EffectType.MAPLE_CHARGED)) {       //Effect: Charged
+            shot.setCharged();
+            effectSet.removeEffect(EffectSet.EffectType.MAPLE_CHARGED);
+        }
+        serverGame.addProjectile(shot);
         performUpgradesOnShoot();
     }
 

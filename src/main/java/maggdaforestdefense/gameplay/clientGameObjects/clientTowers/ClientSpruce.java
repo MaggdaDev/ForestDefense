@@ -10,6 +10,7 @@ import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import static maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientMaple.RANGE_TYPE;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
@@ -40,6 +41,11 @@ public class ClientSpruce extends ClientTower {
             if(!isMature) {
                 isMature = true;
             }
+        }
+        
+        if(isMature) {
+            EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
+            handleEffects(e);
         }
     }
     

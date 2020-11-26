@@ -142,7 +142,10 @@ public class Spruce extends Tower {
             // Upgrades
             performUpgradesOnUpdate();
 
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints)});
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
+                    new CommandArgument[]{new CommandArgument("id", id), 
+                    new CommandArgument("hp", healthPoints), 
+                    new CommandArgument("effects", effectSet.toString())});
         }
     }
 

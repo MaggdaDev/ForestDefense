@@ -13,6 +13,7 @@ import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
@@ -111,6 +112,14 @@ public abstract class ClientMob extends ClientGameObject {
                 shadow.setOffsetY(shadowOffsetX);
                 break;
 
+        }
+    }
+    
+    protected void handleEffects (EffectSet set) {
+        if(set.isActive(EffectSet.EffectType.SENSITIVE)) {
+            addColoredShadow(5, Color.YELLOW);
+        } else {
+            addColoredShadow(0, Color.TRANSPARENT);
         }
     }
 

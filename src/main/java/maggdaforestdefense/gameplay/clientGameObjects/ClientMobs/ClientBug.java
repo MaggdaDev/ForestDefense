@@ -9,6 +9,7 @@ import javafx.scene.effect.DropShadow;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -53,6 +54,8 @@ public abstract class ClientBug extends ClientMob {
         setNewPos(newX, newY);
         updateHealth(newHealth);
         updateShadow();
+        
+        handleEffects(EffectSet.fromString(updateCommand.getArgument("effects")));
 
     }
 

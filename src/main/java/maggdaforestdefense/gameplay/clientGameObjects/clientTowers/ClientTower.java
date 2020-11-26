@@ -28,6 +28,7 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower.RangeType;
 import maggdaforestdefense.util.NodeSizer;
 
@@ -144,6 +145,16 @@ public abstract class ClientTower extends ClientGameObject{
     
     public UpgradeSet getUpgradeSet() {
         return upgradeSet;
+    }
+    
+    protected void handleEffects(EffectSet set) {
+        if(set.isActive(EffectSet.EffectType.MAPLE_CHARGED)) {
+            addColoredShadow(15, Color.RED);
+        } else if(set.isActive(EffectSet.EffectType.MAPLE_ESCALATION)) {
+            addColoredShadow(15, Color.DARKRED);
+        } else {
+            addColoredShadow(0, Color.TRANSPARENT);
+        }
     }
     
     @Override

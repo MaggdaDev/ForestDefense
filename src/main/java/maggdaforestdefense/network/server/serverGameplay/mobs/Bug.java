@@ -50,7 +50,8 @@ public abstract class Bug extends Mob {
                 new CommandArgument("x", String.valueOf(xPos)),
                 new CommandArgument("y", String.valueOf(yPos)),
                 new CommandArgument("hp", String.valueOf(healthPoints)),
-                new CommandArgument("movement", movementType.ordinal())});
+                new CommandArgument("movement", movementType.ordinal()),
+                new CommandArgument("effects", effectSet.toString())});
         } else {
             return null;
         }

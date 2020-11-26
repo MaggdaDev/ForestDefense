@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import com.google.gson.Gson;
 import java.util.Vector;
 
 /**
@@ -70,6 +71,15 @@ public class EffectSet {
                 handler.handleEffect(effect);
             } 
         });
+    }
+    
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
+    
+    public static EffectSet fromString(String s) {
+        return new Gson().fromJson(s, EffectSet.class);
     }
 
     public static enum EffectType {

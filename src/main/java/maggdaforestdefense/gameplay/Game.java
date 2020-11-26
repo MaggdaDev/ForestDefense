@@ -54,8 +54,6 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
 
-        
-
     }
 
     public static Game createGame(String gameName) {
@@ -72,7 +70,6 @@ public class Game {
 
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
-        
 
         // Key Events
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
@@ -98,8 +95,11 @@ public class Game {
 
     public void removeGameObject(String id) {
         ClientGameObject remove = gameObjects.get(id);
+
         gameObjects.remove(id);
-        gameScreen.removeGameObject(remove);
+        if (remove != null) {
+            gameScreen.removeGameObject(remove);
+        }
     }
 
     private void handleKeyEvent(KeyCode keyCode) {
@@ -132,8 +132,6 @@ public class Game {
     }
 
     // COMMAND HANDLES
-
-
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
         if (gObj != null) {
@@ -202,7 +200,7 @@ public class Game {
     }
 
     public void updateReadyCheck(NetworkCommand command) {
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             gameScreen.updateReadyCheck(command.getNumArgument("progress"));
         });
     }

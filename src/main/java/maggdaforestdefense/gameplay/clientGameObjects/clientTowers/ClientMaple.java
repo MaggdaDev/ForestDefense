@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
@@ -37,6 +38,11 @@ public class ClientMaple extends ClientTower{
         healthPoints = updateCommand.getNumArgument("hp");
         healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
         
+        if(isMature) {
+            EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
+            handleEffects(e);
+        }
+        
         if(updateCommand.containsArgument("image")) {
             setImage(GameImage.values()[(int)updateCommand.getNumArgument("image")].getImage());
             updateGrowing(updateCommand.getNumArgument("timeLeft"));
@@ -46,7 +52,7 @@ public class ClientMaple extends ClientTower{
             }
         }
         
-
+        
             super.range = updateCommand.getNumArgument("range");
         
     }

@@ -5,7 +5,9 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects;
 
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
@@ -32,6 +34,12 @@ public abstract class ClientGameObject extends ImageView {
         yPos = y;
 
         setMouseTransparent(true);
+    }
+
+    public void addColoredShadow(double radius, Color c) {
+        if (!(getEffect() instanceof DropShadow && ((DropShadow) getEffect()).getColor().equals(c))) {
+            setEffect(new DropShadow(radius, c));
+        }
     }
 
     public abstract void update(NetworkCommand updateCommand);

@@ -25,6 +25,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
+import maggdaforestdefense.sound.SoundEngine;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -45,6 +46,8 @@ public class Game {
     private Vector<KeyEventHandler> keyEventHandlers;
 
     private int essence = 0, coins = 0, maxEssence = 0;
+    
+    private SoundEngine soundEngine;
 
     private Game(String gameName) {
         instance = this;
@@ -53,6 +56,9 @@ public class Game {
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
+        
+        soundEngine = new SoundEngine();
+        soundEngine.playSound(SoundEngine.Sound.SOUNDTRACK);
 
     }
 

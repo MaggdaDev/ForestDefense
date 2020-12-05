@@ -31,10 +31,12 @@ public class InformationOverlay extends ContentBox {
 
     public InformationOverlay() {
 
+
         setBackground(new Background(new BackgroundFill(Color.rgb(0, 102, 0, 0.8), new CornerRadii(10), Insets.EMPTY)));
 
         setSpacing(30);
         setVisible(false);
+
     }
 
     public void startAnimation() {

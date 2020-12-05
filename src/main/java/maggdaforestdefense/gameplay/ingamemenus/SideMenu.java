@@ -34,6 +34,7 @@ import maggdaforestdefense.util.NodeSizer;
  * @author DavidPrivat
  */
 public class SideMenu extends GridPane {
+
     public static double EXPAND_ICON_WIDTH = 20;
 
     protected Button expandButton;
@@ -68,16 +69,17 @@ public class SideMenu extends GridPane {
 
         setAlignment(Pos.CENTER);
 
+
+        
         shown = false;
 
-        maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize(((observable, oldValue, newValue) -> {
+        /*maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize(((observable, oldValue, newValue) -> {
             refreshPosition();
         }));
         super.widthProperty().addListener(((observable, oldValue, newValue) -> {
             refreshPosition();
         }));
-        
-
+         */
     }
 
     public void updateCoins(double coins) {
@@ -104,7 +106,7 @@ public class SideMenu extends GridPane {
 
     public void hide() {
         shown = false;
-        refreshPosition();
+        updateShowing();
         expandButton.setOnAction((ActionEvent e) -> {
             show();
         });
@@ -112,7 +114,7 @@ public class SideMenu extends GridPane {
 
     public void show() {
         shown = true;
-        refreshPosition();
+        updateShowing();
         expandButton.setOnAction((ActionEvent e) -> {
             hide();
         });
@@ -128,23 +130,10 @@ public class SideMenu extends GridPane {
         }
     }
 
-    public void refreshPosition() {
-        if (shown) {
-
-            if (isRightSide) {
-                setLayoutX(maggdaforestdefense.MaggdaForestDefense.getWindowWidth() - getWidth());
-            } else {
-                setLayoutX(0);
-            }
-        } else {
-            if (isRightSide) {
-                setLayoutX(maggdaforestdefense.MaggdaForestDefense.getWindowWidth() - expandButton.getWidth() - 10);
-            } else {
-                setLayoutX(expandButton.getWidth() - getWidth());
-            }
-
+    public void updateShowing() {
+        if (content != null) {
+            content.setVisible(shown);
         }
         updateButtonRotate();
-        setPrefHeight(maggdaforestdefense.MaggdaForestDefense.getWindowHeight());
     }
 }

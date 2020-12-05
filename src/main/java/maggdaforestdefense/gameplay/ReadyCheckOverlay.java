@@ -45,10 +45,6 @@ public class ReadyCheckOverlay extends InformationOverlay {
         
 
         getChildren().addAll(progressLabel, readyProgress, new Separator(), readyButton);
-
-        maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize((a, b, c) -> {
-            updatePos();
-        });
     }
     
     public void updateProgress(double progress) {
@@ -119,10 +115,5 @@ public class ReadyCheckOverlay extends InformationOverlay {
         trans.play();
     }
 
-    private void updatePos() {
-        if (!animationRunning && isVisible()) {
-            setTranslateX(maggdaforestdefense.MaggdaForestDefense.getWindowWidth() / 2 - getPrefWidth() / 2);
-            setTranslateY(maggdaforestdefense.MaggdaForestDefense.getWindowHeight() - (getPrefHeight() + DISTANCE_TO_SCREEN_BOT));
-        }
-    }
+    
 }

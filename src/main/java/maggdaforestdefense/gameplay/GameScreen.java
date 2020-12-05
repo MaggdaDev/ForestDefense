@@ -20,6 +20,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
@@ -39,9 +41,11 @@ import maggdaforestdefense.util.KeyEventHandler;
 public class GameScreen extends Group {
 
     public final static double DEFAULT_FONT = 30;
+
     private DoubleProperty fontSize = new SimpleDoubleProperty(DEFAULT_FONT);
 
     private ClientMap map;
+    private BorderPane overlayPaneOuter, overlayPaneInner;
     private Group gamePlayGroup;
     private TopOverlay topOverlay;
     private PlayerInputHandler inputHandler;
@@ -56,9 +60,11 @@ public class GameScreen extends Group {
     private ReadyCheckOverlay readyCheckOverlay;
 
     public GameScreen() {
+        setManaged(false);
 
         gamePlayGroup = new Group();
-        gamePlayGroup.setManaged(false);
+        overlayPaneOuter = new BorderPane();
+        overlayPaneInner = new BorderPane();
 
         topOverlay = new TopOverlay(0, 0);
         gameOverOverlay = new GameOverOverlay();
@@ -71,14 +77,24 @@ public class GameScreen extends Group {
         essenceMenu = new EssenceMenu();
         essenceMenu.setVisible(true);
 
-        getChildren().addAll(gamePlayGroup, rightSideMenu, essenceMenu, topOverlay, gameOverOverlay, waveAnnouncer, readyCheckOverlay);
-        gamePlayGroup.setViewOrder(3);
-        rightSideMenu.setViewOrder(2);
-        essenceMenu.setViewOrder(2);
-        topOverlay.setViewOrder(1);
+        overlayPaneOuter.setLeft(essenceMenu);
+        overlayPaneOuter.setRight(rightSideMenu);
+        overlayPaneOuter.setCenter(overlayPaneInner);
+        overlayPaneInner.setTop(topOverlay);
 
-        setManaged(false);
+        overlayPaneInner.setBottom(readyCheckOverlay);
+        overlayPaneOuter.setPickOnBounds(false);
+        overlayPaneInner.setPickOnBounds(false);
+        
 
+  
+  
+       
+
+        overlayPaneOuter.prefHeightProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().heightProperty());
+        overlayPaneOuter.prefWidthProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().widthProperty());
+
+        getChildren().addAll(gamePlayGroup, overlayPaneOuter, gameOverOverlay, readyCheckOverlay);
         inputHandler = new PlayerInputHandler();
 
         gamePlayGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), 0, 0));
@@ -95,6 +111,7 @@ public class GameScreen extends Group {
         setCursor(Cursor.OPEN_HAND);
         setOnMousePressed((MouseEvent e) -> {
             PlayerInputHandler.getInstance().setMousePressed(true, e);
+            setCursor(Cursor.CLOSED_HAND);
         });
         setOnMouseReleased((MouseEvent e) -> {
             PlayerInputHandler.getInstance().setMousePressed(false, e);
@@ -102,7 +119,7 @@ public class GameScreen extends Group {
         });
         setOnMouseDragged((MouseEvent e) -> {
             PlayerInputHandler.getInstance().mouseMoved(e);
-            setCursor(Cursor.CLOSED_HAND);
+
         });
 
         MaggdaForestDefense.getInstance().addOnSceneResize((a, b, c) -> {
@@ -114,7 +131,7 @@ public class GameScreen extends Group {
     }
 
     public void updateFont() {
-        fontSize.set(DEFAULT_FONT * maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact());
+        fontSize.set(DEFAULT_FONT * MaggdaForestDefense.getInstance().getSizeFact());
     }
 
     private final void setUpInputListeners() {

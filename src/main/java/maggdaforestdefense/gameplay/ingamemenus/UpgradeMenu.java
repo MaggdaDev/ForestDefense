@@ -241,7 +241,7 @@ public class UpgradeMenu extends VBox{
     }
     
     public class UpgradeButtonTierBox extends FlowPane {
-        public final static double GAP = 30;
+        public final static double GAP = 20;
         private ObservableList<BuyUpgradeButton> buttons;
         
         public ObservableList<BuyUpgradeButton> getButtons() {
@@ -263,7 +263,7 @@ public class UpgradeMenu extends VBox{
             setVgap(GAP);
             
             maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize((a,b,c)->{
-            setPrefWrapLength(maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact() * 3 * BuyUpgradeButton.SIZE + 3 * GAP);
+                setPrefWrapLength(maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact() * (3 * BuyUpgradeButton.SIZE + 3 * GAP));
             });
             
         }

@@ -41,8 +41,7 @@ public class EssenceMenu extends SideMenu {
         contentGroup = new Group();
         contentGroup.getChildren().addAll(essenceBox, essenceBar);
 
-        essenceBoxX = 200;
-        essenceBoxY = 100;
+
 
         show();
 
@@ -51,8 +50,8 @@ public class EssenceMenu extends SideMenu {
     }
 
     @Override
-    public void refreshPosition() {
-        super.refreshPosition();
+    public void updateShowing() {
+        super.updateShowing();
         double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
 
         double newBoxHeight = windowHeight - (2 * SPACING + essenceBoxY);

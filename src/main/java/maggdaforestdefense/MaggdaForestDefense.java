@@ -36,7 +36,6 @@ import maggdaforestdefense.network.NetworkCommand.CommandType;
  */
 public class MaggdaForestDefense extends Application {
 
-    public static double DEFAULT_HEIGHT = 0, DEFAULT_WIDTH = 0;
 
     //Main
     private static MaggdaForestDefense instance;
@@ -109,7 +108,7 @@ public class MaggdaForestDefense extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("maggdaforestdefense/styles/styles.css")).toExternalForm());
 
         primaryStage.setTitle(
-                "MaggdaForestDefense");
+                "Forest Defense");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
@@ -165,12 +164,12 @@ public class MaggdaForestDefense extends Application {
     }
 
     public double getHeightFact() {
-        return getWindowHeight() / DEFAULT_HEIGHT;
+        return 1;
 
     }
 
     public double getWidthFact() {
-        return getWindowWidth() / DEFAULT_WIDTH;
+        return 1;
     }
 
     public double getSizeFact() {
@@ -191,16 +190,10 @@ public class MaggdaForestDefense extends Application {
     }
 
     public static double getWindowWidth() {
-        if(instance.scene.getWidth() > DEFAULT_WIDTH) {
-            DEFAULT_WIDTH = instance.scene.getWidth();
-        }
         return instance.scene.getWidth();
     }
 
     public static double getWindowHeight() {
-        if(instance.scene.getHeight() > DEFAULT_HEIGHT) {
-            DEFAULT_HEIGHT = instance.scene.getHeight();
-        }
         return instance.scene.getHeight();
     }
 

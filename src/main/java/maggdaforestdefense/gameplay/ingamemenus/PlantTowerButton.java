@@ -87,6 +87,10 @@ public class PlantTowerButton extends Button {
                 imageView.setImage(GameImage.TOWER_MAPLE_1.getImage());
                 buyTreeBox = new BuyTreeBox(Game.language.MAPLE_NAME, Game.language.MAPLE_DESCRIPTION, GameImage.TOWER_MAPLE_1, prize);
                 break;
+            case T_LORBEER:
+                imageView.setImage(GameImage.TOWER_LORBEER_1.getImage());
+                buyTreeBox = new BuyTreeBox(Game.language.LORBEER_NAME, Game.language.LORBEER_DESCRIPTION, GameImage.TOWER_LORBEER_1, prize);
+                break;
             default:
                 throw new Exceptions.GameObjectNotCompatibleException();
 

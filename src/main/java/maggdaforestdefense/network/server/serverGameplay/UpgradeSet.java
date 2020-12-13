@@ -46,6 +46,26 @@ public enum UpgradeSet {
             Upgrade.MAPLE_3_1,
             Upgrade.MAPLE_3_2,
             Upgrade.MAPLE_3_3,}
+    }),
+    LORBEER_SET(new Upgrade[][]{
+        new Upgrade[] {
+            Upgrade.LORBEER_1_1,
+            Upgrade.LORBEER_1_2,
+            Upgrade.LORBEER_1_3,
+            Upgrade.LORBEER_1_4
+        },
+        new Upgrade[]{
+            Upgrade.LORBEER_2_1,
+            Upgrade.LORBEER_2_2,
+            Upgrade.LORBEER_2_3,
+            Upgrade.LORBEER_2_4
+        },
+        new Upgrade[] {
+            Upgrade.LORBEER_3_1,
+            Upgrade.LORBEER_3_2,
+            Upgrade.LORBEER_3_3,
+            Upgrade.LORBEER_3_4
+        }
     });
 
     private Upgrade[][] upgrades;

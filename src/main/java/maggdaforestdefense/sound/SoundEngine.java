@@ -16,7 +16,7 @@ import maggdaforestdefense.storage.MediaLoader;
 public class SoundEngine {
     public final static String SOUNDTRACK_PATH = "maggdaforestdefense/sound/music/soundtrack.mp3";
     
-    public final static double DEFAULT_VOLUME = 0.5;
+    public final static double DEFAULT_VOLUME = 0.2;
     
     private MediaPlayer soundtrack;
     

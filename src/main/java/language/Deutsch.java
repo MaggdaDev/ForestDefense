@@ -15,10 +15,12 @@ public class Deutsch extends Language{
     // Tower names
     SPRUCE_NAME = "Fichte";
     MAPLE_NAME = "Ahorn";
+    LORBEER_NAME = "Lorbeerbaum";
     
     // Tower descriptions
     SPRUCE_DESCRIPTION = "Die Fichte schießt einfache Nadelgeschosse, die 1 Gegner durchdringen können.";
     MAPLE_DESCRIPTION = "Der Ahorn schießt Ringe aus Blättern um sich, die Flächenschaden verursachen.";
+    LORBEER_DESCRIPTION = "Der Lorbeerbaum verursacht jedes mal, wenn man ihn angreifen laesst, leichten Schaden an Gegnern in seiner Umgebung. Sterben diese davon, so waechst eine Lorbeere, die man Ernten kann und Geld erhaelt.";
         
         
     // Upgrade description
@@ -55,6 +57,23 @@ public class Deutsch extends Language{
     UPGRADE_DESCRIPTION_MAPLE_3_1 = "Zerschmetternde Blätter: Anstatt Schaden zu verursachen, zerstört der Ahorn die Entsprechende Menge an Rüstungspunkten bei Gegnern permanent.";
     UPGRADE_DESCRIPTION_MAPLE_3_2 = "Reißende Blätter: Jeder Gegner lässt die Blätter etwas weiter fliegen ";
     UPGRADE_DESCRIPTION_MAPLE_3_3 = "Zerlegende Blätter: Pro getroffenem Gegner wird die Abklingzeit für den nächsten Schuss verringert.";
+    
+    
+    UPGRADE_DESCRIPTION_LORBEER_1_1 = "Weitreichende Ernte: Die Reichweite der Lorbeere wird erhöht.";
+    UPGRADE_DESCRIPTION_LORBEER_1_2 = "Ertragreiche Ernte: Jede Lorbeere bringt mehr Geld.";
+    UPGRADE_DESCRIPTION_LORBEER_1_3 = "Effizientere Ernte: Die Wartezeit zwischen Attacken wird verringert.";
+    UPGRADE_DESCRIPTION_LORBEER_1_4 = "Vorrats-Ernte: Es können mehr Lorbeeren gleichzeitig am Baum hängen.";
+            
+    UPGRADE_DESCRIPTION_LORBEER_2_1 = "Brutale Ernte: Je mehr Lebenspunkte der Gegner schon verloren hat, desto mehr Schaden wird verursacht.";
+    UPGRADE_DESCRIPTION_LORBEER_2_2 = "Ernterausch: Werden viele gegner auf einmal getötet, so wird die Wartezeit zur nächsten Attacke halbiert.";
+    UPGRADE_DESCRIPTION_LORBEER_2_3 = "Massenproduktion: Je mehr Lorbeeren auf einmal verkauft werden, desto mehr Geld erhält man für diese.";
+    UPGRADE_DESCRIPTION_LORBEER_2_4 = "Wiederverwertung: Vom lorbeerbaum verletzte aber nicht getötete Gegner, geben beim Tod mehr Geld.";
+            
+    UPGRADE_DESCRIPTION_LORBEER_3_1 = "Automatische Ernte: Kann ein Gegner in Reichweite getötet werden, so wird die Attacke automatisch aktiviert.";
+    UPGRADE_DESCRIPTION_LORBEER_3_2 = "Prestige Ernte: Befindet sich die maximale Anzahl an ungeernteten Lorbeeren am Baum, so können diese in eine Verbesserung für diesen Baum umgewandelt werden, welche den Ertrag für geernteten Lorbeeren um 20% erhöht.";
+    UPGRADE_DESCRIPTION_LORBEER_3_3 = "Kopfgeld Ernte: Für die Erfüllung bestimmter Aufträge wird die maximalanzahl an Lorbeeren produziert.";
+    UPGRADE_DESCRIPTION_LORBEER_3_4 = "Tauschhandel: Befindet sich die maximale Anzahl an Lorbeeren am Baum, so können diese gegen eine zufällige Verbesserung eines Baums eingetauscht werden.";
+
 }
     
 }

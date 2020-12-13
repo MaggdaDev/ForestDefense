@@ -56,6 +56,10 @@ public enum GameImage {
     TOWER_MAPLE_2("maggdaforestdefense/towers/maple2.png"),
     TOWER_MAPLE_3("maggdaforestdefense/towers/maple3.png"),
     TOWER_MAPLE_4("maggdaforestdefense/towers/maple4.png"),
+    TOWER_LORBEER_1("maggdaforestdefense/towers/lorbeer1.png"),
+    TOWER_LORBEER_2("maggdaforestdefense/towers/lorbeer2.png"),
+    TOWER_LORBEER_3("maggdaforestdefense/towers/lorbeer3.png"),
+    TOWER_LORBEER_4("maggdaforestdefense/towers/lorbeer4.png"),
     
 
     // PROJECTILES
@@ -90,6 +94,19 @@ public enum GameImage {
     UPGRADE_MAPLE_03_01("maggdaforestdefense/upgrade_icons/maple/maple_03_01.png"),
     UPGRADE_MAPLE_03_02("maggdaforestdefense/upgrade_icons/maple/maple_03_02.png"),
     UPGRADE_MAPLE_03_03("maggdaforestdefense/upgrade_icons/maple/maple_03_03.png"),
+    
+    UPGRADE_LORBEER_01_01("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_01_01.png"),
+    UPGRADE_LORBEER_01_02("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_01_02.png"),
+    UPGRADE_LORBEER_01_03("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_01_03.png"),
+    UPGRADE_LORBEER_01_04("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_01_04.png"),
+    UPGRADE_LORBEER_02_01("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_02_01.png"),
+    UPGRADE_LORBEER_02_02("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_02_02.png"),
+    UPGRADE_LORBEER_02_03("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_02_03.png"),
+    UPGRADE_LORBEER_02_04("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_02_04.png"),
+    UPGRADE_LORBEER_03_01("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_03_01.png"),
+    UPGRADE_LORBEER_03_02("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_03_02.png"),
+    UPGRADE_LORBEER_03_03("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_03_03.png"),
+    UPGRADE_LORBEER_03_04("maggdaforestdefense/upgrade_icons/lorbeer/lorbeer_03_04.png"),
     
     
     // MENU ICONS

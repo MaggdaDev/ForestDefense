@@ -13,11 +13,13 @@ public abstract class Language {
     // Tower names
     public String SPRUCE_NAME;
     public String MAPLE_NAME;
+    public String LORBEER_NAME;
     
     
     // Tower descripition
     public String SPRUCE_DESCRIPTION;
     public String MAPLE_DESCRIPTION;
+    public String LORBEER_DESCRIPTION;
     
     // Upgrade description
     // Spruce
@@ -53,6 +55,23 @@ public abstract class Language {
     public String UPGRADE_DESCRIPTION_MAPLE_3_1;
     public String UPGRADE_DESCRIPTION_MAPLE_3_2;
     public String UPGRADE_DESCRIPTION_MAPLE_3_3;
+    
+    // LORBEER
+    public String UPGRADE_DESCRIPTION_LORBEER_1_1;
+    public String UPGRADE_DESCRIPTION_LORBEER_1_2;
+    public String UPGRADE_DESCRIPTION_LORBEER_1_3;
+    public String UPGRADE_DESCRIPTION_LORBEER_1_4;
+    
+    public String UPGRADE_DESCRIPTION_LORBEER_2_1;
+    public String UPGRADE_DESCRIPTION_LORBEER_2_2;
+    public String UPGRADE_DESCRIPTION_LORBEER_2_3;
+    public String UPGRADE_DESCRIPTION_LORBEER_2_4;
+    
+    public String UPGRADE_DESCRIPTION_LORBEER_3_1;
+    public String UPGRADE_DESCRIPTION_LORBEER_3_2;
+    public String UPGRADE_DESCRIPTION_LORBEER_3_3;
+    public String UPGRADE_DESCRIPTION_LORBEER_3_4;
+    
     
     
     

@@ -35,6 +35,8 @@ import maggdaforestdefense.util.UpgradeHandler;
 public abstract class Tower extends GameObject {
 
     protected int xIndex, yIndex, prize;
+    
+    protected RangeType rangeType;
 
     protected ServerGame serverGame;
 
@@ -67,7 +69,7 @@ public abstract class Tower extends GameObject {
     protected GameAnimation growingAnimation;
     
 
-    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, double range, CanAttackSet attackSet, double growTime) {
+    public Tower(ServerGame game, double xPos, double yPos, GameObjectType type, int prize, UpgradeSet upgrades, double health, double regen, double range, CanAttackSet attackSet, double growTime, RangeType rangeType) {
         super(game.getNextId(), type);
         upgradeSet = upgrades;
         xIndex = (int) (xPos / MapCell.CELL_SIZE);
@@ -91,6 +93,7 @@ public abstract class Tower extends GameObject {
         this.canAttackSet = attackSet;
         this.growingTime = growTime;
         this.effectSet = new EffectSet();
+        this.rangeType = rangeType;
         
         // Animation
         GameImage lastImage;
@@ -100,6 +103,9 @@ public abstract class Tower extends GameObject {
                 break;
             case T_MAPLE:
                 lastImage = GameImage.TOWER_MAPLE_1;
+                break;
+            case T_LORBEER:
+                lastImage = GameImage.TOWER_LORBEER_1;
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -142,6 +148,8 @@ public abstract class Tower extends GameObject {
 
         return null;
     }
+    
+   
 
     protected void updateRegen(double timeElapsed) {
         if (timeElapsed * regenerationPerSecond + healthPoints > maxHealth) {
@@ -317,7 +325,9 @@ public abstract class Tower extends GameObject {
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);
     
-    abstract public RangeType getRangeType();
+    public RangeType getRangeType() {
+        return rangeType;
+    }
 
     public void notifyNextRound() {
         performUpgradesOnNewRound();

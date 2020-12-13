@@ -37,6 +37,7 @@ import maggdaforestdefense.util.NodeSizer;
  * @author DavidPrivat
  */
 public abstract class ClientTower extends ClientGameObject{
+    protected RangeType rangeType;
     protected int xIndex, yIndex;
     protected double range;
     protected UpgradeMenu upgradeMenu;
@@ -57,7 +58,7 @@ public abstract class ClientTower extends ClientGameObject{
     
     protected EssenceButton essenceButton;
     
-    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, double range, double health, double growingTime) {
+    public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, double range, double health, double growingTime, RangeType rangeType) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
         mapCell = Game.getInstance().getGameScreen().getMap().getCells()[xIndex][yIndex];
         
@@ -68,6 +69,7 @@ public abstract class ClientTower extends ClientGameObject{
         this.yIndex = yIndex;
         this.range = range;
         this.growingTime = growingTime;
+        this.rangeType = rangeType;
         
         
         setPreserveRatio(true);
@@ -97,7 +99,9 @@ public abstract class ClientTower extends ClientGameObject{
 
     }
     
-    public abstract RangeType getRangeType();
+    public RangeType getRangeType() {
+        return rangeType;
+    }
     
     protected void updateGrowing(double timeLeft) {
         growingMenu.update(timeLeft);

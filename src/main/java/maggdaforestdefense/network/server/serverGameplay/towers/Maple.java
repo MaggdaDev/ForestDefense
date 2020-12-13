@@ -57,7 +57,7 @@ public class Maple extends Tower {
 
 
     public Maple(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
+        super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME, RANGE_TYPE);
 
         onTowerChanges.add((o) -> {
             isBundDerAhorn = false;
@@ -190,9 +190,6 @@ public class Maple extends Tower {
         performUpgradesOnShoot();
     }
 
-    @Override
-    public RangeType getRangeType() {
-        return RANGE_TYPE;
-    }
+
 
 }

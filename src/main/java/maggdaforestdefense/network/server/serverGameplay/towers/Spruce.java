@@ -69,7 +69,7 @@ public class Spruce extends Tower {
 
     // multiplier
     public Spruce(ServerGame game, double x, double y) {
-        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME);
+        super(game, x, y, GameObjectType.T_SPRUCE, DEFAULT_PRIZE, UpgradeSet.SPRUCE_SET, HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME, RANGE_TYPE);
         xPos = x;
         yPos = y;
 
@@ -264,9 +264,5 @@ public class Spruce extends Tower {
         return researchStacks;
     }
     
-    @Override
-    public RangeType getRangeType() {
-        return RANGE_TYPE;
-    }
 
 }

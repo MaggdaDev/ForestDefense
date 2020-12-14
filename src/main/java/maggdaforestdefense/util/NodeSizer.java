@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.util;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -87,6 +88,16 @@ public class NodeSizer<E extends Node> {
             im.setLayoutX(layoutCenterX - wOld/2.0d);
             im.setLayoutY(layoutCenterY - hOld/2.0d);
         }
+    }
+    
+    public static void bindRegionToRegion(Region bindObject, Region bindTo) {
+        bindObject.layoutXProperty().bind(Bindings.createDoubleBinding(() -> ((bindTo.getLayoutX() + bindTo.getWidth()/2.0d)  - bindObject.getWidth() / 2.0d), bindTo.layoutXProperty(), bindTo.widthProperty(), bindObject.widthProperty()));
+        bindObject.layoutYProperty().bind(Bindings.createDoubleBinding(() -> ((bindTo.getLayoutY() + bindTo.getHeight()/2.0d)  - bindObject.getHeight() / 2.0d), bindTo.layoutYProperty(), bindTo.heightProperty(), bindObject.heightProperty()));
+    }
+    
+    public static void bindRegionToImageView(Region bindObject, ImageView bindTo) {
+        bindObject.layoutXProperty().bind(Bindings.createDoubleBinding(() -> ((bindTo.getLayoutX() + bindTo.getFitWidth()/2.0d)  - bindObject.getWidth() / 2.0d), bindTo.layoutXProperty(), bindTo.fitWidthProperty(), bindObject.widthProperty()));
+        bindObject.layoutYProperty().bind(Bindings.createDoubleBinding(() -> ((bindTo.getLayoutY() + bindTo.getFitHeight()/2.0d)  - bindObject.getHeight() / 2.0d), bindTo.layoutYProperty(), bindTo.fitHeightProperty(), bindObject.heightProperty()));
     }
   
 }

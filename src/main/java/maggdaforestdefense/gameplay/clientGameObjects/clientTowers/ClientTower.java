@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import java.util.Vector;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.gameplay.ingamemenus.GrowingWaitingMenu;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
+import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -57,6 +59,8 @@ public abstract class ClientTower extends ClientGameObject{
     protected PauseTransition removeEssenceShadowAnimation;
     
     protected EssenceButton essenceButton;
+    
+    protected Vector<ActiveSkillActivator> activeSkillActivators;
     
     public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, double range, double health, double growingTime, RangeType rangeType) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
@@ -96,7 +100,28 @@ public abstract class ClientTower extends ClientGameObject{
         
      
         setViewOrder(ViewOrder.TOWER);
+        
+        activeSkillActivators = new Vector<>();
 
+    }
+    
+    public void addActiveSkill(ActiveSkillActivator a) {
+        activeSkillActivators.add(a);
+        a.setVisible(false);
+        Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(a);
+        relayoutActiveSkills();
+        a.setVisible(true);
+    }
+    
+    private void relayoutActiveSkills() {
+        for(int i = 0; i < activeSkillActivators.size(); i++) {
+            ActiveSkillActivator currentActiveSkill = activeSkillActivators.get(i);
+            
+            double addX = MapCell.CELL_SIZE*0.4 * Math.cos(2* Math.PI * (0.25d + (double)i/(double)activeSkillActivators.size()));
+            double addY = MapCell.CELL_SIZE*0.4 * Math.sin(2* Math.PI * (0.25d + (double)i/(double)activeSkillActivators.size()));
+            
+            currentActiveSkill.relocateCenter(((xIndex + 0.5) * MapCell.CELL_SIZE) + addX, ((yIndex + 0.5) * MapCell.CELL_SIZE) + addY);
+        }
     }
     
     public RangeType getRangeType() {
@@ -109,7 +134,12 @@ public abstract class ClientTower extends ClientGameObject{
             isMature = true;
             mapCell.notifyTreeMature();
             setOpacity(1);
+            onMatured();
         }
+    }
+    
+    protected void onMatured() {        // OVERRIDABLE
+        
     }
     
     public void doReceiveEssenceAnimation() {
@@ -165,6 +195,9 @@ public abstract class ClientTower extends ClientGameObject{
     public void onRemove(){
         Game.getInstance().getGameScreen().safeRemoveGameplayNode(healthBar);
         Game.getInstance().getGameScreen().safeRemoveGameplayNode(essenceButton);
+        activeSkillActivators.forEach((ActiveSkillActivator a)->{
+            Game.getInstance().getGameScreen().safeRemoveGameplayNode(a);
+        });
     }
 
     public void buyUpgrade(int tier, int type) {

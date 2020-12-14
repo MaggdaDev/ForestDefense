@@ -6,7 +6,10 @@
 package maggdaforestdefense.gameplay;
 
 import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.util.TimeUpdatable;
 
 /**
  *
@@ -15,9 +18,10 @@ import maggdaforestdefense.network.client.NetworkManager;
 public class GameLoop extends AnimationTimer {
 
     private boolean gameRunning = true;
+    
 
     public GameLoop() {
-
+       
     }
 
     @Override
@@ -25,6 +29,7 @@ public class GameLoop extends AnimationTimer {
         if (gameRunning) {
             NetworkManager.getInstance().update();
         } 
+        
     }
     
     public void setGameRunning(boolean b) {

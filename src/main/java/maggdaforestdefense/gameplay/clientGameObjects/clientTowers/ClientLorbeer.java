@@ -6,6 +6,7 @@
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import javafx.scene.image.Image;
+import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
@@ -23,8 +24,14 @@ import maggdaforestdefense.storage.GameImage;
 public class ClientLorbeer extends ClientTower{
     public final static RangeType RANGE_TYPE = Lorbeer.RANGE_TYPE;
     
+    private ActiveSkillActivator attackActivator;
+    
     public ClientLorbeer(int id, int xIndex, int yIndex, double health) {
         super(id, GameImage.TOWER_LORBEER_1, GameObjectType.T_LORBEER, UpgradeSet.LORBEER_SET, xIndex, yIndex, Lorbeer.DEFAULT_RANGE, Lorbeer.DEFAULT_HEALTH, Lorbeer.DEFAULT_GROWING_TIME, RANGE_TYPE);
+        
+        
+        attackActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_ATTACK);
+
     }
 
 
@@ -67,11 +74,18 @@ public class ClientLorbeer extends ClientTower{
         } else {
             if(!isMature) {
                 isMature = true;
+                onMatured();
+                
             }
         }
         
         
             super.range = updateCommand.getNumArgument("range");
+    }
+    
+    @Override
+    public void onMatured() {
+        addActiveSkill(attackActivator);
     }
     
 }

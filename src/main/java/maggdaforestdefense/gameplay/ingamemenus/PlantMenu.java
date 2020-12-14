@@ -56,6 +56,7 @@ public class PlantMenu extends VBox {
         cellType = type;
         xIndex = x;
         yIndex = y;
+        
 
         //CellType
         cellTypeView = new ImageView();

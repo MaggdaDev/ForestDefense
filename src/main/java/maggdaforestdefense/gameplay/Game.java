@@ -48,7 +48,6 @@ public class Game {
 
     private int essence = 0, coins = 0, maxEssence = 0;
     
-    private SoundEngine soundEngine;
 
     private Game(String gameName) {
         instance = this;
@@ -58,8 +57,8 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
         
-        soundEngine = new SoundEngine();
-        soundEngine.playSound(SoundEngine.Sound.SOUNDTRACK);
+        
+
 
     }
 
@@ -82,6 +81,8 @@ public class Game {
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
             handleKeyEvent(event.getCode());
         });
+        
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDENMUSIK_1);
 
     }
 
@@ -92,6 +93,8 @@ public class Game {
 
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().resetCommandHandler();
+        
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER_MUSIK);
     }
 
     // General

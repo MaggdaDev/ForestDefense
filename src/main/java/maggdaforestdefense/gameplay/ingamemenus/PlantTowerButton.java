@@ -54,6 +54,9 @@ public class PlantTowerButton extends Button {
         imageView = new ImageView();
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(IMAGE_SIZE);
+        
+        setMinWidth(100);
+        setMinHeight(100);
        
 
         xIndex = x;

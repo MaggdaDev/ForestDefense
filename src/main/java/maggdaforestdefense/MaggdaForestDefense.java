@@ -28,6 +28,7 @@ import javafx.scene.control.Labeled;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.NetworkCommand.CommandType;
+import maggdaforestdefense.sound.SoundEngine;
 
 /**
  * Main class.
@@ -58,6 +59,8 @@ public class MaggdaForestDefense extends Application {
     private static Server server;
 
     private static Game game;
+    
+    private static SoundEngine soundEngine;
 
     /**
      * Starts the program/GUI
@@ -78,6 +81,9 @@ public class MaggdaForestDefense extends Application {
                 }
             });
         }
+        
+        soundEngine = new SoundEngine();
+        soundEngine.playSound(SoundEngine.Sound.MENUMUSIK);
     }
 
     /**
@@ -178,6 +184,10 @@ public class MaggdaForestDefense extends Application {
         } else {
             return getWidthFact();
         }
+    }
+    
+    public static SoundEngine getSoundEngine() {
+        return soundEngine;
     }
 
     public void addOnSceneResize(ChangeListener<? super Number> l) {

@@ -14,6 +14,7 @@ import javafx.scene.shape.Circle;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
@@ -117,6 +118,7 @@ public abstract class Tower extends GameObject {
     protected GameImage updateGrowing(double timeElapsed) {
         return growingAnimation.update(timeElapsed);
     }
+    
 
     protected Mob findTarget(double range) {
 
@@ -217,6 +219,10 @@ public abstract class Tower extends GameObject {
     public void die() {
         serverGame.killTower(this);
         isAlive = false;
+    }
+    
+    public void performActiveSkill(ActiveSkill skill) {      // OVERRIDABLE
+        
     }
     
     public void handleAfterWave() {

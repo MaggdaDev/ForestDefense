@@ -24,6 +24,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.sound.SoundEngine;
 import maggdaforestdefense.storage.Logger;
@@ -138,11 +139,16 @@ public class Game {
     }
 
     // COMMAND HANDLES
+    
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
         if (gObj != null) {
             gObj.update(command);
         }
+    }
+    
+    public void performActiveSkill(NetworkCommand command) {
+        ((ClientTower)gameObjects.get(command.getArgument("id"))).performActiveSkill(ActiveSkill.values()[(int)command.getNumArgument("skill")]);
     }
 
     public void plantTree(NetworkCommand command) {
@@ -210,5 +216,11 @@ public class Game {
             gameScreen.updateReadyCheck(command.getNumArgument("progress"));
         });
     }
+
+    public GameLoop getGameLoop() {
+        return gameLoop;
+    }
+
+    
 
 }

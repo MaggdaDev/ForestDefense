@@ -6,8 +6,13 @@
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.LorbeerShot;
 import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
+import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
@@ -31,6 +36,10 @@ public class ClientLorbeer extends ClientTower{
         
         
         attackActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_ATTACK);
+        attackActivator.setOnUsed((MouseEvent e)->{
+            NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.LORBEER_ATTACK.ordinal())});
+            NetworkManager.getInstance().sendCommand(command);
+        });
 
     }
 
@@ -66,6 +75,8 @@ public class ClientLorbeer extends ClientTower{
         if(isMature) {
             EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
             handleEffects(e);
+            
+            attackActivator.updateCooldown(updateCommand.getNumArgument("attackCooldown"));
         }
         
         if(updateCommand.containsArgument("image")) {
@@ -81,6 +92,19 @@ public class ClientLorbeer extends ClientTower{
         
         
             super.range = updateCommand.getNumArgument("range");
+    }
+    
+    @Override
+    public void performActiveSkill(ActiveSkill skill) {
+        switch(skill) {
+            case LORBEER_ATTACK:
+                shoot();
+                break;
+        }
+    }
+    
+    public void shoot() {
+        new LorbeerShot(xPos + 0.5*MapCell.CELL_SIZE, yPos + 0.5*MapCell.CELL_SIZE, (0.5+range)*(MapCell.CELL_SIZE));
     }
     
     @Override

@@ -246,6 +246,10 @@ public class ServerGame extends Thread {
             }
         });
     }
+    
+    public void performActiveSkill(String id, ActiveSkill skill) {
+        ((Tower)gameObjects.get(id)).performActiveSkill(skill);
+    }
 
     public void handleEssenceNewRound() {
         base.refillEssence();
@@ -371,5 +375,7 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+    
 
 }

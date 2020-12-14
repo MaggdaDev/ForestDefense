@@ -104,6 +104,10 @@ public class ActiveSkillActivator extends ImageView {
     }
 
     public void updateCooldown(double restTime) {
+        if(restTime <= 0) {
+            endCooldown();
+            return;
+        }
         cooldownIndicator.updateCooldown(restTime);
         if (!onCooldown) {
             onCooldown = true;
@@ -126,6 +130,10 @@ public class ActiveSkillActivator extends ImageView {
         setLayoutY(y - getFitHeight() / 2);
     }
 
+    public CooldownIndicator getCooldownIndicator() {
+        return cooldownIndicator;
+    }
+    
     public static class CooldownIndicator extends Label {
 
         public CooldownIndicator() {
@@ -137,7 +145,7 @@ public class ActiveSkillActivator extends ImageView {
         }
 
         public void updateCooldown(double restCooldown) {
-            setText(String.valueOf((int) restCooldown));
+            setText(String.valueOf(1+(int) restCooldown));
             setVisible(true);
         }
 

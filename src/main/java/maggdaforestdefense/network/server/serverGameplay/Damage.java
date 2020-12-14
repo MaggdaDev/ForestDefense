@@ -10,6 +10,7 @@ import java.util.Vector;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 
 import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
+import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
 /**
@@ -20,11 +21,18 @@ public class Damage {
 
     private Projectile ownerProjectile;
     private Mob ownerMob;
+    private Tower ownerTower;
     private Vector<DamageSubclass> damageList;
     private Vector<DamageMultiplier> damageMultiplierList;
 
     public Damage(Projectile ownerProjectile) {
         this.ownerProjectile = ownerProjectile;
+        damageList = new Vector<DamageSubclass>();
+        damageMultiplierList = new Vector<DamageMultiplier>();
+    }
+    
+    public Damage(Tower ownerTower) {
+        this.ownerTower = ownerTower;
         damageList = new Vector<DamageSubclass>();
         damageMultiplierList = new Vector<DamageMultiplier>();
     }
@@ -73,6 +81,10 @@ public class Damage {
     
     public Mob getOwnerMob() {
         return ownerMob;
+    }
+    
+    public Tower getOwnerTower() {
+        return ownerTower;
     }
 
     //Multipliers

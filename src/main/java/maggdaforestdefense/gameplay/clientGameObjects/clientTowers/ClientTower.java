@@ -30,6 +30,7 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower.RangeType;
 import maggdaforestdefense.util.NodeSizer;
@@ -142,6 +143,11 @@ public abstract class ClientTower extends ClientGameObject{
         
     }
     
+    public void performActiveSkill(ActiveSkill skill) {      // OVERRIDABLE
+        
+    }
+    
+    
     public void doReceiveEssenceAnimation() {
         setEffect(receiveEssenceShadow);
         removeEssenceShadowAnimation.play();
@@ -197,6 +203,7 @@ public abstract class ClientTower extends ClientGameObject{
         Game.getInstance().getGameScreen().safeRemoveGameplayNode(essenceButton);
         activeSkillActivators.forEach((ActiveSkillActivator a)->{
             Game.getInstance().getGameScreen().safeRemoveGameplayNode(a);
+            Game.getInstance().getGameScreen().safeRemoveGameplayNode(a.getCooldownIndicator());
         });
     }
 

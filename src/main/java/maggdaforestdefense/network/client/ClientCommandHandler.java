@@ -153,6 +153,9 @@ public class ClientCommandHandler extends Thread {
             case UPDATE_READY_CHECK:
                 Game.getInstance().updateReadyCheck(command);
                 break;
+            case PERFORM_ACTIVESKILL_TC:
+                Game.getInstance().performActiveSkill(command);
+                break;
         }
     }
 

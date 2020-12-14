@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 
 /**
  *
@@ -167,6 +168,11 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             case REQUEST_ESSENCE_TOWER:
 
                 game.requestEssence(command.getArgument("id"));
+                break;
+                
+            case PERFORM_ACTIVESKILL_TS:
+                game.performActiveSkill(command.getArgument("id"), ActiveSkill.values()[(int)command.getNumArgument("skill")]);
+                
                 break;
         }
 

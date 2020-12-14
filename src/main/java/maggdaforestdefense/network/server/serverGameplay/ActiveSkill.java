@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package maggdaforestdefense.util;
+package maggdaforestdefense.network.server.serverGameplay;
 
 /**
  *
  * @author DavidPrivat
  */
-public interface TimeUpdatable {
-    public abstract void update(double timeElapsed);
+public enum ActiveSkill {
+    LORBEER_ATTACK;
 }

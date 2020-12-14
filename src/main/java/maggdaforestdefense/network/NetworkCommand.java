@@ -92,7 +92,7 @@ public class NetworkCommand {
         }
     }
 
-    public static enum CommandType {
+    public static enum CommandType {        // TS = to server; TC = to client
 
         //  CLIENT TO SERVER
         REQUIRE_CONNECTION, // auth
@@ -105,6 +105,7 @@ public class NetworkCommand {
         UPGRADE_BUTTON_CLICKED, //id, tier, type
         READY_FOR_NEXT_ROUND, // NO ARGS
         REQUEST_ESSENCE_TOWER, //id
+        PERFORM_ACTIVESKILL_TS,    // towerId, activeSkill (ordinal)
 
         
         
@@ -131,6 +132,7 @@ public class NetworkCommand {
         NEXT_WAVE, //wave
         DO_ESSENCE_ANIMATION, // id (of tower)
         UPDATE_READY_CHECK,     // readycheck progress
+        PERFORM_ACTIVESKILL_TC, //towerId, activeSkill (ordinal)
         END_GAME;               // NO ARGS
 
     }

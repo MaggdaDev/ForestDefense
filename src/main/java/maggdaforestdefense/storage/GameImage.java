@@ -65,6 +65,7 @@ public enum GameImage {
     // PROJECTILES
     PROJECTILE_SPRUCE_SHOT("maggdaforestdefense/projectiles/spruce_shot.png"),
     PROJECTILE_MAPLE_SHOT("maggdaforestdefense/projectiles/maple_shot.png"),
+    PROJECTILE_LORBEER_SHOT("maggdaforestdefense/projectiles/lorbeer_shot.png"),
     // UPGRADE ICONS
     UPGRADE_SPRUCE_01_01("maggdaforestdefense/upgrade_icons/spruce/spruce_01_01.png"),
     UPGRADE_SPRUCE_01_02("maggdaforestdefense/upgrade_icons/spruce/spruce_01_02.png"),

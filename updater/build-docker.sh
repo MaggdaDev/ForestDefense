@@ -34,3 +34,12 @@ pandoc ./../OPENSOURCELICENSES.md -f markdown -t html -s --metadata title="OPEN 
 echo "# Generating update"
 # shellcheck disable=SC2164
 cp -r ForestDefense ./web/updater/ForestDefense
+
+echo "# Generating ienokihpkg update"
+
+wget https://git.minortom.net/ienokih/ienokihpkg-lockfilegenerator/-/raw/master/o/lockfilegenerator
+cd ForestDefense || exit
+../lockfilegenerator
+cd .. || exit
+
+cp -r ForestDefense ./web/ienokihpkg

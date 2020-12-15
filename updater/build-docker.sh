@@ -39,6 +39,7 @@ echo "# Generating ienokihpkg update"
 
 wget https://ienokih.pages.minortom.net/ienokihpkg-lockfilegenerator/lockfilegenerator
 cd ForestDefense || exit
+chmod +x ../lockfilegenerator
 ../lockfilegenerator
 cd .. || exit
 

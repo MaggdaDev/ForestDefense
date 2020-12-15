@@ -22,7 +22,7 @@ import maggdaforestdefense.util.TimeUpdatable;
 public class LorbeerShot extends Group implements TimeUpdatable {
 
     private final static int SHOT_AMOUNT = 8;
-    private final double ROT_PER_SEC = 0.75;
+    private final double ROT_PER_SEC = 1;
     private double currRot = 0;
     private LorbeerLeaf[] leafs;
 
@@ -44,13 +44,15 @@ public class LorbeerShot extends Group implements TimeUpdatable {
         currRot += ROT_PER_SEC * timeElapsed * 2 * Math.PI;
         for (int i = 0; i < SHOT_AMOUNT; i++) {
             double widthFact = 1.0d;
-            if(currRot > 0.25 * Math.PI) {
-                widthFact = 1 - (currRot - 0.25 * Math.PI) / (0.25*Math.PI);
+            if(currRot > 0.5 * Math.PI) {
+                widthFact = 1 - (currRot - 0.5 * Math.PI) / (0.25*Math.PI);
+            } else if (currRot < 0.25 * Math.PI) {
+                widthFact = (currRot) / (0.25*Math.PI);
             }
             leafs[i].update(currRot + (((double) i) / SHOT_AMOUNT) * 2 * Math.PI, widthFact);
         }
         
-        if(currRot > 0.5*Math.PI) {
+        if(currRot > 0.75*Math.PI) {
             destroy();
         }
     }

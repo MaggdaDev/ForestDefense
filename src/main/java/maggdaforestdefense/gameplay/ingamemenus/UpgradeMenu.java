@@ -70,7 +70,7 @@ public class UpgradeMenu extends VBox{
         treePane.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
         treePane.setPadding(new Insets(20));
         treePane.setAlignment(Pos.CENTER);
-        treePane.setFillWidth(true);
+        treePane.setFillWidth(false);
         treePane.setSpacing(10);
         
         
@@ -147,6 +147,10 @@ public class UpgradeMenu extends VBox{
           new NodeSizer<ImageView>(treeView, TREE_VIEW_WIDTH, NodeSizer.CALC_HEIGHT_FROM_WIDTH(treeView), true);
           
           
+    }
+    
+    public VBox getTreePane() {
+        return treePane;
     }
     
     public void updateButtonsLocked() {

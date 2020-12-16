@@ -120,6 +120,7 @@ public enum GameImage {
     
     //ACTIVE ICONS
     ACTIVE_ICON_ATTACK("maggdaforestdefense/active_icons/attack.png"),
+    ACTIVE_ICON_SELL("maggdaforestdefense/active_icons/sell.png"),
     //DISPLAY 
     DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),
     DISPLAY_HEALTH_BAR_MOB("maggdaforestdefense/display/health_bar_mob.png"),
@@ -132,7 +133,8 @@ public enum GameImage {
     ESSENCE_ANIMATION_1("maggdaforestdefense/display/essence_animation_1.png"),
     ESSENCE_ANIMATION_2("maggdaforestdefense/display/essence_animation_2.png"),
     ESSENCE_ANIMATION_3("maggdaforestdefense/display/essence_animation_3.png"),
-    ESSENCE_ANIMATION_4("maggdaforestdefense/display/essence_animation_4.png");
+    ESSENCE_ANIMATION_4("maggdaforestdefense/display/essence_animation_4.png"),
+    LORBEER_ICON("maggdaforestdefense/display/lorbeer_icon.png");
 
     private Image image;
 

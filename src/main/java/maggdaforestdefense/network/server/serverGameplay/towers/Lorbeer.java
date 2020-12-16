@@ -25,16 +25,21 @@ import maggdaforestdefense.storage.Logger;
 public class Lorbeer extends Tower{
     public static final int DEFAULT_PRIZE = 1;
     public final static double DEFAULT_HEALTH = 20, DEFAULT_REGEN = 0;
-    public final static double DEFAULT_RANGE = 3;
+    public final static double DEFAULT_RANGE = 2;
     public final static double DEFAULT_GROWING_TIME = 2;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
     public final static double DEFAULT_DAMAGE = 10;
+    public final static int DEFAULT_MAX_LORBEERS = 50;
+    public final static int DEFAULT_GOLD_PER_LORBEER = 10;
     
     private Damage damageObject;
     private Damage.NormalDamage usualDamage;
     
     private double attackCooldown = 5.0d, attackTimer = attackCooldown;
     private boolean canAttack = true;
+    
+    private int lorbeerAmount = 0, maxLorbeerAmount = DEFAULT_MAX_LORBEERS;
+    private int goldPerLorbeer = DEFAULT_GOLD_PER_LORBEER;
     
     
     public Lorbeer(ServerGame game, double xPos, double yPos) {
@@ -43,6 +48,13 @@ public class Lorbeer extends Tower{
         usualDamage = new Damage.NormalDamage(DEFAULT_DAMAGE);
         
         damageObject.addAllDamage(new Damage.DamageSubclass[]{usualDamage});
+        
+        onKill.add((o)->
+                {
+                    if(lorbeerAmount < maxLorbeerAmount) {
+                    lorbeerAmount++;
+                    }
+                });
     }
 
     @Override
@@ -98,7 +110,8 @@ public class Lorbeer extends Tower{
                 new CommandArgument("hp", healthPoints), 
                 new CommandArgument("effects", effectSet.toString()),
                 new CommandArgument("range", range),
-                new CommandArgument("attackCooldown", attackCooldown - attackTimer)});
+                new CommandArgument("attackCooldown", attackCooldown - attackTimer),
+                new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount)});
         
     }
     
@@ -108,9 +121,19 @@ public class Lorbeer extends Tower{
             case LORBEER_ATTACK:
                 attack();
                 break;
-                
+            case LORBEER_SELL:
+                sellLorbeers();
+                break;
             default:
                 throw new UnsupportedOperationException();
+        }
+    }
+    
+    private void sellLorbeers() {
+        if(lorbeerAmount > 0) {
+            serverGame.addGold(goldPerLorbeer * lorbeerAmount);
+            lorbeerAmount = 0;
+            
         }
     }
     

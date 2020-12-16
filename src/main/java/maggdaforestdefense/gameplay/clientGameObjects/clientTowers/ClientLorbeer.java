@@ -5,8 +5,13 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import maggdaforestdefense.gameplay.RessourceDisplay;
 import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.LorbeerShot;
 import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
 import maggdaforestdefense.network.CommandArgument;
@@ -29,17 +34,29 @@ import maggdaforestdefense.storage.GameImage;
 public class ClientLorbeer extends ClientTower{
     public final static RangeType RANGE_TYPE = Lorbeer.RANGE_TYPE;
     
-    private ActiveSkillActivator attackActivator;
+    private ActiveSkillActivator attackActivator, sellActivator;
+    
+    private int lorbeerAmount = 0, maxLorbeerAmount = 1;
+    private RessourceDisplay lorbeerDisplay;
     
     public ClientLorbeer(int id, int xIndex, int yIndex, double health) {
         super(id, GameImage.TOWER_LORBEER_1, GameObjectType.T_LORBEER, UpgradeSet.LORBEER_SET, xIndex, yIndex, Lorbeer.DEFAULT_RANGE, Lorbeer.DEFAULT_HEALTH, Lorbeer.DEFAULT_GROWING_TIME, RANGE_TYPE);
         
+        lorbeerDisplay = new RessourceDisplay(GameImage.LORBEER_ICON, 0);
         
         attackActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_ATTACK);
         attackActivator.setOnUsed((MouseEvent e)->{
             NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.LORBEER_ATTACK.ordinal())});
             NetworkManager.getInstance().sendCommand(command);
         });
+        
+        sellActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_SELL);
+        sellActivator.setOnUsed((MouseEvent e)->{
+            NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.LORBEER_SELL.ordinal())});
+            NetworkManager.getInstance().sendCommand(command);
+        });
+        
+        upgradeMenu.getTreePane().getChildren().add(lorbeerDisplay);
 
     }
 
@@ -76,6 +93,12 @@ public class ClientLorbeer extends ClientTower{
             EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
             handleEffects(e);
             
+            
+            // LORBEERAMOUNT
+            String[] lorbeeren = updateCommand.getArgument("lorbeeren").split("-");
+            lorbeerAmount = Integer.parseInt(lorbeeren[0]);
+            maxLorbeerAmount = Integer.parseInt(lorbeeren[1]);
+            
             attackActivator.updateCooldown(updateCommand.getNumArgument("attackCooldown"));
         }
         
@@ -88,6 +111,13 @@ public class ClientLorbeer extends ClientTower{
                 onMatured();
                 
             }
+        }
+        
+        lorbeerDisplay.setValue(lorbeerAmount);
+        if(lorbeerAmount > 0) {
+            sellActivator.setUsable(true);
+        } else {
+            sellActivator.setUsable(false);
         }
         
         
@@ -110,6 +140,7 @@ public class ClientLorbeer extends ClientTower{
     @Override
     public void onMatured() {
         addActiveSkill(attackActivator);
+        addActiveSkill(sellActivator);
     }
-    
+
 }

@@ -28,7 +28,7 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class RessourceDisplay extends HBox{
-    private final static double ICON_SIZE = 40;
+    public final static double ICON_SIZE = 40;
     
     protected Label valueLabel;
     private ImageView icon;
@@ -47,8 +47,9 @@ public class RessourceDisplay extends HBox{
         setSpacing(20);
         super.setPadding(new Insets(0, 20, 0, 20));
         
-        setLayoutX(1000);
-        setLayoutY(200);
+        
+        
+  
       
 
         

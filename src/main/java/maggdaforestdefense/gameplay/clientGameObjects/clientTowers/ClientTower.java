@@ -118,8 +118,8 @@ public abstract class ClientTower extends ClientGameObject{
         for(int i = 0; i < activeSkillActivators.size(); i++) {
             ActiveSkillActivator currentActiveSkill = activeSkillActivators.get(i);
             
-            double addX = MapCell.CELL_SIZE*0.4 * Math.cos(2* Math.PI * (0.25d + (double)i/(double)activeSkillActivators.size()));
-            double addY = MapCell.CELL_SIZE*0.4 * Math.sin(2* Math.PI * (0.25d + (double)i/(double)activeSkillActivators.size()));
+            double addX = MapCell.CELL_SIZE*0.4 * Math.cos(2* Math.PI * ((double)i/(double)activeSkillActivators.size()));
+            double addY = MapCell.CELL_SIZE*0.4 * Math.sin(2* Math.PI * ((double)i/(double)activeSkillActivators.size()));
             
             currentActiveSkill.relocateCenter(((xIndex + 0.5) * MapCell.CELL_SIZE) + addX, ((yIndex + 0.5) * MapCell.CELL_SIZE) + addY);
         }

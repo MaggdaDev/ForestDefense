@@ -32,7 +32,7 @@ public class ActiveSkillActivator extends ImageView {
 
     private ColorAdjust colorAdjust;
 
-    private boolean onCooldown;
+    private boolean onCooldown, usable;
 
     private EventHandler<MouseEvent> onUse;
 
@@ -56,7 +56,7 @@ public class ActiveSkillActivator extends ImageView {
 
         setOnMouseClicked((MouseEvent e) -> {
 
-            if (onUse != null) {
+            if (onUse != null && usable) {
                 onUse.handle(e);
             }
         });
@@ -102,6 +102,15 @@ public class ActiveSkillActivator extends ImageView {
         });
 
     }
+    
+    public void setUsable(boolean b) {
+        usable = b;
+        if(b) {
+            colorAdjust.setContrast(0);
+        } else {
+            colorAdjust.setContrast(-0.6);
+        }
+    }
 
     public void updateCooldown(double restTime) {
         if(restTime <= 0) {
@@ -111,14 +120,14 @@ public class ActiveSkillActivator extends ImageView {
         cooldownIndicator.updateCooldown(restTime);
         if (!onCooldown) {
             onCooldown = true;
-            colorAdjust.setContrast(-0.5);
+            setUsable(false);
         }
     }
 
     public void endCooldown() {
         cooldownIndicator.endCooldown();
         onCooldown = false;
-        colorAdjust.setContrast(0);
+        setUsable(true);
     }
 
     public void setOnUsed(EventHandler<MouseEvent> handler) {

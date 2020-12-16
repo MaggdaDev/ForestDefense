@@ -322,6 +322,10 @@ public class ServerGame extends Thread {
             }
         });
     }
+    
+     public void addGold(int i) {
+        coins += i;
+    }
 
     public HashMap<String, Mob> getMobs() {
         return mobsList;
@@ -375,6 +379,8 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+   
 
     
 

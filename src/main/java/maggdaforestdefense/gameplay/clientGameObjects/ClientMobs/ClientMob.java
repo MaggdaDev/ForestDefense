@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.HealthBar;
+import maggdaforestdefense.gameplay.InformationBubble;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
@@ -32,6 +33,8 @@ public abstract class ClientMob extends ClientGameObject {
     
     protected Mob.MovementType movementType;
     protected double size;
+    
+    private double oldHealth;
     
     // Shadow offsets
     public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
@@ -72,6 +75,8 @@ public abstract class ClientMob extends ClientGameObject {
         
         
         setViewOrder(ViewOrder.MOB);
+        
+        oldHealth = maxHealth;
     }
 
     protected void updateShadow() {
@@ -126,6 +131,12 @@ public abstract class ClientMob extends ClientGameObject {
     protected void updateHealth(double h) {
 
         healthBar.update(xPos + (getFitWidth() * 0.5d), yPos, h);
+        if(oldHealth != h) {
+            Game.addGamePlayNode(new InformationBubble(String.valueOf((int)h - oldHealth), InformationBubble.InformationType.MOB_HP, xPos, yPos));
+        }
+        
+        oldHealth = h;
+        
     }
 
     public HealthBar getHealthBar() {

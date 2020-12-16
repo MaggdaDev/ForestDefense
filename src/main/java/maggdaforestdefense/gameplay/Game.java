@@ -17,6 +17,7 @@ import maggdaforestdefense.util.KeyEventHandler;
 import java.util.Vector;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import language.Deutsch;
 import language.Language;
@@ -222,6 +223,14 @@ public class Game {
 
     public GameLoop getGameLoop() {
         return gameLoop;
+    }
+    
+    public static void addGamePlayNode(Node node) {
+        instance.getGameScreen().getGamePlayGroup().getChildren().add(node);
+    }
+    
+    public static void removeGamePlayNode(Node node) {
+        instance.getGameScreen().safeRemoveGameplayNode(node);
     }
 
     

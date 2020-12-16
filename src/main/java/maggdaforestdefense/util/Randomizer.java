@@ -50,4 +50,12 @@ public class Randomizer {
     public static interface RandomHandler {
         public abstract void handle();
     }
+    
+    public static double randDouble(double min, double max) {
+        return min + Math.random()*(max-min);
+    }
+    
+    public static int randSign() {
+        return -1 + 2*(int)(Math.random()+0.5);
+    }
 }

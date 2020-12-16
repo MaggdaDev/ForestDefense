@@ -48,13 +48,15 @@ public class HealthBar extends Group{
     }
     
     public void update(double x, double y, double health) {
+        if(health < 0) {
+            health = 0;
+        }
         setLayoutX(x - 0.5 * size);
         setLayoutY(y - 1.5 * size * BOX_HEIGHT_MULT);
        
         bar.setFitWidth((1 - BOX_BORDER_MULT*2) * size * (health / maxHealth));
         
         
-        bar.setVisible(health > 0);
         setVisible(true);
     }
     

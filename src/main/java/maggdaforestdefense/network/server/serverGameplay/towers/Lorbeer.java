@@ -29,7 +29,7 @@ public class Lorbeer extends Tower{
     public final static double DEFAULT_GROWING_TIME = 2;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
     public final static double DEFAULT_DAMAGE = 10;
-    public final static int DEFAULT_MAX_LORBEERS = 50;
+    public final static int DEFAULT_MAX_LORBEERS = 20;
     public final static int DEFAULT_GOLD_PER_LORBEER = 10;
     
     private Damage damageObject;

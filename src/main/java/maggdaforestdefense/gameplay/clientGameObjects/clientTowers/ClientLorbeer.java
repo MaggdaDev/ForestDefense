@@ -11,6 +11,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.InformationPopup;
 import maggdaforestdefense.gameplay.RessourceDisplay;
 import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.LorbeerShot;
 import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
@@ -39,6 +41,8 @@ public class ClientLorbeer extends ClientTower{
     private int lorbeerAmount = 0, maxLorbeerAmount = 1;
     private RessourceDisplay lorbeerDisplay;
     
+    private InformationPopup fullPopup;
+    
     public ClientLorbeer(int id, int xIndex, int yIndex, double health) {
         super(id, GameImage.TOWER_LORBEER_1, GameObjectType.T_LORBEER, UpgradeSet.LORBEER_SET, xIndex, yIndex, Lorbeer.DEFAULT_RANGE, Lorbeer.DEFAULT_HEALTH, Lorbeer.DEFAULT_GROWING_TIME, RANGE_TYPE);
         
@@ -57,6 +61,12 @@ public class ClientLorbeer extends ClientTower{
         });
         
         upgradeMenu.getTreePane().getChildren().add(lorbeerDisplay);
+        
+        fullPopup = new InformationPopup("VOLL!", (xIndex+0.5) * MapCell.CELL_SIZE, (yIndex+0.1) * MapCell.CELL_SIZE);
+        
+        onRemove.add(()->{
+            Game.removeGamePlayNode(fullPopup);
+        });
 
     }
 
@@ -87,7 +97,7 @@ public class ClientLorbeer extends ClientTower{
     @Override
     public void update(NetworkCommand updateCommand) {
         healthPoints = updateCommand.getNumArgument("hp");
-        healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
+        updateHealth(healthPoints);
         
         if(isMature) {
             EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
@@ -119,6 +129,8 @@ public class ClientLorbeer extends ClientTower{
         } else {
             sellActivator.setUsable(false);
         }
+        
+        fullPopup.setVisible(lorbeerAmount >= maxLorbeerAmount);
         
         
             super.range = updateCommand.getNumArgument("range");

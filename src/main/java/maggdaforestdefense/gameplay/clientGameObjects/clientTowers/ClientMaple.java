@@ -36,7 +36,7 @@ public class ClientMaple extends ClientTower{
     @Override
     public void update(NetworkCommand updateCommand) {
         healthPoints = updateCommand.getNumArgument("hp");
-        healthBar.update(xPos + 0.5*MapCell.CELL_SIZE, yPos, healthPoints);
+        updateHealth(healthPoints);
         
         if(isMature) {
             EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));

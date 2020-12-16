@@ -40,21 +40,20 @@ public abstract class Bug extends Mob {
 
     @Override
     public NetworkCommand update(double timeElapsed) {
-        if (updateAlive()) {
-            updateIndexPosition();
-            updateMovement(timeElapsed);
-            updateDamageTarget(timeElapsed);
-            updateEffects(timeElapsed);
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", String.valueOf(id)),
-                new CommandArgument("x", String.valueOf(xPos)),
-                new CommandArgument("y", String.valueOf(yPos)),
-                new CommandArgument("hp", String.valueOf(healthPoints)),
-                new CommandArgument("movement", movementType.ordinal()),
-                new CommandArgument("effects", effectSet.toString())});
-        } else {
-            return null;
+        if (!updateAlive()) {
+            sentDeathToClient = true;
         }
+        updateIndexPosition();
+        updateMovement(timeElapsed);
+        updateDamageTarget(timeElapsed);
+        updateEffects(timeElapsed);
+        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+            new CommandArgument("id", String.valueOf(id)),
+            new CommandArgument("x", String.valueOf(xPos)),
+            new CommandArgument("y", String.valueOf(yPos)),
+            new CommandArgument("hp", String.valueOf(healthPoints)),
+            new CommandArgument("movement", movementType.ordinal()),
+            new CommandArgument("effects", effectSet.toString())});
 
     }
 

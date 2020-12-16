@@ -56,6 +56,8 @@ public abstract class Mob extends GameObject {
     protected MovementType movementType;
 
     protected EffectSet effectSet;
+    
+    protected boolean sentDeathToClient = false;
 
     public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
         super(game.getNextId(), objectType);
@@ -204,12 +206,10 @@ public abstract class Mob extends GameObject {
     }
 
     public boolean updateAlive() {
-        if (!checkAlive()) {
+        if (sentDeathToClient) {
             die(true);
-            return false;
-        } else {
-            return true;
         }
+        return checkAlive();
     }
 
     public boolean checkAlive() {

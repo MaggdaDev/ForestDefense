@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects;
 
+import java.util.Vector;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -12,6 +13,7 @@ import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.util.GameMaths;
+import maggdaforestdefense.util.Handler;
 
 /**
  *
@@ -23,6 +25,8 @@ public abstract class ClientGameObject extends ImageView {
     private final GameObjectType gameObjectType;
 
     protected double xPos, yPos;
+    
+    protected Vector<Handler> onRemove;
 
     protected ClientGameObject(int id, GameImage gameImage, GameObjectType objectType, double x, double y) {
         if (gameImage != null) {
@@ -34,6 +38,8 @@ public abstract class ClientGameObject extends ImageView {
         yPos = y;
 
         setMouseTransparent(true);
+        
+        onRemove = new Vector<>();
     }
 
     public void addColoredShadow(double radius, Color c) {
@@ -67,6 +73,10 @@ public abstract class ClientGameObject extends ImageView {
         setLayoutY(y);
     }
 
-    public abstract void onRemove();
+    public void onRemove() {
+        onRemove.forEach((Handler h)->{
+            h.handle();
+        });
+    }
 
 }

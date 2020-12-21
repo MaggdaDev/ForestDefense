@@ -18,6 +18,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
+import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
@@ -275,11 +276,19 @@ public abstract class Mob extends GameObject {
     }
 
     public double getCoinValue() {
-        return (int) (calculateStrength() / 50);
+        double add = 0;
+        if(effectSet.isActive(EffectSet.EffectType.GOLDED)) {
+            add = Lorbeer.WIEDERVWERTUNG_ADD;
+        }
+        return (int) (add + calculateStrength() / 50);
     }
 
     public double getHP() {
         return healthPoints;
+    }
+    
+    public double getMaxHP() {
+        return maxHealth;
     }
 
     public void destroyArmor(double arm) {

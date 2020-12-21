@@ -123,7 +123,9 @@ public abstract class ClientMob extends ClientGameObject {
     protected void handleEffects (EffectSet set) {
         if(set.isActive(EffectSet.EffectType.SENSITIVE)) {
             addColoredShadow(5, Color.YELLOW);
-        } else {
+        }else if(set.isActive(EffectSet.EffectType.GOLDED)) {
+            addColoredShadow(8, Color.ORANGE);
+        } else{
             addColoredShadow(0, Color.TRANSPARENT);
         }
     }

@@ -87,6 +87,7 @@ public class EffectSet {
         STUN,
         SLOW,
         SENSITIVE,
+        GOLDED,
         //
         MAPLE_ESCALATION,
         MAPLE_CHARGED

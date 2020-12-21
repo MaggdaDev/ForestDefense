@@ -111,7 +111,8 @@ public class Lorbeer extends Tower{
                 new CommandArgument("effects", effectSet.toString()),
                 new CommandArgument("range", range),
                 new CommandArgument("attackCooldown", attackCooldown - attackTimer),
-                new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount)});
+                new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount),
+                new CommandArgument("coinsPerLorbeer", goldPerLorbeer)});
         
     }
     

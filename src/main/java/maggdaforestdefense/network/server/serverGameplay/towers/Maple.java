@@ -170,7 +170,11 @@ public class Maple extends Tower {
             
             
 
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("hp", healthPoints), new CommandArgument("range", range), new CommandArgument("effects", effectSet.toString())});
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+                new CommandArgument("id", id), 
+                new CommandArgument("hp", healthPoints), 
+                new CommandArgument("range", range), 
+                new CommandArgument("effects", effectSet.toString())});
         }
     }
 

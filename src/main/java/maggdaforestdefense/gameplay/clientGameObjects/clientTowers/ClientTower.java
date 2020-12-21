@@ -235,5 +235,13 @@ public abstract class ClientTower extends ClientGameObject {
     public void hideEssenceButton() {
         essenceButton.hide();
     }
+    
+    public double getCenterX() {
+        return (0.5d + xIndex) * MapCell.CELL_SIZE;
+    }
+    
+    public double getCenterY() {
+        return (0.5d + yIndex) * MapCell.CELL_SIZE;
+    }
 
 }

@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.InformationBubble;
 import maggdaforestdefense.gameplay.InformationPopup;
 import maggdaforestdefense.gameplay.RessourceDisplay;
 import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.LorbeerShot;
@@ -38,8 +39,9 @@ public class ClientLorbeer extends ClientTower{
     
     private ActiveSkillActivator attackActivator, sellActivator;
     
-    private int lorbeerAmount = 0, maxLorbeerAmount = 1;
-    private RessourceDisplay lorbeerDisplay;
+    private int lorbeerAmount = 0, oldLorbeerAmount = 0, maxLorbeerAmount = 1;
+    private int coinsPerLorbeer = 0;
+    private RessourceDisplay lorbeerDisplay, potentialGoldDisplay;
     
     private InformationPopup fullPopup;
     
@@ -47,6 +49,7 @@ public class ClientLorbeer extends ClientTower{
         super(id, GameImage.TOWER_LORBEER_1, GameObjectType.T_LORBEER, UpgradeSet.LORBEER_SET, xIndex, yIndex, Lorbeer.DEFAULT_RANGE, Lorbeer.DEFAULT_HEALTH, Lorbeer.DEFAULT_GROWING_TIME, RANGE_TYPE);
         
         lorbeerDisplay = new RessourceDisplay(GameImage.LORBEER_ICON, 0);
+        potentialGoldDisplay = new RessourceDisplay(GameImage.COIN_ICON, 0);
         
         attackActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_ATTACK);
         attackActivator.setOnUsed((MouseEvent e)->{
@@ -60,7 +63,7 @@ public class ClientLorbeer extends ClientTower{
             NetworkManager.getInstance().sendCommand(command);
         });
         
-        upgradeMenu.getTreePane().getChildren().add(lorbeerDisplay);
+        upgradeMenu.getTreePane().getChildren().add(new HBox(lorbeerDisplay, new Label("="), potentialGoldDisplay));
         
         fullPopup = new InformationPopup("VOLL!", (xIndex+0.5) * MapCell.CELL_SIZE, (yIndex+0.1) * MapCell.CELL_SIZE);
         
@@ -108,8 +111,19 @@ public class ClientLorbeer extends ClientTower{
             String[] lorbeeren = updateCommand.getArgument("lorbeeren").split("-");
             lorbeerAmount = Integer.parseInt(lorbeeren[0]);
             maxLorbeerAmount = Integer.parseInt(lorbeeren[1]);
+            coinsPerLorbeer = (int)(updateCommand.getNumArgument("coinsPerLorbeer"));
             
             attackActivator.updateCooldown(updateCommand.getNumArgument("attackCooldown"));
+            
+            
+            if(oldLorbeerAmount > lorbeerAmount) {
+                Game.addGamePlayNode(new InformationBubble("+" + ((oldLorbeerAmount - lorbeerAmount) * coinsPerLorbeer), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
+            } else if(oldLorbeerAmount < lorbeerAmount) {
+                 Game.addGamePlayNode(new InformationBubble("+" + (lorbeerAmount - oldLorbeerAmount), InformationBubble.InformationType.LORBEER, getCenterX(), getCenterY()));
+            }
+            
+            oldLorbeerAmount = lorbeerAmount;
+            
         }
         
         if(updateCommand.containsArgument("image")) {
@@ -124,6 +138,7 @@ public class ClientLorbeer extends ClientTower{
         }
         
         lorbeerDisplay.setValue(lorbeerAmount);
+        potentialGoldDisplay.setValue(lorbeerAmount * coinsPerLorbeer);
         if(lorbeerAmount > 0) {
             sellActivator.setUsable(true);
         } else {

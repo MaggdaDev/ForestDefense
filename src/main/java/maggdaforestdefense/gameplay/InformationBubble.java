@@ -33,16 +33,26 @@ public class InformationBubble extends Label {
     private PathTransition pathTrans;
     private FadeTransition fadeTrans;
     private CubicCurve curve;
+    private double bigFact = 1;
 
     public InformationBubble(String text, InformationType type, double startX, double startY) {
         setLayoutX(startX);
         setLayoutY(startY);
         setText(text);
-        setFont(new Font(11));
+        switch(type) {
+            case LORBEER: case GOLD:
+                setFont(new Font(22));
+                bigFact = 3;
+                break;
+            default:
+                setFont(new Font(11));
+                break;
+        }
+        
         setEffect(new Glow());
         setTextFill(type.getColor());
 
-        fadeTrans = new FadeTransition(Duration.seconds(DURATION), this);
+        fadeTrans = new FadeTransition(Duration.seconds(DURATION * bigFact), this);
         fadeTrans.setFromValue(1);
         fadeTrans.setToValue(0);
 
@@ -54,7 +64,7 @@ public class InformationBubble extends Label {
 
         curve = new CubicCurve(0, 0, randXAdd1, randYAdd1, randXAdd1 + randXAdd2, randYAdd1 + randYAdd2, 2 * randXAdd1 + randXAdd2, 0);
 
-        pathTrans = new PathTransition(Duration.seconds(DURATION), curve, this);
+        pathTrans = new PathTransition(Duration.seconds(DURATION*bigFact), curve, this);
         pathTrans.setInterpolator(new Interpolator() {
             @Override
             protected double curve(double arg0) {

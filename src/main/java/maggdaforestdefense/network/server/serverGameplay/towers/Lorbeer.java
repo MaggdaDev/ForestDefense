@@ -53,6 +53,8 @@ public class Lorbeer extends Tower{
     private int lorbeerAmount = 0, maxLorbeerAmount = DEFAULT_MAX_LORBEERS;
     private int goldPerLorbeer = DEFAULT_GOLD_PER_LORBEER;
     
+    private Vector<CommandArgument> updateCommandArgs;
+    
     //UPGRADES
     private double goldPerLorbeerUpgradeMult = 1;
     
@@ -80,6 +82,11 @@ public class Lorbeer extends Tower{
     private HeadHuntGenerator headHuntGenerator;
     private HeadHuntGenerator.HeadHunt headHunt;
     
+    private boolean isTauschhandel = false, tauschhandelUpgradesUpdates = false;
+    private Vector<Upgrade> tauschhandelUpgrades;
+    private double tauschhandelPow = 1;
+    
+    
     
     
     public Lorbeer(ServerGame game, double xPos, double yPos) {
@@ -99,6 +106,8 @@ public class Lorbeer extends Tower{
                 });
         
         headHuntGenerator = new HeadHuntGenerator();
+        tauschhandelUpgrades = new Vector<>();
+        updateCommandArgs = new Vector<>();
     }
 
     @Override
@@ -112,12 +121,14 @@ public class Lorbeer extends Tower{
             case LORBEER_1_2:   // ERTRAGREICH
                 goldPerLorbeerUpgradeMult = (1.5 * goldPerLorbeer);
                 goldPerLorbeer = (int)(DEFAULT_GOLD_PER_LORBEER * goldPerLorbeerUpgradeMult);
+                tauschhandelPow -= 0.25;
                 break;
             case LORBEER_1_3:   // EFFIZIENTNE ERNTE
                 attackCooldown /= 1.5;
                 break;
             case LORBEER_1_4:   // SPEICHER
                 maxLorbeerAmount *= 1.5;
+                tauschhandelPow -= 0.5;
                 break;
                 
             case LORBEER_2_1:   // EXECUTIVE
@@ -128,6 +139,7 @@ public class Lorbeer extends Tower{
                 break;
             case LORBEER_2_3:   // MASSENPRODUKTION
                 isMassenproduktion = true;
+                tauschhandelPow -= 0.5;
                 break;
             case LORBEER_2_4:   // WIEDERVERWERTUNG
                 isWiederverwertung = true;
@@ -142,7 +154,9 @@ public class Lorbeer extends Tower{
                 isKopfgeld = true;
                 generateHeadHunt();
                 break;
-                
+            case LORBEER_3_4:   // Tauschhandel
+                isTauschhandel = true;
+                break;
                 
         }
     }
@@ -199,35 +213,28 @@ public class Lorbeer extends Tower{
         }
         
         performUpgradesOnUpdate();
+        
+        updateCommandArgs.clear();
+        
+        updateCommandArgs.add(new CommandArgument("id", id));
+        updateCommandArgs.add(new CommandArgument("hp", healthPoints));
+        updateCommandArgs.add(new CommandArgument("effects", effectSet.toString()));
+        updateCommandArgs.add(new CommandArgument("range", range));
+        updateCommandArgs.add(new CommandArgument("attackCooldown", attackCooldown - attackTimer));
 
-        if(isKopfgeld) {
-            if(headHunt.isUpdate()) {
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
-                new CommandArgument[]{new CommandArgument("id", id), 
-                new CommandArgument("hp", healthPoints), 
-                new CommandArgument("effects", effectSet.toString()),
-                new CommandArgument("range", range),
-                new CommandArgument("attackCooldown", attackCooldown - attackTimer),
-                new CommandArgument("headhunt", headHunt.toString())});
-            } else {
-                return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
-                new CommandArgument[]{new CommandArgument("id", id), 
-                new CommandArgument("hp", healthPoints), 
-                new CommandArgument("effects", effectSet.toString()),
-                new CommandArgument("range", range),
-                new CommandArgument("attackCooldown", attackCooldown - attackTimer)});
-            }
-        } else {
-        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
-                new CommandArgument[]{new CommandArgument("id", id), 
-                new CommandArgument("hp", healthPoints), 
-                new CommandArgument("effects", effectSet.toString()),
-                new CommandArgument("range", range),
-                new CommandArgument("attackCooldown", attackCooldown - attackTimer),
-                new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount),
-                new CommandArgument("coinsPerLorbeer", goldPerLorbeer)});
+        if(isTauschhandel && tauschhandelUpgradesUpdates) {
+            updateCommandArgs.add(new CommandArgument("tauschhandel", new Gson().toJson(tauschhandelUpgrades)));
         }
         
+        if(isKopfgeld) {
+            if(headHunt.isUpdate()) {
+               updateCommandArgs.add(new CommandArgument("headhunt", headHunt.toString()));
+            } 
+        } else {
+            updateCommandArgs.add(new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount));
+            updateCommandArgs.add(new CommandArgument("coinsPerLorbeer", goldPerLorbeer));
+        }
+        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, (CommandArgument[])updateCommandArgs.toArray());
     }
     
     @Override
@@ -241,6 +248,9 @@ public class Lorbeer extends Tower{
                 break;
             case LORBEER_PRESTIGE:
                 prestige();
+                break;
+            case LORBEER_TRADE:
+                trade();
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -300,6 +310,25 @@ public class Lorbeer extends Tower{
             lorbeerAmount = 0;
             goldPerLorbeer += PRESTIGE_ADD;
         }
+    }
+    
+    private void trade() {
+        if(lorbeerAmount >= maxLorbeerAmount) {
+            lorbeerAmount = 0;
+            tauschhandelUpgrades.add(generateTauschhandelUpgrade());
+            tauschhandelUpgradesUpdates = true;
+        }
+    }
+    
+    private Upgrade generateTauschhandelUpgrade() {
+        
+        Randomizer rand = new Randomizer();
+        
+        for(Upgrade upgrade: Upgrade.values()) {
+            rand.addEvent(new RandomEvent(upgrade.ordinal(), Math.pow((double)upgrade.getPrize(), tauschhandelPow)));
+        }
+        
+        return Upgrade.values()[rand.throwDice()];
     }
     
     private void generateHeadHunt() {

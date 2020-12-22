@@ -44,7 +44,7 @@ import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer.HeadHunt
 public class ClientLorbeer extends ClientTower{
     public final static RangeType RANGE_TYPE = Lorbeer.RANGE_TYPE;
     
-    private ActiveSkillActivator attackActivator, sellActivator, prestigeActivator;
+    private ActiveSkillActivator attackActivator, sellActivator, prestigeActivator, tradeActivator;
     
     private int lorbeerAmount = 0, oldLorbeerAmount = 0, maxLorbeerAmount = 1;
     private int coinsPerLorbeer = 0, oldCoinsPerLorbeer = 0;
@@ -79,6 +79,12 @@ public class ClientLorbeer extends ClientTower{
         prestigeActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_PRESTIGE);
         prestigeActivator.setOnUsed((MouseEvent e)->{
             NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.LORBEER_PRESTIGE.ordinal())});
+            NetworkManager.getInstance().sendCommand(command);
+        });
+        
+        tradeActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_TRADE);
+        tradeActivator.setOnUsed((MouseEvent e)->{
+            NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.LORBEER_TRADE.ordinal())});
             NetworkManager.getInstance().sendCommand(command);
         });
         
@@ -165,6 +171,7 @@ public class ClientLorbeer extends ClientTower{
         
             fullPopup.setVisible(lorbeerAmount >= maxLorbeerAmount);
             prestigeActivator.setUsable(lorbeerAmount >= maxLorbeerAmount);
+            tradeActivator.setUsable(lorbeerAmount >= maxLorbeerAmount);
             }
             
         }
@@ -211,6 +218,9 @@ public class ClientLorbeer extends ClientTower{
             headHuntBox = new HeadHuntBox();
             upgradeMenu.getTreePane().getChildren().remove(goldLorbeerHBox);
             upgradeMenu.getTreePane().getChildren().add(headHuntBox);
+        }
+        if(UpgradeSet.LORBEER_SET.getUpgrade(tier, type) == Upgrade.LORBEER_3_4) {
+            addActiveSkill(tradeActivator);
         }
         upgradeMenu.buyUpgrade(tier, type);
     }

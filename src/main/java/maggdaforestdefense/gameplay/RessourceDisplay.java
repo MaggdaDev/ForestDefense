@@ -87,4 +87,27 @@ public class RessourceDisplay extends HBox{
         
         
     }
+    
+    public static class LorbeerDisplay extends RessourceDisplay {
+        private int lorbeer, maxLorbeer;
+        public LorbeerDisplay(GameImage iconGameImage, int lorbeer, int maxLorbeer) {
+            super(iconGameImage, lorbeer);
+            this.lorbeer = lorbeer;
+            this.maxLorbeer = maxLorbeer;
+        }
+        
+        @Override
+        public void setValue(int v) {
+            lorbeer = v;
+            valueLabel.setText(lorbeer + " / " + maxLorbeer);
+        }
+        
+        public void setMaxLorbeer(int m) {
+            maxLorbeer = m;
+            valueLabel.setText(lorbeer + " / " + maxLorbeer);
+        }
+        
+        
+        
+    }
 }

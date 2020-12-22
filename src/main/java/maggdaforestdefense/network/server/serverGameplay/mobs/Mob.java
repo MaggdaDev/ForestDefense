@@ -162,6 +162,10 @@ public abstract class Mob extends GameObject {
 
         return null;
     }
+    
+    public boolean wouldDie(Damage damage) {
+        return directDamage(damage) >= healthPoints;
+    }
 
     protected void updateDamageTarget(double timeElapsed) {
         if (targetReached) {
@@ -232,21 +236,18 @@ public abstract class Mob extends GameObject {
 
         if (!damageTaken.contains(damage)) {
             damageTaken.add(damage);
-            return directDamage(damage);
+            double damageVal = directDamage(damage);
+            return applyDamage(damageVal, damage);
         }
         return 0;
 
     }
-
-    public double directDamage(Damage damage) {
-        double oldHealthPoints = healthPoints;
+    
+    private double applyDamage(double damageVal, Damage damage) {
         if (checkAlive()) {
-            double damageVal = damage.getTotalDamage(armor);
-            if (effectSet.isActive(EffectSet.EffectType.SENSITIVE)) {        // EFFECT: SENSITIVE
-                damageVal *= EffectSet.Effect.EFFECT_SENSITIVE_MULT;
-            }
-            healthPoints -= damageVal;
-            if (!checkAlive()) {
+        double oldHealthPoints = healthPoints;
+        healthPoints -= damageVal;
+        if (!checkAlive()) {
                 if(damage.getOwnerProjectile() != null) {
                 damage.getOwnerProjectile().notifyKill(this);
                 } else if(damage.getOwnerTower() != null) {
@@ -256,6 +257,16 @@ public abstract class Mob extends GameObject {
             return oldHealthPoints - healthPoints;
         }
         return 0;
+    }
+
+    public double directDamage(Damage damage) {
+            double damageVal = damage.getTotalDamage(armor);
+            if (effectSet.isActive(EffectSet.EffectType.SENSITIVE)) {        // EFFECT: SENSITIVE
+                damageVal *= EffectSet.Effect.EFFECT_SENSITIVE_MULT;
+            }
+            return damageVal;
+            
+            
     }
     // Get/Set
 
@@ -274,13 +285,32 @@ public abstract class Mob extends GameObject {
     public double calculateStrength() {
         return maxHealth * speed;
     }
-
-    public double getCoinValue() {
-        double add = 0;
+    
+    public int calculateCoinValue() {
+        int goldAdd = 1;
         if(effectSet.isActive(EffectSet.EffectType.GOLDED)) {
-            add = Lorbeer.WIEDERVWERTUNG_ADD;
+            goldAdd = (int)Lorbeer.WIEDERVWERTUNG_ADD;
         }
-        return (int) (add + calculateStrength() / 50);
+        return getCoinValue(gameObjectType) + goldAdd;
+    }
+
+    public static int getCoinValue(GameObjectType type) {
+        switch(type) {
+            case M_BLATTLAUS:
+                return 50;
+            case M_BORKENKAEFER:
+                return 100;
+            case M_HIRSCHKAEFER:
+                return 20;
+            case M_SCHWIMMKAEFER:
+                return 20;
+            case M_WANDERLAUFER:
+                return 20;
+            case M_WASSERLAEUFER:
+                return 40;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     public double getHP() {

@@ -5,12 +5,21 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.towers;
 
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
@@ -18,6 +27,8 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.Randomizer;
+import maggdaforestdefense.util.RandomEvent;
 
 /**
  *
@@ -60,6 +71,16 @@ public class Lorbeer extends Tower{
     private boolean isWiederverwertung = false;
     public final static double WIEDERVWERTUNG_ADD = 5;
     
+    private boolean isAutomatic = false;
+    
+    private boolean isPrestige = false;
+    public final static int PRESTIGE_ADD = 5;
+    
+    private boolean isKopfgeld = false;
+    private HeadHuntGenerator headHuntGenerator;
+    private HeadHuntGenerator.HeadHunt headHunt;
+    
+    
     
     public Lorbeer(ServerGame game, double xPos, double yPos) {
         super(game, xPos, yPos,GameObjectType.T_LORBEER, DEFAULT_PRIZE, UpgradeSet.LORBEER_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(true, true, true), DEFAULT_GROWING_TIME, RANGE_TYPE);
@@ -76,6 +97,8 @@ public class Lorbeer extends Tower{
                     lorbeerAmount++;
                     }
                 });
+        
+        headHuntGenerator = new HeadHuntGenerator();
     }
 
     @Override
@@ -109,7 +132,16 @@ public class Lorbeer extends Tower{
             case LORBEER_2_4:   // WIEDERVERWERTUNG
                 isWiederverwertung = true;
                 break;
-                
+            case LORBEER_3_1:   // AUTOMATISCHE
+                isAutomatic = true;
+                break;
+            case LORBEER_3_2:   // PRESTIGE
+                isPrestige = true;
+                break;
+            case LORBEER_3_3:   // Bounty
+                isKopfgeld = true;
+                generateHeadHunt();
+                break;
                 
                 
         }
@@ -156,8 +188,36 @@ public class Lorbeer extends Tower{
             goldPerLorbeer = (int)(DEFAULT_GOLD_PER_LORBEER * goldPerLorbeerUpgradeMult * (1 + lorbeerAmount/DEFAULT_MAX_LORBEERS));
         }
         
+        if(isAutomatic) {
+            if(canAttack) {
+            getMobsInRange(range).forEach((Mob mob)->{
+                if(mob.wouldDie(damageObject)) {
+                    attack();
+                }
+            });
+            }
+        }
+        
         performUpgradesOnUpdate();
 
+        if(isKopfgeld) {
+            if(headHunt.isUpdate()) {
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
+                new CommandArgument[]{new CommandArgument("id", id), 
+                new CommandArgument("hp", healthPoints), 
+                new CommandArgument("effects", effectSet.toString()),
+                new CommandArgument("range", range),
+                new CommandArgument("attackCooldown", attackCooldown - attackTimer),
+                new CommandArgument("headhunt", headHunt.toString())});
+            } else {
+                return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
+                new CommandArgument[]{new CommandArgument("id", id), 
+                new CommandArgument("hp", healthPoints), 
+                new CommandArgument("effects", effectSet.toString()),
+                new CommandArgument("range", range),
+                new CommandArgument("attackCooldown", attackCooldown - attackTimer)});
+            }
+        } else {
         return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
                 new CommandArgument[]{new CommandArgument("id", id), 
                 new CommandArgument("hp", healthPoints), 
@@ -166,6 +226,7 @@ public class Lorbeer extends Tower{
                 new CommandArgument("attackCooldown", attackCooldown - attackTimer),
                 new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount),
                 new CommandArgument("coinsPerLorbeer", goldPerLorbeer)});
+        }
         
     }
     
@@ -178,16 +239,24 @@ public class Lorbeer extends Tower{
             case LORBEER_SELL:
                 sellLorbeers();
                 break;
+            case LORBEER_PRESTIGE:
+                prestige();
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
     }
     
     private void sellLorbeers() {
-        if(lorbeerAmount > 0) {
-            serverGame.addGold(goldPerLorbeer * lorbeerAmount);
-            lorbeerAmount = 0;
+        if(!isKopfgeld) {
+            if(lorbeerAmount > 0) {
+                serverGame.addGold(goldPerLorbeer * lorbeerAmount);
+                lorbeerAmount = 0;
             
+            }
+        } else {
+            serverGame.addGold(headHunt.getGoldOnFinished());
+            generateHeadHunt();
         }
     }
     
@@ -210,17 +279,192 @@ public class Lorbeer extends Tower{
                     mob.damage(damageObject);
                     if(mob.getHP() <= 0) {
                         ernteRauschKillCount++;
+                        if(isKopfgeld && headHunt != null) {
+                            headHunt.notifyKill(mob);
+                        }
                     } else if(isWiederverwertung) {
                         mob.getEffectSet().addEffect(new EffectSet.Effect(EffectSet.EffectType.GOLDED, EffectSet.Effect.UNLIMITED));
                     }
                 }
             });
-            if(ernteRauschKillCount >= RAUSCH_KILL_AMOUNT) {
+            if(isErnteRausch && ernteRauschKillCount >= RAUSCH_KILL_AMOUNT) {
                 attackTimer += attackCooldown/2;
             }
             
         }
         
+    }
+    
+    private void prestige() {
+        if(lorbeerAmount >= maxLorbeerAmount) {
+            lorbeerAmount = 0;
+            goldPerLorbeer += PRESTIGE_ADD;
+        }
+    }
+    
+    private void generateHeadHunt() {
+        double fact = 1.0d;
+        if(isMassenproduktion) {
+            fact += 0.5;
+        }
+        if(upgrades.contains(Upgrade.LORBEER_1_2)) {
+            fact += 0.5;
+        }
+        if(upgrades.contains(Upgrade.LORBEER_1_4)) {
+            fact += 0.5;
+        }
+        headHunt = headHuntGenerator.generateHeadHunt(fact);
+    }
+    
+    
+    public static class HeadHuntGenerator {
+        private Randomizer randomizer;
+        public HeadHuntGenerator() {
+            setUpRandomizer();
+        }
+        
+        private final void setUpRandomizer() {
+            randomizer = new Randomizer();
+            randomizer.addEvent(new RandomEvent(1, 3));
+            randomizer.addEvent(new RandomEvent(2, 3));
+            randomizer.addEvent(new RandomEvent(3, 3));
+            randomizer.addEvent(new RandomEvent(4, 2));
+            randomizer.addEvent(new RandomEvent(5, 1));
+        }
+        
+        public HeadHunt generateHeadHunt(double upgradesFact) {
+            return new HeadHunt(randomDifficulty(), upgradesFact);
+        }
+        
+        private int randomDifficulty() {
+            return randomizer.throwDice();
+        }
+        
+        public static class HeadHunt {
+            private List<GameObjectType> mobs;
+            private Vector<Mission> missions;
+            private int totalGold, goldOnFinished;
+            private double bonusFact = 1;
+            private boolean isUpdate = true;
+            
+            public HeadHunt(int difficulty, double upgradeFact) {
+                missions = new Vector<>();
+                mobs = new ArrayList<>(Arrays.asList(GameObject.getMobs()));
+                mobs.sort(new Comparator<GameObjectType>() {
+                    @Override
+                    public int compare(GameObjectType arg0, GameObjectType arg1) {
+                        return Mob.getCoinValue(arg0) - Mob.getCoinValue(arg1);
+                    }
+                });                
+                
+                switch(difficulty) {
+                    case 1:
+                        totalGold = 100;
+                        break;
+                    case 2:
+                        totalGold = 200;
+                        break;
+                    case 3:
+                        totalGold = 300;
+                        break;
+                    case 4:
+                        totalGold = 500;
+                        bonusFact = 2;
+                        break;
+                    case 5:
+                        totalGold = 1000;
+                        bonusFact = 3;
+                        break;
+                    default: 
+                        totalGold = 100;
+                        break;
+                }
+                bonusFact *= upgradeFact;
+                
+                
+                calculateMissions();
+                
+            }
+            
+            public void notifyKill(Mob mob) {
+                isUpdate = true;
+                missions.forEach((Mission mission)->{
+                    mission.notifyKill(mob);
+                });
+            }
+            
+            public boolean isUpdate() {
+                boolean oldIsUpdate = isUpdate;
+                isUpdate = false;
+                return oldIsUpdate;
+            }
+            
+            private final void calculateMissions() {
+                int goldToGet = totalGold;
+                
+                while(goldToGet > 0) {
+                    GameObjectType currentType = (GameObjectType)Randomizer.getRandomElement(mobs);
+                    mobs.remove(currentType);
+                    int amount = (int)(totalGold / Mob.getCoinValue(currentType));
+                    goldToGet -= amount * Mob.getCoinValue(currentType);
+                    missions.add(new Mission(amount, currentType));
+                }
+            }
+            
+            public boolean isFinished() {
+                for(Mission mission: missions) {
+                    if(mission.getAmountReady() != mission.getAmount()) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            public Vector<Mission> getMissions() {
+                return missions;
+            }
+            
+            public int getGoldOnFinished() {
+                return (int)(bonusFact * totalGold);
+            }
+            
+            @Override
+            public String toString() {
+                return new Gson().toJson(this);
+            }
+            
+            public static HeadHunt fromString(String s) {
+                return new Gson().fromJson(s, HeadHunt.class);
+            }
+        }
+        
+        public static class Mission {
+            public final int amount;
+            public final GameObjectType gameObjecType;
+            public final int coinValue;
+            private int amountReady = 0;
+            public Mission(int amount, GameObjectType gameObjectType) {
+                this.amount = amount;
+                this.gameObjecType = gameObjectType;
+                this.coinValue = Mob.getCoinValue(gameObjecType);
+            }
+            public void notifyKill(Mob mob) {
+                if(amountReady < amount && mob.getGameObjectType() == gameObjecType) {
+                    amountReady++;
+                }
+            }
+            public int getAmountReady() {
+                return amountReady;
+            }
+            
+            public GameObjectType getGameObjectType() {
+                return gameObjecType;
+            }
+            
+            public int getAmount() {
+                return amount;
+            }
+        }
     }
     
 }

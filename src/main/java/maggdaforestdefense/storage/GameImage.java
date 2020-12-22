@@ -121,6 +121,7 @@ public enum GameImage {
     //ACTIVE ICONS
     ACTIVE_ICON_ATTACK("maggdaforestdefense/active_icons/attack.png"),
     ACTIVE_ICON_SELL("maggdaforestdefense/active_icons/sell.png"),
+    ACTIVE_ICON_PRESTIGE("maggdaforestdefense/active_icons/prestige.png"),
     //DISPLAY 
     DISPLAY_HEALTH_BOX("maggdaforestdefense/display/health_box.png"),
     DISPLAY_HEALTH_BAR_MOB("maggdaforestdefense/display/health_bar_mob.png"),

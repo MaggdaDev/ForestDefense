@@ -62,6 +62,8 @@ public abstract class Tower extends GameObject {
     protected boolean isEssenceFed = false;
 
     protected EffectSet effectSet;
+    
+    private Vector<Mob> mobsInRange;
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound;
     
@@ -95,6 +97,7 @@ public abstract class Tower extends GameObject {
         this.growingTime = growTime;
         this.effectSet = new EffectSet();
         this.rangeType = rangeType;
+        this.mobsInRange = new Vector<>();
         
         // Animation
         GameImage lastImage;
@@ -183,6 +186,16 @@ public abstract class Tower extends GameObject {
                 
             }
         return false;
+    }
+    
+    protected Vector<Mob> getMobsInRange(double range) {
+        mobsInRange.clear();
+        serverGame.getMobs().forEach((String key, Mob mob)->{
+            if(isInRange(mob, range)) {
+                mobsInRange.add(mob);
+            }
+        });
+        return mobsInRange;
     }
     
     protected int howManyMobsInRange(double range, CanAttackSet canAttackSet) {

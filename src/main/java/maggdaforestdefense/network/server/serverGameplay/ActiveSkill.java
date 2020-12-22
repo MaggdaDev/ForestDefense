@@ -11,5 +11,6 @@ package maggdaforestdefense.network.server.serverGameplay;
  */
 public enum ActiveSkill {
     LORBEER_ATTACK,
-    LORBEER_SELL;
+    LORBEER_SELL,
+    LORBEER_PRESTIGE;
 }

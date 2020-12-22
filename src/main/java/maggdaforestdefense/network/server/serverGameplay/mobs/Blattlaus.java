@@ -27,9 +27,6 @@ public class Blattlaus extends Bug{
         super(serverGame, HP, SPEED, TOWER_VISION_RANGE, DAMAGE, ATTACK_TIME, MAP_DISTANCES, ARMOR, MOVEMENT_TYPE, GameObjectType.M_BLATTLAUS);
     }
     
-    @Override
-    public double getCoinValue() {
-        return 10;
-    }
+   
 
 }

@@ -93,7 +93,7 @@ public class ActiveSkillActivator extends ImageView {
             cooldownIndicator.setOpacity(1);
         });
         setOnMousePressed((MouseEvent e) -> {
-            if (!onCooldown) {
+            if (usable && !onCooldown) {
                 colorAdjust.setBrightness(-0.5);
             }
         });

@@ -22,7 +22,9 @@ import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientMaple;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.storage.GameImage;
 
 /**
  *
@@ -41,6 +43,7 @@ public abstract class GameObject {
         gameObjectType = t;
         
         // SetUpMobs
+        /*
         if(mobs == null) {
         ObservableList<GameObjectType> retlist = FXCollections.observableArrayList();
         for(GameObjectType type:GameObjectType.values()) {
@@ -54,6 +57,8 @@ public abstract class GameObject {
         }
         mobs = arr;
         }
+        */
+        mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS};//, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER};
     }
 
     public abstract CommandArgument[] toNetworkCommandArgs();
@@ -66,6 +71,19 @@ public abstract class GameObject {
 
     public GameObjectType getGameObjectType() {
         return gameObjectType;
+    }
+    
+    public static GameImage getGameImageFromType (GameObjectType type) {
+        switch(type) {
+            case M_BLATTLAUS:
+                return GameImage.MOB_BLATTLAUS_1;
+            case M_HIRSCHKAEFER:
+                return GameImage.MOB_HIRSCHKAEFER_1;
+            case M_WANDERLAUFER:
+                return GameImage.MOB_LAUFKAEFER_1;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
     
     public static GameObjectType[] getMobs() {

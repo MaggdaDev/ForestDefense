@@ -305,7 +305,7 @@ public class ServerGame extends Thread {
         mobsList.remove(String.valueOf(mob.getId()));
         removeGameObject(mob);
         if (getGold) {
-            coins += mob.getCoinValue();
+            coins += mob.calculateCoinValue();
         }
         serverLoop.notifyMobDeath();
     }

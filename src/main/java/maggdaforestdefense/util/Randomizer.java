@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.util;
 
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -57,5 +58,9 @@ public class Randomizer {
     
     public static int randSign() {
         return -1 + 2*(int)(Math.random()+0.5);
+    }
+    
+    public static Object getRandomElement(List list) {
+        return list.get((int)(list.size()*Math.random()));
     }
 }

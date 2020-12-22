@@ -218,7 +218,7 @@ public abstract class ClientTower extends ClientGameObject {
         }
     }
 
-    public void buyUpgrade(int tier, int type) {
+    public void buyUpgrade(int tier, int type) {    // Overridable
         upgradeMenu.buyUpgrade(tier, type);
     }
 

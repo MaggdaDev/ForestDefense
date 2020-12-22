@@ -124,11 +124,26 @@ public abstract class ClientTower extends ClientGameObject {
     }
 
     private void relayoutActiveSkills() {
+        
+        double rotAdd = 0;
+        switch(activeSkillActivators.size()) {
+
+            case 2: 
+                rotAdd = 0;
+                break;
+            case 1: case 3:
+                rotAdd = 0.5 * Math.PI;
+                break;
+            default:
+                
+                rotAdd = Math.PI*0.5;
+                
+        }
         for (int i = 0; i < activeSkillActivators.size(); i++) {
             ActiveSkillActivator currentActiveSkill = activeSkillActivators.get(i);
 
-            double addX = MapCell.CELL_SIZE * 0.4 * Math.cos(2 * Math.PI * ((double) i / (double) activeSkillActivators.size()));
-            double addY = MapCell.CELL_SIZE * 0.4 * Math.sin(2 * Math.PI * ((double) i / (double) activeSkillActivators.size()));
+            double addX = MapCell.CELL_SIZE * 0.4 * Math.cos(rotAdd + 2 * Math.PI * ((double) i / (double) activeSkillActivators.size()));
+            double addY = MapCell.CELL_SIZE * 0.4 * Math.sin(rotAdd + 2 * Math.PI * ((double) i / (double) activeSkillActivators.size()));
 
             currentActiveSkill.relocateCenter(((xIndex + 0.5) * MapCell.CELL_SIZE) + addX, ((yIndex + 0.5) * MapCell.CELL_SIZE) + addY);
         }

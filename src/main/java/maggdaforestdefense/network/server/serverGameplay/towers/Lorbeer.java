@@ -325,9 +325,9 @@ public class Lorbeer extends Tower{
         
         private final void setUpRandomizer() {
             randomizer = new Randomizer();
-            randomizer.addEvent(new RandomEvent(1, 3));
-            randomizer.addEvent(new RandomEvent(2, 3));
-            randomizer.addEvent(new RandomEvent(3, 3));
+            randomizer.addEvent(new RandomEvent(1, 4));
+            randomizer.addEvent(new RandomEvent(2, 4));
+            randomizer.addEvent(new RandomEvent(3, 4));
             randomizer.addEvent(new RandomEvent(4, 2));
             randomizer.addEvent(new RandomEvent(5, 1));
         }
@@ -359,21 +359,21 @@ public class Lorbeer extends Tower{
                 
                 switch(difficulty) {
                     case 1:
-                        totalGold = 100;
+                        totalGold = 50;
                         break;
                     case 2:
-                        totalGold = 200;
+                        totalGold = 100;
                         break;
                     case 3:
-                        totalGold = 300;
+                        totalGold = 200;
                         break;
                     case 4:
                         totalGold = 500;
-                        bonusFact = 2;
+                        bonusFact = 1.5;
                         break;
                     case 5:
                         totalGold = 1000;
-                        bonusFact = 3;
+                        bonusFact = 2;
                         break;
                     default: 
                         totalGold = 100;

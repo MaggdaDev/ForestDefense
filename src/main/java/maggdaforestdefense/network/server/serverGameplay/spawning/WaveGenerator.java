@@ -37,6 +37,9 @@ public class WaveGenerator {
         while(totStrength > 0) {
             int randIndex = (int)(Math.random() * mobs.length);
             int amount = (int)(totStrength/strengths[randIndex]);
+            if(amount > 5) {
+                amount = 5;
+            }
             for(int i = 0; i < amount; i++) {
                 spawnables.add(new Spawnable(mobs[randIndex], 2/(0.3 * round * amount)));
             }

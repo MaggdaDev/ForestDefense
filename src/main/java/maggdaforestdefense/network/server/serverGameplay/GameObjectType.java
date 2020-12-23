@@ -5,24 +5,40 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import javafx.scene.image.Image;
+import maggdaforestdefense.storage.GameImage;
+
 /**
  *
  * @author DavidPrivat
  */
 public enum GameObjectType {
     //MOBS
-    M_SCHWIMMKAEFER,
-    M_WASSERLAEUFER,
-    M_HIRSCHKAEFER,
-    M_BORKENKAEFER,
-    M_WANDERLAUFER,
-    M_BLATTLAUS,
+    M_SCHWIMMKAEFER(GameImage.MOB_BLATTLAUS_1),
+    M_WASSERLAEUFER(GameImage.MOB_BLATTLAUS_1),
+    M_HIRSCHKAEFER(GameImage.MOB_HIRSCHKAEFER_1),
+    M_BORKENKAEFER(GameImage.MOB_BLATTLAUS_1),
+    M_WANDERLAUFER(GameImage.MOB_LAUFKAEFER_1),
+    M_BLATTLAUS(GameImage.MOB_BLATTLAUS_1),
     
     //TOWERS
-    T_SPRUCE,
-    T_MAPLE,
-    T_LORBEER,
+    T_SPRUCE(GameImage.TOWER_SPRUCE_1),
+    T_MAPLE(GameImage.TOWER_MAPLE_1),
+    T_LORBEER(GameImage.TOWER_LORBEER_1),
     //PROJECTILES
-    P_SPRUCE_SHOT,
-    P_MAPLE_SHOT;
+    P_SPRUCE_SHOT(GameImage.PROJECTILE_SPRUCE_SHOT),
+    P_MAPLE_SHOT(GameImage.PROJECTILE_MAPLE_SHOT);
+    
+    private final GameImage gameImage;
+    GameObjectType(GameImage gameImage) {
+        this.gameImage = gameImage;
+    }
+    
+    public Image getImage() {
+        return gameImage.getImage();
+    }
+    
+    public GameImage getGameImage() {
+        return gameImage;
+    }
 }

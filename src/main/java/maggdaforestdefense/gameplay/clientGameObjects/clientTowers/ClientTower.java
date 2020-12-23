@@ -33,6 +33,7 @@ import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.network.client.NetworkManager;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower.RangeType;
 import maggdaforestdefense.util.Handler;
 import maggdaforestdefense.util.NodeSizer;
@@ -65,6 +66,8 @@ public abstract class ClientTower extends ClientGameObject {
     protected EssenceButton essenceButton;
 
     protected Vector<ActiveSkillActivator> activeSkillActivators;
+    
+
 
     public ClientTower(int id, GameImage image, GameObjectType type, UpgradeSet upgrades, int xIndex, int yIndex, double range, double health, double growingTime, RangeType rangeType) {
         super(id, image, type, xIndex * MapCell.CELL_SIZE, yIndex * MapCell.CELL_SIZE);
@@ -78,6 +81,7 @@ public abstract class ClientTower extends ClientGameObject {
         this.range = range;
         this.growingTime = growingTime;
         this.rangeType = rangeType;
+
 
         setPreserveRatio(true);
         setFitHeight(100);
@@ -257,6 +261,14 @@ public abstract class ClientTower extends ClientGameObject {
     
     public double getCenterY() {
         return (0.5d + yIndex) * MapCell.CELL_SIZE;
+    }
+
+    public void clearLorbeerTrading() {
+        upgradeMenu.clearLorbeerTrading();
+    }
+
+    public void addLorbeerTrade(Upgrade upgrade) {
+        upgradeMenu.addLorbeerTrade(upgrade);
     }
 
 }

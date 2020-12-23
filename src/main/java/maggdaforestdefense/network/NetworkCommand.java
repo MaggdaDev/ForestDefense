@@ -106,6 +106,7 @@ public class NetworkCommand {
         READY_FOR_NEXT_ROUND, // NO ARGS
         REQUEST_ESSENCE_TOWER, //id
         PERFORM_ACTIVESKILL_TS,    // towerId, activeSkill (ordinal)
+        USE_LORBEER_TRADE,          // towerId, upgradeOrdinal
 
         
         

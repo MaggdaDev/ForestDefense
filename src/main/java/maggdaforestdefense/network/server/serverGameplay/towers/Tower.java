@@ -101,19 +101,7 @@ public abstract class Tower extends GameObject {
         
         // Animation
         GameImage lastImage;
-        switch(gameObjectType) {
-            case T_SPRUCE:
-                lastImage = GameImage.TOWER_SPRUCE_1;
-                break;
-            case T_MAPLE:
-                lastImage = GameImage.TOWER_MAPLE_1;
-                break;
-            case T_LORBEER:
-                lastImage = GameImage.TOWER_LORBEER_1;
-                break;
-            default:
-                throw new UnsupportedOperationException();
-        }
+        lastImage = gameObjectType.getGameImage();
         growingAnimation = new GameAnimation(growTime, new GameImage[]{GameImage.TOWERGROWING_ANIMATION_1, GameImage.TOWERGROWING_ANIMATION_2, GameImage.TOWERGROWING_ANIMATION_3, GameImage.TOWERGROWING_ANIMATION_4, GameImage.TOWERGROWING_ANIMATION_5, GameImage.TOWERGROWING_ANIMATION_6, GameImage.TOWERGROWING_ANIMATION_7, GameImage.TOWERGROWING_ANIMATION_8, lastImage});
 
     }

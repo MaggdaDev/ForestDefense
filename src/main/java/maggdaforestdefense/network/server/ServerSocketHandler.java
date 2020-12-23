@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 
 /**
  *
@@ -173,6 +174,10 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             case PERFORM_ACTIVESKILL_TS:
                 game.performActiveSkill(command.getArgument("id"), ActiveSkill.values()[(int)command.getNumArgument("skill")]);
                 
+                break;
+                
+            case USE_LORBEER_TRADE:
+                game.useLorbeerTrade(command.getArgument("id"), Upgrade.values()[(int)command.getNumArgument("upgrade")]);
                 break;
         }
 

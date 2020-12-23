@@ -62,6 +62,8 @@ public class ServerGame extends Thread {
     private HashMap<String, Mob> mobsList;
 
     private Vector<NetworkCommand> commandsToSend;
+    
+    private boolean hasRemovedTrade = false;
 
     public ServerGame(Player firstPlayer, String name) {
         this.name = name;
@@ -355,6 +357,25 @@ public class ServerGame extends Thread {
         notifyTowerChanges();
 
     }
+    
+    public void useLorbeerTrade(String id, Upgrade upgrade) {
+        Tower tower = (Tower) gameObjects.get(id);
+        tower.addUpgrade(upgrade);
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{
+            new CommandArgument("id", id), 
+            new CommandArgument("tier", tower.getUpgradeSet().getTier(upgrade)), 
+            new CommandArgument("type", tower.getUpgradeSet().getType(upgrade))}));
+        hasRemovedTrade = false;
+        gameObjects.forEach((String key, GameObject gameObject)->{
+            if((!hasRemovedTrade) && gameObject instanceof Lorbeer) {
+                Lorbeer currentLorbeer = (Lorbeer) gameObject;
+                if(currentLorbeer.removeTradeUpgrade(upgrade)) {
+                    hasRemovedTrade = true;
+                }
+            }
+        });
+        notifyTowerChanges();
+    }
 
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
@@ -379,6 +400,8 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+    
 
    
 

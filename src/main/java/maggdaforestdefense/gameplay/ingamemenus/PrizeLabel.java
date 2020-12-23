@@ -43,6 +43,10 @@ public class PrizeLabel extends HBox{
         
     }
     
+    public void setPrize(int prize) {
+        prizeLabel.setText(String.valueOf(prize));
+    }
+    
     public void setBuyable(boolean b) {
         if(b) {
            prizeLabel.setTextFill(Color.BLACK);

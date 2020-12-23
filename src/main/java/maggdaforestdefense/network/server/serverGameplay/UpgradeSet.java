@@ -73,6 +73,32 @@ public enum UpgradeSet {
     UpgradeSet(Upgrade[][] array) {
         upgrades = array;
     }
+    
+    public int getTier(Upgrade upgrade) {
+        for(int i = 0; i < upgrades.length; i++) {
+            Upgrade[] currUpgrades = upgrades[i];
+            for(int j = 0; j < currUpgrades.length; j++) {
+                Upgrade currUpgrade = currUpgrades[j];
+                if(currUpgrade == upgrade) {
+                    return i+1;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    public int getType(Upgrade upgrade) {
+        for(int i = 0; i < upgrades.length; i++) {
+            Upgrade[] currUpgrades = upgrades[i];
+            for(int j = 0; j < currUpgrades.length; j++) {
+                Upgrade currUpgrade = currUpgrades[j];
+                if(currUpgrade == upgrade) {
+                    return j+1;
+                }
+            }
+        }
+        return -1;
+    }
 
     public Upgrade getUpgrade(int tier, int type) {
         return upgrades[tier - 1][type - 1];

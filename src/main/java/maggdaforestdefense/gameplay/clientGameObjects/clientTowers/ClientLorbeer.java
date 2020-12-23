@@ -5,14 +5,23 @@
  */
 package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
+import com.google.gson.Gson;
 import java.util.Vector;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import maggdaforestdefense.gameplay.Game;
 import maggdaforestdefense.gameplay.InformationBubble;
 import maggdaforestdefense.gameplay.InformationPopup;
@@ -36,6 +45,7 @@ import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.gameplay.ingamemenus.ContentBox;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer.HeadHuntGenerator.Mission;
+import maggdaforestdefense.gameplay.playerinput.*;
 
 /**
  *
@@ -56,11 +66,15 @@ public class ClientLorbeer extends ClientTower{
     private HeadHunt headHunt, oldHeadHunt;
     private HeadHuntBox headHuntBox;
     
+    private TradeBox tradeBox;
+    
     private HBox goldLorbeerHBox;
+    
+    private Vector<Upgrade> tradeUpgrades;
     
     public ClientLorbeer(int id, int xIndex, int yIndex, double health) {
         super(id, GameImage.TOWER_LORBEER_1, GameObjectType.T_LORBEER, UpgradeSet.LORBEER_SET, xIndex, yIndex, Lorbeer.DEFAULT_RANGE, Lorbeer.DEFAULT_HEALTH, Lorbeer.DEFAULT_GROWING_TIME, RANGE_TYPE);
-        
+        tradeUpgrades = new Vector<>();
         lorbeerDisplay = new RessourceDisplay.LorbeerDisplay(GameImage.LORBEER_ICON, lorbeerAmount, maxLorbeerAmount);
         potentialGoldDisplay = new RessourceDisplay(GameImage.COIN_ICON, 0);
         
@@ -98,6 +112,9 @@ public class ClientLorbeer extends ClientTower{
         onRemove.add(()->{
             Game.removeGamePlayNode(fullPopup);
             Game.removeGamePlayNode(headHuntFinishedPopup);
+            if(tradeUpgrades.size() != 0) {
+                Game.getInstance().removeAllLorbeerTradingUpgrades(tradeUpgrades);
+            }
         });
 
     }
@@ -192,6 +209,7 @@ public class ClientLorbeer extends ClientTower{
             headHuntBox.update(headHunt);
             
         } 
+        
         if(headHunt != null) {
             boolean headHuntFinished = headHunt.isFinished();
             sellActivator.setUsable(headHuntFinished);
@@ -204,9 +222,28 @@ public class ClientLorbeer extends ClientTower{
             oldHeadHunt = headHunt;
         }
         
+        // tauschhandel
+        if(updateCommand.containsArgument("tauschhandelAdd")) {
+            Upgrade upgrade = Upgrade.values()[(int)updateCommand.getNumArgument("tauschhandelAdd")];
+            tradeBox.addTrade(upgrade);
+            Game.getInstance().addLorbeerTradingUpgrade(upgrade);
+            tradeUpgrades.add(upgrade);
+        }
+        if(updateCommand.containsArgument("tauschhandelRemove")) {
+            Upgrade upgrade = Upgrade.values()[(int)updateCommand.getNumArgument("tauschhandelRemove")];
+            tradeBox.removeTrade(upgrade);
+            tradeUpgrades.remove(upgrade);
+            Game.getInstance().removeLorbeerTradingUpgrade(upgrade);
+        }
+      
         
         
-            super.range = updateCommand.getNumArgument("range");
+        double newRange = updateCommand.getNumArgument("range");
+            
+            if(newRange != super.range && SelectionClickedSquare.getInstance().isIndexClicked(xIndex, yIndex)) {
+                super.range = newRange;
+                PlayerInputHandler.getInstance().showRange(mapCell);
+            }
     }
     
     @Override
@@ -221,6 +258,8 @@ public class ClientLorbeer extends ClientTower{
         }
         if(UpgradeSet.LORBEER_SET.getUpgrade(tier, type) == Upgrade.LORBEER_3_4) {
             addActiveSkill(tradeActivator);
+            tradeBox = new TradeBox();
+            upgradeMenu.getTreePane().getChildren().add(tradeBox);
         }
         upgradeMenu.buyUpgrade(tier, type);
     }
@@ -242,6 +281,93 @@ public class ClientLorbeer extends ClientTower{
     public void onMatured() {
         addActiveSkill(attackActivator);
         addActiveSkill(sellActivator);
+    }
+    
+    private class TradeBox extends ContentBox {
+        
+        private Group tradeGroup;
+        private Vector<Trade> trades;
+        private Label label;
+        
+        public TradeBox() {
+            tradeGroup= new Group();
+            
+            trades = new Vector<>();
+            
+            
+            setAlignment(Pos.CENTER);
+            
+            label = new Label("Tauschhandel:");
+            label.setTooltip(new Tooltip("Folgende Upgrades können einmalig umsonst erworben werden:"));
+            getChildren().addAll(label, tradeGroup);
+            setFillWidth(false);
+            
+        }
+        
+
+        
+        public void addTrade(Upgrade upgrade) {
+            Trade trade = new Trade(upgrade);
+            trades.add(trade);
+            tradeGroup.getChildren().add(trade);
+            relayoutTrades();
+        }
+        
+        public void removeTrade(Upgrade upgrade) {
+            for(Trade trade: trades) {
+                if(trade.getUpgrade() == upgrade) {
+                    trades.remove(trade);
+                    if(tradeGroup.getChildren().contains(trade)) {
+                        tradeGroup.getChildren().remove(trade);
+                        break;
+                    }
+                }
+                
+            }
+            relayoutTrades();
+        }
+        
+        private void relayoutTrades() {
+            for(int i = 0; i < trades.size(); i++) {
+                trades.get(i).setLayoutX(((upgradeMenu.getTreePane().getWidth()-4*Trade.width)) * (i+1) / (1+trades.size()));
+            }
+        }
+        
+        
+        private class Trade extends VBox {
+            public final static double width = 40;
+            private ImageView upgradeIcon, treeIcon;
+            private final Upgrade upgrade;
+            
+            public Trade(Upgrade upgrade) {
+                this.upgrade = upgrade;
+                upgradeIcon = new ImageView(upgrade.getIcon());
+                treeIcon = new ImageView(upgrade.getOwnerType().getImage());
+                
+                upgradeIcon.setPreserveRatio(true);
+                upgradeIcon.setFitWidth(width);
+                
+                treeIcon.setPreserveRatio(true);
+                treeIcon.setFitWidth(width);
+                
+                Tooltip description = new Tooltip(upgrade.getDescription());
+                Tooltip.install(upgradeIcon, description);
+                
+          
+                
+                getChildren().addAll(upgradeIcon, treeIcon);
+                setSpacing(2);
+                setAlignment(Pos.CENTER);
+                setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.NONE, new CornerRadii(2), new BorderWidths(1))));
+                
+                
+            }
+            
+            public Upgrade getUpgrade() {
+                return upgrade;
+            }
+            
+        }
     }
     
     private static class HeadHuntBox extends ContentBox {

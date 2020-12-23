@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
@@ -35,7 +36,7 @@ import maggdaforestdefense.util.RandomEvent;
  * @author DavidPrivat
  */
 public class Lorbeer extends Tower{
-    public static final int DEFAULT_PRIZE = 1;
+    public static final int DEFAULT_PRIZE = 500;
     public final static double DEFAULT_HEALTH = 20, DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 2;
     public final static double DEFAULT_GROWING_TIME = 2;
@@ -82,9 +83,10 @@ public class Lorbeer extends Tower{
     private HeadHuntGenerator headHuntGenerator;
     private HeadHuntGenerator.HeadHunt headHunt;
     
-    private boolean isTauschhandel = false, tauschhandelUpgradesUpdates = false;
+    private boolean isTauschhandel = false;
     private Vector<Upgrade> tauschhandelUpgrades;
-    private double tauschhandelPow = 1;
+    private ConcurrentLinkedQueue<Upgrade> tradeUpgradesAdd, tradeUpgradesRemove;
+    private double tauschhandelPow = 0.5d;
     
     
     
@@ -107,7 +109,9 @@ public class Lorbeer extends Tower{
         
         headHuntGenerator = new HeadHuntGenerator();
         tauschhandelUpgrades = new Vector<>();
-        updateCommandArgs = new Vector<>();
+        tradeUpgradesAdd = new ConcurrentLinkedQueue<>();
+        tradeUpgradesRemove = new ConcurrentLinkedQueue<>();
+        updateCommandArgs = new Vector<CommandArgument>();
     }
 
     @Override
@@ -121,14 +125,14 @@ public class Lorbeer extends Tower{
             case LORBEER_1_2:   // ERTRAGREICH
                 goldPerLorbeerUpgradeMult = (1.5 * goldPerLorbeer);
                 goldPerLorbeer = (int)(DEFAULT_GOLD_PER_LORBEER * goldPerLorbeerUpgradeMult);
-                tauschhandelPow -= 0.25;
+                tauschhandelPow -= 0.1;
                 break;
             case LORBEER_1_3:   // EFFIZIENTNE ERNTE
                 attackCooldown /= 1.5;
                 break;
             case LORBEER_1_4:   // SPEICHER
                 maxLorbeerAmount *= 1.5;
-                tauschhandelPow -= 0.5;
+                tauschhandelPow -= 0.2;
                 break;
                 
             case LORBEER_2_1:   // EXECUTIVE
@@ -139,7 +143,7 @@ public class Lorbeer extends Tower{
                 break;
             case LORBEER_2_3:   // MASSENPRODUKTION
                 isMassenproduktion = true;
-                tauschhandelPow -= 0.5;
+                tauschhandelPow -= 0.2;
                 break;
             case LORBEER_2_4:   // WIEDERVERWERTUNG
                 isWiederverwertung = true;
@@ -222,8 +226,8 @@ public class Lorbeer extends Tower{
         updateCommandArgs.add(new CommandArgument("range", range));
         updateCommandArgs.add(new CommandArgument("attackCooldown", attackCooldown - attackTimer));
 
-        if(isTauschhandel && tauschhandelUpgradesUpdates) {
-            updateCommandArgs.add(new CommandArgument("tauschhandel", new Gson().toJson(tauschhandelUpgrades)));
+        if(isTauschhandel) {
+            updateTauschhandel();
         }
         
         if(isKopfgeld) {
@@ -234,7 +238,11 @@ public class Lorbeer extends Tower{
             updateCommandArgs.add(new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount));
             updateCommandArgs.add(new CommandArgument("coinsPerLorbeer", goldPerLorbeer));
         }
-        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, (CommandArgument[])updateCommandArgs.toArray());
+        CommandArgument[] args = new CommandArgument[updateCommandArgs.size()];
+        for(int i = 0; i < updateCommandArgs.size(); i++) {
+            args[i] = updateCommandArgs.get(i);
+        }
+        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, args);
     }
     
     @Override
@@ -315,8 +323,35 @@ public class Lorbeer extends Tower{
     private void trade() {
         if(lorbeerAmount >= maxLorbeerAmount) {
             lorbeerAmount = 0;
-            tauschhandelUpgrades.add(generateTauschhandelUpgrade());
-            tauschhandelUpgradesUpdates = true;
+            addTradeUpgrade(generateTauschhandelUpgrade());
+        }
+    }
+    
+    public void addTradeUpgrade(Upgrade upgrade) {
+        tradeUpgradesAdd.add(upgrade);
+    }
+    
+    public boolean removeTradeUpgrade(Upgrade upgrade) {
+        if(tauschhandelUpgrades.contains(upgrade)) {
+        tradeUpgradesRemove.add(upgrade);
+        return true;
+        } else {
+            return false;
+        }
+    }
+    
+    private void updateTauschhandel() {
+        if(tradeUpgradesAdd.size() != 0) {
+            Upgrade add = tradeUpgradesAdd.poll();
+            updateCommandArgs.add(new CommandArgument("tauschhandelAdd", add.ordinal()));
+            tauschhandelUpgrades.add(add);
+        }
+        if(tradeUpgradesRemove.size() != 0) {
+            Upgrade remove = tradeUpgradesRemove.poll();
+            if(tauschhandelUpgrades.contains(remove)) {
+                updateCommandArgs.add(new CommandArgument("tauschhandelRemove", remove.ordinal()));
+                tauschhandelUpgrades.remove(remove);
+            }
         }
     }
     
@@ -325,7 +360,7 @@ public class Lorbeer extends Tower{
         Randomizer rand = new Randomizer();
         
         for(Upgrade upgrade: Upgrade.values()) {
-            rand.addEvent(new RandomEvent(upgrade.ordinal(), Math.pow((double)upgrade.getPrize(), tauschhandelPow)));
+            rand.addEvent(new RandomEvent(upgrade.ordinal(), Math.pow((double)upgrade.getPrize(), -tauschhandelPow)));
         }
         
         return Upgrade.values()[rand.throwDice()];

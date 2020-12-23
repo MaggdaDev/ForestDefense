@@ -40,6 +40,8 @@ public class BuyUpgradeButton extends StackPane {
     private PrizeLabel prizeLabel;
     private final int tier, type;
     private boolean bought, locked, tierBought;
+    
+    private boolean isLorbeerTrade = false;
 
     public BuyUpgradeButton(ClientTower owner, Upgrade upgrade, boolean locked, int tier, int type) {
         
@@ -116,6 +118,15 @@ public class BuyUpgradeButton extends StackPane {
         setOnMouseClicked((MouseEvent e)->{
             tower.getUpgradeMenu().getSelectedUpgradeBox().setUpgrade(this, isBuyable());
         });
+        
+        
+        // Lorbeertrades
+        setLorbeerTrade(false);
+        Game.getInstance().getLorbeerTrades().forEach((Upgrade currUpgr)->{
+            if(currUpgr == this.upgrade) {
+                setLorbeerTrade(true);
+            }
+        });
 
     }
     
@@ -156,10 +167,16 @@ public class BuyUpgradeButton extends StackPane {
     }
     
     public void sendBuyOrder() {
+        if(isLorbeerTrade) {
+            NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.USE_LORBEER_TRADE, new CommandArgument[]{
+            new CommandArgument("id", tower.getGameObjectId()), 
+            new CommandArgument("upgrade", upgrade.ordinal())}));
+        } else {
         NetworkManager.getInstance().sendCommand(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUTTON_CLICKED, new CommandArgument[]{
             new CommandArgument("id", tower.getGameObjectId()), 
             new CommandArgument("tier", tier), 
             new CommandArgument("type", type)}));
+        }
     }
     
     public CLICK_STATES getClickState() {
@@ -211,6 +228,16 @@ public class BuyUpgradeButton extends StackPane {
             default:
                 prizeLabel.setBuyable(true);
                 break;
+        }
+    }
+
+    public void setLorbeerTrade(boolean b) {
+        isLorbeerTrade = b;
+        if(isLorbeerTrade) {
+            prizeLabel.setPrize(0);
+
+        } else {
+            prizeLabel.setPrize((int)upgrade.getPrize());
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.gameplay.ingamemenus;
 
+import java.util.Vector;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -53,9 +54,12 @@ public class UpgradeMenu extends VBox{
     
     private SelectedUpgradeBox selectedUpgradeBox;
     
+    private Vector<Upgrade> lorbeerTradingUpgrades;
+    
     public UpgradeMenu(ClientTower owner) {
         ownerTower = owner;
         gameObjectType = ownerTower.getType();
+        lorbeerTradingUpgrades = new Vector<>();
         
         treeView = new ImageView();
         treeView.setFitWidth(TREE_VIEW_WIDTH);
@@ -249,6 +253,25 @@ public class UpgradeMenu extends VBox{
     public void setTreeImage(Image image) {
         treeView.setImage(image);
     }
+
+    public void clearLorbeerTrading() {
+        lorbeerTradingUpgrades.forEach((Upgrade upgrade)->{
+            boxes.get(upgradeSet.getTier(upgrade) - 1).getUpgradeButton(upgradeSet.getType(upgrade) - 1).setLorbeerTrade(false);
+        });
+        lorbeerTradingUpgrades.clear();
+    }
+
+    public void addLorbeerTrade(Upgrade upgrade) {
+        boxes.get(upgradeSet.getTier(upgrade) - 1).getUpgradeButton(upgradeSet.getType(upgrade) - 1).setLorbeerTrade(true);
+        lorbeerTradingUpgrades.add(upgrade);
+    }
+    
+    public void removeLorbeerTrade(Upgrade upgrade) {
+        boxes.get(upgradeSet.getTier(upgrade) - 1).getUpgradeButton(upgradeSet.getType(upgrade) - 1).setLorbeerTrade(false);
+        if(lorbeerTradingUpgrades.contains(upgrade)) {
+        lorbeerTradingUpgrades.remove(upgrade);
+        }
+    }
     
     public class UpgradeButtonTierBox extends FlowPane {
         public final static double GAP = 20;
@@ -282,6 +305,10 @@ public class UpgradeMenu extends VBox{
             buttons.forEach((BuyUpgradeButton button)->{
                button.updateCoins(coins); 
             });
+        }
+        
+        public BuyUpgradeButton getUpgradeButton(int type) {
+            return buttons.get(type);
         }
     }
     

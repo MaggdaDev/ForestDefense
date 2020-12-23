@@ -26,6 +26,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.sound.SoundEngine;
 import maggdaforestdefense.storage.Logger;
@@ -49,6 +50,8 @@ public class Game {
 
     private int essence = 0, coins = 0, maxEssence = 0;
     
+    private Vector<Upgrade> lorbeerTradingUpgrades;
+    
 
     private Game(String gameName) {
         instance = this;
@@ -57,6 +60,7 @@ public class Game {
         gameLoop = new GameLoop();
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
+        lorbeerTradingUpgrades = new Vector<>();
         
         
 
@@ -220,6 +224,43 @@ public class Game {
             gameScreen.updateReadyCheck(command.getNumArgument("progress"));
         });
     }
+    
+    public void addLorbeerTradingUpgrade(Upgrade upgrade) {
+        lorbeerTradingUpgrades.add(upgrade);
+        refreshLorbeerTrading();
+    } 
+    
+    public void removeLorbeerTradingUpgrade(Upgrade upgrade) {
+        if(lorbeerTradingUpgrades.contains(upgrade)) {
+            lorbeerTradingUpgrades.remove(upgrade);
+        }
+        refreshLorbeerTrading();
+    }
+    
+    public void removeAllLorbeerTradingUpgrades(Vector<Upgrade> tradeUpgrades) {
+        lorbeerTradingUpgrades.removeAll(tradeUpgrades);
+        refreshLorbeerTrading();
+    }
+    
+    public void clearLorbeerTradingUpgrades() {
+        
+        lorbeerTradingUpgrades.clear();
+        refreshLorbeerTrading();
+    }
+    
+    public void refreshLorbeerTrading() {
+        gameObjects.forEach((String id, ClientGameObject gameObject)->{
+            if(gameObject instanceof ClientTower) {
+                ClientTower tower = (ClientTower) gameObject;
+                tower.clearLorbeerTrading();
+                lorbeerTradingUpgrades.forEach((Upgrade upgrade)->{
+                    if(upgrade.getOwnerType() == tower.getType()) {
+                        tower.addLorbeerTrade(upgrade);
+                    }
+                });
+            }
+        });
+    }
 
     public GameLoop getGameLoop() {
         return gameLoop;
@@ -232,6 +273,12 @@ public class Game {
     public static void removeGamePlayNode(Node node) {
         instance.getGameScreen().safeRemoveGameplayNode(node);
     }
+
+    public Vector<Upgrade> getLorbeerTrades() {
+        return lorbeerTradingUpgrades;
+    }
+
+    
 
     
 

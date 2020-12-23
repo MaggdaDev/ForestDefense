@@ -36,7 +36,7 @@ public abstract class GameObject {
 
     protected final int id;
     protected final GameObjectType gameObjectType;
-    private static GameObjectType[] mobs;
+    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER};
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;
@@ -58,7 +58,7 @@ public abstract class GameObject {
         mobs = arr;
         }
         */
-        mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS};//, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER};
+ 
     }
 
     public abstract CommandArgument[] toNetworkCommandArgs();

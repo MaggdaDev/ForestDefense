@@ -29,7 +29,7 @@ import maggdaforestdefense.util.Randomizer;
 public class Spruce extends Tower {
 
     public final static double DEFAULT_RANGE = 2;              //map cells
-    public final static double DEFAULT_SHOOT_TIME = 1;        //per sec
+    public final static double DEFAULT_SHOOT_TIME = 0.75;        //per sec
     public final static int DEFAULT_PRIZE = 100;
     public final static double HEALTH = 100;
     public final static double DEFAULT_REGEN = 0;
@@ -42,7 +42,7 @@ public class Spruce extends Tower {
     double shootTimer = 0, shootTime = DEFAULT_SHOOT_TIME;
 
     // UPGRADE CONSTANTS
-    public final static double FICHTEN_WUT_MULTIPLIER = 0.97;
+    public final static double FICHTEN_WUT_MULTIPLIER = 0.99;
     public final static double NADEL_STAERKUNG_MULT = 3;
     public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.5;
     public final static double UPGRADE_LIFE_STEAL = 0.5;
@@ -207,7 +207,7 @@ public class Spruce extends Tower {
             case SPRUCE_3_2:        //rasende fichte
                 onKill.add((o) -> {
                     rasendeFichteKillCounter++;
-                    rasendeFichteMultiplier = Math.sqrt(0.1 * (int) rasendeFichteKillCounter + 1.0d);
+                    rasendeFichteMultiplier = Math.sqrt(0.01 * (int) rasendeFichteKillCounter + 1.0d);
                 });
                 break;
             case SPRUCE_3_4:        // fichtenforschung

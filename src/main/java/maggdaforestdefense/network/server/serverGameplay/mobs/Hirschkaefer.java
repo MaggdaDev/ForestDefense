@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay.mobs;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
+import maggdaforestdefense.network.server.serverGameplay.Map;
 
 /**
  *
@@ -17,9 +18,9 @@ public class Hirschkaefer extends Bug{
     
    
 
-    public final static double HP = 100, SPEED = 80, DAMAGE = 25, ATTACK_TIME = 2, ARMOR = 20;
-    public final static int TOWER_VISION_RANGE = 3;
-    public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 5, SAND_DISTANCE_WEIGHT = 2, STONE_DISTANCE_WEIGHT = 5;
+    public final static double HP = 500, SPEED = 25, DAMAGE = 25, ATTACK_TIME = 2, ARMOR = 5;
+    public final static int TOWER_VISION_RANGE = Map.MAP_SIZE;
+    public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 2, SAND_DISTANCE_WEIGHT = 1, STONE_DISTANCE_WEIGHT = 5;
     public final static Mob.MovementType MOVEMENT_TYPE = Mob.MovementType.WALK;
 
     public final static MapDistanceSet MAP_DISTANCES = new MapDistanceSet(WATER_DISTANCE_WEIGHT, SAND_DISTANCE_WEIGHT, DIRT_DISTANCE_WEIGHT, STONE_DISTANCE_WEIGHT);

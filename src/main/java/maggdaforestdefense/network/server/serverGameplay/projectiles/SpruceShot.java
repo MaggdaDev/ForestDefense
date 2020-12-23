@@ -213,8 +213,8 @@ public class SpruceShot extends ConstantFlightProjectile {
         newVec2X = newVec2X * totSpd / tot2;
         newVec2Y = newVec2Y * totSpd / tot2;
 
-        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec1X, newVec1Y, owner, pierce + 1, mobsDamaged, canAttackSet));
-        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec2X, newVec2Y, owner, pierce + 1, mobsDamaged, canAttackSet));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec1X, newVec1Y, owner, pierce, mobsDamaged, canAttackSet));
+        serverGame.addProjectile(new SpruceShot(serverGame.getNextId(), serverGame, xPos, yPos, newVec2X, newVec2Y, owner, pierce, mobsDamaged, canAttackSet));
 
         pierce = 0;
     }

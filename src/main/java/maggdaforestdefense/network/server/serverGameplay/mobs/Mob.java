@@ -297,15 +297,15 @@ public abstract class Mob extends GameObject {
     public static int getCoinValue(GameObjectType type) {
         switch(type) {
             case M_BLATTLAUS:
-                return 50;
+                return 20;
             case M_BORKENKAEFER:
                 return 100;
             case M_HIRSCHKAEFER:
-                return 20;
+                return 200;
             case M_SCHWIMMKAEFER:
                 return 20;
             case M_WANDERLAUFER:
-                return 20;
+                return 40;
             case M_WASSERLAEUFER:
                 return 40;
             default:

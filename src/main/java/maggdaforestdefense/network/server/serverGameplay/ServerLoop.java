@@ -15,6 +15,7 @@ import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.spawning.MobWave;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
+import maggdaforestdefense.network.server.serverGameplay.spawning.WaveGenerator;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.storage.MobWavesLoader;
 import maggdaforestdefense.util.FPSLimiter;
@@ -37,7 +38,7 @@ public class ServerLoop {
 
     private int livingMobs = 0, mobsToSpawn = 0;
     private boolean nextWave = false;
-    private Vector<MobWave> mobWaves;
+    private WaveGenerator waveGenerator;
     private int currentWaveIndex = 0;
     private MobWave currentWave;
 
@@ -50,7 +51,7 @@ public class ServerLoop {
         players = playerList;
         serverGame = game;
 
-        mobWaves = MobWavesLoader.loadMobWaves();
+        waveGenerator = new WaveGenerator();
         fpsLimiter = new FPSLimiter();
     }
 
@@ -66,7 +67,7 @@ public class ServerLoop {
 
         while (running) {
             
-            currentWave = mobWaves.get(currentWaveIndex);
+            currentWave = waveGenerator.generateWave(currentWaveIndex);
             mobsToSpawn = currentWave.getMobAmount();
 
             setAllPlayersNotReady();

@@ -37,7 +37,7 @@ public class Maple extends Tower {
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
     public final static RangeType RANGE_TYPE = RangeType.CIRCLE;
 
-    private double shootTime = 2, shootTimer = 0;
+    private double shootTime = 3, shootTimer = 0;
 
     // UPGRADE CONSTANTS
     public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 0.5;

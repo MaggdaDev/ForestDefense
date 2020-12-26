@@ -220,7 +220,10 @@ public abstract class ClientTower extends ClientGameObject {
             oldHealthPoints = h;
         }
         if(oldHealthPoints != h) {
-            Game.addGamePlayNode(new InformationBubble(String.valueOf((int)h - oldHealthPoints), InformationBubble.InformationType.TREE_HP, xPos, yPos));
+            int hpDiff = (int)(h - oldHealthPoints);
+            if(hpDiff != 0) {
+            Game.addGamePlayNode(new InformationBubble(String.valueOf(hpDiff), InformationBubble.InformationType.TREE_HP, xPos, yPos));
+            }
         }
         
         oldHealthPoints = h;

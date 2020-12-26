@@ -30,22 +30,21 @@ public abstract class ClientMob extends ClientGameObject {
 
     protected double shadowOffsetX = 5;
     protected double shadowOffsetY = 20;
-    
+
     protected Mob.MovementType movementType;
     protected double size;
-    
+
     private double oldHealth;
-    
+
     // Shadow offsets
     public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
     public final static double SHADOW_OFFSET_Y_DIG_MULT = 0;
-    
+
     public final static double SHADOW_OFFSET_X_WALK_MULT = 0.06;
     public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.18;
-    
+
     public final static double SHADOW_OFFSET_X_FLY_MULT = 0.18;
     public final static double SHADOW_OFFSET_Y_FLY_MULT = 0.54;
-    
 
     public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth, Mob.MovementType movement, double size) {
         super(id, image, type, x, y);
@@ -61,26 +60,25 @@ public abstract class ClientMob extends ClientGameObject {
         shadow.setColor(Color.BLACK);
         shadow.setBlurType(BlurType.GAUSSIAN);
         setEffect(shadow);
-        
+
         double fitWidth = getImage().getWidth();
         double fitHeight = getImage().getHeight();
         setPreserveRatio(true);
-        if(fitWidth > fitHeight) {
+        if (fitWidth > fitHeight) {
             setFitWidth(size);
             setFitHeight(fitHeight * (size / fitWidth));
         } else {
             setFitHeight(size);
             setFitWidth(fitWidth * (size / fitHeight));
         }
-        
-        
+
         setViewOrder(ViewOrder.MOB);
-        
+
         oldHealth = maxHealth;
     }
 
     protected void updateShadow() {
-        switch(movementType) {
+        switch (movementType) {
             case DIG:
                 shadowOffsetX = SHADOW_OFFSET_X_DIG_MULT * size;
                 shadowOffsetY = SHADOW_OFFSET_Y_DIG_MULT * size;
@@ -97,35 +95,39 @@ public abstract class ClientMob extends ClientGameObject {
                 setOpacity(1);
                 break;
         }
-        
+
         int direction = (int) ((getRotate() / 90) + 0.5);
         switch (direction) {
-            case 0: case 4:
+            case 0:
+            case 4:
                 shadow.setOffsetX(shadowOffsetX);
                 shadow.setOffsetY(shadowOffsetY);
                 break;
-            case 1: case -3:
+            case 1:
+            case -3:
                 shadow.setOffsetX(shadowOffsetY);
                 shadow.setOffsetY(-shadowOffsetX);
                 break;
-            case 2: case -2:
+            case 2:
+            case -2:
                 shadow.setOffsetX(-shadowOffsetX);
                 shadow.setOffsetY(-shadowOffsetY);
                 break;
-            case 3: case -1:
+            case 3:
+            case -1:
                 shadow.setOffsetX(-shadowOffsetY);
                 shadow.setOffsetY(shadowOffsetX);
                 break;
 
         }
     }
-    
-    protected void handleEffects (EffectSet set) {
-        if(set.isActive(EffectSet.EffectType.SENSITIVE)) {
+
+    protected void handleEffects(EffectSet set) {
+        if (set.isActive(EffectSet.EffectType.SENSITIVE)) {
             addColoredShadow(5, Color.YELLOW);
-        }else if(set.isActive(EffectSet.EffectType.GOLDED)) {
+        } else if (set.isActive(EffectSet.EffectType.GOLDED)) {
             addColoredShadow(8, Color.ORANGE);
-        } else{
+        } else {
             addColoredShadow(0, Color.TRANSPARENT);
         }
     }
@@ -133,12 +135,15 @@ public abstract class ClientMob extends ClientGameObject {
     protected void updateHealth(double h) {
 
         healthBar.update(xPos + (getFitWidth() * 0.5d), yPos, h);
-        if(oldHealth != h) {
-            Game.addGamePlayNode(new InformationBubble(String.valueOf((int)h - oldHealth), InformationBubble.InformationType.MOB_HP, xPos, yPos));
+        if (oldHealth != h) {
+            int hpDiff = (int) (h - oldHealth);
+            if (hpDiff != 0) {
+                Game.addGamePlayNode(new InformationBubble(String.valueOf(hpDiff), InformationBubble.InformationType.MOB_HP, xPos, yPos));
+            }
         }
-        
+
         oldHealth = h;
-        
+
     }
 
     public HealthBar getHealthBar() {

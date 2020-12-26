@@ -316,7 +316,8 @@ public class Lorbeer extends Tower{
     private void prestige() {
         if(lorbeerAmount >= maxLorbeerAmount) {
             lorbeerAmount = 0;
-            goldPerLorbeer += PRESTIGE_ADD;
+            double extraMult = maxLorbeerAmount / DEFAULT_MAX_LORBEERS;
+            goldPerLorbeer += PRESTIGE_ADD * extraMult;
         }
     }
     

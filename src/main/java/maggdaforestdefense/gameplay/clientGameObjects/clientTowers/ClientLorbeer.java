@@ -169,10 +169,10 @@ public class ClientLorbeer extends ClientTower{
                 if(oldCoinsPerLorbeer < coinsPerLorbeer) {
                     
                 } else {
-                    Game.addGamePlayNode(new InformationBubble("+" + ((oldLorbeerAmount - lorbeerAmount) * coinsPerLorbeer), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
+                    Game.addGamePlayNode(new InformationBubble("+" + (int)((goldLorbeerAmount - lorbeerAmount) * coinsPerLorbeer), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
                 }
             } else if(oldLorbeerAmount < lorbeerAmount) {
-                 Game.addGamePlayNode(new InformationBubble("+" + (lorbeerAmount - oldLorbeerAmount), InformationBubble.InformationType.LORBEER, getCenterX(), getCenterY()));
+                 Game.addGamePlayNode(new InformationBubble("+" + (int)(lorbeerAmount - oldLorbeerAmount), InformationBubble.InformationType.LORBEER, getCenterX(), getCenterY()));
             }
             
             oldLorbeerAmount = lorbeerAmount;
@@ -216,7 +216,7 @@ public class ClientLorbeer extends ClientTower{
             headHuntFinishedPopup.setVisible(headHuntFinished);
             
             if(oldHeadHunt != null && oldHeadHunt.isFinished() && !headHunt.isFinished()) {
-                Game.addGamePlayNode(new InformationBubble("+" + oldHeadHunt.getGoldOnFinished(), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
+                Game.addGamePlayNode(new InformationBubble("+" + (int)oldHeadHunt.getGoldOnFinished(), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
             }
             
             oldHeadHunt = headHunt;

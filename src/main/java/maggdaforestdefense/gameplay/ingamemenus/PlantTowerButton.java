@@ -22,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import maggdaforestdefense.gameplay.Game;
+import static maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu.ARROW_SIZE;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
@@ -53,7 +54,7 @@ public class PlantTowerButton extends Button {
         this.plantMenu = plantMenu;
         imageView = new ImageView();
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(IMAGE_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(imageView.fitHeightProperty(), IMAGE_SIZE);
         
         setMinWidth(100);
         setMinHeight(100);
@@ -99,7 +100,7 @@ public class PlantTowerButton extends Button {
 
         }
         
-        new NodeSizer<ImageView>(imageView, imageView.getImage().getHeight() * (IMAGE_SIZE / imageView.getImage().getWidth()), IMAGE_SIZE, true);
+
 
     }
 
@@ -158,7 +159,6 @@ public class PlantTowerButton extends Button {
             setAlignment(Pos.CENTER);
             
 
-            new NodeSizer(treeView, NodeSizer.CALC_WIDTH_FROM_HEIGHT(treeView), TREE_VIEW_HEIGHT, true);
 
         }
 

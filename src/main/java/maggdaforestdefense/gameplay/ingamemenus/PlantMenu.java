@@ -60,8 +60,8 @@ public class PlantMenu extends VBox {
 
         //CellType
         cellTypeView = new ImageView();
-        cellTypeView.setFitWidth(CELL_TYPE_VIEW_SIZE);
-        cellTypeView.setFitHeight(CELL_TYPE_VIEW_SIZE);
+        cellTypeView.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(cellTypeView.fitWidthProperty(), CELL_TYPE_VIEW_SIZE);
         BorderPane celltTypeViewBorder = new BorderPane(cellTypeView);
         celltTypeViewBorder.setBorder(new Border(new BorderStroke(Color.web("022202"), BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
 
@@ -88,7 +88,7 @@ public class PlantMenu extends VBox {
 
         updateTypeSpecific(type);
         
-        new NodeSizer<ImageView>(cellTypeView, CELL_TYPE_VIEW_SIZE, CELL_TYPE_VIEW_SIZE, true);
+
     }
 
     public void updateTypeSpecific(MapCell.CellType t) {

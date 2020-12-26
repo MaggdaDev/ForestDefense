@@ -39,7 +39,6 @@ public class GameOverOverlay extends InformationOverlay {
     public GameOverOverlay() {
         gameOverLabel = new Label("GAME OVER!");
         gameOverLabel.setTextFill(Color.RED);
-        gameOverLabel.setFont(font);
 
         backToMenuBtn = new Button("Back to menu");
         backToMenuBtn.setOnAction((ActionEvent e) -> {

@@ -62,7 +62,7 @@ public class UpgradeMenu extends VBox{
         lorbeerTradingUpgrades = new Vector<>();
         
         treeView = new ImageView();
-        treeView.setFitWidth(TREE_VIEW_WIDTH);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(treeView.fitWidthProperty(), TREE_VIEW_WIDTH);
         treeView.setPreserveRatio(true);
         boughtUpgradesBox = new BoughtUpgradesBox(owner.getUpgradeSet().getMaxTier());
         
@@ -85,8 +85,8 @@ public class UpgradeMenu extends VBox{
         // Set up upgrades scroll
         ImageView rightArrow = new ImageView(GameImage.MENUICON_ARROW_RIGHT.getImage());
         ImageView leftArrow = new ImageView(GameImage.MENUICON_ARROW_LEFT.getImage());
-        rightArrow.setFitWidth(ARROW_SIZE);
-        leftArrow.setFitWidth(ARROW_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(rightArrow.fitWidthProperty(), ARROW_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(leftArrow.fitWidthProperty(), ARROW_SIZE);
         rightArrow.setPreserveRatio(true);
         leftArrow.setPreserveRatio(true);
         previousUpgradeTierButton = new Button("", leftArrow);
@@ -146,9 +146,7 @@ public class UpgradeMenu extends VBox{
           
           selectedUpgradeBox.setVisible(false);
           
-          new NodeSizer<ImageView>(rightArrow, ARROW_SIZE, ARROW_SIZE, true);
-          new NodeSizer<ImageView>(leftArrow, ARROW_SIZE, ARROW_SIZE, true);
-          new NodeSizer<ImageView>(treeView, TREE_VIEW_WIDTH, NodeSizer.CALC_HEIGHT_FROM_WIDTH(treeView), true);
+
           
           
     }
@@ -337,8 +335,8 @@ public class UpgradeMenu extends VBox{
             
             public UpgradeDisplayPane() {
                 imageView = new ImageView();
-                imageView.setFitHeight(SIZE);
-                imageView.setFitWidth(SIZE);
+                imageView.setPreserveRatio(true);
+                maggdaforestdefense.MaggdaForestDefense.bindToHeight(imageView.fitWidthProperty(), SIZE);
                 
                 setPrefSize(SIZE, SIZE);
                 
@@ -346,7 +344,7 @@ public class UpgradeMenu extends VBox{
                 
                 getChildren().add(imageView);
                 
-                new NodeSizer<ImageView>(imageView, SIZE, SIZE, true);
+
             }
             public ImageView getImageView() {
                 return imageView;
@@ -365,8 +363,9 @@ public class UpgradeMenu extends VBox{
             buyButton = new Button("BUY");
             
             upgradeIcon = new ImageView();
-            upgradeIcon.setFitHeight(ICON_SIZE);
-            upgradeIcon.setFitWidth(ICON_SIZE);
+            upgradeIcon.setPreserveRatio(true);
+            maggdaforestdefense.MaggdaForestDefense.bindToHeight(upgradeIcon.fitWidthProperty(), ICON_SIZE);
+     
             
             descriptionLabel = new Label();
             descriptionLabel.setWrapText(true);
@@ -379,7 +378,7 @@ public class UpgradeMenu extends VBox{
             setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
             setPadding(new Insets(20));
             
-            new NodeSizer<ImageView>(upgradeIcon, ICON_SIZE, ICON_SIZE, true);
+
         }
         
         public void setUpgrade(BuyUpgradeButton button, boolean buyable) {

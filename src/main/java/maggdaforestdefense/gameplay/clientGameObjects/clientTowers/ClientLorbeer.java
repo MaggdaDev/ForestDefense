@@ -169,7 +169,7 @@ public class ClientLorbeer extends ClientTower{
                 if(oldCoinsPerLorbeer < coinsPerLorbeer) {
                     
                 } else {
-                    Game.addGamePlayNode(new InformationBubble("+" + (int)((goldLorbeerAmount - lorbeerAmount) * coinsPerLorbeer), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
+                    Game.addGamePlayNode(new InformationBubble("+" + (int)((oldLorbeerAmount - lorbeerAmount) * coinsPerLorbeer), InformationBubble.InformationType.GOLD, getCenterX(), getCenterY()));
                 }
             } else if(oldLorbeerAmount < lorbeerAmount) {
                  Game.addGamePlayNode(new InformationBubble("+" + (int)(lorbeerAmount - oldLorbeerAmount), InformationBubble.InformationType.LORBEER, getCenterX(), getCenterY()));

@@ -40,8 +40,9 @@ public class RessourceDisplay extends HBox{
         valueLabel = new Label(String.valueOf(value));
         
         icon = new ImageView(iconGameImage.getImage());
-        icon.setFitHeight(ICON_SIZE);
-        icon.setFitWidth(ICON_SIZE);
+        icon.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(icon.fitHeightProperty(), ICON_SIZE);
+
         
         setAlignment(Pos.CENTER);
         setSpacing(20);

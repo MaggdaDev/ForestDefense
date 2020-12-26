@@ -15,9 +15,11 @@
     -fx-effect: none;
 }
 
+/*
 .root {
     -fx-font-size: 20;
 }
+*/
 
 .button,.menu-button,.toggle-button,.split-menu-button{
     -fx-background-radius: 4;
@@ -38,7 +40,7 @@
     -fx-border-radius: 0 4 4 0;
     -fx-background-radius: 0 3 3 0;
 }
-
+/*
 .lg {
     -fx-min-height: 46;
     -fx-max-height: 46;
@@ -55,6 +57,7 @@
     -fx-max-height: 22;
     -fx-font-size: 10;
 }
+*/
 
 /* MAGGDA */
 

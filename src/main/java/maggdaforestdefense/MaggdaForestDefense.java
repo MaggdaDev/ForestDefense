@@ -22,6 +22,9 @@ import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
@@ -50,6 +53,7 @@ public class MaggdaForestDefense extends Application {
     private StackPane root;
     private Scene scene;
     private Stage primStage;
+    public final static double DEBUG_WIDTH = 2560, DEBUG_HEIGHT = 1380;
 
     //Networks
     private NetworkManager networkManager;
@@ -108,9 +112,16 @@ public class MaggdaForestDefense extends Application {
         });
 
         root = new StackPane();
+        
+        
 
         scene = new Scene(root);
 
+        DoubleProperty fontSize = new SimpleDoubleProperty();
+        fontSize.bind(Bindings.createDoubleBinding(()->(Math.sqrt(scene.getWidth() * scene.getHeight()) / 100.0d), scene.heightProperty(), scene.widthProperty()));
+        
+        root.styleProperty().bind(Bindings.concat("-fx-font-size: ", fontSize.asString(), ";"));
+        
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getClassLoader().getResource("maggdaforestdefense/styles/styles.css")).toExternalForm());
 
         primaryStage.setTitle(
@@ -127,6 +138,7 @@ public class MaggdaForestDefense extends Application {
         // Graphics
         menueManager = new MenuManager(root);
         menueManager.start();
+        
 
         // Game
     }
@@ -184,6 +196,15 @@ public class MaggdaForestDefense extends Application {
         } else {
             return getWidthFact();
         }
+    }
+    
+    public static void bindToWidth(DoubleProperty prop, double normalWidth) {
+        
+        prop.bind(Bindings.createDoubleBinding(()->(normalWidth * instance.scene.getWidth()/DEBUG_WIDTH), instance.scene.widthProperty()));
+    }
+    
+    public static void bindToHeight(DoubleProperty prop, double normalHeight) {
+        prop.bind(Bindings.createDoubleBinding(()->(normalHeight * instance.scene.getHeight()/DEBUG_HEIGHT), instance.scene.heightProperty()));
     }
     
     public static SoundEngine getSoundEngine() {

@@ -19,6 +19,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import language.Deutsch;
 import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
@@ -36,6 +37,8 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class Game {
+    
+    public static Font HEADING_FONT, USUAL_FONT, DESCRIPTION_FONT;
 
     public static Language language = new Deutsch();
 
@@ -62,7 +65,7 @@ public class Game {
         gameObjects = new HashMap<>();
         lorbeerTradingUpgrades = new Vector<>();
         
-        
+
 
 
     }

@@ -46,8 +46,8 @@ public class SideMenu extends GridPane {
     public SideMenu(boolean rightSide) {
         isRightSide = rightSide;
         expandIcon = new ImageView(GameImage.MENUICON_EXPAND.getImage());
-        expandIcon.setFitWidth(EXPAND_ICON_WIDTH);
-        expandIcon.setFitHeight(EXPAND_ICON_WIDTH);
+        expandIcon.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(expandIcon.fitWidthProperty(), EXPAND_ICON_WIDTH);
 
         expandButton = new Button("", expandIcon);
         if (rightSide) {

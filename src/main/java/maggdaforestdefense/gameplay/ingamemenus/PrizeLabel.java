@@ -37,7 +37,7 @@ public class PrizeLabel extends HBox{
         
         
         // SIZING
-        new NodeSizer<ImageView>(coinIcon, COIN_ICON_SIZE, COIN_ICON_SIZE, true);
+
 
         
         

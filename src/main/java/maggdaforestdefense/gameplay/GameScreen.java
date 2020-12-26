@@ -40,9 +40,7 @@ import maggdaforestdefense.util.KeyEventHandler;
  */
 public class GameScreen extends Group {
 
-    public final static double DEFAULT_FONT = 30;
 
-    private DoubleProperty fontSize = new SimpleDoubleProperty(DEFAULT_FONT);
 
     private ClientMap map;
     private BorderPane overlayPaneOuter, overlayPaneInner;
@@ -122,17 +120,13 @@ public class GameScreen extends Group {
 
         });
 
-        MaggdaForestDefense.getInstance().addOnSceneResize((a, b, c) -> {
-            updateFont();
-        });
 
-        styleProperty().bind(Bindings.format("-fx-font-size: %.2fpt;", fontSize));
+
+
 
     }
 
-    public void updateFont() {
-        fontSize.set(DEFAULT_FONT * MaggdaForestDefense.getInstance().getSizeFact());
-    }
+
 
     private final void setUpInputListeners() {
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.RIGHT) {

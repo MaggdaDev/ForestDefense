@@ -15,47 +15,14 @@ import javafx.scene.layout.Region;
  *
  * @author DavidPrivat
  */
-public class NodeSizer<E extends Node> {
+public class NodeSizer {
 
-    private E node;
-    private double width, height;
-    private boolean preserveRatio;
 
-    public NodeSizer(E n, double width, double height, boolean preserveRatio) {
-        this.node = n;
-        this.width = width;
-        this.height = height;
-        this.preserveRatio = preserveRatio;
-        resize();
-
-        maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize(((arg0, arg1, arg2) -> {
-
-            resize();
-        }));
+    public NodeSizer() {
+ 
     }
 
-    private final void resize() {
-        if (node instanceof Region) {
-            Region region = (Region) node;
-            if (preserveRatio) {
-                double sizeFact = maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact();
-                region.setPrefSize(width * sizeFact, height * sizeFact);
-            } else {
-                region.setPrefSize(width * maggdaforestdefense.MaggdaForestDefense.getInstance().getWidthFact(), height * maggdaforestdefense.MaggdaForestDefense.getInstance().getHeightFact());
-            }
-        } else if(node instanceof ImageView) {
-            ImageView iV = (ImageView)node;
-            if (preserveRatio) {
-                double sizeFact = maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact();
-                iV.setFitWidth(width * sizeFact);
-                iV.setFitHeight(height * sizeFact);
-            } else {
-                iV.setFitWidth(width * maggdaforestdefense.MaggdaForestDefense.getInstance().getWidthFact());
-                iV.setFitHeight(height * maggdaforestdefense.MaggdaForestDefense.getInstance().getHeightFact());
-            }
-        }
-
-    }
+ 
    
     public static double CALC_WIDTH_FROM_HEIGHT(ImageView i) {
         return i.getImage().getWidth() * (i.getFitHeight() / i.getImage().getHeight());

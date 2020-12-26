@@ -53,22 +53,23 @@ public class BuyUpgradeButton extends StackPane {
        
 
         upgradeIcon = new ImageView(upgrade.getIcon());
-        upgradeIcon.setFitHeight(SIZE);
-        upgradeIcon.setFitWidth(SIZE);
+        upgradeIcon.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(upgradeIcon.fitHeightProperty(), SIZE);
         
         
 
         lockedIcon = new ImageView(GameImage.MENUICON_LOCK.getImage());
-        lockedIcon.setFitHeight(SIZE / 2);
         lockedIcon.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(lockedIcon.fitWidthProperty(), SIZE/2);
+        
         
         checkIcon = new ImageView(GameImage.MENUICON_CHECK_GREEN.getImage());
         checkIcon.setPreserveRatio(true);
-        checkIcon.setFitWidth(SIZE/2);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(checkIcon.fitWidthProperty(), SIZE/2);
         
         notAvailableIcon = new ImageView(GameImage.MENUICON_NOT_AVAILABLE.getImage());
         notAvailableIcon.setPreserveRatio(true);
-        notAvailableIcon.setFitWidth(SIZE/1.3);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(notAvailableIcon.fitWidthProperty(), SIZE/1.3);
         
         this.locked = locked;
         bought = false;
@@ -89,10 +90,7 @@ public class BuyUpgradeButton extends StackPane {
 
         update();
         
-        new NodeSizer<ImageView>(upgradeIcon, SIZE, SIZE, true);
-        new NodeSizer<ImageView>(checkIcon, SIZE/2, SIZE/2, true);
-        new NodeSizer<ImageView>(lockedIcon, SIZE/2, SIZE/2, true);
-        new NodeSizer<ImageView>(notAvailableIcon, SIZE/2, SIZE/2, true);
+
 
 
         setOnMousePressed((MouseEvent e) -> {

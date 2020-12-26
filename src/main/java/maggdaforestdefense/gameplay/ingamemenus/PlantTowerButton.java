@@ -21,6 +21,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.gameplay.Game;
 import static maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu.ARROW_SIZE;
 import maggdaforestdefense.network.CommandArgument;
@@ -54,10 +55,11 @@ public class PlantTowerButton extends Button {
         this.plantMenu = plantMenu;
         imageView = new ImageView();
         imageView.setPreserveRatio(true);
-        maggdaforestdefense.MaggdaForestDefense.bindToHeight(imageView.fitHeightProperty(), IMAGE_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(imageView.fitHeightProperty(), IMAGE_SIZE);
         
-        setMinWidth(100);
-        setMinHeight(100);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(minWidthProperty(), IMAGE_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(minHeightProperty(), IMAGE_SIZE);
+
        
 
         xIndex = x;
@@ -120,7 +122,7 @@ public class PlantTowerButton extends Button {
     }
 
     public class BuyTreeBox extends VBox{
-        public static final double TREE_VIEW_HEIGHT = 400;
+        public static final double TREE_VIEW_HEIGHT = 250;
 
         private Button buyButton, backButton;
         private ImageView treeView;
@@ -128,12 +130,12 @@ public class PlantTowerButton extends Button {
         private PrizeLabel prizeLabel;
 
         public BuyTreeBox(String name, String description, GameImage image, int prize) {
-            buyButton = new Button("BUY", new PrizeLabel(prize));
+            buyButton = new ScalingButton("BUY", new PrizeLabel(prize));
             buyButton.setOnAction((ActionEvent e)->{
                 plantTower();
             });
             
-            backButton = new Button("BACK");
+            backButton = new ScalingButton("BACK");
             backButton.setOnAction((ActionEvent e)->{
                 plantMenu.setBuyTreeBox(null);
             });
@@ -142,23 +144,27 @@ public class PlantTowerButton extends Button {
 
             treeView = new ImageView(image.getImage());
             treeView.setPreserveRatio(true);
-            treeView.setFitHeight(200);
+            maggdaforestdefense.MaggdaForestDefense.bindToHeight(treeView.fitHeightProperty(), TREE_VIEW_HEIGHT);
+            MaggdaForestDefense.bindToWidth(minWidthProperty(), 250);
+            
 
             treeName = new Label(name);
 
             treeDescription = new Label(description);
             treeDescription.setWrapText(true);
-            treeDescription.setPrefWidth(400);
+            treeDescription.maxWidthProperty().bind(plantMenu.widthProperty().multiply(0.6));
+            
             
             HBox buttonBox = new HBox(backButton, buyButton);
-            buttonBox.setSpacing(20);
+            maggdaforestdefense.MaggdaForestDefense.bindToWidth(buttonBox.spacingProperty(), 10);
+            maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 20);
             buttonBox.setFillHeight(true);
             buttonBox.setAlignment(Pos.CENTER);
 
             getChildren().addAll(treeName, treeView, treeDescription, buttonBox);
             setAlignment(Pos.CENTER);
             
-
+            
 
         }
 

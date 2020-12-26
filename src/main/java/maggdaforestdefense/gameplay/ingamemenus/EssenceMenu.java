@@ -10,10 +10,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.animation.Transition;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.GameImage;
 
@@ -25,19 +29,20 @@ public class EssenceMenu extends SideMenu {
 
     private ImageView essenceBar, essenceBox;
     private Group contentGroup;
-    private int maxEssence, essenceLevel;
-
-    private double essenceBoxX, essenceBoxY;
-    public static double ORIGINAL_BOX_HEIGHT = 1300, ORIGINAL_BOX_WIDTH = 133, ORIGINAL_BOX_BORDER = 6, SPACING = 150;
+    
+    public static double ORIGINAL_BOX_HEIGHT = 1300, ORIGINAL_BOX_WIDTH = 133;
+    private DoubleProperty boxBorder, essenceLevel, maxEssence, insets;
 
     public EssenceMenu() {
         super(false);
-        maxEssence = ServerGame.START_ESSENCE;
-        essenceLevel = ServerGame.START_ESSENCE;
+        maxEssence = new SimpleDoubleProperty(ServerGame.START_ESSENCE);
+        essenceLevel = new SimpleDoubleProperty(ServerGame.START_ESSENCE);
+        boxBorder = new SimpleDoubleProperty();
+        insets = new SimpleDoubleProperty();
 
         essenceBar = new ImageView(GameImage.ESSENCE_BAR.getImage());
         essenceBox = new ImageView(GameImage.ESSENCE_BOX.getImage());
-        essenceBox.setPreserveRatio(true);
+
         contentGroup = new Group();
         contentGroup.getChildren().addAll(essenceBox, essenceBar);
 
@@ -46,59 +51,45 @@ public class EssenceMenu extends SideMenu {
         show();
 
         setContent(contentGroup);
+        
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(boxBorder, 6);
+        MaggdaForestDefense.bindToSizeFact(insets, 30);
+        
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(essenceBox.fitHeightProperty(), ORIGINAL_BOX_HEIGHT);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(essenceBox.fitWidthProperty(), ORIGINAL_BOX_WIDTH);
+        essenceBox.layoutXProperty().bind(insets);
+        essenceBox.layoutYProperty().bind(insets);
 
+        essenceBar.fitWidthProperty().bind(essenceBox.fitWidthProperty().subtract(boxBorder.multiply(2)));
+        essenceBar.fitHeightProperty().bind(essenceBox.fitHeightProperty().subtract(boxBorder.multiply(2)).multiply(essenceLevel.divide(maxEssence)));
+        essenceBar.layoutXProperty().bind(essenceBox.layoutXProperty().add(boxBorder));
+        essenceBar.layoutYProperty().bind(essenceBox.layoutYProperty().add(essenceBox.fitHeightProperty()).subtract(essenceBar.fitHeightProperty().add(boxBorder)));
     }
 
-    @Override
-    public void updateShowing() {
-        super.updateShowing();
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-
-        double newBoxHeight = windowHeight - (2 * SPACING + essenceBoxY);
-
-        double ratio = newBoxHeight / ORIGINAL_BOX_HEIGHT;
-        double newBoxWidth = ORIGINAL_BOX_WIDTH * ratio;
-        double newBorder = ORIGINAL_BOX_BORDER * ratio;
-        double newBarHeight = (newBoxHeight - 2 * newBorder) * ((double) essenceLevel / (double) maxEssence);
-
-        essenceBox.setLayoutY(essenceBoxY + SPACING);
-        essenceBox.setLayoutX(essenceBoxX);
-        essenceBar.setLayoutY(essenceBoxY + SPACING + newBoxHeight - (newBarHeight + newBorder));
-        essenceBar.setLayoutX(essenceBoxX + newBorder);
-
-        essenceBox.setFitHeight(newBoxHeight);
-        essenceBox.setFitWidth(newBoxWidth);
-        essenceBar.setFitHeight(newBarHeight);
-        essenceBar.setFitWidth(newBoxWidth - 2 * newBorder);
-
-    }
 
     public void updateEssenceLevel(int essence, int maxEss) {
-        if (essence != essenceLevel) {
-            animateEssenceLevel(essenceLevel, essence);
+        maxEssence.set(maxEss);
+        if (essence != (int)essenceLevel.get()) {
+            animateEssenceLevel((int)essenceLevel.get(), essence);
         }
-        essenceLevel = essence;
-        maxEssence = maxEss;
+
 
     }
 
    
 
     public void animateEssenceLevel(int oldVal, int newVal) {
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-        double newBoxHeight = windowHeight - (2 * SPACING + essenceBoxY);
-        double ratio = newBoxHeight / ORIGINAL_BOX_HEIGHT;
-        double newBorder = ORIGINAL_BOX_BORDER * ratio;
-        double newBarHeight =  (newBoxHeight - 2 * newBorder) * ((double) newVal / (double) maxEssence);
-        double newYPos =  essenceBoxY + SPACING + newBoxHeight - (newBarHeight + newBorder);
+        double newBarHeight =  (essenceBox.fitHeightProperty().get() - 2 * boxBorder.get()) * ((double) newVal / (double) maxEssence.get());
         
         if(newVal <= 0) {
             newBarHeight = 1;
         }
         
         
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceBar.fitHeightProperty(), newBarHeight, Interpolator.EASE_BOTH)),
-                new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceBar.layoutYProperty(), newYPos, Interpolator.EASE_BOTH)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceBar.fitHeightProperty(), newBarHeight, Interpolator.EASE_BOTH)));
+        timeline.setOnFinished((o)->{
+            essenceLevel.set(newVal);
+        });
         timeline.play();
     }
 

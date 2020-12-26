@@ -32,7 +32,7 @@ import maggdaforestdefense.util.NodeSizer;
  */
 public class BuyUpgradeButton extends StackPane {
 
-    public static final double SIZE = 100;
+    public static final double SIZE = 50;
     private Upgrade upgrade;
     private ImageView upgradeIcon, lockedIcon, checkIcon, notAvailableIcon;
     private CLICK_STATES clickState;

@@ -26,6 +26,7 @@
     -fx-border-radius: 4;
     -fx-pref-height: 30;
     -fx-min-width: 30;
+    -fx-focus-color: transparent; 
 }
 .button,.menu-button,.split-menu-button,.toggle-button,.number-button {
     -fx-background-insets: 0, 0, -1, 0;
@@ -74,6 +75,25 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
 }
 .addTowerButton:pressed{
+    -fx-background-color:#7D7D7D; 
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+
+}
+
+.ScalingButton{
+    -fx-background-color:#D6D6D6;
+    -fx-background-radius: 5,5,4;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-alignment: center;
+    -fx-insets:0;
+}
+
+.ScalingButton:hover{
+    -fx-background-color:#9F9F9F;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+}
+.ScalingButton:pressed{
     -fx-background-color:#7D7D7D; 
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
 

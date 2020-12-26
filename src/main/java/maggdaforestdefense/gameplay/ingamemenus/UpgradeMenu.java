@@ -68,14 +68,13 @@ public class UpgradeMenu extends VBox{
         
         
         treeNameLabel = new Label();
-        treePane = new VBox();
+        treePane = new ContentBox();
         treePane.getChildren().addAll(treeNameLabel, treeView, boughtUpgradesBox);
         
-        treePane.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        treePane.setPadding(new Insets(20));
+        
         treePane.setAlignment(Pos.CENTER);
         treePane.setFillWidth(false);
-        treePane.setSpacing(10);
+       maggdaforestdefense.MaggdaForestDefense.bindToHeight(treePane.spacingProperty(), 10);
         
         
         
@@ -89,8 +88,9 @@ public class UpgradeMenu extends VBox{
         maggdaforestdefense.MaggdaForestDefense.bindToHeight(leftArrow.fitWidthProperty(), ARROW_SIZE);
         rightArrow.setPreserveRatio(true);
         leftArrow.setPreserveRatio(true);
-        previousUpgradeTierButton = new Button("", leftArrow);
-        nextUpgradeTierButton = new Button("" ,  rightArrow);
+        previousUpgradeTierButton = new ScalingButton("", leftArrow);
+        nextUpgradeTierButton = new ScalingButton("" ,  rightArrow);
+
         previousUpgradeTierButton.setOnAction((ActionEvent e)->{
             previousTier();
         });
@@ -110,8 +110,8 @@ public class UpgradeMenu extends VBox{
 
         buttonMenuScrollBox = new HBox(previousUpgradeTierButton, upgradeStackPane, nextUpgradeTierButton);
         buttonMenuScrollBox.setAlignment(Pos.CENTER);
-        buttonMenuScrollBox.setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        buttonMenuScrollBox.setPadding(new Insets(20));
+        maggdaforestdefense.MaggdaForestDefense.bindPadding(buttonMenuScrollBox.paddingProperty(), 20);
+        maggdaforestdefense.MaggdaForestDefense.bindBorder(buttonMenuScrollBox.borderProperty(), Color.DARKGREEN, BorderStrokeStyle.SOLID, 10, 3);
       
         updateButtonDisable();
         updateUpgradesShowing();
@@ -141,7 +141,7 @@ public class UpgradeMenu extends VBox{
                 throw new UnsupportedOperationException();
         }
           getChildren().addAll(treePane, buttonMenuScrollBox, selectedUpgradeBox);
-          setSpacing(20);
+          maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 20);
           setAlignment(Pos.TOP_CENTER);
           
           selectedUpgradeBox.setVisible(false);
@@ -290,12 +290,9 @@ public class UpgradeMenu extends VBox{
             }
             
             setAlignment(Pos.CENTER);
-            setHgap(GAP);
-            setVgap(GAP);
+            maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(hgapProperty(), GAP);
+            maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(vgapProperty(), GAP);
             
-            maggdaforestdefense.MaggdaForestDefense.getInstance().addOnSceneResize((a,b,c)->{
-                setPrefWrapLength(maggdaforestdefense.MaggdaForestDefense.getInstance().getSizeFact() * (3 * BuyUpgradeButton.SIZE + 3 * GAP));
-            });
             
         }
 
@@ -319,7 +316,7 @@ public class UpgradeMenu extends VBox{
                 panes[i] = addPane;
                 getChildren().add(addPane);
             }
-            setSpacing(20);
+            maggdaforestdefense.MaggdaForestDefense.bindToWidth(spacingProperty(), 20);
             
             setManaged(true);
             setAlignment(Pos.CENTER);
@@ -338,9 +335,9 @@ public class UpgradeMenu extends VBox{
                 imageView.setPreserveRatio(true);
                 maggdaforestdefense.MaggdaForestDefense.bindToHeight(imageView.fitWidthProperty(), SIZE);
                 
-                setPrefSize(SIZE, SIZE);
-                
-                setBorder(new Border(new BorderStroke(Color.DARKMAGENTA, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
+                maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(prefHeightProperty(), SIZE);
+                maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(prefWidthProperty(), SIZE);
+                maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.DARKMAGENTA, BorderStrokeStyle.SOLID, 10, 5);
                 
                 getChildren().add(imageView);
                 
@@ -360,7 +357,7 @@ public class UpgradeMenu extends VBox{
         private BuyUpgradeButton currentButton;
         
         public SelectedUpgradeBox() {
-            buyButton = new Button("BUY");
+            buyButton = new ScalingButton("BUY");
             
             upgradeIcon = new ImageView();
             upgradeIcon.setPreserveRatio(true);

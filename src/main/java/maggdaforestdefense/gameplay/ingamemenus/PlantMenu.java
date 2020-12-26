@@ -50,7 +50,7 @@ public class PlantMenu extends VBox {
 
     private int xIndex, yIndex;
 
-    private VBox cellTypeBox, towerBox, buyTreeBorderBox;
+    private ContentBox cellTypeBox, towerBox, buyTreeBorderBox;
 
     public PlantMenu(MapCell.CellType type, int x, int y) {
         cellType = type;
@@ -61,7 +61,7 @@ public class PlantMenu extends VBox {
         //CellType
         cellTypeView = new ImageView();
         cellTypeView.setPreserveRatio(true);
-        maggdaforestdefense.MaggdaForestDefense.bindToHeight(cellTypeView.fitWidthProperty(), CELL_TYPE_VIEW_SIZE);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(cellTypeView.fitWidthProperty(), CELL_TYPE_VIEW_SIZE);
         BorderPane celltTypeViewBorder = new BorderPane(cellTypeView);
         celltTypeViewBorder.setBorder(new Border(new BorderStroke(Color.web("022202"), BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(5))));
 
@@ -83,7 +83,7 @@ public class PlantMenu extends VBox {
         buyTreeBorderBox = new ContentBox();
 
         setAlignment(Pos.CENTER);
-        setSpacing(10);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 10);
         getChildren().addAll(cellTypeBox, towerBox, buyTreeBorderBox);
 
         updateTypeSpecific(type);

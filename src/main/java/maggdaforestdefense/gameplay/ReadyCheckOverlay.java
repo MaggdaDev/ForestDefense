@@ -5,7 +5,12 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -15,6 +20,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.VLineTo;
 import javafx.util.Duration;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
@@ -27,9 +33,10 @@ import maggdaforestdefense.storage.Logger;
 public class ReadyCheckOverlay extends InformationOverlay {
 
     private ToggleButton readyButton;
-    private final static double DISTANCE_TO_SCREEN_BOT = 200;
     private ProgressBar readyProgress;
     private Label progressLabel;
+    
+    private DoubleProperty pathPercentage, distanceToBot;
 
     private boolean animationRunning = false;
 
@@ -42,9 +49,17 @@ public class ReadyCheckOverlay extends InformationOverlay {
         
         progressLabel = new Label("Players ready:");
         readyProgress = new ProgressBar(0);
+        MaggdaForestDefense.bindToHeight(readyProgress.prefWidthProperty(), 200);
         
-
+        pathPercentage = new SimpleDoubleProperty(0);
+        distanceToBot = new SimpleDoubleProperty(200);
+        MaggdaForestDefense.bindToHeight(distanceToBot, 200);
+        
+        
         getChildren().addAll(progressLabel, readyProgress, new Separator(), readyButton);
+        
+        translateXProperty().bind(MaggdaForestDefense.screenWidthMidProperty().subtract(widthProperty().divide(2)));
+        translateYProperty().bind(MaggdaForestDefense.screenHeightProperty().subtract(pathPercentage.multiply(heightProperty().add(distanceToBot))));
     }
     
     public void updateProgress(double progress) {
@@ -59,60 +74,30 @@ public class ReadyCheckOverlay extends InformationOverlay {
     public void startAnimation() {
         readyProgress.setProgress(0);
         animationRunning = true;
-        double windowWidth = maggdaforestdefense.MaggdaForestDefense.getWindowWidth();
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-        double thisHeight = getPrefHeight();
-        double thisWidth = getPrefWidth();
+    
 
-        double xPos = windowWidth / 2 - thisWidth / 2;
-        double yPos = windowHeight - (thisHeight + DISTANCE_TO_SCREEN_BOT);
-
-        setTranslateX(xPos);
-        setTranslateY(windowHeight);
-
-        Path path = new Path();
-
-        MoveTo moveTo = new MoveTo(xPos, windowHeight);
-        VLineTo curve = new VLineTo(yPos);
-        path.getElements().addAll(moveTo, curve);
-
-        PathTransition trans = new PathTransition(Duration.seconds(0.5), path, this);
+        Timeline timeLine = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(pathPercentage, 1)));
         setVisible(true);
 
-        trans.setOnFinished((arg0) -> {
+        timeLine.setOnFinished((arg0) -> {
             animationRunning = false;
         });
 
-        trans.play();
+        timeLine.play();
     }
 
     public void back() {
-        double windowWidth = maggdaforestdefense.MaggdaForestDefense.getWindowWidth();
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-        double thisHeight = getPrefHeight();
-        double thisWidth = getPrefWidth();
+        
 
-        double xPos = windowWidth / 2 - thisWidth / 2;
-        double yPos = windowHeight - (thisHeight + DISTANCE_TO_SCREEN_BOT);
+        Timeline timeLine = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(pathPercentage, 0)));
 
-        setTranslateX(xPos);
-        setTranslateY(windowHeight);
-
-        Path path = new Path();
-
-        MoveTo moveTo = new MoveTo(xPos, yPos);
-        VLineTo curve = new VLineTo(windowHeight);
-        path.getElements().addAll(moveTo, curve);
-
-        PathTransition trans = new PathTransition(Duration.seconds(0.5), path, this);
-
-        trans.setOnFinished((ActionEvent e) -> {
+        timeLine.setOnFinished((ActionEvent e) -> {
             setVisible(false);
             readyButton.setSelected(false);
             animationRunning = false;
         });
 
-        trans.play();
+        timeLine.play();
     }
 
     

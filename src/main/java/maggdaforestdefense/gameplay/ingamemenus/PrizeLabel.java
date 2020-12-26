@@ -25,12 +25,13 @@ public class PrizeLabel extends HBox{
        
         
         ImageView coinIcon = new ImageView(GameImage.COIN_ICON.getImage());
-        coinIcon.setFitHeight(COIN_ICON_SIZE);
-        coinIcon.setFitWidth(COIN_ICON_SIZE);
+        coinIcon.setPreserveRatio(true);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(coinIcon.fitWidthProperty(), COIN_ICON_SIZE);
+
         
         prizeLabel = new Label(String.valueOf(prize));
                 
-        setSpacing(5);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(spacingProperty(), 5);
         setAlignment(Pos.CENTER);
         
         getChildren().addAll(coinIcon, prizeLabel);

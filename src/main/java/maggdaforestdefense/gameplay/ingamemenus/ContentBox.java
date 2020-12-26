@@ -21,9 +21,9 @@ import javafx.scene.paint.Color;
  */
 public class ContentBox extends VBox{
     public ContentBox() {
-        setAlignment(Pos.CENTER);
-        setBorder(new Border(new BorderStroke(Color.DARKGREEN, BorderStrokeStyle.SOLID, new CornerRadii(10), new BorderWidths(3))));
-        setPadding(new Insets(20));
+        setAlignment(Pos.CENTER);    
+        maggdaforestdefense.MaggdaForestDefense.bindPadding(paddingProperty(), 20);
+        maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.DARKGREEN, BorderStrokeStyle.SOLID, 10, 3);
         setFillWidth(true);
     }
 }

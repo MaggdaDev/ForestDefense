@@ -24,7 +24,7 @@ public class TopOverlay extends HBox{
         
         essenceDisplay = new RessourceDisplay.EssenceDisplay(GameImage.ESSENCE_ICON, startEssence, startEssence);
         
-        setSpacing(200);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(spacingProperty(), 200);
         setAlignment(Pos.CENTER);
         setPadding(new Insets(20, 100, 100,100));
         

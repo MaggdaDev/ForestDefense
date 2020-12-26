@@ -45,7 +45,7 @@ public class GrowingWaitingMenu extends VBox {
         timerBox.getChildren().add(timer);
         
         setAlignment(Pos.CENTER);
-        setSpacing(10);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 10);
         getChildren().addAll(treeBox, timerBox);
     }
     

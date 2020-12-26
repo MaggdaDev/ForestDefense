@@ -45,7 +45,7 @@ public class RessourceDisplay extends HBox{
 
         
         setAlignment(Pos.CENTER);
-        setSpacing(20);
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(spacingProperty(), 10);
         super.setPadding(new Insets(0, 20, 0, 20));
         
         

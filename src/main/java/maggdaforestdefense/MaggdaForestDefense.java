@@ -23,11 +23,23 @@ import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Paint;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.NetworkCommand.CommandType;
@@ -181,16 +193,16 @@ public class MaggdaForestDefense extends Application {
         networkManager.sendCommand(new NetworkCommand(CommandType.REQUEST_JOIN_GAME, new CommandArgument[]{new CommandArgument("id", id)}));
     }
 
-    public double getHeightFact() {
-        return 1;
+    public static double getHeightFact() {
+        return instance.scene.getHeight() / DEBUG_HEIGHT;
 
     }
 
-    public double getWidthFact() {
-        return 1;
+    public static double getWidthFact() {
+        return instance.scene.getWidth() / DEBUG_WIDTH;
     }
 
-    public double getSizeFact() {
+    public static double getSizeFact() {
         if (getHeightFact() < getWidthFact()) {
             return getHeightFact();
         } else {
@@ -198,13 +210,43 @@ public class MaggdaForestDefense extends Application {
         }
     }
     
+    public static void bindToSizeFact(DoubleProperty prop, double normalWidth) {
+        
+        prop.bind(Bindings.createDoubleBinding(()->(normalWidth * getSizeFact()), instance.scene.heightProperty(), instance.scene.widthProperty()));
+    }
+
+    
     public static void bindToWidth(DoubleProperty prop, double normalWidth) {
         
-        prop.bind(Bindings.createDoubleBinding(()->(normalWidth * instance.scene.getWidth()/DEBUG_WIDTH), instance.scene.widthProperty()));
+        prop.bind(Bindings.createDoubleBinding(()->(normalWidth * getWidthFact()), instance.scene.widthProperty()));
     }
     
     public static void bindToHeight(DoubleProperty prop, double normalHeight) {
-        prop.bind(Bindings.createDoubleBinding(()->(normalHeight * instance.scene.getHeight()/DEBUG_HEIGHT), instance.scene.heightProperty()));
+        prop.bind(Bindings.createDoubleBinding(()->(normalHeight * getHeightFact()), instance.scene.heightProperty()));
+    }
+    
+    public static void bindPadding(ObjectProperty<Insets> padding, double insets) {
+        padding.bind(Bindings.createObjectBinding(()->new Insets(insets * getSizeFact()), instance.scene.widthProperty(), instance.scene.heightProperty()));
+    }
+    
+    public static void bindBorder(ObjectProperty<Border> border, Paint color, BorderStrokeStyle style, double cornerRadius, double borderWidth) {
+        border.bind(Bindings.createObjectBinding(()->new Border(new BorderStroke(color, style, new CornerRadii(cornerRadius*getSizeFact()), new BorderWidths(borderWidth*getSizeFact()))), instance.scene.widthProperty(), instance.scene.heightProperty()));
+    }
+    
+    public static void bindBorder(ObjectProperty<Border> border, Paint color, BorderStrokeStyle style, double c1, double c2, double c3, double c4, double borderWidth) {
+        border.bind(Bindings.createObjectBinding(()->new Border(new BorderStroke(color, style, new CornerRadii(c1*getSizeFact(),c2*getSizeFact(),c3*getSizeFact(),c4*getSizeFact(),false), new BorderWidths(borderWidth*getSizeFact()))), instance.scene.widthProperty(), instance.scene.heightProperty()));
+    }
+    
+    public static void bindBackground(ObjectProperty<Background> background, Paint color, double c1, double c2, double c3, double c4, double inset) {
+        background.bind(Bindings.createObjectBinding(()->(new Background(new BackgroundFill(color, new CornerRadii(c1*getSizeFact(),c2*getSizeFact(),c3*getSizeFact(),c4*getSizeFact(),false), new Insets(inset*getSizeFact())))) , instance.scene.widthProperty(), instance.scene.heightProperty()));
+    }
+    
+    public static DoubleBinding screenWidthMidProperty() {
+        return instance.scene.widthProperty().divide(2);
+    }
+    
+    public static ReadOnlyDoubleProperty screenHeightProperty() {
+        return instance.scene.heightProperty();
     }
     
     public static SoundEngine getSoundEngine() {

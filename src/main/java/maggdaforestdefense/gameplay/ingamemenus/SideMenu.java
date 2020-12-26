@@ -24,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
@@ -36,7 +37,7 @@ import maggdaforestdefense.util.NodeSizer;
 public class SideMenu extends GridPane {
 
     public static double EXPAND_ICON_WIDTH = 20;
-
+    public static double maxWidth = 500;
     protected Button expandButton;
     protected ImageView expandIcon;
     private Parent content;
@@ -47,26 +48,27 @@ public class SideMenu extends GridPane {
         isRightSide = rightSide;
         expandIcon = new ImageView(GameImage.MENUICON_EXPAND.getImage());
         expandIcon.setPreserveRatio(true);
-        maggdaforestdefense.MaggdaForestDefense.bindToHeight(expandIcon.fitWidthProperty(), EXPAND_ICON_WIDTH);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(expandIcon.fitWidthProperty(), EXPAND_ICON_WIDTH);
 
-        expandButton = new Button("", expandIcon);
+        expandButton = new ScalingButton("", expandIcon);
         if (rightSide) {
             expandIcon.setRotate(90);
-            setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.DASHED, new CornerRadii(30, 0, 0, 30, false), new BorderWidths(3))));
-            setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(30, 0, 0, 30, false), new Insets(3))));
+            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.DASHED, 30, 0, 0, 30, 3);
+            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 30, 0, 0, 30, 3);
+ 
             add(expandButton, 0, 0);
         } else {
             expandIcon.setRotate(270);
-            setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.DASHED, new CornerRadii(0, 30, 30, 0, false), new BorderWidths(3))));
-            setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(0, 30, 30, 0, false), new Insets(3))));
+            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.DASHED, 0, 30, 30, 0, 3);
+            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 0, 30, 30, 0, 3);
             add(expandButton, 1, 0);
         }
 
-        setPrefHeight(500);
+       
 
-        setHgap(20);
-        setVgap(20);
-
+        maggdaforestdefense.MaggdaForestDefense.bindToWidth(vgapProperty(), 20);
+        maggdaforestdefense.MaggdaForestDefense.bindToHeight(hgapProperty(), 20);
+        MaggdaForestDefense.bindToWidth(maxWidthProperty(), maxWidth);
         setAlignment(Pos.CENTER);
 
 

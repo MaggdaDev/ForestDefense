@@ -92,7 +92,7 @@ public class GameScreen extends Group {
         overlayPaneOuter.prefHeightProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().heightProperty());
         overlayPaneOuter.prefWidthProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().widthProperty());
 
-        getChildren().addAll(gamePlayGroup, overlayPaneOuter, gameOverOverlay, readyCheckOverlay);
+        getChildren().addAll(gamePlayGroup, overlayPaneOuter, gameOverOverlay, readyCheckOverlay, waveAnnouncer);
         inputHandler = new PlayerInputHandler();
 
         gamePlayGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), 0, 0));
@@ -215,8 +215,7 @@ public class GameScreen extends Group {
     }
 
     public void setNewContentSideMenu(Parent p) {
-        rightSideMenu.setContent(p);
-        rightSideMenu.show();
+        rightSideMenu.setContent(p);;
         rightSideMenu.setVisible(true);
     }
 

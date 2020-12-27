@@ -5,8 +5,15 @@
  */
 package maggdaforestdefense.gameplay;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -20,6 +27,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.gameplay.ingamemenus.ContentBox;
 import maggdaforestdefense.menues.MenuManager;
 
@@ -29,81 +37,37 @@ import maggdaforestdefense.menues.MenuManager;
  */
 public class InformationOverlay extends ContentBox {
 
+    private DoubleProperty animationProgress;
+
     public InformationOverlay() {
+        animationProgress = new SimpleDoubleProperty(-0.5);
 
-
-        setBackground(new Background(new BackgroundFill(Color.rgb(0, 102, 0, 0.8), new CornerRadii(10), Insets.EMPTY)));
-
+        maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.rgb(0, 102, 0, 0.8), 10, 10, 10, 10, 0);
         maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 30);
-        setVisible(false);
+        
+        layoutXProperty().bind(MaggdaForestDefense.screenWidthMidProperty().subtract(widthProperty().divide(2)));
+        layoutYProperty().bind(animationProgress.multiply(MaggdaForestDefense.screenHeightMidProperty().subtract(heightProperty().divide(2))));
 
     }
 
     public void startAnimation() {
-        double windowWidth = maggdaforestdefense.MaggdaForestDefense.getWindowWidth();
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-        double thisHeight = getPrefHeight();
-        double thisWidth = getPrefWidth();
-
-        double midX = windowWidth / 2 - thisWidth / 2;
-        double midY = windowHeight / 2 - thisHeight / 2;
-
-        setTranslateX(midX);
-        setTranslateY(-thisHeight);
-
-        Path path = new Path();
-
-        MoveTo moveTo = new MoveTo(midX, -thisHeight);
-        VLineTo curve = new VLineTo(midY);
-        path.getElements().addAll(moveTo, curve);
-
-        PathTransition trans = new PathTransition(Duration.seconds(0.5), path, this);
-        setVisible(true);
-        
-
-        trans.play();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(animationProgress, 1, Interpolator.EASE_BOTH)));
+        timeline.play();
 
     }
 
     public void startAnimation(double fadeOutDelay) {
-        double windowWidth = maggdaforestdefense.MaggdaForestDefense.getWindowWidth();
-        double windowHeight = maggdaforestdefense.MaggdaForestDefense.getWindowHeight();
-        double thisHeight = getPrefHeight();
-        double thisWidth = getPrefWidth();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(animationProgress, 1, Interpolator.EASE_BOTH)));
 
-        double midX = windowWidth / 2 - thisWidth / 2;
-        double midY = windowHeight / 2 - thisHeight / 2;
-
-        setTranslateX(midX);
-        setTranslateY(-thisHeight);
-
-        Path path = new Path();
-
-        MoveTo moveTo = new MoveTo(midX, -thisHeight);
-        VLineTo curve = new VLineTo(midY);
-        path.getElements().addAll(moveTo, curve);
-
-        PathTransition trans = new PathTransition(Duration.seconds(0.5), path, this);
-        setVisible(true);
-        trans.play();
-        trans.setOnFinished((ActionEvent e) -> {
-            PauseTransition pause = new PauseTransition(Duration.seconds(fadeOutDelay));
-            pause.setOnFinished((ActionEvent ev) -> {
-                Path pathBack = new Path();
-
-                MoveTo moveToBack = new MoveTo(midX, midY);
-                VLineTo curveBack = new VLineTo(-thisHeight);
-                pathBack.getElements().addAll(moveToBack, curveBack);
-
-                PathTransition transBack = new PathTransition(Duration.seconds(0.5), pathBack, this);
-                transBack.setOnFinished((ActionEvent eve)->{
-                    setVisible(false);
-                });
-                transBack.play();
-                
+        timeline.setOnFinished((o) -> {
+            PauseTransition trans = new PauseTransition(Duration.seconds(fadeOutDelay));
+            trans.setOnFinished((p) -> {
+                Timeline out = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(animationProgress, -0.5, Interpolator.EASE_BOTH)));
+                out.play();
             });
-            pause.play();
+            trans.play();
         });
 
+        timeline.play();
     }
 }

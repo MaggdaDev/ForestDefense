@@ -16,11 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.VLineTo;
 import javafx.util.Duration;
 import maggdaforestdefense.MaggdaForestDefense;
+import maggdaforestdefense.gameplay.ingamemenus.ContentBox;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
@@ -30,7 +32,7 @@ import maggdaforestdefense.storage.Logger;
  *
  * @author DavidPrivat
  */
-public class ReadyCheckOverlay extends InformationOverlay {
+public class ReadyCheckOverlay extends ContentBox {
 
     private ToggleButton readyButton;
     private ProgressBar readyProgress;
@@ -46,6 +48,8 @@ public class ReadyCheckOverlay extends InformationOverlay {
             sendReadyCheck();
 
         });
+        
+        maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.rgb(0, 102, 0, 0.8), 10, 10, 10, 10, 0);
         
         progressLabel = new Label("Players ready:");
         readyProgress = new ProgressBar(0);
@@ -70,7 +74,7 @@ public class ReadyCheckOverlay extends InformationOverlay {
         NetworkManager.getInstance().sendCommand(NetworkCommand.READY_FOR_NEXT_ROUND);
     }
 
-    @Override
+
     public void startAnimation() {
         readyProgress.setProgress(0);
         animationRunning = true;

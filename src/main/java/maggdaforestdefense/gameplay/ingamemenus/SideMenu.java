@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
@@ -34,40 +35,33 @@ import maggdaforestdefense.util.NodeSizer;
  *
  * @author DavidPrivat
  */
-public class SideMenu extends GridPane {
+public class SideMenu extends StackPane {
 
     public static double EXPAND_ICON_WIDTH = 20;
-    public static double maxWidth = 500;
-    protected Button expandButton;
-    protected ImageView expandIcon;
+    public static double maxWidth = 500, prefWidth = 400;
     private Parent content;
     public boolean shown;
     private boolean isRightSide;
 
     public SideMenu(boolean rightSide) {
         isRightSide = rightSide;
-        expandIcon = new ImageView(GameImage.MENUICON_EXPAND.getImage());
-        expandIcon.setPreserveRatio(true);
-        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(expandIcon.fitWidthProperty(), EXPAND_ICON_WIDTH);
+        
 
-        expandButton = new ScalingButton("", expandIcon);
+
+
         if (rightSide) {
-            expandIcon.setRotate(90);
-            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.DASHED, 30, 0, 0, 30, 3);
+          
+            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.SOLID, 30, 0, 0, 30, 3);
             maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 30, 0, 0, 30, 3);
- 
-            add(expandButton, 0, 0);
+            MaggdaForestDefense.bindToWidth(prefWidthProperty(), prefWidth);
         } else {
-            expandIcon.setRotate(270);
-            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.DASHED, 0, 30, 30, 0, 3);
+            maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.SOLID, 0, 30, 30, 0, 3);
             maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 0, 30, 30, 0, 3);
-            add(expandButton, 1, 0);
         }
 
        
 
-        maggdaforestdefense.MaggdaForestDefense.bindToWidth(vgapProperty(), 20);
-        maggdaforestdefense.MaggdaForestDefense.bindToHeight(hgapProperty(), 20);
+
         MaggdaForestDefense.bindToWidth(maxWidthProperty(), maxWidth);
         setAlignment(Pos.CENTER);
 
@@ -99,43 +93,8 @@ public class SideMenu extends GridPane {
             getChildren().remove(content);
         }
         content = p;
-        if (isRightSide) {
-            add(content, 1, 0);
-        } else {
-            add(content, 0, 0);
-        }
+        getChildren().add(p);
     }
 
-    public void hide() {
-        shown = false;
-        updateShowing();
-        expandButton.setOnAction((ActionEvent e) -> {
-            show();
-        });
-    }
-
-    public void show() {
-        shown = true;
-        updateShowing();
-        expandButton.setOnAction((ActionEvent e) -> {
-            hide();
-        });
-    }
-
-    public void updateButtonRotate() {
-        if (shown == isRightSide) {
-            expandIcon.setRotate(270);
-
-        } else {
-            expandIcon.setRotate(90);
-
-        }
-    }
-
-    public void updateShowing() {
-        if (content != null) {
-            content.setVisible(shown);
-        }
-        updateButtonRotate();
-    }
+ 
 }

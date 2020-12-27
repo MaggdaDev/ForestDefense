@@ -21,7 +21,7 @@ public class WaveAnnouncer extends InformationOverlay {
 
     public WaveAnnouncer() {
         waveLabel = new Label();
-        waveLabel.setText("Survive as long as possible!\nGood luck with wave 1!");
+        waveLabel.setText("Wave 1!");
         waveLabel.setTextAlignment(TextAlignment.CENTER);
         waveLabel.setFont(font);
         waveLabel.setTextFill(Color.LIGHTGRAY);
@@ -30,8 +30,8 @@ public class WaveAnnouncer extends InformationOverlay {
 
     public void nextWave(int waveNumber) {
         if (waveNumber > 1) {
-            waveLabel.setText("WAVE " + waveNumber + " INCOMING!");
+            waveLabel.setText("WAVE " + waveNumber + "!");
         }
-        super.startAnimation(2);
+        super.startAnimation(1);
     }
 }

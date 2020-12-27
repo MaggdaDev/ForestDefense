@@ -116,6 +116,7 @@ public abstract class ClientTower extends ClientGameObject {
                 Game.getInstance().getGameScreen().safeRemoveGameplayNode(a.getCooldownIndicator());
             });
         });
+        setMouseTransparent(true);
         
     }
 

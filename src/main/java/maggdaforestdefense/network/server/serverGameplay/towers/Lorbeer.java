@@ -36,14 +36,14 @@ import maggdaforestdefense.util.RandomEvent;
  * @author DavidPrivat
  */
 public class Lorbeer extends Tower{
-    public static final int DEFAULT_PRIZE = 500;
+    public static final int DEFAULT_PRIZE = 350;
     public final static double DEFAULT_HEALTH = 20, DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 2;
     public final static double DEFAULT_GROWING_TIME = 2;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
     public final static double DEFAULT_DAMAGE = 10;
     public final static int DEFAULT_MAX_LORBEERS = 20;
-    public final static int DEFAULT_GOLD_PER_LORBEER = 10;
+    public final static int DEFAULT_GOLD_PER_LORBEER = 20;
     
     private Damage damageObject;
     private Damage.NormalDamage usualDamage;
@@ -77,7 +77,7 @@ public class Lorbeer extends Tower{
     private boolean isAutomatic = false;
     
     private boolean isPrestige = false;
-    public final static int PRESTIGE_ADD = 5;
+    public final static int PRESTIGE_ADD = 10;
     
     private boolean isKopfgeld = false;
     private HeadHuntGenerator headHuntGenerator;

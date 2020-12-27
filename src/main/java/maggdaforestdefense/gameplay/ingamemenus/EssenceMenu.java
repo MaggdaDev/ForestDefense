@@ -48,7 +48,6 @@ public class EssenceMenu extends SideMenu {
 
 
 
-        show();
 
         setContent(contentGroup);
         

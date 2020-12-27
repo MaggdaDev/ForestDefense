@@ -245,6 +245,10 @@ public class MaggdaForestDefense extends Application {
         return instance.scene.widthProperty().divide(2);
     }
     
+    public static DoubleBinding screenHeightMidProperty() {
+        return instance.scene.heightProperty().divide(2);
+    }
+    
     public static ReadOnlyDoubleProperty screenHeightProperty() {
         return instance.scene.heightProperty();
     }

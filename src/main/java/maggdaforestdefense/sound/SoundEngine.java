@@ -19,7 +19,7 @@ public class SoundEngine {
             GAMEOVER_MUSIK_PATH = "maggdaforestdefense/sound/music/gameover.mp3",
             MENUMUSIK_PATH = "maggdaforestdefense/sound/music/menumusik.mp3";
     
-    public final static double DEFAULT_VOLUME = 0;//0.05;
+    public final static double DEFAULT_VOLUME = 0.1;
     
     private MediaPlayer rundenmusik1, rundenmusik2, gameoverMusik, menuMusik;
     

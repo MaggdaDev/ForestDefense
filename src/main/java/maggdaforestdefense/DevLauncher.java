@@ -11,6 +11,6 @@ package maggdaforestdefense;
  */
 public class DevLauncher {
     public static void main(String[] args) {
-        MaggdaForestDefense.main(new String[]{"--dev"});
+        MaggdaForestDefense.main(new String[]{"--dev"});    // AJA
     }
 }

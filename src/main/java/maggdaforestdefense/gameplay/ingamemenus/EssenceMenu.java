@@ -81,15 +81,13 @@ public class EssenceMenu extends SideMenu {
     public void animateEssenceLevel(int oldVal, int newVal) {
         double newBarHeight =  (essenceBox.fitHeightProperty().get() - 2 * boxBorder.get()) * ((double) newVal / (double) maxEssence.get());
         
-        if(newVal <= 0) {
-            newBarHeight = 1;
+        if(newVal < 0) {
+            newVal = 0;
         }
         
         
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceBar.fitHeightProperty(), newBarHeight, Interpolator.EASE_BOTH)));
-        timeline.setOnFinished((o)->{
-            essenceLevel.set(newVal);
-        });
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceLevel, newVal, Interpolator.EASE_BOTH)));
+
         timeline.play();
     }
 

@@ -83,19 +83,23 @@ public class PlantTowerButton extends Button {
 
         getStyleClass().clear();
         getStyleClass().add("addTowerButton");
-
+        
+        imageView.setImage(type.getImage());
         switch (type) {
             case T_SPRUCE:
-                imageView.setImage(GameImage.TOWER_SPRUCE_1.getImage());
+                
                 buyTreeBox = new BuyTreeBox(Game.language.SPRUCE_NAME, Game.language.SPRUCE_DESCRIPTION, GameImage.TOWER_SPRUCE_1, prize);
                 break;
             case T_MAPLE:
-                imageView.setImage(GameImage.TOWER_MAPLE_1.getImage());
+                
                 buyTreeBox = new BuyTreeBox(Game.language.MAPLE_NAME, Game.language.MAPLE_DESCRIPTION, GameImage.TOWER_MAPLE_1, prize);
                 break;
             case T_LORBEER:
-                imageView.setImage(GameImage.TOWER_LORBEER_1.getImage());
+
                 buyTreeBox = new BuyTreeBox(Game.language.LORBEER_NAME, Game.language.LORBEER_DESCRIPTION, GameImage.TOWER_LORBEER_1, prize);
+                break;
+            case T_OAK:
+                buyTreeBox = new BuyTreeBox(Game.language.OAK_NAME, Game.language.OAK_DESCRIPTION, GameImage.TOWER_OAK_1, prize);
                 break;
             default:
                 throw new Exceptions.GameObjectNotCompatibleException();

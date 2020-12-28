@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,10 +36,10 @@ import maggdaforestdefense.util.NodeSizer;
  *
  * @author DavidPrivat
  */
-public class SideMenu extends StackPane {
+public class SideMenu extends HBox {
 
     public static double EXPAND_ICON_WIDTH = 20;
-    public static double maxWidth = 500, prefWidth = 400;
+    public static double maxWidth = 500, prefWidth = 450;
     private Parent content;
     public boolean shown;
     private boolean isRightSide;
@@ -52,17 +53,18 @@ public class SideMenu extends StackPane {
         if (rightSide) {
           
             maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.SOLID, 30, 0, 0, 30, 3);
-            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 30, 0, 0, 30, 3);
+            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 30, 0, 0, 30, 0);
             MaggdaForestDefense.bindToWidth(prefWidthProperty(), prefWidth);
         } else {
             maggdaforestdefense.MaggdaForestDefense.bindBorder(borderProperty(), Color.GRAY, BorderStrokeStyle.SOLID, 0, 30, 30, 0, 3);
-            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 0, 30, 30, 0, 3);
+            maggdaforestdefense.MaggdaForestDefense.bindBackground(backgroundProperty(), Color.GREEN, 0, 30, 30, 0, 0);
         }
 
        
 
-
+        MaggdaForestDefense.bindPadding(paddingProperty(), 20);
         MaggdaForestDefense.bindToWidth(maxWidthProperty(), maxWidth);
+        prefHeightProperty().bind(MaggdaForestDefense.screenHeightProperty());
         setAlignment(Pos.CENTER);
 
 

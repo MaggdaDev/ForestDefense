@@ -34,7 +34,7 @@ public class Spruce extends Tower {
     public final static double HEALTH = 100;
     public final static double DEFAULT_REGEN = 0;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
-    public final static double GROWING_TIME = 2;
+    public final static double GROWING_TIME = 3;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
 
     //Balancing stats;
@@ -50,7 +50,7 @@ public class Spruce extends Tower {
 
     // UPGRADE VARIABLES
     private double fichtenWutBuff = 1;
-    
+
     private double monoculturalMultiplier = 1;  // *deltaT => >1
     private int spruceCounter = 0;
 
@@ -108,45 +108,19 @@ public class Spruce extends Tower {
     }
 
     @Override
-    public NetworkCommand update(double timeElapsed) {
-        if (!checkAlive()) {
-            return null;
-        }
+    public void updateSpecific(double timeElapsed) {
 
-        if (!isMature) {
-            GameImage currImage = updateGrowing(timeElapsed);
-            isMature = growingAnimation.isFinished();
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", id),
-                new CommandArgument("hp", healthPoints),
-                new CommandArgument("image", currImage.ordinal()),
-                new CommandArgument("timeLeft", growingAnimation.getTimeLeft())
-            });
-        } else {
+        // Shooting
+        shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
 
-            // Regen
-            updateRegen(timeElapsed);
-
-            // Shooting
-            shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
-
-            if (shootTimer > shootTime * fichtenWutBuff) {
-                Mob target = findTarget(range);
-                if (target != null) {
-                    shootTimer = 0;
-                    shoot(target);
-                }
+        if (shootTimer > shootTime * fichtenWutBuff) {
+            Mob target = findTarget(range);
+            if (target != null) {
+                shootTimer = 0;
+                shoot(target);
             }
-
-            // Health
-            // Upgrades
-            performUpgradesOnUpdate();
-
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, 
-                    new CommandArgument[]{new CommandArgument("id", id), 
-                    new CommandArgument("hp", healthPoints), 
-                    new CommandArgument("effects", effectSet.toString())});
         }
+
     }
 
     private void shoot(Mob target) {
@@ -191,7 +165,7 @@ public class Spruce extends Tower {
                 onShoot.add((o) -> {
                     fichtenWutBuff *= FICHTEN_WUT_MULTIPLIER;
                 });
-                onNewRound.add((o)->{
+                onNewRound.add((o) -> {
                     fichtenWutBuff = 1;
                 });
                 break;
@@ -260,9 +234,8 @@ public class Spruce extends Tower {
         return oldHealth - healthPoints;
     }
 
-    public HashMap<String,Integer> getResearchStacks() {
+    public HashMap<String, Integer> getResearchStacks() {
         return researchStacks;
     }
-    
 
 }

@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import maggdaforestdefense.MaggdaForestDefense;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -29,7 +30,7 @@ public class EssenceMenu extends SideMenu {
 
     private ImageView essenceBar, essenceBox;
     private Group contentGroup;
-    
+    private int animationGoal = 0;
     public static double ORIGINAL_BOX_HEIGHT = 1300, ORIGINAL_BOX_WIDTH = 133;
     private DoubleProperty boxBorder, essenceLevel, maxEssence, insets;
 
@@ -51,11 +52,11 @@ public class EssenceMenu extends SideMenu {
 
         setContent(contentGroup);
         
-        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(boxBorder, 6);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(boxBorder, 5);
         MaggdaForestDefense.bindToSizeFact(insets, 30);
         
         maggdaforestdefense.MaggdaForestDefense.bindToHeight(essenceBox.fitHeightProperty(), ORIGINAL_BOX_HEIGHT);
-        maggdaforestdefense.MaggdaForestDefense.bindToWidth(essenceBox.fitWidthProperty(), ORIGINAL_BOX_WIDTH);
+        maggdaforestdefense.MaggdaForestDefense.bindToSizeFact(essenceBox.fitWidthProperty(), ORIGINAL_BOX_WIDTH);
         essenceBox.layoutXProperty().bind(insets);
         essenceBox.layoutYProperty().bind(insets);
 
@@ -67,18 +68,19 @@ public class EssenceMenu extends SideMenu {
 
 
     public void updateEssenceLevel(int essence, int maxEss) {
+        
         maxEssence.set(maxEss);
-        if (essence != (int)essenceLevel.get()) {
-            animateEssenceLevel((int)essenceLevel.get(), essence);
+        if (animationGoal != essence) {
+            animateEssenceLevel(essence);
         }
+        animationGoal = essence;
 
 
     }
 
    
 
-    public void animateEssenceLevel(int oldVal, int newVal) {
-        double newBarHeight =  (essenceBox.fitHeightProperty().get() - 2 * boxBorder.get()) * ((double) newVal / (double) maxEssence.get());
+    public void animateEssenceLevel(int newVal) {
         
         if(newVal < 0) {
             newVal = 0;
@@ -86,7 +88,6 @@ public class EssenceMenu extends SideMenu {
         
         
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceLevel, newVal, Interpolator.EASE_BOTH)));
-
         timeline.play();
     }
 

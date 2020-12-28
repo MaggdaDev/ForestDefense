@@ -60,7 +60,22 @@ public enum Upgrade {
     LORBEER_3_1(GameImage.UPGRADE_LORBEER_03_01.getImage(), "Mechanische Ernte", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_1;}), GameObjectType.T_LORBEER),
     LORBEER_3_2(GameImage.UPGRADE_LORBEER_03_02.getImage(), "Prestige Ernte", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_2;}), GameObjectType.T_LORBEER),
     LORBEER_3_3(GameImage.UPGRADE_LORBEER_03_03.getImage(), "Kopfgeld Ernte", 25000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_3;}), GameObjectType.T_LORBEER),
-    LORBEER_3_4(GameImage.UPGRADE_LORBEER_03_04.getImage(), "Tauschhandel", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_4;}), GameObjectType.T_LORBEER);
+    LORBEER_3_4(GameImage.UPGRADE_LORBEER_03_04.getImage(), "Tauschhandel", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_4;}), GameObjectType.T_LORBEER),
+    
+    // OAK
+    
+    OAK_1_1(GameImage.UPGRADE_OAK_01_01.getImage(), "Harte Rinde", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_1_1;}), GameObjectType.T_OAK),
+    OAK_1_2(GameImage.UPGRADE_OAK_01_02.getImage(), "Leckere Eicheln", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_1_2;}), GameObjectType.T_OAK),
+    OAK_1_3(GameImage.UPGRADE_OAK_01_03.getImage(), "Leckere Wurzeln", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_1_3;}), GameObjectType.T_OAK),
+    OAK_1_4(GameImage.UPGRADE_OAK_01_04.getImage(), "Raue Rinde", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_1_4;}), GameObjectType.T_OAK),
+    OAK_2_1(GameImage.UPGRADE_OAK_02_01.getImage(), "Auffrischung", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_2_1;}), GameObjectType.T_OAK),
+    OAK_2_2(GameImage.UPGRADE_OAK_02_02.getImage(), "Frische Quelle", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_2_2;}), GameObjectType.T_OAK),
+    OAK_2_3(GameImage.UPGRADE_OAK_02_03.getImage(), "Soziale Eiche", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_2_3;}), GameObjectType.T_OAK),
+    OAK_2_4(GameImage.UPGRADE_OAK_02_04.getImage(), "Verbundene Wurzeln", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_2_4;}), GameObjectType.T_OAK),
+    OAK_3_1(GameImage.UPGRADE_OAK_03_01.getImage(), "Totalregeneration", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_3_1;}), GameObjectType.T_OAK),
+    OAK_3_2(GameImage.UPGRADE_OAK_03_02.getImage(), "Eichenwall", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_3_2;}), GameObjectType.T_OAK),
+    OAK_3_3(GameImage.UPGRADE_OAK_03_03.getImage(), "Spontane Erhärtung", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_3_3;}), GameObjectType.T_OAK),
+    OAK_3_4(GameImage.UPGRADE_OAK_03_04.getImage(), "Eichelernte", 1 , (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_OAK_3_4;}), GameObjectType.T_OAK);
 
 
     private final Image icon;

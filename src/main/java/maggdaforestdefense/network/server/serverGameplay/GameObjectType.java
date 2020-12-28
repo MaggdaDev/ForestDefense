@@ -25,6 +25,7 @@ public enum GameObjectType {
     T_SPRUCE(GameImage.TOWER_SPRUCE_1),
     T_MAPLE(GameImage.TOWER_MAPLE_1),
     T_LORBEER(GameImage.TOWER_LORBEER_1),
+    T_OAK(GameImage.TOWER_OAK_1),
     //PROJECTILES
     P_SPRUCE_SHOT(GameImage.PROJECTILE_SPRUCE_SHOT),
     P_MAPLE_SHOT(GameImage.PROJECTILE_MAPLE_SHOT);

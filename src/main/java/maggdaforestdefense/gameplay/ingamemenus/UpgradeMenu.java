@@ -137,12 +137,16 @@ public class UpgradeMenu extends VBox{
                 treeView.setImage(GameImage.TOWER_LORBEER_1.getImage());
                 
                 break;
+            case T_OAK:
+                treeNameLabel.setText("Oak");
+                treeView.setImage(GameImage.TOWER_OAK_1.getImage());
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
           getChildren().addAll(treePane, buttonMenuScrollBox, selectedUpgradeBox);
           maggdaforestdefense.MaggdaForestDefense.bindToHeight(spacingProperty(), 20);
-          setAlignment(Pos.TOP_CENTER);
+          setAlignment(Pos.CENTER);
           
           selectedUpgradeBox.setVisible(false);
           

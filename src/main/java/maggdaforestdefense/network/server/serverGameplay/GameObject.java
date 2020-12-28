@@ -19,6 +19,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientMa
 import maggdaforestdefense.gameplay.clientGameObjects.clientProjectiles.ClientSpruceShot;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientLorbeer;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientMaple;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientOak;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -114,6 +115,9 @@ public abstract class GameObject {
                 
             case T_LORBEER:
                 return new ClientLorbeer((int)command.getNumArgument("id"), (int) command.getNumArgument("xIndex"), (int) command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
+                
+            case T_OAK:
+                return new ClientOak((int)command.getNumArgument("id"), (int) command.getNumArgument("xIndex"), (int)command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
 
             //PROJECTILES
             case P_MAPLE_SHOT:

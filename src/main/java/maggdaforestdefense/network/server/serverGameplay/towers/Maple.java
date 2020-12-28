@@ -33,7 +33,7 @@ public class Maple extends Tower {
     public final static double DEFAULT_HEALTH = 100;
     public final static double DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 1.5d;
-    public final static double GROWING_TIME = 3;
+    public final static double GROWING_TIME = 10;
     public final static boolean CAN_ATTACK_DIGGING = false, CAN_ATTACK_WALKING = true, CAN_ATTACK_FLYING = false;
     public final static RangeType RANGE_TYPE = RangeType.CIRCLE;
 
@@ -54,7 +54,6 @@ public class Maple extends Tower {
     private boolean isChargedShots = false;
     private double escalationCooldownTimer = 0;
     private boolean isEscalation = false, escalationReady = false;
-
 
     public Maple(ServerGame game, double x, double y) {
         super(game, x, y, GameObjectType.T_MAPLE, DEFAULT_PRIZE, UpgradeSet.MAPLE_SET, DEFAULT_HEALTH, DEFAULT_REGEN, DEFAULT_RANGE, new CanAttackSet(CAN_ATTACK_DIGGING, CAN_ATTACK_WALKING, CAN_ATTACK_FLYING), GROWING_TIME, RANGE_TYPE);
@@ -101,81 +100,49 @@ public class Maple extends Tower {
     }
 
     @Override
-    public NetworkCommand update(double timeElapsed) {
-        if (!checkAlive()) {
-            return null;
+    public void updateSpecific(double timeElapsed) {
+
+        // Shooting
+        shootTimer += timeElapsed;
+
+        if (isEscalation && (!escalationReady) && (!effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION))) {        // Effect: Escalation
+            escalationCooldownTimer += timeElapsed;
+            if (escalationCooldownTimer > ESCALATION_COOLDOWN) {
+                escalationReady = true;
+                escalationCooldownTimer = 0;
+            }
+        }
+        if (isChargedShots && (!effectSet.isActive(EffectSet.EffectType.MAPLE_CHARGED))) {   // Effect: Charged shot
+            chargedShotCooldownTimer += timeElapsed;
+            if (chargedShotCooldownTimer > CHARGED_COOLDOWN) {
+                effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_CHARGED, EffectSet.Effect.UNLIMITED));
+                escalationCooldownTimer = 0;
+            }
         }
 
-        if (!isMature) {
-            GameImage currImage = updateGrowing(timeElapsed);
-            isMature = growingAnimation.isFinished();
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", id),
-                new CommandArgument("hp", healthPoints),
-                new CommandArgument("image", currImage.ordinal()),
-                new CommandArgument("timeLeft", growingAnimation.getTimeLeft()),
-                new CommandArgument("range", range)
-            });
-        } else {
-
-            // Regen
-            updateRegen(timeElapsed);
-
-            // Shooting
-            shootTimer += timeElapsed;
-            
-            // Effects
-            updateEffects(timeElapsed);
-            
-            if(isEscalation && (!escalationReady) && (!effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION))) {        // Effect: Escalation
-                escalationCooldownTimer += timeElapsed;
-                if(escalationCooldownTimer > ESCALATION_COOLDOWN) {
-                    escalationReady = true;
-                    escalationCooldownTimer = 0;
-                }
-            }
-            if(isChargedShots && (!effectSet.isActive(EffectSet.EffectType.MAPLE_CHARGED))) {   // Effect: Charged shot
-                chargedShotCooldownTimer += timeElapsed;
-                if(chargedShotCooldownTimer > CHARGED_COOLDOWN) {
-                    effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_CHARGED, EffectSet.Effect.UNLIMITED));
-                    escalationCooldownTimer = 0;
-                }
-            }
-            
-            
-            if (effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION)) {     // Effect: Escalation
-                shootTimer += timeElapsed * (ESCALATION_FACT -1);
-            }
-
-            if (shootTimer > shootTime) {
-                int mobsInRange = howManyMobsInRange(range, canAttackSet);
-                
-                if(mobsInRange >= ESCALATION_MOB_AMAOUNT && escalationReady && isEscalation) {     //Effect: Escalation
-                    escalationReady = false;
-                    effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_ESCALATION, ESCALATION_DURATION));
-                }
-                
-                if (mobsInRange > 0) {
-                    Logger.logServer(mobsInRange + "mobs in range detected");
-                    shootTimer = 0;
-                    shoot(mobsInRange);
-                    
-                    chargedShotCooldownTimer = 0;       // Effect: charged
-                }
-            }
-
-            // Health
-            // Upgrades
-            performUpgradesOnUpdate();
-            
-            
-
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", id), 
-                new CommandArgument("hp", healthPoints), 
-                new CommandArgument("range", range), 
-                new CommandArgument("effects", effectSet.toString())});
+        if (effectSet.isActive(EffectSet.EffectType.MAPLE_ESCALATION)) {     // Effect: Escalation
+            shootTimer += timeElapsed * (ESCALATION_FACT - 1);
         }
+
+        if (shootTimer > shootTime) {
+            int mobsInRange = howManyMobsInRange(range, canAttackSet);
+
+            if (mobsInRange >= ESCALATION_MOB_AMAOUNT && escalationReady && isEscalation) {     //Effect: Escalation
+                escalationReady = false;
+                effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.MAPLE_ESCALATION, ESCALATION_DURATION));
+            }
+
+            if (mobsInRange > 0) {
+                Logger.logServer(mobsInRange + "mobs in range detected");
+                shootTimer = 0;
+                shoot(mobsInRange);
+
+                chargedShotCooldownTimer = 0;       // Effect: charged
+            }
+        }
+
+        addUpdateArg(new CommandArgument("range", range));
+
     }
 
     public void notifyEnemyHit() {
@@ -193,7 +160,5 @@ public class Maple extends Tower {
         serverGame.addProjectile(shot);
         performUpgradesOnShoot();
     }
-
-
 
 }

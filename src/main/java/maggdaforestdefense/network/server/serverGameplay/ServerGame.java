@@ -32,6 +32,7 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.Projectile;
 import maggdaforestdefense.network.server.serverGameplay.spawning.Spawnable;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Maple;
+import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.Waiter;
 
@@ -189,6 +190,12 @@ public class ServerGame extends Thread {
                 newTower = new Lorbeer(this, xPos, yPos);
                 break;
 
+            case T_OAK:
+                if(coins < Oak.DEFAULT_PRIZE) {
+                    return;
+                }
+                newTower = new Oak(this, xPos, yPos);
+                break;
             default:
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }

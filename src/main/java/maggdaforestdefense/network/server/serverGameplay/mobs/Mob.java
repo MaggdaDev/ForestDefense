@@ -287,7 +287,7 @@ public abstract class Mob extends GameObject {
     }
     
     public int calculateCoinValue() {
-        int goldAdd = 1;
+        int goldAdd = 0;
         if(effectSet.isActive(EffectSet.EffectType.GOLDED)) {
             goldAdd = (int)Lorbeer.WIEDERVWERTUNG_ADD;
         }
@@ -305,7 +305,7 @@ public abstract class Mob extends GameObject {
             case M_SCHWIMMKAEFER:
                 return 20;
             case M_WANDERLAUFER:
-                return 40;
+                return 50;
             case M_WASSERLAEUFER:
                 return 40;
             default:

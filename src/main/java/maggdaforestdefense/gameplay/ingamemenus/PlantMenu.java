@@ -27,6 +27,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Maple;
+import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
@@ -104,6 +105,7 @@ public class PlantMenu extends VBox {
                     towerButtons.add(new PlantTowerButton(GameObjectType.T_SPRUCE, xIndex, yIndex, Spruce.DEFAULT_PRIZE, this), 0, 0);
                     towerButtons.add(new PlantTowerButton(GameObjectType.T_MAPLE, xIndex, yIndex, Maple.DEFAULT_PRIZE, this), 1, 0);
                     towerButtons.add(new PlantTowerButton(GameObjectType.T_LORBEER, xIndex, yIndex, Lorbeer.DEFAULT_PRIZE, this), 0, 1);
+                    towerButtons.add(new PlantTowerButton(GameObjectType.T_OAK, xIndex, yIndex, Oak.DEFAULT_PRIZE, this), 1, 1);
                     break;
                 case SAND:
                     cellTypeView.setImage(GameImage.MAP_CELL_SAND.getImage());

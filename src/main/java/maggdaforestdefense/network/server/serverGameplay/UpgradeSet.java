@@ -47,6 +47,26 @@ public enum UpgradeSet {
             Upgrade.MAPLE_3_2,
             Upgrade.MAPLE_3_3,}
     }),
+    OAK_SET(new Upgrade[][]{
+        new Upgrade[] {
+            Upgrade.OAK_1_1,
+            Upgrade.OAK_1_2,
+            Upgrade.OAK_1_3,
+            Upgrade.OAK_1_4
+        },
+        new Upgrade[]{
+            Upgrade.OAK_2_1,
+            Upgrade.OAK_2_2,
+            Upgrade.OAK_2_3,
+            Upgrade.OAK_2_4
+        },
+        new Upgrade[] {
+            Upgrade.OAK_3_1,
+            Upgrade.OAK_3_2,
+            Upgrade.OAK_3_3,
+            Upgrade.OAK_3_4
+        }
+    }),
     LORBEER_SET(new Upgrade[][]{
         new Upgrade[] {
             Upgrade.LORBEER_1_1,

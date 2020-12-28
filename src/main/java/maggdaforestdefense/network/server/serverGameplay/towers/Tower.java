@@ -64,6 +64,8 @@ public abstract class Tower extends GameObject {
     protected EffectSet effectSet;
     
     private Vector<Mob> mobsInRange;
+    
+    private Vector<CommandArgument> updateCommandArgs;
     // Upgrade events
     protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound;
     
@@ -98,6 +100,7 @@ public abstract class Tower extends GameObject {
         this.effectSet = new EffectSet();
         this.rangeType = rangeType;
         this.mobsInRange = new Vector<>();
+        this.updateCommandArgs = new Vector<>();
         
         // Animation
         GameImage lastImage;
@@ -142,6 +145,54 @@ public abstract class Tower extends GameObject {
         return null;
     }
     
+    @Override
+    public final NetworkCommand update(double timeElapsed) {
+        
+        if (!checkAlive()) {
+            return null;
+        }
+
+        if (!isMature) {
+            GameImage currImage = updateGrowing(timeElapsed);
+            isMature = growingAnimation.isFinished();
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
+                new CommandArgument("id", id),
+                new CommandArgument("hp", healthPoints),
+                new CommandArgument("image", currImage.ordinal()),
+                new CommandArgument("timeLeft", growingAnimation.getTimeLeft())
+            });
+        } else {
+            updateSpecific(timeElapsed);
+
+            // Regen
+            updateRegen(timeElapsed);
+
+            updateEffects(timeElapsed);
+
+            // Health
+            // Upgrades
+            performUpgradesOnUpdate();
+            
+            updateCommandArgs.add(new CommandArgument("id", id));
+            updateCommandArgs.add(new CommandArgument("hp", healthPoints));
+            updateCommandArgs.add(new CommandArgument("effects", effectSet.toString()));
+
+            CommandArgument[] args = new CommandArgument[updateCommandArgs.size()];
+            for(int i = 0; i < args.length; i++) {
+                args[i] = updateCommandArgs.get(i);
+            }
+            
+            updateCommandArgs.clear();
+
+            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, args);
+    }
+    }
+    
+    protected abstract void updateSpecific(double timeElapsed);
+    
+    protected void addUpdateArg(CommandArgument arg) {
+        updateCommandArgs.add(arg);
+    }
    
 
     protected void updateRegen(double timeElapsed) {

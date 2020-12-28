@@ -39,7 +39,7 @@ public class Lorbeer extends Tower{
     public static final int DEFAULT_PRIZE = 350;
     public final static double DEFAULT_HEALTH = 20, DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 2;
-    public final static double DEFAULT_GROWING_TIME = 2;
+    public final static double DEFAULT_GROWING_TIME = 30;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
     public final static double DEFAULT_DAMAGE = 10;
     public final static int DEFAULT_MAX_LORBEERS = 20;
@@ -172,25 +172,9 @@ public class Lorbeer extends Tower{
     }
 
     @Override
-    public NetworkCommand update(double timeElapsed) {
-        if (!checkAlive()) {
-            return null;
-        }
+    public void updateSpecific(double timeElapsed) {
+       
 
-        if (!isMature) {
-            GameImage currImage = updateGrowing(timeElapsed);
-            isMature = growingAnimation.isFinished();
-            return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, new CommandArgument[]{
-                new CommandArgument("id", id),
-                new CommandArgument("hp", healthPoints),
-                new CommandArgument("image", currImage.ordinal()),
-                new CommandArgument("timeLeft", growingAnimation.getTimeLeft()), 
-                new CommandArgument("range", range)
-            });
-        } 
-
-        // Regen
-        updateRegen(timeElapsed);
         
         if(attackTimer <= attackCooldown) {
             attackTimer += timeElapsed;
@@ -216,15 +200,9 @@ public class Lorbeer extends Tower{
             }
         }
         
-        performUpgradesOnUpdate();
-        
-        updateCommandArgs.clear();
-        
-        updateCommandArgs.add(new CommandArgument("id", id));
-        updateCommandArgs.add(new CommandArgument("hp", healthPoints));
-        updateCommandArgs.add(new CommandArgument("effects", effectSet.toString()));
-        updateCommandArgs.add(new CommandArgument("range", range));
-        updateCommandArgs.add(new CommandArgument("attackCooldown", attackCooldown - attackTimer));
+
+        addUpdateArg(new CommandArgument("range", range));
+        addUpdateArg(new CommandArgument("attackCooldown", attackCooldown - attackTimer));
 
         if(isTauschhandel) {
             updateTauschhandel();
@@ -232,17 +210,13 @@ public class Lorbeer extends Tower{
         
         if(isKopfgeld) {
             if(headHunt.isUpdate()) {
-               updateCommandArgs.add(new CommandArgument("headhunt", headHunt.toString()));
+               addUpdateArg(new CommandArgument("headhunt", headHunt.toString()));
             } 
         } else {
-            updateCommandArgs.add(new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount));
-            updateCommandArgs.add(new CommandArgument("coinsPerLorbeer", goldPerLorbeer));
+            addUpdateArg(new CommandArgument("lorbeeren", lorbeerAmount + "-" + maxLorbeerAmount));
+            addUpdateArg(new CommandArgument("coinsPerLorbeer", goldPerLorbeer));
         }
-        CommandArgument[] args = new CommandArgument[updateCommandArgs.size()];
-        for(int i = 0; i < updateCommandArgs.size(); i++) {
-            args[i] = updateCommandArgs.get(i);
-        }
-        return new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_OBJECT, args);
+
     }
     
     @Override

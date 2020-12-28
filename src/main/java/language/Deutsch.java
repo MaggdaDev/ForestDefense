@@ -9,7 +9,7 @@ package language;
  *
  * @author DavidPrivat
  */
-public class Deutsch extends Language{
+public class Deutsch extends Language{  // HALLE
 
     public Deutsch() {
     // Tower names

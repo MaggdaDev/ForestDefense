@@ -13,6 +13,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.*;
 
 /**
  *
@@ -26,11 +27,12 @@ public class Oak extends Tower{
     
     
     //Upgrade var
-    private boolean isEicheln, isWurzeln, isRaueRinde;
+    private boolean isEicheln, isWurzeln, isRaueRinde, isSozial, isVerbundeneWurzeln;
     
     // Upgrade const
     public final double HARTE_RINDE_ADD = 50;
     public final double ATTRACT_RANGE = 1.5;
+    public final double REGEN_PER_WATER_ADD = 0.3;
 
     
     public Oak(ServerGame game, double x, double y) {
@@ -65,6 +67,24 @@ public class Oak extends Tower{
                     Mob mob = (Mob)m;
                     mob.getEffectSet().addEffect(new EffectSet.Effect(EffectSet.EffectType.SENSITIVE, 3));
                 });
+                break;
+            case OAK_2_1:
+                onNewRound.add((o)->{
+                    healthPoints = maxHealth;
+                });
+                break;
+            case OAK_2_2:
+                double regenAdd = 0;
+                for(PathCell cell: mapCell.getPathCell().getNeighbours()) {
+                    regenAdd += REGEN_PER_WATER_ADD;
+                }
+                regenerationPerSecond = regenAdd;
+                break;
+            case OAK_2_3:
+                isSozial = true;
+                break;
+            case OAK_2_4:
+                isVerbundeneWurzeln = true;
                 break;
                 
                 

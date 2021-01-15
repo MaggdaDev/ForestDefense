@@ -149,7 +149,8 @@ public abstract class Mob extends GameObject {
         serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
             if (gameObject instanceof Tower) {
                 Tower tower = ((Tower) gameObject);
-                if (Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
+                double dist = Math.sqrt(Math.pow(tower.getXIndex() - currentXIndex, 2.0d) + Math.pow(tower.getYIndex() - currentYIndex, 2.0d));
+                if (tower.shouldPrioritize(dist * MapCell.CELL_SIZE, movementType) || Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
                     PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
                     Path newPath = finder.findPath();
                     if (newPath.getRestWay() < path.getRestWay()) {

@@ -67,7 +67,7 @@ public abstract class Tower extends GameObject {
     
     private Vector<CommandArgument> updateCommandArgs;
     // Upgrade events
-    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound;
+    protected Vector<UpgradeHandler> onShoot, onKill, onUpdate, onTowerChanges, onNewRound, onDamageTaken;
     
     protected boolean isMature = false;
     
@@ -95,6 +95,7 @@ public abstract class Tower extends GameObject {
         this.onUpdate = new Vector<UpgradeHandler>();
         this.onTowerChanges = new Vector<UpgradeHandler>();
         this.onNewRound = new Vector<UpgradeHandler>();
+        this.onDamageTaken = new Vector<UpgradeHandler>();
         this.canAttackSet = attackSet;
         this.growingTime = growTime;
         this.effectSet = new EffectSet();
@@ -257,6 +258,8 @@ public abstract class Tower extends GameObject {
 
     public void damage(Damage damageObject) {
         healthPoints -= damageObject.getTotalDamage(0);
+        performUpgradesOnDamageTaken(damageObject.getOwnerMob());
+        
     }
 
     public boolean checkAlive() {
@@ -275,6 +278,10 @@ public abstract class Tower extends GameObject {
     
     public void performActiveSkill(ActiveSkill skill) {      // OVERRIDABLE
         
+    }
+    
+    public boolean shouldPrioritize(double dist, Mob.MovementType movement) {
+        return false;
     }
     
     public void handleAfterWave() {
@@ -351,6 +358,13 @@ public abstract class Tower extends GameObject {
             u.handleUpgrade(null);
         }
     }
+    
+    public void performUpgradesOnDamageTaken(Mob mob) {                  
+        for (int i = 0; i < onDamageTaken.size(); i++) {
+            UpgradeHandler u = onDamageTaken.get(i);
+            u.handleUpgrade(mob);
+        }
+    }
 
     public void performUpgradesOnKill(Mob killed) {
         for (int i = 0; i < onKill.size(); i++) {
@@ -404,7 +418,6 @@ public abstract class Tower extends GameObject {
     }
 
     public void notifyDamage(double damageVal) {
-        Logger.logServer("DAMAGE: " + damageVal);
         double healthAdd = damageVal * lifeSteal;
         if (healthPoints + healthAdd > maxHealth) {
             healthPoints = maxHealth;

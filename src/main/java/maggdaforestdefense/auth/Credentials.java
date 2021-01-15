@@ -5,7 +5,7 @@ public class Credentials {
     public String userId = "";
     public String userName = "";
     public String authToken = "";
-    MWUser mwUser;
+    public MWUser mwUser;
 
     /**
      * Refreshes the user details.

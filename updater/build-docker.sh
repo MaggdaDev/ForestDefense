@@ -39,7 +39,10 @@ cp -r ForestDefense ./web/updater/ForestDefense
 
 echo "# Generating ienokihpkg update"
 
-mv ForestDefense2 ForestDefense
+rm -rf ForestDefense
+mkdir ForestDefense
+
+mv ForestDefense2/* ForestDefense
 
 wget https://ienokih.pages.minortom.net/ienokihpkg-lockfilegenerator/lockfilegenerator
 cd ForestDefense || exit

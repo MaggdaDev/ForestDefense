@@ -6,7 +6,16 @@ plugins {
 
 group 'maggdaforestdefense'
 version 'app'
-mainClassName = 'maggdaforestdefense.Main'
+
+mainClassName = 'maggdaforestdefense.ClientLauncher'
+jar {
+    manifest {
+        attributes 'Main-Class': 'maggdaforestdefense.ClientLauncher'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
 applicationDefaultJvmArgs = ["-Djava.library.path=natives"]
 
@@ -30,9 +39,12 @@ dependencies {
     compile "org.java-websocket:Java-WebSocket:1.5.1"
     //compile 'com.jfoenix:jfoenix:8.0.8' // For Java 8
     //compile 'com.jfoenix:jfoenix:9.0.8' // For Java 9
+    runtimeOnly "org.openjfx:javafx-graphics:15.0.1:win"
+    runtimeOnly "org.openjfx:javafx-graphics:15.0.1:linux"
+    runtimeOnly "org.openjfx:javafx-graphics:15.0.1:mac"
 }
 
 javafx {
-    version = "15"
+    version = "15.0.1"
     modules = [ 'javafx.base' , 'javafx.controls' , 'javafx.fxml' , 'javafx.graphics' , 'javafx.media' , 'javafx.swing' , 'javafx.web' ]
 }

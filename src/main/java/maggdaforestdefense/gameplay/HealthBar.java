@@ -60,5 +60,9 @@ public class HealthBar extends Group{
         setVisible(true);
     }
     
+    public void setMaxHealth(double m) {
+        maxHealth = m;
+    }
+    
     
 }

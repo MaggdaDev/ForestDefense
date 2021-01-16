@@ -42,7 +42,7 @@ import maggdaforestdefense.util.Waiter;
  */
 public class ServerGame extends Thread {
 
-    public final static int START_COINS = 100, START_ESSENCE = 8;
+    public final static int START_COINS = 1000, START_ESSENCE = 8;
 
     // MANAGEMENT
     private final String name;

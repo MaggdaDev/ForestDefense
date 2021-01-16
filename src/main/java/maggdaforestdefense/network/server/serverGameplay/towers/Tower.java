@@ -261,6 +261,13 @@ public abstract class Tower extends GameObject {
         performUpgradesOnDamageTaken(damageObject.getOwnerMob());
         
     }
+    
+    public void heal(double healing) {
+        healthPoints += healing;
+        if(healthPoints > maxHealth) {
+            healthPoints = maxHealth;
+        }
+    }
 
     public boolean checkAlive() {
         if (healthPoints < 0) {
@@ -393,6 +400,12 @@ public abstract class Tower extends GameObject {
             u.handleUpgrade(null);
         }
     }
+     
+     public void addOnDamageTaken(UpgradeHandler h) {
+         if(!onDamageTaken.contains(h)) {
+             onDamageTaken.add(h);
+         }
+     }
 
     // UPgrade performs end
     abstract public void addUpgrade(Upgrade upgrade);

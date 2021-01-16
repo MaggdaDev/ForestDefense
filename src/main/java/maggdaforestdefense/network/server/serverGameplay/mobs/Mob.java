@@ -225,6 +225,14 @@ public abstract class Mob extends GameObject {
             return true;
         }
     }
+    
+    public Tower getTargetTower() {
+        return targetTower;
+    }
+    
+    public double getDamage() {
+        return damage;
+    }
 
     public void die(boolean getGold) {
         if (!dead) {

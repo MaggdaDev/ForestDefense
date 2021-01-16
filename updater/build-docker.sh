@@ -42,6 +42,11 @@ echo "# Generating ienokihpkg update"
 rm -rf ForestDefense
 mkdir ForestDefense
 
+wget -O openjfx.zip https://gluonhq.com/download/javafx-15-0-1-sdk-windows/
+
+unzip openjfx.zip
+mv javafx-*/bin/* ForestDefense2
+
 mv ForestDefense2/* ForestDefense
 
 wget https://ienokih.pages.minortom.net/ienokihpkg-lockfilegenerator/lockfilegenerator

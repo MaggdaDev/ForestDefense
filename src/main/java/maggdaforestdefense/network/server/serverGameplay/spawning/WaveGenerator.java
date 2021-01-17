@@ -49,7 +49,7 @@ public class WaveGenerator {
     }
     
     private int getStrengthFromRound(int round) {
-        return (int)(4.0d + 0.2 * round + 0.2d * Math.pow((double)round, 2));
+        return (int)(4.0d + 0.2 * round + 0.1d * Math.pow((double)round, 2));
     }
     
     private int getStrength(GameObjectType type) {

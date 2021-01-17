@@ -236,6 +236,8 @@ public abstract class ClientTower extends ClientGameObject {
             addColoredShadow(15, Color.RED);
         } else if (set.isActive(EffectSet.EffectType.MAPLE_ESCALATION)) {
             addColoredShadow(15, Color.DARKRED);
+        } else if(set.isActive(EffectSet.EffectType.OAK_ERHAERTUNG)) {
+            addColoredShadow(20, Color.SILVER);
         } else {
             addColoredShadow(0, Color.TRANSPARENT);
         }

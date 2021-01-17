@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.towers;
 
+import java.util.Vector;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
@@ -17,6 +18,7 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.*;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.UpgradeHandler;
 
 /**
@@ -30,11 +32,16 @@ public class Oak extends Tower {
     public final static RangeType RANGE_TYPE = RangeType.CIRCLE;
 
     //Upgrade var
-    private boolean isEicheln = false, isWurzeln = false, isRaueRinde = false, isSozial = false, isVerbundeneWurzeln = false, isTotalRegen = false;
+    private boolean isEicheln = false, isWurzeln = false, isRaueRinde = false, isSozial = false, isVerbundeneWurzeln = false, isTotalRegen = false, isEichenWallOrigin = false, isEichenWallMember = false, isSpontanErhaertung = false, isEichelErnte = false;
     private UpgradeHandler sozialHandler;
     private boolean isAnyVerbundeneWurzeln = false;
     private int verbundeneWurzelnAmount = 0;
     private double totalRegenTimer = 0;
+    private Vector<Oak> wallOaks;
+    private Oak wallOrigin;
+    private double spontanErhaertungTimer = 0;
+    private int eichelErnteCounter = 0;
+    private Vector<Mob> eichelErnteMobs;
     // Upgrade const
     public final double HARTE_RINDE_ADD = 50;
     public final double ATTRACT_RANGE = 1.5;
@@ -42,6 +49,8 @@ public class Oak extends Tower {
     public final double SOZIAL_PERCENTAGE_OF_DAMAGE = 0.5;
     public final double VERBUNDENE_WURZELN_PERCENTAGE = 0.5;
     public final double TOTAL_REGEN_COOLDOWN = 60;
+    public final double SPONTAN_ERHAERTUNG_COOLDOWN = 10;
+    public final double HEALTH_PER_EICHEL_ERNTE = 1;
     
 
     public Oak(ServerGame game, double x, double y) {
@@ -66,9 +75,48 @@ public class Oak extends Tower {
                         ((Oak)gameObject).heal(healPerOak);
                     }
                 }
-            });
+            }); 
+             
+            }
+            
+            if(isInWall()) {
+                heal(((Mob)mob).getDamage());
+                wallOrigin.doWallDamage(((Mob)mob).getDamage());
+            }
+            
+            if(isSpontanErhaertung) {
+                if(effectSet.isActive(EffectSet.EffectType.OAK_ERHAERTUNG)) {
+                    heal(((Mob)mob).getDamage());
+                    effectSet.removeEffect(EffectSet.EffectType.OAK_ERHAERTUNG);
+                }
+            } 
+            
+            if(isEichelErnte) {
+                if(!eichelErnteMobs.contains(mob)) {
+                    eichelErnteMobs.add((Mob)mob);
+                    eichelErnteCounter++;
+                    maxHealth += HEALTH_PER_EICHEL_ERNTE;
+                    for(int i = 0; i < eichelErnteMobs.size(); i++) {
+                        Mob currMob = eichelErnteMobs.get(i);
+                        if(!currMob.checkAlive()) {
+                            eichelErnteMobs.remove(currMob);
+                        }
+                    }
+                }
             }
         });
+        onTowerChanges.add((o)->{
+            if(isEichenWallMember) {
+                if(!wallOrigin.isAlive) {
+                    isEichenWallMember = false;
+                    wallOrigin = null;
+                }
+            }
+        });
+        
+        wallOaks = new Vector<>();
+        wallOaks.add(this);
+        eichelErnteMobs = new Vector<>();
 
     }
 
@@ -81,6 +129,12 @@ public class Oak extends Tower {
                 totalRegenTimer -= timeElapsed;
             }
             addUpdateArg(new CommandArgument("totalRegenCooldown", totalRegenTimer));
+        }
+        if(isSpontanErhaertung) {
+            if(spontanErhaertungTimer > 0) {
+                spontanErhaertungTimer -= timeElapsed;
+            }
+            addUpdateArg(new CommandArgument("spontanErhaertungCooldown", spontanErhaertungTimer));
         }
     }
 
@@ -149,14 +203,17 @@ public class Oak extends Tower {
             case OAK_3_1:
                 isTotalRegen = true;
                 break;
-            case OAK_3_2:
+            case OAK_3_2:   // Eichenwall
+                isEichenWallOrigin = true;
+                wallOrigin = this;
+                setUpEichenWall();
                 
                 break;
             case OAK_3_3:
-                
+                isSpontanErhaertung = true;
                 break;
             case OAK_3_4:
-                
+                isEichelErnte = true;
                 break;
 
         }
@@ -169,10 +226,159 @@ public class Oak extends Tower {
         }
     }
     
+    public void doSpontanErhaertung() {
+        Logger.logServer("ERHÄRTUNG!!!!!!!!!!!!!!!!!");
+        if(spontanErhaertungTimer <= 0) {
+            effectSet.addEffect(new EffectSet.Effect(EffectSet.EffectType.OAK_ERHAERTUNG, 3));
+            spontanErhaertungTimer = SPONTAN_ERHAERTUNG_COOLDOWN;
+        }
+    }
     
+    public void doWallDamage(double damage) {
+        double damagePerOak = damage / (double)wallOaks.size();
+        wallOaks.forEach((Oak oak)->{
+            oak.getWallDamaged(damagePerOak);
+        });
+    }
+    
+    public void getWallDamaged(double d) {
+        healthPoints -= d;
+    }
+    
+    private void setUpEichenWall() {
+        int hAmount = 1;
+        int vAmount = 1;
+        
+
+        
+        // H pos check
+        int counter = 1;
+        while(true) {
+            if(xIndex + counter >= serverGame.getMap().getCells().length) {
+      
+                break;
+            }
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex + counter][yIndex];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+           
+                break;
+            }
+            hAmount ++;
+            counter ++;
+        }
+        // H neg check
+        counter = 1;
+        while(true) {
+            if(xIndex - counter < 0) {
+                break;
+            }
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex - counter][yIndex];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                
+                break;
+            }
+            hAmount ++;
+            counter ++;
+        }
+        // V pos check
+        counter = 1;
+        while(true) {
+            if(yIndex + counter >= serverGame.getMap().getCells()[0].length) {
+                break;
+            }
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex][yIndex+counter];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                break;
+            }
+            vAmount ++;
+            counter ++;
+        }
+        // V neg check
+        counter = 1;
+        while(true) {
+            if(yIndex - counter < 0) {
+                break;
+            }
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex][yIndex-counter];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                break;
+            }
+            vAmount ++;
+            counter ++;
+        }
+        
+        if(vAmount > hAmount) {
+            setUpVerticalWall();
+        } else {
+            setUpHorizontalWall();
+        }
+        
+    }
+    
+    private void setUpVerticalWall() {
+        for(int y = yIndex+1; y < serverGame.getMap().getCells()[xIndex].length; y++) {
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex][y];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                y = serverGame.getMap().getCells()[xIndex].length;
+            } else{
+                Oak currOak = (Oak)currentCell.getTower();
+                    wallOaks.add(currOak);
+                    currOak.setInWall(this);
+                
+            }
+            
+        }
+        
+        for(int y = yIndex-1; y >= 0; y--) {
+            MapCell currentCell = serverGame.getMap().getCells()[xIndex][y];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                y = -1;
+            } else{
+                Oak currOak = (Oak)currentCell.getTower();
+                    wallOaks.add(currOak);
+                    currOak.setInWall(this);
+            }
+            
+        }
+    }
+    
+    private void setUpHorizontalWall() {
+        for(int x = xIndex+1; x < serverGame.getMap().getCells().length; x++) {
+            MapCell currentCell = serverGame.getMap().getCells()[x][yIndex];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                x = serverGame.getMap().getCells().length;
+            } else{
+                Oak currOak = (Oak)currentCell.getTower();
+                    wallOaks.add(currOak);
+                    currOak.setInWall(this);
+            }
+            
+        }
+        
+        for(int x = xIndex-1; x >= 0; x--) {
+            MapCell currentCell = serverGame.getMap().getCells()[x][yIndex];
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
+                x = -1;
+            } else{
+                Oak currOak = (Oak)currentCell.getTower();
+                    wallOaks.add(currOak);
+                    currOak.setInWall(this);
+            }
+            
+        }
+    }
     
     public boolean isVerbundeneWurzeln() {
         return isVerbundeneWurzeln;
+    }
+    
+    public boolean isInWall() {
+        return (isEichenWallMember || isEichenWallOrigin);
+    }
+    
+    public void setInWall(Oak oakWallOrigin) {
+        isEichenWallMember = true;
+        wallOrigin = oakWallOrigin;
     }
     
     public void doTotalRegen() {
@@ -188,7 +394,9 @@ public class Oak extends Tower {
             case OAK_TOTALREGEN:
                 doTotalRegen();
                 break;
-
+            case OAK_SPONTANERHAERTUNG:
+                doSpontanErhaertung();
+                break;
             default:
                 throw new UnsupportedOperationException();
         }

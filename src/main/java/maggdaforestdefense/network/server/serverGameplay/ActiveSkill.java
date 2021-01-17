@@ -15,5 +15,6 @@ public enum ActiveSkill {
     LORBEER_PRESTIGE,
     LORBEER_TRADE,
     
-    OAK_TOTALREGEN;
+    OAK_TOTALREGEN,
+    OAK_SPONTANERHAERTUNG;
 }

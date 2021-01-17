@@ -90,7 +90,9 @@ public class EffectSet {
         GOLDED,
         //
         MAPLE_ESCALATION,
-        MAPLE_CHARGED
+        MAPLE_CHARGED,
+        
+        OAK_ERHAERTUNG;
     }
 
     public static interface EffectHandler {

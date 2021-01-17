@@ -25,13 +25,19 @@ import maggdaforestdefense.network.client.NetworkManager;
  */
 public class ClientOak extends ClientTower{
     private double maxHealth;
-    private ActiveSkillActivator totalRegenActivator;
+    private ActiveSkillActivator totalRegenActivator, spontanErhaertungActivator;
     public ClientOak(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_OAK_1, GameObjectType.T_OAK, UpgradeSet.OAK_SET, xIndex, yIndex, Oak.DEFAULT_RANGE, Oak.DEFAULT_HEALTH, growingTime, Oak.RANGE_TYPE);
 
         totalRegenActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_TOTAL_REGEN);
         totalRegenActivator.setOnUsed((MouseEvent e)->{
             NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.OAK_TOTALREGEN.ordinal())});
+            NetworkManager.getInstance().sendCommand(command);
+        });
+        
+        spontanErhaertungActivator = new ActiveSkillActivator(GameImage.ACTIVE_ICON_SPONTAN_ERHAERTUNG);
+        spontanErhaertungActivator.setOnUsed((MouseEvent e)->{
+            NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.OAK_SPONTANERHAERTUNG.ordinal())});
             NetworkManager.getInstance().sendCommand(command);
         });
     }
@@ -69,6 +75,10 @@ public class ClientOak extends ClientTower{
             totalRegenActivator.updateCooldown(updateCommand.getNumArgument("totalRegenCooldown"));
         }
         
+        if(updateCommand.containsArgument("spontanErhaertungCooldown")) {
+            spontanErhaertungActivator.updateCooldown(updateCommand.getNumArgument("spontanErhaertungCooldown"));
+        }
+        
         if(isMature) {
             EffectSet e = EffectSet.fromString(updateCommand.getArgument("effects"));
             handleEffects(e);
@@ -93,6 +103,9 @@ public class ClientOak extends ClientTower{
     public void buyUpgrade(int tier, int type) {
         if(UpgradeSet.OAK_SET.getUpgrade(tier, type) == Upgrade.OAK_3_1){
             addActiveSkill(totalRegenActivator);
+        }
+        if(UpgradeSet.OAK_SET.getUpgrade(tier, type) == Upgrade.OAK_3_3) {  // SPONTANERHAERTUNG
+            addActiveSkill(spontanErhaertungActivator);
         }
         upgradeMenu.buyUpgrade(tier, type);
     }

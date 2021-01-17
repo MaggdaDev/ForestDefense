@@ -41,14 +41,14 @@ public class Lorbeer extends Tower{
     public final static double DEFAULT_RANGE = 2;
     public final static double DEFAULT_GROWING_TIME = 30;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
-    public final static double DEFAULT_DAMAGE = 10;
-    public final static int DEFAULT_MAX_LORBEERS = 20;
-    public final static int DEFAULT_GOLD_PER_LORBEER = 20;
+    public final static double DEFAULT_DAMAGE = 20;
+    public final static int DEFAULT_MAX_LORBEERS = 10;
+    public final static int DEFAULT_GOLD_PER_LORBEER = 25;
     
     private Damage damageObject;
     private Damage.NormalDamage usualDamage;
     
-    private double attackCooldown = 5.0d, attackTimer = attackCooldown;
+    private double attackCooldown = 8.0d, attackTimer = attackCooldown;
     private boolean canAttack = true;
     
     private int lorbeerAmount = 0, maxLorbeerAmount = DEFAULT_MAX_LORBEERS;

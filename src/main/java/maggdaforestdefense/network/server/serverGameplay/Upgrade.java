@@ -53,14 +53,14 @@ public enum Upgrade {
     LORBEER_1_2(GameImage.UPGRADE_LORBEER_01_02.getImage(), "Ertragreiche Ernte", 350, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_1_2;}), GameObjectType.T_LORBEER),
     LORBEER_1_3(GameImage.UPGRADE_LORBEER_01_03.getImage(), "Effizientere Ernte", 350, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_1_3;}), GameObjectType.T_LORBEER),
     LORBEER_1_4(GameImage.UPGRADE_LORBEER_01_04.getImage(), "Vorrats-Ernte", 350, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_1_4;}), GameObjectType.T_LORBEER),
-    LORBEER_2_1(GameImage.UPGRADE_LORBEER_02_01.getImage(), "Brutale Ernte", 1000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_1;}), GameObjectType.T_LORBEER),
-    LORBEER_2_2(GameImage.UPGRADE_LORBEER_02_02.getImage(), "Ernterausch", 1000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_2;}), GameObjectType.T_LORBEER),
-    LORBEER_2_3(GameImage.UPGRADE_LORBEER_02_03.getImage(), "Massenproduktion", 1000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_3;}), GameObjectType.T_LORBEER),
-    LORBEER_2_4(GameImage.UPGRADE_LORBEER_02_04.getImage(), "Wiederverwertung", 1000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_4;}), GameObjectType.T_LORBEER),
-    LORBEER_3_1(GameImage.UPGRADE_LORBEER_03_01.getImage(), "Mechanische Ernte", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_1;}), GameObjectType.T_LORBEER),
-    LORBEER_3_2(GameImage.UPGRADE_LORBEER_03_02.getImage(), "Prestige Ernte", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_2;}), GameObjectType.T_LORBEER),
-    LORBEER_3_3(GameImage.UPGRADE_LORBEER_03_03.getImage(), "Kopfgeld Ernte", 25000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_3;}), GameObjectType.T_LORBEER),
-    LORBEER_3_4(GameImage.UPGRADE_LORBEER_03_04.getImage(), "Tauschhandel", 2500, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_4;}), GameObjectType.T_LORBEER),
+    LORBEER_2_1(GameImage.UPGRADE_LORBEER_02_01.getImage(), "Brutale Ernte", 800, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_1;}), GameObjectType.T_LORBEER),
+    LORBEER_2_2(GameImage.UPGRADE_LORBEER_02_02.getImage(), "Ernterausch", 800, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_2;}), GameObjectType.T_LORBEER),
+    LORBEER_2_3(GameImage.UPGRADE_LORBEER_02_03.getImage(), "Massenproduktion", 800, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_3;}), GameObjectType.T_LORBEER),
+    LORBEER_2_4(GameImage.UPGRADE_LORBEER_02_04.getImage(), "Wiederverwertung", 800, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_2_4;}), GameObjectType.T_LORBEER),
+    LORBEER_3_1(GameImage.UPGRADE_LORBEER_03_01.getImage(), "Mechanische Ernte", 2000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_1;}), GameObjectType.T_LORBEER),
+    LORBEER_3_2(GameImage.UPGRADE_LORBEER_03_02.getImage(), "Prestige Ernte", 2000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_2;}), GameObjectType.T_LORBEER),
+    LORBEER_3_3(GameImage.UPGRADE_LORBEER_03_03.getImage(), "Kopfgeld Ernte", 2000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_3;}), GameObjectType.T_LORBEER),
+    LORBEER_3_4(GameImage.UPGRADE_LORBEER_03_04.getImage(), "Tauschhandel", 2000, (() -> {return Game.getInstance().language.UPGRADE_DESCRIPTION_LORBEER_3_4;}), GameObjectType.T_LORBEER),
     
     // OAK
     

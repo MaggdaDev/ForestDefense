@@ -192,6 +192,17 @@ public class Game {
         int wave = (int) command.getNumArgument("wave");
         gameScreen.hideReadyCheck();
         gameScreen.announceWave(wave);
+        
+        Vector<String> idsToRemove = new Vector<>();
+        
+        gameObjects.forEach((String id, ClientGameObject gameObj)->{
+            if(!(gameObj instanceof ClientTower)) {
+                idsToRemove.add(id);
+            }
+        });
+        for(String idToRemove: idsToRemove) {
+            gameObjects.remove(idsToRemove);
+        }
     }
 
     public void doEssenceAnimtion(NetworkCommand command) {

@@ -28,9 +28,7 @@ public class WaveGenerator {
     }
     
     public MobWave generateWave(int round) {
-        if(round == 0) {
-            round = 1;
-        }
+
         int totStrength = getStrengthFromRound(round);
         
         Vector<Spawnable> spawnables = new Vector<>();
@@ -51,7 +49,7 @@ public class WaveGenerator {
     }
     
     private int getStrengthFromRound(int round) {
-        return (int)(4.0d + round + 0.2d * Math.pow((double)round, 2));
+        return (int)(4.0d + 0.2 * round + 0.2d * Math.pow((double)round, 2));
     }
     
     private int getStrength(GameObjectType type) {
@@ -59,9 +57,9 @@ public class WaveGenerator {
             case M_BLATTLAUS:
                 return 1;
             case M_WANDERLAUFER:
-                return 10;
+                return 5;
             case M_HIRSCHKAEFER:
-                return 40;
+                return 25;
             default:
                 throw new UnsupportedOperationException();
         }

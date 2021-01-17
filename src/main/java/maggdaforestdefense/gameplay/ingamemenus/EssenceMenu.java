@@ -82,11 +82,11 @@ public class EssenceMenu extends SideMenu {
 
     public void animateEssenceLevel(int newVal) {
         
-        if(newVal < 0) {
-            newVal = 0;
+        
+        double newDouble = newVal;
+        if(newVal <= 0) {
+            newDouble = 0.1;
         }
-        
-        
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceLevel, newVal, Interpolator.EASE_BOTH)));
         timeline.play();
     }

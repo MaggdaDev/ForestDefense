@@ -74,6 +74,8 @@ public class ServerLoop {
             serverGame.sendCommandToAllPlayers(NetworkCommand.WAIR_FOR_READY_NEXT_WAVE);
             
             serverGame.checkPlayers();
+            
+            serverGame.updateRessources();
 
             Waiter.waitUntil(() -> {      // wait until
                 return allPlayersReadyForNextRound();
@@ -82,6 +84,10 @@ public class ServerLoop {
             serverGame.handleTreesDieing();
 
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
+            
+            if((currentWaveIndex + 1) % 5 == 0) {
+                serverGame.increaseMaxEssence(1);
+            }
             
             serverGame.handleEssenceNewRound();
             

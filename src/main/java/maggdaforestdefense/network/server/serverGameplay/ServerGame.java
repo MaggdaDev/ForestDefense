@@ -42,7 +42,7 @@ import maggdaforestdefense.util.Waiter;
  */
 public class ServerGame extends Thread {
 
-    public final static int START_COINS = 1000, START_ESSENCE = 8;
+    public final static int START_COINS = 1000, START_ESSENCE = 3;
 
     // MANAGEMENT
     private final String name;
@@ -90,6 +90,7 @@ public class ServerGame extends Thread {
         isStarted = true;
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_MAP, new CommandArgument[]{new CommandArgument("map", map.toString())}));
 
+       
         serverLoop.run();
     }
 
@@ -212,6 +213,8 @@ public class ServerGame extends Thread {
             new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal())),
             new CommandArgument("growingTime", tower.getGrowingTime())
         }));
+        
+        updateRessources();
 
         notifyTowerChanges();
     }
@@ -261,9 +264,15 @@ public class ServerGame extends Thread {
     }
 
     public void handleEssenceNewRound() {
+        
         base.refillEssence();
     }
 
+    public void increaseMaxEssence(int i) {
+        base.increaseMaxEssence(i);
+        updateRessources();
+    }
+    
     public void updateRessources() {
         queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
     }
@@ -360,7 +369,7 @@ public class ServerGame extends Thread {
 
             sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("tier", tier), new CommandArgument("type", upgradeType)}));
         }
-
+        updateRessources();
         notifyTowerChanges();
 
     }
@@ -407,6 +416,8 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+    
 
     
 

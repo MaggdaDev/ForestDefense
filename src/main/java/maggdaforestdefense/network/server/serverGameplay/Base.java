@@ -22,7 +22,6 @@ public class Base extends MapCell{
     
     public void damageBase(Mob mob) {
         essence --;
-        mob.die(false);
         checkAlive();
     }
     
@@ -45,12 +44,16 @@ public class Base extends MapCell{
         essence = maxEssence;
     }
 
-    boolean decreaseEssenceIfPossible() {
+    public boolean decreaseEssenceIfPossible() {
         if(essence > 0) {
             essence--;
             return true;
         } else {
             return false;
         }
+    }
+
+    public void increaseMaxEssence(int i) {
+        maxEssence += i;
     }
 }

@@ -178,7 +178,12 @@ public abstract class Mob extends GameObject {
                     damageTarget();
                 }
             } else if (serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
-                damageBase();
+                damageTimer += timeElapsed;
+                if (damageTimer > damageTime) {
+                    damageTimer = 0;
+                    damageBase();
+                }
+                
             } else {
                 targetReached = false;
                 pathToBase();
@@ -310,11 +315,11 @@ public abstract class Mob extends GameObject {
             case M_BORKENKAEFER:
                 return 100;
             case M_HIRSCHKAEFER:
-                return 200;
+                return 500;
             case M_SCHWIMMKAEFER:
                 return 20;
             case M_WANDERLAUFER:
-                return 50;
+                return 100;
             case M_WASSERLAEUFER:
                 return 40;
             default:

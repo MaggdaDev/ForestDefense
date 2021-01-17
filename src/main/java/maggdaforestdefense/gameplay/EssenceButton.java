@@ -21,7 +21,7 @@ import maggdaforestdefense.storage.GameImage;
  * @author DavidPrivat
  */
 public class EssenceButton extends ImageView{
-    public final static double WIDTH = 30;
+    public final static double WIDTH = 50;
     private ClientTower owner;
     public EssenceButton(ClientTower owner) {
         this.owner = owner;

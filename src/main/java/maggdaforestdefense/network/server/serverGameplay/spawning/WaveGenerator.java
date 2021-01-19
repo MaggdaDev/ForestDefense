@@ -33,7 +33,11 @@ public class WaveGenerator {
         
         Vector<Spawnable> spawnables = new Vector<>();
         while(totStrength > 0) {
+
             int randIndex = (int)(Math.random() * mobs.length);
+            if(round <= 5) {
+                randIndex = 0;
+            }
             int amount = (int)(totStrength/strengths[randIndex]);
             if(amount > 5) {
                 amount = 5;
@@ -49,7 +53,7 @@ public class WaveGenerator {
     }
     
     private int getStrengthFromRound(int round) {
-        return (int)(2.0d + 0.2 * round + 0.05d * Math.pow((double)round, 2));
+        return (int)(5.0d + 0.2d * (double)round + 0.05d * Math.pow((double)round, 2.0d));
     }
     
     private int getStrength(GameObjectType type) {

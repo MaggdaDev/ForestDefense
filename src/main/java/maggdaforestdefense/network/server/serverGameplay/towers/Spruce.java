@@ -44,8 +44,8 @@ public class Spruce extends Tower {
     // UPGRADE CONSTANTS
     public final static double FICHTEN_WUT_MULTIPLIER = 0.995;
     public final static double NADEL_STAERKUNG_MULT = 3;
-    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.5;
-    public final static double UPGRADE_LIFE_STEAL = 0.2;
+    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.25;
+    public final static double UPGRADE_LIFE_STEAL = 0.3;
     public final static double RESEARCH_PROBABILITY = 0.1;
 
     // UPGRADE VARIABLES

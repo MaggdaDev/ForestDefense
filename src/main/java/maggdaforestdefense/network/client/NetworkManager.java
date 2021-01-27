@@ -7,6 +7,13 @@ package maggdaforestdefense.network.client;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.SocketAddress;
+import java.net.SocketException;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -21,6 +28,7 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
+import maggdaforestdefense.network.server.ServerSocketHandler;
 
 /**
  *
@@ -28,13 +36,22 @@ import java.util.concurrent.CountDownLatch;
  */
 public class NetworkManager extends WebSocketClient {
 
+    
+
     private ClientCommandHandler commandHandler;
     private static NetworkManager instance;
+    private UdpReceiver udpReceiver;
 
     private CountDownLatch waitLatch = new CountDownLatch(1);
+    
+    
+    
 
     public NetworkManager(URI serverURI) {
         super(serverURI);
+        
+        udpReceiver = new UdpReceiver();
+        udpReceiver.start();
     }
 
     public void update() {
@@ -99,7 +116,7 @@ public class NetworkManager extends WebSocketClient {
     }
 
     public void sendCommand(NetworkCommand command) {
-        //Logger.logClient("Command sent: " + command.toString());
+        Logger.logClient("Command sent: " + command.toString());
         this.send(command.toString());
         //Logger.debugClient("Sent: " + command.toString());
     }
@@ -107,6 +124,11 @@ public class NetworkManager extends WebSocketClient {
     public void setInGame(boolean b) {
         commandHandler.setInGame(b);
     }
+    
+    public ClientCommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+    
 
     public static NetworkManager getInstance() {
         if (instance == null) {

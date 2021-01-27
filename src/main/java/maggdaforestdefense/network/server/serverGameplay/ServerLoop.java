@@ -115,7 +115,7 @@ public class ServerLoop {
 
                 // MOB SPAWNING END
                 
-                serverGame.flushCommands();
+               
                 
                 fpsLimiter.endOfIteration();
                 fpsLimiter.doSleep();

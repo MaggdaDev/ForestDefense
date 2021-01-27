@@ -13,8 +13,10 @@ import maggdaforestdefense.storage.Logger;
 import org.java_websocket.WebSocket;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import maggdaforestdefense.network.NetworkCommand;
@@ -27,6 +29,7 @@ public class Server {
 
     public final static int PORT = 27757;
     public final static int WS_PORT = 27756;
+    public final static int UDP_PORT = 27755;
     public final static String WS_FILENAME = "api/gamesocket/";
     public final static String WS_HOST = "forestdefense.minortom.net";
     public final static String WS_HOST2 = "0.0.0.0";
@@ -38,6 +41,8 @@ public class Server {
 
     private GameHandler gameHandler;
     private static Server instance;
+    
+    private boolean useUDP = true;
 
     public Server() throws IOException {
         instance = this;
@@ -51,12 +56,23 @@ public class Server {
 
     }
 
-    public void addNewSocket(WebSocket conn) {
+    public void addNewSocket(WebSocket conn) throws SocketException {
         ServerSocketHandler addSocketHandler;
-        addSocketHandler = new ServerSocketHandler(conn);
+        addSocketHandler = new ServerSocketHandler(conn, createUDPSocket(conn));
         Player player = new Player(addSocketHandler, playerList.size());
         playerList.put(player.getID(), player);
         conn.setAttachment(player.getID());
+    }
+    
+    private DatagramSocket createUDPSocket(WebSocket conn) {
+        if(useUDP) {
+            try {
+            return new DatagramSocket(new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), UDP_PORT));
+            } catch(SocketException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public void handleMessage(WebSocket conn, String message) {

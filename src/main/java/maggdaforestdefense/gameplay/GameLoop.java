@@ -51,6 +51,7 @@ public class GameLoop extends AnimationTimer {
             u.update(timeElapsed);
         });
         
+        
     }
     
     public static void addTimeUpdatable(TimeUpdatable u) {

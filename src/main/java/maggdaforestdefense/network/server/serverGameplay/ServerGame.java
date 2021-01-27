@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.net.DatagramPacket;
+import java.nio.ByteBuffer;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -115,17 +117,7 @@ public class ServerGame extends Thread {
         Server.getInstance().getGameHandler().removeGame(gameId);
     }
 
-    public void flushCommands() {
-        CommandArgument[] args = new CommandArgument[commandsToSend.size()];
-        for (int i = 0; i < commandsToSend.size(); i++) {
-            args[i] = new CommandArgument(String.valueOf(i), commandsToSend.get(i));
-        }
-        commandsToSend.clear();
-
-        NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.UPDATE, args);
-        sendCommandToAllPlayers(command);
-    }
-
+    
     public void checkPlayers() {
         if (players.size() == 0) {
             Logger.logServer("GAME ABANDONED BECAUSE OF NO PLAYERS!!!   GAME ID: " + gameId + "      GAME NAME: " + name);
@@ -223,7 +215,7 @@ public class ServerGame extends Thread {
         gameObjects.forEach((String key, GameObject g) -> {
             NetworkCommand comm = g.update(timeElapsed);
             if (comm != null) {
-                queueUpdateCommand(comm);
+                sendCommandToAllPlayersUDP(comm);
             }
         });
 
@@ -274,35 +266,34 @@ public class ServerGame extends Thread {
     }
     
     public void updateRessources() {
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
     }
 
     public void damageBase(Mob mob) {
         base.damageBase(mob);
     }
 
-    public void queueUpdateCommand(NetworkCommand command) {
-        if (serverLoop.isInWave()) {
-            commandsToSend.add(command);
-        } else {
-            sendCommandToAllPlayers(command);
-        }
-    }
 
     public void sendCommandToAllPlayers(NetworkCommand command) {
         players.forEach((Player player) -> {
             player.sendCommand(command);
         });
     }
+    
+    public void sendCommandToAllPlayersUDP(NetworkCommand command) {
+        players.forEach((Player player) -> {
+            player.sendCommandUDP(command);
+        });
+    }
 
     private void addGameObject(GameObject g) {
         gameObjects.put(String.valueOf(g.getId()), g);
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
     }
 
     private void removeGameObject(GameObject g) {
         gameObjects.remove(String.valueOf(g.getId()));
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
 
     }
 

@@ -18,8 +18,13 @@ import maggdaforestdefense.storage.Logger;
 import org.java_websocket.WebSocket;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -45,8 +50,15 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     private boolean gameStarted = false;
 
-    public ServerSocketHandler(WebSocket conn) {
+    //UDP STUFF
+    private DatagramSocket udpSocket;
+    private DatagramPacket udpPacket;
+    private byte[] udpByteBuffer;
+    public final static int byteBufferLength = 500;
+    private boolean useUDP;
 
+    public ServerSocketHandler(WebSocket conn, DatagramSocket udp) throws SocketException {
+        this.useUDP = useUDP;
         this.conn = conn;
 
         // Queues
@@ -54,6 +66,14 @@ public class ServerSocketHandler implements Runnable, Stoppable {
         workingList = new LinkedList();
 
         Logger.debugServer("New ServerSocketHandler created");
+        useUDP = udp != null;
+        if(useUDP) {
+            
+        udpSocket = udp;
+        udpByteBuffer = new byte[byteBufferLength];
+        udpPacket = new DatagramPacket(udpByteBuffer, byteBufferLength, new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), Server.UDP_PORT));
+        Logger.logServer("UDP set up");
+        }
     }
 
     @Override
@@ -170,14 +190,14 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
                 game.requestEssence(command.getArgument("id"));
                 break;
-                
+
             case PERFORM_ACTIVESKILL_TS:
-                game.performActiveSkill(command.getArgument("id"), ActiveSkill.values()[(int)command.getNumArgument("skill")]);
-                
+                game.performActiveSkill(command.getArgument("id"), ActiveSkill.values()[(int) command.getNumArgument("skill")]);
+
                 break;
-                
+
             case USE_LORBEER_TRADE:
-                game.useLorbeerTrade(command.getArgument("id"), Upgrade.values()[(int)command.getNumArgument("upgrade")]);
+                game.useLorbeerTrade(command.getArgument("id"), Upgrade.values()[(int) command.getNumArgument("upgrade")]);
                 break;
         }
 
@@ -194,16 +214,33 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     public void sendCommand(NetworkCommand command) {
         //Logger.debugServer("Command sent: " + command.toString());
-        if(conn.isOpen()) {
+        if (conn.isOpen()) {
             conn.send(command.toString());
         } else {
             Logger.errServer("A command was sent but the client is not connected.");
         }
     }
 
+    public void sendCommandUPD(NetworkCommand command) {
+        //Logger.debugServer("Command sent: " + command.toString());
+        if (useUDP) {
+            byte[] commandAsBytes = command.toString().getBytes();
+            udpPacket.setData(commandAsBytes);
+            udpPacket.setLength(commandAsBytes.length);
+            try {
+                udpSocket.send(udpPacket);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            sendCommand(command);
+        }
+
+    }
+
     @Override
     public void stop() {
-        if(game!=null) {
+        if (game != null) {
             game.removePlayer(owner);
         }
     }

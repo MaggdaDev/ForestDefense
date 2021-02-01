@@ -7,27 +7,21 @@ package maggdaforestdefense.menues;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
 import javafx.scene.text.Text;
 import maggdaforestdefense.MaggdaForestDefense;
-import maggdaforestdefense.auth.AuthWindow;
+import maggdaforestdefense.auth.AuthenticationManager;
 import maggdaforestdefense.config.Configuration;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.config.Version;
-import maggdaforestdefense.gameplay.Game;
-import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.network.client.NetworkManager;
 
 public class MainMenu {
 
     @FXML private Button playBtn;
 
-    @FXML private Button logoutBtn;
-    @FXML private Button settingsBtn;
+    @FXML private Button userBtn;
     @FXML private Button mapEditorBtn;
     @FXML private Text userNameTxt;
     @FXML private Text emailTxt;
@@ -38,15 +32,10 @@ public class MainMenu {
 
     @FXML public void initialize() {
         
-        userNameTxt.setText(ConfigurationManager.getConfig().getAuth().getUserName());
-        if (ConfigurationManager.getConfig().getAuth().getMwUser().getEmail().equals("")) {
-            emailTxt.setText("");
-        } else {
-            emailTxt.setText(ConfigurationManager.getConfig().getAuth().getMwUser().getEmail());
-        }
         emailTxt.setFont(new Font(emailTxt.getFont().getName(), emailTxt.getFont().getSize()*0.8));
         gameVersion.setText(Version.getVersion());
         gameVersion.setFont(new Font(gameVersion.getFont().getName(), gameVersion.getFont().getSize()*0.75));
+        updateUserInfo();
     }
 
     @FXML private void playBtnOnClick(ActionEvent e) {
@@ -54,16 +43,29 @@ public class MainMenu {
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.PLAY);
     }
 
-    @FXML private void settingsBtnOnClick(ActionEvent e) {
-        AuthWindow.openBrowser(AuthWindow.SETTINGS_URL);
+    public void updateUserInfo() {
+        userNameTxt.setText(AuthenticationManager.getInstance().getUser().getUsername());
+        if (AuthenticationManager.getInstance().getUser().getEmail()==null) {
+            emailTxt.setText("");
+        } else {
+            emailTxt.setText(AuthenticationManager.getInstance().getUser().getEmail());
+        }
+        if(AuthenticationManager.getInstance().getUser().isSignedIn()) {
+            userBtn.setText("Sign out");
+        } else {
+            userBtn.setText("Sign in");
+        }
     }
 
-    @FXML private void logoutBtnOnClick(ActionEvent e) {
-        Configuration cfg = ConfigurationManager.getConfig();
-        cfg.getAuth().setSignedIn(false);
-        ConfigurationManager.setConfig(cfg);
-        MaggdaForestDefense.getInstance().exit();
-        MaggdaForestDefense.main(new String[]{});
+    @FXML private void userBtnOnClick(ActionEvent e) {
+        if(AuthenticationManager.getInstance().getUser().isSignedIn()) {
+            AuthenticationManager.getInstance().signOut();
+            updateUserInfo();
+        } else {
+            AuthenticationManager.getInstance().signIn();
+            updateUserInfo();
+        }
+        NetworkManager.getInstance().reset();
     }
 
     @FXML private void mapEditorBtnOnClick(ActionEvent e) {

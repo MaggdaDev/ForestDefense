@@ -7,6 +7,10 @@ package maggdaforestdefense.network.client;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
+import maggdaforestdefense.auth.AnonAuthCredentials;
+import maggdaforestdefense.auth.AuthenticationManager;
+import maggdaforestdefense.auth.FAuthCredentials;
+import maggdaforestdefense.auth.WireCredentials;
 import maggdaforestdefense.config.ConfigurationManager;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
@@ -40,26 +44,27 @@ public class NetworkManager extends WebSocketClient {
     public void update() {
         commandHandler.handleInput();
     }
-    
+
     public void resetCommandHandler() {
         commandHandler.reset();
     }
 
-   public void startConnection() {
-       Logger.debugClient("Connecting...");
-       commandHandler = new ClientCommandHandler();
-       this.connect();
-       try {
-           waitLatch.await();
-       } catch (InterruptedException e) {
-           Logger.debugClient("Connection failed: " + e.getMessage());
-       }
-   }
+    public void startConnection() {
+        Logger.debugClient("Connecting...");
+        commandHandler = new ClientCommandHandler();
+        this.connect();
+        try {
+            waitLatch.await();
+        } catch (InterruptedException e) {
+            Logger.debugClient("Connection failed: " + e.getMessage());
+        }
+    }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         Logger.debugClient("Connected!");
-        sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("auth", new Gson().toJson(ConfigurationManager.getConfig().getAuth()))}));
+        WireCredentials credentials = new WireCredentials(AuthenticationManager.getInstance().getCredentials().isAnonymous() ? WireCredentials.CredentialType.AnonAuthCredentials : WireCredentials.CredentialType.FAuthCredentials, AuthenticationManager.getInstance().getCredentials().isAnonymous() ? null : (FAuthCredentials) AuthenticationManager.getInstance().getCredentials(), AuthenticationManager.getInstance().getCredentials().isAnonymous() ? (AnonAuthCredentials) AuthenticationManager.getInstance().getCredentials() : null);
+        sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("auth", new Gson().toJson(credentials))}));
         commandHandler.start();
     }
 
@@ -120,5 +125,11 @@ public class NetworkManager extends WebSocketClient {
             }
         }
         return instance;
+    }
+
+    public void reset() {
+        commandHandler.stop();
+        commandHandler = new ClientCommandHandler();
+        reconnect();
     }
 }

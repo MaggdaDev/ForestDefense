@@ -136,7 +136,9 @@ public class MenuManager {
         findGameMenu.getController().reset();
     }
 
-    
+    public void updateUserInfo() {
+        mainMenu.getController().updateUserInfo();
+    }
 
     public enum Screen {
 

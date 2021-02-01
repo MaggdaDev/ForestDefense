@@ -6,15 +6,18 @@
 package maggdaforestdefense.network.server;
 
 import com.google.gson.Gson;
-import maggdaforestdefense.auth.AuthWindow;
-import maggdaforestdefense.auth.Credentials;
-import maggdaforestdefense.auth.MWUser;
-import maggdaforestdefense.config.Configuration;
+import maggdaforestdefense.auth.AuthCredentials;
+import maggdaforestdefense.auth.AuthUser;
+import maggdaforestdefense.auth.AuthenticationException;
+import maggdaforestdefense.auth.WireCredentials;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
+import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.Json;
 import org.java_websocket.WebSocket;
 
 import java.io.BufferedReader;
@@ -23,8 +26,6 @@ import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
-import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 
 /**
  *
@@ -92,33 +93,32 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     private void handleCommand(NetworkCommand command) {
-        //Logger.logServer("Command handled: " + command);
+        Logger.logServer("Command handled: " + command);
         switch (command.getCommandType()) {
             case REQUIRE_CONNECTION:
-                Credentials credentials = new Gson().fromJson(command.getArgument("auth"), Credentials.class);
-                boolean anonymous = true;
-                String userId = "";
-                String userName = "";
-                if (credentials.isSignedIn()) {
-                    MWUser user = AuthWindow.getUserFromToken(credentials.getAuthToken());
-                    anonymous = false;
-                    userId = user.getUsername() + "@wiki.minortom.net";
-                    userName = user.getUsername();
-                } else if (credentials.getUserName().startsWith("Anonymous") && credentials.getMwUser().getUsername().equals("Anonymous")) {
-                    anonymous = true;
-                    userId = "Anonymous@forestdefense.minortom.net";
-                    userName = credentials.getUserName();
-                } else {
-                    userId = null;
-                }
-                if (userId == null) {
+                try {
+                    WireCredentials credentials = Json.getGson().fromJson(command.getArgument("auth"), WireCredentials.class);
+                    AuthCredentials authCredentials;
+                    AuthUser user;
+
+                    if (credentials.getType() == WireCredentials.CredentialType.AnonAuthCredentials) {
+                        user = credentials.getAnonAuthCredentials().getAuthUser();
+                    } else if (credentials.getType() == WireCredentials.CredentialType.FAuthCredentials) {
+                        user = credentials.getfAuthCredentials().getAuthUser();
+                    } else {
+                        user = null;
+                    }
+                    if (user == null) {
+                        sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(false))}));
+                        conn.close(); // TODO: Find a better way to close a connection
+                    } else {
+                        sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(true))}));
+                        owner.setAuthUser(user);
+                    }
+                } catch (AuthenticationException e) {
+                    Logger.logServer("Couldn't authenticate a user: " + e.getReason() + " " + e.getMessage());
                     sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(false))}));
                     conn.close(); // TODO: Find a better way to close a connection
-                } else {
-                    sendCommand(new NetworkCommand(NetworkCommand.CommandType.PERMIT_CONNECTION, new CommandArgument[]{new CommandArgument("auth_ok", Boolean.toString(true))}));
-                    owner.setUserId(userId);
-                    owner.setUserName(userName);
-                    owner.setAnonymous(!credentials.isSignedIn());
                 }
                 break;
             case CREATE_GAME:

@@ -6,29 +6,6 @@
 package maggdaforestdefense;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import maggdaforestdefense.auth.Afterwards;
-import maggdaforestdefense.auth.AuthWindow;
-import maggdaforestdefense.auth.Credentials;
-import maggdaforestdefense.auth.MWUser;
-import maggdaforestdefense.config.Configuration;
-import maggdaforestdefense.config.ConfigurationManager;
-import maggdaforestdefense.config.Version;
-import maggdaforestdefense.gameplay.Game;
-import maggdaforestdefense.menues.MenuManager;
-import maggdaforestdefense.network.client.NetworkManager;
-import maggdaforestdefense.network.server.Server;
-import maggdaforestdefense.storage.Logger;
-
-import java.util.Objects;
-import java.util.Random;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -36,23 +13,27 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Labeled;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.Scene;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import maggdaforestdefense.auth.AuthenticationManager;
+import maggdaforestdefense.config.Version;
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.menues.MenuManager;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.NetworkCommand.CommandType;
+import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.sound.SoundEngine;
+import maggdaforestdefense.storage.Logger;
 
-import static maggdaforestdefense.auth.AuthWindow.ANON_TOKEN;
+import java.util.Objects;
+
 
 /**
  * Main class.
@@ -78,6 +59,7 @@ public class MaggdaForestDefense extends Application {
 
     //Networks
     private NetworkManager networkManager;
+    private AuthenticationManager authenticationManager;
 
     private static boolean isServer, isDev;
 
@@ -96,27 +78,7 @@ public class MaggdaForestDefense extends Application {
     public void start(Stage primaryStage) {
         instance = this;
         primStage = primaryStage;
-        //TODO: Implement new auth
-        /*if (ConfigurationManager.getConfig().getAuth().isSignedIn() && ConfigurationManager.getConfig().getAuth().refresh()) {
-            mainApp(primaryStage);
-        } else {
-            AuthWindow.authenticate(new Afterwards() {
-                @Override
-                public void run() {
-                    mainApp(primaryStage);
-                }
-            });
-        }*/
-        Credentials defaultCredentials = new Credentials();
-        defaultCredentials.userId = "Anonymous";
-        defaultCredentials.userName = "Anonymous #" + new Random().nextInt(100);
-        defaultCredentials.authToken = ANON_TOKEN;
-        defaultCredentials.mwUser = MWUser.anonymous();
-        Configuration c = ConfigurationManager.getConfig();
-        c.auth = defaultCredentials;
-        if(!ConfigurationManager.setConfig(c)) {
-            new Alert(Alert.AlertType.WARNING, "Configuration could not be saved.", ButtonType.OK).showAndWait();
-        }
+
         mainApp(primaryStage);
         
         soundEngine = new SoundEngine();
@@ -167,6 +129,7 @@ public class MaggdaForestDefense extends Application {
 
         // Networks
         networkManager = NetworkManager.getInstance();
+        authenticationManager = AuthenticationManager.getInstance();
 
         // Graphics
         menueManager = new MenuManager(root);

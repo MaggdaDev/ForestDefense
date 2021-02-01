@@ -27,11 +27,11 @@
                 <Text fx:id="userNameTxt" />
                 <Text fx:id="emailTxt" />
             </VBox>
-            <Button fx:id="settingsBtn" styleClass="y-btn-settings" minHeight="20" minWidth="20" onAction="#settingsBtnOnClick"/>
-            <Button fx:id="logoutBtn" styleClass="y-btn-logout" minHeight="20" minWidth="20" onAction="#logoutBtnOnClick"/>
+            <!--<Button fx:id="settingsBtn" styleClass="y-btn-settings" minHeight="20" minWidth="20" onAction="#settingsBtnOnClick"/>-->
+            <Button fx:id="userBtn" text="..." onAction="#userBtnOnClick"/>
         </HBox>
 
-        <Button fx:id="mapEditorBtn" text="Open Map Editor" onAction="#mapEditorBtnOnClick" />
+        <!--<Button fx:id="mapEditorBtn" text="Open Map Editor" onAction="#mapEditorBtnOnClick" />-->
         <Text fx:id="gameVersion" />
     </VBox>
 

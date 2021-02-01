@@ -7,6 +7,7 @@ package maggdaforestdefense.network;
 
 import com.google.gson.Gson;
 import maggdaforestdefense.util.Exceptions;
+import maggdaforestdefense.util.Json;
 
 /**
  *
@@ -42,7 +43,7 @@ public class NetworkCommand {
 
     @Override
     public String toString() {
-        return KEYWORD + new Gson().toJson(this);
+        return KEYWORD + Json.getGson().toJson(this);
     }
 
     public String getArgument(String name) {

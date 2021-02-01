@@ -1,15 +1,14 @@
 package maggdaforestdefense.config;
 
-import maggdaforestdefense.auth.Credentials;
-
 public class Configuration {
-    public Credentials auth = new Credentials();
+    private boolean anon = true;
 
-    public Credentials getAuth() {
-        return auth;
+    public boolean isAnon() {
+        return anon;
     }
 
-    public void setAuth(Credentials auth) {
-        this.auth = auth;
+    public Configuration setAnon(boolean anon) {
+        this.anon = anon;
+        return this;
     }
 }

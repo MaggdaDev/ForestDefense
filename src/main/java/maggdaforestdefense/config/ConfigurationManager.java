@@ -14,12 +14,18 @@ import java.nio.file.Paths;
 public class ConfigurationManager {
     private static Configuration configuration;
 
-    private static Path configFile = Paths.get("./config.json");
+    private static Path getConfigFile() {
+        if(System.getenv("IENOKIHPKG_DATA_FOLDER")!=null) {
+            return Paths.get(System.getenv("IENOKIHPKG_DATA"));
+        } else {
+            return Paths.get("./config.json");
+        }
+    }
 
     public static Configuration getConfig() {
         if(configuration==null) {
             Charset charset = StandardCharsets.UTF_8;
-            try (BufferedReader reader = Files.newBufferedReader(configFile, charset)) {
+            try (BufferedReader reader = Files.newBufferedReader(getConfigFile(), charset)) {
                 configuration=new Gson().fromJson(reader, Configuration.class);
             } catch (IOException x) {
                 setConfig(new Configuration());
@@ -33,7 +39,7 @@ public class ConfigurationManager {
         Gson gson = new Gson();
         String s = gson.toJson(newCfg);
         Charset charset = StandardCharsets.UTF_8;
-        try (BufferedWriter writer = Files.newBufferedWriter(configFile, charset)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(getConfigFile(), charset)) {
             writer.write(s, 0, s.length());
             configuration = newCfg;
             return true;

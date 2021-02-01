@@ -5,8 +5,7 @@
  */
 package maggdaforestdefense.network.server;
 
-import maggdaforestdefense.auth.MWUser;
-import maggdaforestdefense.network.CommandArgument;
+import maggdaforestdefense.auth.AuthUser;
 import maggdaforestdefense.network.NetworkCommand;
 import org.java_websocket.WebSocket;
 
@@ -21,9 +20,7 @@ public class Player {
     private boolean readyForNextRound = false;
 
     private int serverId;
-    private String userName;
-    private String userId;
-    private boolean anonymous;
+    private AuthUser authUser;
 
     public Player(ServerSocketHandler handler, int id) {
         this.serverId = id;
@@ -61,26 +58,16 @@ public class Player {
         return serverId;
     }
     public boolean isAnonymous() {
-        return anonymous;
-    }
-    public Player setAnonymous(boolean anonymous) {
-        this.anonymous = anonymous;
-        return this;
+        return !authUser.isSignedIn();
     }
     public String getUserName() {
-        return userName;
+        return authUser.getUsername();
     }
-    public Player setUserName(String userName) {
-        this.userName = userName;
-        return this;
-    }
-
     public String getUserId() {
-        return userId;
+        return authUser.getId();
     }
-
-    public Player setUserId(String userId) {
-        this.userId = userId;
+    public Player setAuthUser(AuthUser authUser) {
+        this.authUser = authUser;
         return this;
     }
 }

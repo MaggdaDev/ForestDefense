@@ -9,10 +9,10 @@ public class IenokihpkgAuthHelper {
 
     public static AuthCredentials signIn() throws AuthenticationException {
         Logger.logClient("Signing in");
-        if(System.getenv("IENOKIGPKG_CLI")!=null) {
+        if(System.getenv("IENOKIHPKG_CLI")!=null) {
             Process process;
             try {
-                process = Runtime.getRuntime().exec(System.getenv("IENOKIGPKG_CLI") + " --get-api-key");
+                process = Runtime.getRuntime().exec(System.getenv("IENOKIHPKG_CLI") + " --get-api-key");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -38,10 +38,10 @@ public class IenokihpkgAuthHelper {
 
     public static void signOut() throws AuthenticationException {
         Logger.logClient("Signing out");
-        if(System.getenv("IENOKIGPKG_CLI")!=null) {
+        if(System.getenv("IENOKIHPKG_CLI")!=null) {
             Process process;
             try {
-                process = Runtime.getRuntime().exec(System.getenv("IENOKIGPKG_CLI") + " --signout");
+                process = Runtime.getRuntime().exec(System.getenv("IENOKIHPKG_CLI") + " --signout");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {

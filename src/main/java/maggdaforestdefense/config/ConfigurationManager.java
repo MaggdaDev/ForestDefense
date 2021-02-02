@@ -16,7 +16,7 @@ public class ConfigurationManager {
 
     private static Path getConfigFile() {
         if(System.getenv("IENOKIHPKG_DATA_FOLDER")!=null) {
-            return Paths.get(System.getenv("IENOKIHPKG_DATA"));
+            return Paths.get(System.getenv("IENOKIHPKG_DATA_FOLDER"));
         } else {
             return Paths.get("./config.json");
         }

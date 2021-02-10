@@ -90,7 +90,7 @@ public class Game {
             handleKeyEvent(event.getCode());
         });
         
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDENMUSIK_1);
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDEN_1_INTRO);
 
     }
 
@@ -102,7 +102,7 @@ public class Game {
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().resetCommandHandler();
         
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER_MUSIK);
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER);
     }
 
     // General
@@ -275,6 +275,16 @@ public class Game {
             }
         });
     }
+    
+    public void suggestMusic(NetworkCommand command) {
+        int musicId = (int)command.getNumArgument("id");
+        int isLater = (int)command.getNumArgument("later");
+        if(isLater == 0) {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.values()[musicId]);
+        } else {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playLater(SoundEngine.Sound.values()[musicId]);
+        }
+    }
 
     public GameLoop getGameLoop() {
         return gameLoop;
@@ -291,6 +301,8 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
+
+    
 
     
 

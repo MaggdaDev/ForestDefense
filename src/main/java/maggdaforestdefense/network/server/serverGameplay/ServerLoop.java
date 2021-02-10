@@ -47,12 +47,15 @@ public class ServerLoop {
     
     private FPSLimiter fpsLimiter;
     
+    private ServerSoundsPicker musicPicker;
+    
     public ServerLoop(List<Player> playerList, ServerGame game) {
         players = playerList;
         serverGame = game;
 
         waveGenerator = new WaveGenerator();
         fpsLimiter = new FPSLimiter();
+        musicPicker = new ServerSoundsPicker(game);
     }
 
     public void run() {
@@ -95,6 +98,7 @@ public class ServerLoop {
             oldRunTime = runTime;
             
             isInWave = true;
+            musicPicker.handleNewRound(currentWaveIndex, currentWave);
             while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {                         // ONE WAVE!
                 fpsLimiter.startOfIteration();
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);

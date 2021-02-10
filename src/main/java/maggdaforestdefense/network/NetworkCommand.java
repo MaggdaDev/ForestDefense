@@ -134,6 +134,7 @@ public class NetworkCommand {
         DO_ESSENCE_ANIMATION, // id (of tower)
         UPDATE_READY_CHECK,     // readycheck progress
         PERFORM_ACTIVESKILL_TC, //towerId, activeSkill (ordinal)
+        SUGGEST_MUSIC,          // NOW or LATER (0 or 1); music_id
         END_GAME;               // NO ARGS
 
     }

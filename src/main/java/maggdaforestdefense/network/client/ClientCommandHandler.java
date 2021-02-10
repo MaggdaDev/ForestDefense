@@ -156,6 +156,9 @@ public class ClientCommandHandler extends Thread {
             case PERFORM_ACTIVESKILL_TC:
                 Game.getInstance().performActiveSkill(command);
                 break;
+            case SUGGEST_MUSIC:
+                Game.getInstance().suggestMusic(command);
+                break;
         }
     }
 

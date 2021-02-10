@@ -25,6 +25,15 @@ public class MobWave {
 
         currentSpawnable = spawnableVector.get(currentIndex);
     }
+    
+    public boolean containsMobType(GameObjectType type) {
+        for(Spawnable spawnable: spawnableVector) {
+            if(spawnable.getType() == type) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Spawnable update(double timeElapsed) {
         Spawnable retSpawn = null;

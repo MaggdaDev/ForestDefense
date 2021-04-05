@@ -62,6 +62,7 @@ public class EssenceMenu extends SideMenu {
 
         essenceBar.fitWidthProperty().bind(essenceBox.fitWidthProperty().subtract(boxBorder.multiply(2)));
         essenceBar.fitHeightProperty().bind(essenceBox.fitHeightProperty().subtract(boxBorder.multiply(2)).multiply(essenceLevel.divide(maxEssence)));
+
         essenceBar.layoutXProperty().bind(essenceBox.layoutXProperty().add(boxBorder));
         essenceBar.layoutYProperty().bind(essenceBox.layoutYProperty().add(essenceBox.fitHeightProperty()).subtract(essenceBar.fitHeightProperty().add(boxBorder)));
     }
@@ -85,9 +86,9 @@ public class EssenceMenu extends SideMenu {
         
         double newDouble = newVal;
         if(newVal <= 0) {
-            newDouble = 0.1;
+            newDouble = 0.001;
         }
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceLevel, newVal, Interpolator.EASE_BOTH)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.4), new KeyValue(essenceLevel, newDouble, Interpolator.EASE_BOTH)));
         timeline.play();
     }
 

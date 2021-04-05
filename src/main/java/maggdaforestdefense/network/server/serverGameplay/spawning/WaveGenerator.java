@@ -61,9 +61,11 @@ public class WaveGenerator {
             case M_BLATTLAUS:
                 return 1;
             case M_WANDERLAUFER:
-                return 5;
+                return 8;
             case M_HIRSCHKAEFER:
                 return 25;
+            case M_MARIENKAEFER:
+                return 5;
             default:
                 throw new UnsupportedOperationException();
         }

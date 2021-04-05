@@ -40,8 +40,8 @@ public abstract class ClientMob extends ClientGameObject {
     public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
     public final static double SHADOW_OFFSET_Y_DIG_MULT = 0;
 
-    public final static double SHADOW_OFFSET_X_WALK_MULT = 0.06;
-    public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.18;
+    public final static double SHADOW_OFFSET_X_WALK_MULT = 0.04;
+    public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.12;
 
     public final static double SHADOW_OFFSET_X_FLY_MULT = 0.18;
     public final static double SHADOW_OFFSET_Y_FLY_MULT = 0.54;
@@ -57,7 +57,7 @@ public abstract class ClientMob extends ClientGameObject {
         shadow = new DropShadow();
         shadow.setOffsetX(shadowOffsetX);
         shadow.setOffsetY(shadowOffsetY);
-        shadow.setColor(Color.BLACK);
+        shadow.setColor(Color.color(0, 0, 0, 0.2));
         shadow.setBlurType(BlurType.GAUSSIAN);
         setEffect(shadow);
 
@@ -76,6 +76,8 @@ public abstract class ClientMob extends ClientGameObject {
 
         oldHealth = maxHealth;
     }
+    
+
 
     protected void updateShadow() {
         switch (movementType) {
@@ -97,6 +99,7 @@ public abstract class ClientMob extends ClientGameObject {
         }
 
         int direction = (int) ((getRotate() / 90) + 0.5);
+        
         switch (direction) {
             case 0:
             case 4:
@@ -156,6 +159,13 @@ public abstract class ClientMob extends ClientGameObject {
             Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().remove(healthBar);
         }
 
+    }
+    
+    @Override
+    public void addColoredShadow(double radius, Color c) {
+        if (!(getEffect() instanceof DropShadow && ((DropShadow) getEffect()).getColor().equals(c))) {
+            shadow.setInput(new DropShadow(radius, c));
+        }
     }
 
 }

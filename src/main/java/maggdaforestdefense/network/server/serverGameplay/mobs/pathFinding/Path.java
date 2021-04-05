@@ -16,12 +16,21 @@ public class Path {
 
     private Vector<PathCell> cells;
     private Vector<WaySegment> ways;
+    private int priority = 0;
     
     double wayWalked = 0;
 
     public Path() {
         cells = new Vector<>();
         ways = new Vector<>();
+    }
+    
+    public void setPriority(int p) {
+        priority = p;
+    }
+    
+    public int getPriority() {
+        return priority;
     }
 
     public void generate(PathCell endCell) {

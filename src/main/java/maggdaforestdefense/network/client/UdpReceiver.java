@@ -11,13 +11,14 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.network.server.ServerSocketHandler;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
  * @author DavidPrivat
  */
 public class UdpReceiver extends Thread {
-
+    
     private boolean useUDP = true;
     private DatagramSocket udpSocket;
     private DatagramPacket udpPacket;
@@ -25,7 +26,7 @@ public class UdpReceiver extends Thread {
 
     public UdpReceiver() {
         try {
-            udpSocket = new DatagramSocket(Server.UDP_PORT);
+            udpSocket = new DatagramSocket(Server.CLIENT_UDP_PORT);
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -42,8 +43,9 @@ public class UdpReceiver extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            String message = new String(udpPacket.getData());
+            
+            
+            String message = new String(udpPacket.getData(),0,udpPacket.getLength());
             NetworkManager.getInstance().getCommandHandler().onMessage(message);
         }
     }

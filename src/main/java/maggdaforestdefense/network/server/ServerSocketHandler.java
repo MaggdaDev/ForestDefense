@@ -6,6 +6,8 @@
 package maggdaforestdefense.network.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import maggdaforestdefense.auth.AuthWindow;
 import maggdaforestdefense.auth.Credentials;
 import maggdaforestdefense.auth.MWUser;
@@ -28,6 +30,7 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import maggdaforestdefense.network.client.UdpReceiver;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 
@@ -71,7 +74,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
             
         udpSocket = udp;
         udpByteBuffer = new byte[byteBufferLength];
-        udpPacket = new DatagramPacket(udpByteBuffer, byteBufferLength, new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), Server.UDP_PORT));
+        udpPacket = new DatagramPacket(udpByteBuffer, byteBufferLength, new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), Server.CLIENT_UDP_PORT));
         Logger.logServer("UDP set up");
         }
     }
@@ -85,7 +88,9 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
     public void handleMessage(WebSocket conn, String message) {
         if (NetworkCommand.testForKeyWord(message)) {
+
             queue.add(NetworkCommand.fromString(message));
+
         } else {
             Logger.errServer("Received an invalid command.");
             sendCommand(new NetworkCommand(NetworkCommand.CommandType.INVALID_MESSAGE, NetworkCommand.EMPTY_ARGS));
@@ -159,6 +164,8 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                         game.sendCommandToAllPlayers(NetworkCommand.START_GAME);
                         game.start();
 
+                    } else {
+                        Logger.logServer("START_GAME requested but game already running!");
                     }
 
                 }
@@ -213,7 +220,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     public void sendCommand(NetworkCommand command) {
-        //Logger.debugServer("Command sent: " + command.toString());
+        Logger.debugServer("Command sent: " + command.toString());
         if (conn.isOpen()) {
             conn.send(command.toString());
         } else {

@@ -39,6 +39,13 @@ public enum GameImage {
     MOB_BLATTLAUS_1("maggdaforestdefense/mobs/blattlaus1.png"),
     MOB_BLATTLAUS_2("maggdaforestdefense/mobs/blattlaus2.png"),
     MOB_BLATTLAUS_3("maggdaforestdefense/mobs/blattlaus3.png"),
+    MOB_MARIENKAEFER_1("maggdaforestdefense/mobs/marienkaefer1.png"),
+    MOB_MARIENKAEFER_2("maggdaforestdefense/mobs/marienkaefer2.png"),
+    MOB_MARIENKAEFER_3("maggdaforestdefense/mobs/marienkaefer3.png"),
+    MOB_MARIENKAEFER_4("maggdaforestdefense/mobs/marienkaefer4.png"),
+    MOB_MARIENKAEFER_5("maggdaforestdefense/mobs/marienkaefer5.png"),
+    MOB_MARIENKAEFER_6("maggdaforestdefense/mobs/marienkaefer6.png"),
+    
     // TOWERS
     TOWERGROWING_ANIMATION_1("maggdaforestdefense/towers/treeGrowing1.png"),
     TOWERGROWING_ANIMATION_2("maggdaforestdefense/towers/treeGrowing2.png"),

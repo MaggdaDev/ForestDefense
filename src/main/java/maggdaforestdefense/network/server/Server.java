@@ -30,6 +30,7 @@ public class Server {
     public final static int PORT = 27757;
     public final static int WS_PORT = 27756;
     public final static int UDP_PORT = 27755;
+    public final static int CLIENT_UDP_PORT = 27754;
     public final static String WS_FILENAME = "api/gamesocket/";
     public final static String WS_HOST = "forestdefense.minortom.net";
     public final static String WS_HOST2 = "0.0.0.0";

@@ -15,10 +15,12 @@ import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
+import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
@@ -153,7 +155,10 @@ public abstract class Mob extends GameObject {
                 if (tower.shouldPrioritize(dist * MapCell.CELL_SIZE, movementType) || Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
                     PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
                     Path newPath = finder.findPath();
-                    if (newPath.getRestWay() < path.getRestWay()) {
+                    if(movementType == MovementType.FLY && tower instanceof Oak && ((Oak)tower).getUpgrades().contains(Upgrade.OAK_1_2)) {
+                        newPath.setPriority(10);
+                    }
+                    if (newPath.getPriority() > path.getPriority() || newPath.getRestWay() < path.getRestWay()) {
                         path = newPath;
                         targetTower = tower;
                     }
@@ -322,6 +327,8 @@ public abstract class Mob extends GameObject {
                 return 100;
             case M_WASSERLAEUFER:
                 return 40;
+            case M_MARIENKAEFER:
+                return 80;
             default:
                 throw new UnsupportedOperationException();
         }

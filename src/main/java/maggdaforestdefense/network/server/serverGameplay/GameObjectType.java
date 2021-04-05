@@ -20,6 +20,7 @@ public enum GameObjectType {
     M_BORKENKAEFER(GameImage.MOB_BLATTLAUS_1),
     M_WANDERLAUFER(GameImage.MOB_LAUFKAEFER_1),
     M_BLATTLAUS(GameImage.MOB_BLATTLAUS_1),
+    M_MARIENKAEFER(GameImage.MOB_MARIENKAEFER_1),
     
     //TOWERS
     T_SPRUCE(GameImage.TOWER_SPRUCE_1),

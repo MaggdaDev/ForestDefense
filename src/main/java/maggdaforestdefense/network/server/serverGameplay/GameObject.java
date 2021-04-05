@@ -12,6 +12,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBlattlaus;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBorkenkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHirschkaefer;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientMarienkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientSchwimmkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWanderlaeufer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWasserlaeufer;
@@ -24,6 +25,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Marienkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
 
@@ -37,7 +39,7 @@ public abstract class GameObject {
 
     protected final int id;
     protected final GameObjectType gameObjectType;
-    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER};
+    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER};
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;
@@ -104,8 +106,10 @@ public abstract class GameObject {
                 return new ClientWanderlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_WASSERLAEUFER:
                 return new ClientWasserlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
-                case M_BLATTLAUS:
+            case M_BLATTLAUS:
                 return new ClientBlattlaus((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+            case M_MARIENKAEFER:
+                return new ClientMarienkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             //TOWERS
             case T_SPRUCE:
                 return new ClientSpruce((int) command.getNumArgument("id"), (int) command.getNumArgument("xIndex"), (int) command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));

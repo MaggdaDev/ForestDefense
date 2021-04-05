@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network.client;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;

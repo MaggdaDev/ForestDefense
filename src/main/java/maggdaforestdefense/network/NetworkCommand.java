@@ -6,6 +6,8 @@
 package maggdaforestdefense.network;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import maggdaforestdefense.util.Exceptions;
 
 /**
@@ -16,8 +18,7 @@ public class NetworkCommand {
 
     public static final CommandArgument[] EMPTY_ARGS = new CommandArgument[]{};
     // PREDEF COMMANDS
-    public static final NetworkCommand 
-            START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
+    public static final NetworkCommand START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
             REQUEST_START_GAME = new NetworkCommand(CommandType.REQUEST_START_GAME, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
             READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS),
@@ -58,11 +59,16 @@ public class NetworkCommand {
         }
         return "";
     }
-    
+
     public NetworkCommand getInnerCommand(String name) {
-        return fromString(getArgument(name));
+        try {
+            return fromString(getArgument(name));
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-    
+
     public CommandArgument[] getAllArguments() {
         return commandArguments;
     }
@@ -82,6 +88,8 @@ public class NetworkCommand {
 
     public static NetworkCommand fromString(String string) {
         return new Gson().fromJson(string.replace(KEYWORD, ""), NetworkCommand.class);
+
+
     }
 
     public static boolean testForKeyWord(String s) {
@@ -97,32 +105,30 @@ public class NetworkCommand {
         //  CLIENT TO SERVER
         REQUIRE_CONNECTION, // auth
         CREATE_GAME, // NO ARGS
-        LIST_AVAILABLE_GAMES,   // NO ARGS
-        REQUEST_JOIN_GAME,      // GAME ID
-        
+        LIST_AVAILABLE_GAMES, // NO ARGS
+        REQUEST_JOIN_GAME, // GAME ID
+
         REQUEST_START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type
         READY_FOR_NEXT_ROUND, // NO ARGS
         REQUEST_ESSENCE_TOWER, //id
-        PERFORM_ACTIVESKILL_TS,    // towerId, activeSkill (ordinal)
-        USE_LORBEER_TRADE,          // towerId, upgradeOrdinal
+        PERFORM_ACTIVESKILL_TS, // towerId, activeSkill (ordinal)
+        USE_LORBEER_TRADE, // towerId, upgradeOrdinal
 
-        
-        
         //  SERVER TO CLIENT
-        LAUNCH_GAME,        // NO ARGS
+        LAUNCH_GAME, // NO ARGS
         PERMIT_CONNECTION, // auth_ok
-        SHOW_GAMES,         // list of games
-        SHOW_WAITING_PLAYERS,   // list of playernames
+        SHOW_GAMES, // list of games
+        SHOW_WAITING_PLAYERS, // list of playernames
         INVALID_MESSAGE, // NO ARGS      The message sent by the client is invalid, will disconnect
         HANDLE_EXCEPTION, // name, stack
-        
+
         START_GAME, //NO ARGS
         SHOW_MAP, // map
         NEW_GAME_OBJECT, //type, id, x, y (maybe more; type specific)
         UPDATE_GAME_OBJECT, //id, args (x,y maybe more, type specific)
-         UPDATE,             // LIST OF ALL UPDATE COMMANDS
+        UPDATE, // LIST OF ALL UPDATE COMMANDS
         UPDATE_GAME_RESSOURCES, // coins, essence
         PLANT_TREE, //id, type, xIndex, yIndex
         REMOVE_GAME_OBJECT, //id
@@ -132,9 +138,9 @@ public class NetworkCommand {
         WAIT_FOR_READY_NEXT_WAVE, // NO ARGS
         NEXT_WAVE, //wave
         DO_ESSENCE_ANIMATION, // id (of tower)
-        UPDATE_READY_CHECK,     // readycheck progress
+        UPDATE_READY_CHECK, // readycheck progress
         PERFORM_ACTIVESKILL_TC, //towerId, activeSkill (ordinal)
-        SUGGEST_MUSIC,          // NOW or LATER (0 or 1); music_id
+        SUGGEST_MUSIC, // NOW or LATER (0 or 1); music_id
         END_GAME;               // NO ARGS
 
     }

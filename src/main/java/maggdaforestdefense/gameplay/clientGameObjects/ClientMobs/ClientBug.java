@@ -23,7 +23,7 @@ import maggdaforestdefense.util.GameMaths;
  */
 public abstract class ClientBug extends ClientMob {
 
-    private double distance_between_steps = 5;
+    protected double distance_between_steps = 5;
 
     protected double distanceSinceLastStep = 0;
 

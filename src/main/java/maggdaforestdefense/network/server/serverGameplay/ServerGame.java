@@ -24,6 +24,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Hirschkaefer;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Marienkaefer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -156,6 +157,9 @@ public class ServerGame extends Thread {
             case M_BLATTLAUS:
                 addMob(new Blattlaus(this));
                 break;
+            case M_MARIENKAEFER:
+                addMob(new Marienkaefer(this));
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -266,7 +270,7 @@ public class ServerGame extends Thread {
     }
     
     public void updateRessources() {
-        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        sendCommandToAllPlayersUDP(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
     }
 
     public void damageBase(Mob mob) {

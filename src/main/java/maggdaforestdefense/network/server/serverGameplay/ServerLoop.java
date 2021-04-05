@@ -56,9 +56,11 @@ public class ServerLoop {
         waveGenerator = new WaveGenerator();
         fpsLimiter = new FPSLimiter();
         musicPicker = new ServerSoundsPicker(game);
+        Logger.logServer("ServerLoop generated.");
     }
 
     public void run() {
+        Logger.logServer("ServerLoop started.");
         startTimeNano = System.nanoTime();
         oldRunTime = 0;
         

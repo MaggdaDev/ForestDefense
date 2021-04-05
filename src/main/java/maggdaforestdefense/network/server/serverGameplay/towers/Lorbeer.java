@@ -39,16 +39,16 @@ public class Lorbeer extends Tower{
     public static final int DEFAULT_PRIZE = 350;
     public final static double DEFAULT_HEALTH = 20, DEFAULT_REGEN = 0;
     public final static double DEFAULT_RANGE = 2;
-    public final static double DEFAULT_GROWING_TIME = 30;
+    public final static double DEFAULT_GROWING_TIME = 1;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
-    public final static double DEFAULT_DAMAGE = 20;
-    public final static int DEFAULT_MAX_LORBEERS = 10;
+    public final static double DEFAULT_DAMAGE = 100;
+    public final static int DEFAULT_MAX_LORBEERS = 3;
     public final static int DEFAULT_GOLD_PER_LORBEER = 25;
     
     private Damage damageObject;
     private Damage.NormalDamage usualDamage;
     
-    private double attackCooldown = 8.0d, attackTimer = attackCooldown;
+    private double attackCooldown = 1.0d, attackTimer = attackCooldown;
     private boolean canAttack = true;
     
     private int lorbeerAmount = 0, maxLorbeerAmount = DEFAULT_MAX_LORBEERS;
@@ -65,7 +65,7 @@ public class Lorbeer extends Tower{
     public final static double EXECUTIVE_PERCENTMISSINGHEALTH = 0.2d;
     
     private boolean isErnteRausch = false;
-    public final static int RAUSCH_KILL_AMOUNT = 4;
+    public final static int RAUSCH_KILL_AMOUNT = 2;
     private int ernteRauschKillCount = 0;
     
     private boolean isMassenproduktion = false;
@@ -296,6 +296,7 @@ public class Lorbeer extends Tower{
     }
     
     private void trade() {
+        Logger.logServer("trade!");
         if(lorbeerAmount >= maxLorbeerAmount) {
             lorbeerAmount = 0;
             addTradeUpgrade(generateTauschhandelUpgrade());
@@ -318,13 +319,13 @@ public class Lorbeer extends Tower{
     private void updateTauschhandel() {
         if(tradeUpgradesAdd.size() != 0) {
             Upgrade add = tradeUpgradesAdd.poll();
-            updateCommandArgs.add(new CommandArgument("tauschhandelAdd", add.ordinal()));
+            serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.EDIT_TAUSCHHANDEL, new CommandArgument[]{new CommandArgument("id", id),new CommandArgument("mode", 1), new CommandArgument("upgradeId", add.ordinal())}));
             tauschhandelUpgrades.add(add);
         }
         if(tradeUpgradesRemove.size() != 0) {
             Upgrade remove = tradeUpgradesRemove.poll();
             if(tauschhandelUpgrades.contains(remove)) {
-                updateCommandArgs.add(new CommandArgument("tauschhandelRemove", remove.ordinal()));
+                serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.EDIT_TAUSCHHANDEL, new CommandArgument[]{new CommandArgument("id", id),new CommandArgument("mode", 0), new CommandArgument("upgradeId", remove.ordinal())}));
                 tauschhandelUpgrades.remove(remove);
             }
         }

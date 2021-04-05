@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import language.Deutsch;
 import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientLorbeer;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
@@ -285,6 +286,12 @@ public class Game {
             maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playLater(SoundEngine.Sound.values()[musicId]);
         }
     }
+    
+    public void editTauschhandel(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientLorbeer)gameObjects.get(id)).editTauschhandel(command);
+        
+    }
 
     public GameLoop getGameLoop() {
         return gameLoop;
@@ -297,10 +304,14 @@ public class Game {
     public static void removeGamePlayNode(Node node) {
         instance.getGameScreen().safeRemoveGameplayNode(node);
     }
+    
+    
 
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
+
+    
 
     
 

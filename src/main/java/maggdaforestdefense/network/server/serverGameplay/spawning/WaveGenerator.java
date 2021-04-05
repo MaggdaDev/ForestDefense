@@ -39,11 +39,11 @@ public class WaveGenerator {
                 randIndex = 0;
             }
             int amount = (int)(totStrength/strengths[randIndex]);
-            if(amount > 5) {
+            if(amount > 10) {
                 amount = 5;
             }
             for(int i = 0; i < amount; i++) {
-                spawnables.add(new Spawnable(mobs[randIndex], 15.0d / ((double)round + 5.0d)));
+                spawnables.add(new Spawnable(mobs[randIndex], Math.pow((double)getStrength(mobs[randIndex]), 0.3)));
             }
             totStrength -= amount * strengths[randIndex];
         }

@@ -161,6 +161,9 @@ public class ClientCommandHandler extends Thread {
             case SUGGEST_MUSIC:
                 Game.getInstance().suggestMusic(command);
                 break;
+            case EDIT_TAUSCHHANDEL:
+                Game.getInstance().editTauschhandel(command);
+                break;
         }
     }
 

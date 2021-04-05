@@ -25,7 +25,7 @@ import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 public class MapleShot extends Projectile {
 
     public final static double WIDTH = 10;
-    public final static double DAMAGE = 10;
+    public final static double DAMAGE = 20;
     private double EXPANSION = 500;
 
     private double xPos, yPos;

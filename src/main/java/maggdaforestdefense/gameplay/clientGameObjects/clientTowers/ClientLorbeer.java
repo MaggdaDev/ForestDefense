@@ -46,6 +46,7 @@ import maggdaforestdefense.gameplay.ingamemenus.ContentBox;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer.HeadHuntGenerator.Mission;
 import maggdaforestdefense.gameplay.playerinput.*;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -220,18 +221,7 @@ public class ClientLorbeer extends ClientTower {
         }
 
         // tauschhandel
-        if (updateCommand.containsArgument("tauschhandelAdd")) {
-            Upgrade upgrade = Upgrade.values()[(int) updateCommand.getNumArgument("tauschhandelAdd")];
-            tradeBox.addTrade(upgrade);
-            Game.getInstance().addLorbeerTradingUpgrade(upgrade);
-            tradeUpgrades.add(upgrade);
-        }
-        if (updateCommand.containsArgument("tauschhandelRemove")) {
-            Upgrade upgrade = Upgrade.values()[(int) updateCommand.getNumArgument("tauschhandelRemove")];
-            tradeBox.removeTrade(upgrade);
-            tradeUpgrades.remove(upgrade);
-            Game.getInstance().removeLorbeerTradingUpgrade(upgrade);
-        }
+        
 
         if (updateCommand.containsArgument("range")) {
             double newRange = updateCommand.getNumArgument("range");
@@ -240,6 +230,20 @@ public class ClientLorbeer extends ClientTower {
                 super.range = newRange;
                 PlayerInputHandler.getInstance().showRange(mapCell);
             }
+        }
+    }
+    
+    public void editTauschhandel(NetworkCommand command) {
+        if (command.getNumArgument("mode") == 1) {
+            Upgrade upgrade = Upgrade.values()[(int) command.getNumArgument("upgradeId")];
+            tradeBox.addTrade(upgrade);
+            Game.getInstance().addLorbeerTradingUpgrade(upgrade);
+            tradeUpgrades.add(upgrade);
+        } else {
+            Upgrade upgrade = Upgrade.values()[(int) command.getNumArgument("upgradeId")];
+            tradeBox.removeTrade(upgrade);
+            tradeUpgrades.remove(upgrade);
+            Game.getInstance().removeLorbeerTradingUpgrade(upgrade);
         }
     }
 
@@ -305,6 +309,7 @@ public class ClientLorbeer extends ClientTower {
             trades.add(trade);
             tradeGroup.getChildren().add(trade);
             relayoutTrades();
+            Logger.logClient("Box add Trade!");
         }
 
         public void removeTrade(Upgrade upgrade) {

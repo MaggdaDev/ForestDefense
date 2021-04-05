@@ -136,6 +136,7 @@ public class NetworkCommand {
         WAVE_FINISHED, // NO ARGS
         TOWER_NEED_ESSENCE, // id
         WAIT_FOR_READY_NEXT_WAVE, // NO ARGS
+        EDIT_TAUSCHHANDEL,  // 0/1 = remove/add ; upgrade id
         NEXT_WAVE, //wave
         DO_ESSENCE_ANIMATION, // id (of tower)
         UPDATE_READY_CHECK, // readycheck progress

@@ -20,6 +20,7 @@ public class NetworkCommand {
     // PREDEF COMMANDS
     public static final NetworkCommand START_GAME = new NetworkCommand(CommandType.START_GAME, EMPTY_ARGS),
             REQUEST_START_GAME = new NetworkCommand(CommandType.REQUEST_START_GAME, EMPTY_ARGS),
+            REMOVE_WAITING_PLAYER = new NetworkCommand(CommandType.REMOVE_WAITING_PLAYER, EMPTY_ARGS),
             END_GAME = new NetworkCommand(CommandType.END_GAME, EMPTY_ARGS),
             READY_FOR_NEXT_ROUND = new NetworkCommand(CommandType.READY_FOR_NEXT_ROUND, EMPTY_ARGS),
             LIST_AVAILABLE_GAMES = new NetworkCommand(CommandType.LIST_AVAILABLE_GAMES, EMPTY_ARGS),
@@ -107,6 +108,7 @@ public class NetworkCommand {
         CREATE_GAME, // NO ARGS
         LIST_AVAILABLE_GAMES, // NO ARGS
         REQUEST_JOIN_GAME, // GAME ID
+        REMOVE_WAITING_PLAYER,  //NO ARGS
 
         REQUEST_START_GAME, // NO ARGS
         ADD_TOWER, // x, y, type

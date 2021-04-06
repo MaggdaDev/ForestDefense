@@ -33,6 +33,7 @@ public class ClientCommandHandler extends Thread {
     private LinkedList<NetworkCommand> workingQueue;
 
     private boolean isInGame = false, running = true;
+    private int tempCount = 0;
 
     public ClientCommandHandler() {
         queue = new LinkedBlockingQueue<>();
@@ -42,10 +43,9 @@ public class ClientCommandHandler extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
-                handleInput();
-            }
+            while (!isInGame) {      
+            // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
+            handleInput();
         }
     }
 
@@ -60,6 +60,7 @@ public class ClientCommandHandler extends Thread {
     public void reset() {
         queue.clear();
         workingQueue.clear();
+        start();
     }
 
     public void stopRunning() {
@@ -78,7 +79,6 @@ public class ClientCommandHandler extends Thread {
     }
 
     private void handleCommand(NetworkCommand command) {
-        //Logger.logClient("Command handled: " + command.toString());
 
         switch (command.getCommandType()) {
             case UPDATE:
@@ -167,8 +167,8 @@ public class ClientCommandHandler extends Thread {
         }
     }
 
-    void setInGame(boolean b) {
-        isInGame = b;
+    public void setInGame(boolean b) {
+        isInGame = b;   
     }
 
 }

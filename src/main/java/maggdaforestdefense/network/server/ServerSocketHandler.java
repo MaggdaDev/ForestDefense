@@ -171,6 +171,10 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 }
 
                 break;
+                
+            case REMOVE_WAITING_PLAYER:
+                game.removePlayer(owner);
+                break;
 
             case ADD_TOWER:
                 double xPos = command.getNumArgument("x");
@@ -211,6 +215,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     private void createGame(String name) {
+        gameStarted = false;
         game = new ServerGame(owner, name);
         Server.getInstance().addGame(game);
     }

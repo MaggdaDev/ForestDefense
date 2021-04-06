@@ -16,7 +16,7 @@ import maggdaforestdefense.storage.GameImage;
 public class ClientHirschkaefer extends ClientBug {
     public static double SIZE = 90, STEP_DISTANCE = 10;
     public ClientHirschkaefer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_HIRSCHKAEFER, GameImage.MOB_BUG_1, STEP_DISTANCE, SIZE);
+        super(id, x, y, hp, movement, GameObjectType.M_HIRSCHKAEFER, GameImage.MOB_HIRSCHKAEFER_1, STEP_DISTANCE, SIZE);
     }
 
     @Override

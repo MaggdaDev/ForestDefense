@@ -46,7 +46,8 @@ public class WaitForPlayersMenu {
 
     @FXML
     private void cancel(ActionEvent e) {
-        
+        MenuManager.getInstance().showPreviousScreen();
+        NetworkManager.getInstance().sendCommand(NetworkCommand.REMOVE_WAITING_PLAYER);
     }
     
     public void addPlayerEntry(String name) {

@@ -66,8 +66,8 @@ public class ServerGame extends Thread {
     private HashMap<String, Mob> mobsList;
 
     private Vector<NetworkCommand> commandsToSend;
-    
-    private boolean hasRemovedTrade = false;
+
+    private boolean hasRemovedTrade = false, endGame = false;
 
     public ServerGame(Player firstPlayer, String name) {
         this.name = name;
@@ -93,32 +93,40 @@ public class ServerGame extends Thread {
         isStarted = true;
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_MAP, new CommandArgument[]{new CommandArgument("map", map.toString())}));
 
-       
         serverLoop.run();
     }
 
     public void addPlayer(Player player) {
         players.add(player);
+        updatePlayersWaiting();
+        player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
+    }
+
+    public void updatePlayersWaiting() {
         CommandArgument[] args = new CommandArgument[players.size()];
         for (int i = 0; i < players.size(); i++) {
             args[i] = new CommandArgument("name", players.get(i).getUserName());
         }
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_WAITING_PLAYERS, args));
-        player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
+
     }
 
     public void removePlayer(Player owner) {
         players.remove(owner);
         checkPlayers();
+        if (!isStarted) {
+            updatePlayersWaiting();
+        }
+
     }
 
     public void endGame() {
+        this.endGame = true;
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
         Server.getInstance().getGameHandler().removeGame(gameId);
     }
 
-    
     public void checkPlayers() {
         if (players.size() == 0) {
             Logger.logServer("GAME ABANDONED BECAUSE OF NO PLAYERS!!!   GAME ID: " + gameId + "      GAME NAME: " + name);
@@ -188,7 +196,7 @@ public class ServerGame extends Thread {
                 break;
 
             case T_OAK:
-                if(coins < Oak.DEFAULT_PRIZE) {
+                if (coins < Oak.DEFAULT_PRIZE) {
                     return;
                 }
                 newTower = new Oak(this, xPos, yPos);
@@ -209,30 +217,34 @@ public class ServerGame extends Thread {
             new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal())),
             new CommandArgument("growingTime", tower.getGrowingTime())
         }));
-        
+
         updateRessources();
 
         notifyTowerChanges();
     }
 
     public void updateGameObjects(double timeElapsed) {
-        gameObjects.forEach((String key, GameObject g) -> {
-            NetworkCommand comm = g.update(timeElapsed);
-            if (comm != null) {
-                sendCommandToAllPlayersUDP(comm);
-            }
-        });
+        if (!endGame) {
+            gameObjects.forEach((String key, GameObject g) -> {
+                NetworkCommand comm = g.update(timeElapsed);
+                if (comm != null) {
+                    sendCommandToAllPlayersUDP(comm);
+                }
+            });
+        }
 
     }
 
     public void handleEssenceAfterRound() {
-        sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
-        gameObjects.forEach((String id, GameObject gObj) -> {
-            if (gObj instanceof Tower) {
-                Tower tower = (Tower) gObj;
-                tower.handleAfterWave();
-            }
-        });
+        if (!endGame) {
+            sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
+            gameObjects.forEach((String id, GameObject gObj) -> {
+                if (gObj instanceof Tower) {
+                    Tower tower = (Tower) gObj;
+                    tower.handleAfterWave();
+                }
+            });
+        }
     }
 
     public void requestEssence(String id) {
@@ -254,13 +266,13 @@ public class ServerGame extends Thread {
             }
         });
     }
-    
+
     public void performActiveSkill(String id, ActiveSkill skill) {
-        ((Tower)gameObjects.get(id)).performActiveSkill(skill);
+        ((Tower) gameObjects.get(id)).performActiveSkill(skill);
     }
 
     public void handleEssenceNewRound() {
-        
+
         base.refillEssence();
     }
 
@@ -268,22 +280,23 @@ public class ServerGame extends Thread {
         base.increaseMaxEssence(i);
         updateRessources();
     }
-    
+
     public void updateRessources() {
-        sendCommandToAllPlayersUDP(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        if (!endGame) {
+            sendCommandToAllPlayersUDP(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        }
     }
 
     public void damageBase(Mob mob) {
         base.damageBase(mob);
     }
 
-
     public void sendCommandToAllPlayers(NetworkCommand command) {
         players.forEach((Player player) -> {
             player.sendCommand(command);
         });
     }
-    
+
     public void sendCommandToAllPlayersUDP(NetworkCommand command) {
         players.forEach((Player player) -> {
             player.sendCommandUDP(command);
@@ -335,8 +348,8 @@ public class ServerGame extends Thread {
             }
         });
     }
-    
-     public void addGold(int i) {
+
+    public void addGold(int i) {
         coins += i;
     }
 
@@ -368,19 +381,19 @@ public class ServerGame extends Thread {
         notifyTowerChanges();
 
     }
-    
+
     public void useLorbeerTrade(String id, Upgrade upgrade) {
         Tower tower = (Tower) gameObjects.get(id);
         tower.addUpgrade(upgrade);
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{
-            new CommandArgument("id", id), 
-            new CommandArgument("tier", tower.getUpgradeSet().getTier(upgrade)), 
+            new CommandArgument("id", id),
+            new CommandArgument("tier", tower.getUpgradeSet().getTier(upgrade)),
             new CommandArgument("type", tower.getUpgradeSet().getType(upgrade))}));
         hasRemovedTrade = false;
-        gameObjects.forEach((String key, GameObject gameObject)->{
-            if((!hasRemovedTrade) && gameObject instanceof Lorbeer) {
+        gameObjects.forEach((String key, GameObject gameObject) -> {
+            if ((!hasRemovedTrade) && gameObject instanceof Lorbeer) {
                 Lorbeer currentLorbeer = (Lorbeer) gameObject;
-                if(currentLorbeer.removeTradeUpgrade(upgrade)) {
+                if (currentLorbeer.removeTradeUpgrade(upgrade)) {
                     hasRemovedTrade = true;
                 }
             }
@@ -411,13 +424,5 @@ public class ServerGame extends Thread {
             }
         });
     }
-
-    
-
-    
-
-   
-
-    
 
 }

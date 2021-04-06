@@ -320,7 +320,7 @@ public abstract class Mob extends GameObject {
             case M_BORKENKAEFER:
                 return 100;
             case M_HIRSCHKAEFER:
-                return 500;
+                return 250;
             case M_SCHWIMMKAEFER:
                 return 20;
             case M_WANDERLAUFER:

@@ -97,7 +97,8 @@ public abstract class GameObject {
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
             case M_BORKENKAEFER:
-                return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+                break;
+                //return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_HIRSCHKAEFER:
                 return new ClientHirschkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_SCHWIMMKAEFER:
@@ -105,7 +106,8 @@ public abstract class GameObject {
             case M_WANDERLAUFER:
                 return new ClientWanderlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_WASSERLAEUFER:
-                return new ClientWasserlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+                break;
+                //return new ClientWasserlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_BLATTLAUS:
                 return new ClientBlattlaus((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_MARIENKAEFER:
@@ -131,6 +133,8 @@ public abstract class GameObject {
                 return new ClientSpruceShot((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
             default:
                 throw new UnsupportedOperationException();
+                
         }
+        return null;
     }
 }

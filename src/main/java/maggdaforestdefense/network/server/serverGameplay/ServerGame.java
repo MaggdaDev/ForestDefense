@@ -400,6 +400,17 @@ public class ServerGame extends Thread {
         });
         notifyTowerChanges();
     }
+    
+    public void editPlayspeed(int playspeedId) {
+        switch(playspeedId) {
+            case 0:
+                serverLoop.setPlayspeedFact(1);
+                break;
+            case 1:
+                serverLoop.setPlayspeedFact(2);
+                break;
+        }
+    }
 
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
         return gameObjects;
@@ -424,5 +435,7 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+    
 
 }

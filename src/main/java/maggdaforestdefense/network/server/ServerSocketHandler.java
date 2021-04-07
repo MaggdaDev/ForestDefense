@@ -191,7 +191,12 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 int upgradeType = (int) command.getNumArgument("type");
                 game.buyUpgrade(id, tier, upgradeType);
                 break;
-
+                
+            case REQUEST_PLAYSPEED_CHANGE:
+                int playspeedId = (int)command.getNumArgument("speedId");
+                game.editPlayspeed(playspeedId);
+                game.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NOTIFY_PLAYSPEED_CHANGE, new CommandArgument[]{new CommandArgument("speedId", playspeedId)}));
+                break;
             case READY_FOR_NEXT_ROUND:
                 owner.setReadyForNextRound(true);
                 game.updateReadyProgress();

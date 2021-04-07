@@ -76,7 +76,6 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
         isInGame = true;
-        NetworkManager.getInstance().resetCommandHandler();
         NetworkManager.getInstance().setInGame(true);
 
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
@@ -99,6 +98,7 @@ public class Game {
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().setInGame(false);
         NetworkManager.getInstance().resetCommandHandler();
+
 
         maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER);
         gameLoop.stop();
@@ -289,6 +289,10 @@ public class Game {
         String id = command.getArgument("id");
         ((ClientLorbeer) gameObjects.get(id)).editTauschhandel(command);
 
+    }
+
+    public void notifyPlayspeedChange(NetworkCommand command) {
+        gameScreen.getEssenceMenu().notifyPlayspeedChange(command);
     }
 
     public GameLoop getGameLoop() {

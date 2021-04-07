@@ -39,7 +39,7 @@ public abstract class GameObject {
 
     protected final int id;
     protected final GameObjectType gameObjectType;
-    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER};
+    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER, GameObjectType.M_BORKENKAEFER};
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;
@@ -97,8 +97,7 @@ public abstract class GameObject {
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
             case M_BORKENKAEFER:
-                break;
-                //return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+                return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_HIRSCHKAEFER:
                 return new ClientHirschkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_SCHWIMMKAEFER:

@@ -77,7 +77,6 @@ public class NetworkManager extends WebSocketClient {
     public void onOpen(ServerHandshake handshakedata) {
         Logger.debugClient("Connected!");
         sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("auth", new Gson().toJson(ConfigurationManager.getConfig().getAuth()))}));
-        commandHandler.start();
     }
 
     @Override

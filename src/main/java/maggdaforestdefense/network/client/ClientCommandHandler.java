@@ -27,12 +27,12 @@ import sun.rmi.runtime.Log;
  *
  * @author David
  */
-public class ClientCommandHandler extends Thread {
+public class ClientCommandHandler {
 
     private LinkedBlockingQueue<NetworkCommand> queue;
     private LinkedList<NetworkCommand> workingQueue;
 
-    private boolean isInGame = false, running = true;
+    private boolean isInGame = false;
     private int tempCount = 0;
 
     public ClientCommandHandler() {
@@ -41,17 +41,14 @@ public class ClientCommandHandler extends Thread {
 
     }
 
-    @Override
-    public void run() {
-            while (!isInGame) {      
-            // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
-            handleInput();
-        }
-    }
 
     public void onMessage(String message) {
         if (NetworkCommand.testForKeyWord(message)) {
+            if(isInGame) {
             queue.add(NetworkCommand.fromString(message));
+            } else {
+                handleCommand(NetworkCommand.fromString(message));
+            }
         } else {
             Logger.errClient("Received an invalid message from the server (KeywordNotFound): " + message);
         }
@@ -60,12 +57,9 @@ public class ClientCommandHandler extends Thread {
     public void reset() {
         queue.clear();
         workingQueue.clear();
-        start();
+        
     }
 
-    public void stopRunning() {
-        running = false;
-    }
 
     public void handleInput() {
         queue.drainTo(workingQueue);
@@ -163,6 +157,9 @@ public class ClientCommandHandler extends Thread {
                 break;
             case EDIT_TAUSCHHANDEL:
                 Game.getInstance().editTauschhandel(command);
+                break;
+            case NOTIFY_PLAYSPEED_CHANGE:
+                Game.getInstance().notifyPlayspeedChange(command);
                 break;
         }
     }

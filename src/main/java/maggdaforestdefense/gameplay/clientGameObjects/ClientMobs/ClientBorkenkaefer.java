@@ -13,10 +13,29 @@ import maggdaforestdefense.storage.GameImage;
  *
  * @author David
  */
-abstract public class ClientBorkenkaefer extends ClientBug{
-    public static double size = 90;
+public class ClientBorkenkaefer extends ClientBug{
+    public static double size = 50, DISTANCE_BETWEEN_STEPS = 15;
     
     public ClientBorkenkaefer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_BORKENKAEFER, GameImage.MOB_BLATTLAUS_1, 20, size);
+        super(id, x, y, hp, movement, GameObjectType.M_BORKENKAEFER, GameImage.MOB_BORKENKAEFER_1, DISTANCE_BETWEEN_STEPS, size);
     }
+    
+    @Override
+    public void step() {
+        animationState++;
+        animationState %= 4;
+        switch (animationState) {
+            case 0:
+            case 2:
+                setImage(GameImage.MOB_BORKENKAEFER_1.getImage());
+                break;
+            case 1:
+                setImage(GameImage.MOB_BORKENKAEFER_2.getImage());
+                break;
+            case 3:
+                setImage(GameImage.MOB_BORKENKAEFER_3.getImage());
+                break;
+
+        }
+    } 
 }

@@ -111,6 +111,7 @@ public class NetworkCommand {
         REMOVE_WAITING_PLAYER,  //NO ARGS
 
         REQUEST_START_GAME, // NO ARGS
+        REQUEST_PLAYSPEED_CHANGE, // play speed id: 0 = normal, 1 = double
         ADD_TOWER, // x, y, type
         UPGRADE_BUTTON_CLICKED, //id, tier, type
         READY_FOR_NEXT_ROUND, // NO ARGS
@@ -144,6 +145,7 @@ public class NetworkCommand {
         UPDATE_READY_CHECK, // readycheck progress
         PERFORM_ACTIVESKILL_TC, //towerId, activeSkill (ordinal)
         SUGGEST_MUSIC, // NOW or LATER (0 or 1); music_id
+        NOTIFY_PLAYSPEED_CHANGE,    //playspeed id, see "request playspeed"
         END_GAME;               // NO ARGS
 
     }

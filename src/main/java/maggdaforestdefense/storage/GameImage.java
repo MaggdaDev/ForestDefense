@@ -36,6 +36,9 @@ public enum GameImage {
     MOB_BLATTLAUS_1("maggdaforestdefense/mobs/blattlaus1.png"),
     MOB_BLATTLAUS_2("maggdaforestdefense/mobs/blattlaus2.png"),
     MOB_BLATTLAUS_3("maggdaforestdefense/mobs/blattlaus3.png"),
+    MOB_BORKENKAEFER_1("maggdaforestdefense/mobs/borkenkaefer1.png"),
+    MOB_BORKENKAEFER_2("maggdaforestdefense/mobs/borkenkaefer2.png"),
+    MOB_BORKENKAEFER_3("maggdaforestdefense/mobs/borkenkaefer3.png"),
     MOB_MARIENKAEFER_1("maggdaforestdefense/mobs/marienkaefer1.png"),
     MOB_MARIENKAEFER_2("maggdaforestdefense/mobs/marienkaefer2.png"),
     MOB_MARIENKAEFER_3("maggdaforestdefense/mobs/marienkaefer3.png"),
@@ -159,7 +162,9 @@ public enum GameImage {
     ESSENCE_ANIMATION_2("maggdaforestdefense/display/essence_animation_2.png"),
     ESSENCE_ANIMATION_3("maggdaforestdefense/display/essence_animation_3.png"),
     ESSENCE_ANIMATION_4("maggdaforestdefense/display/essence_animation_4.png"),
-    LORBEER_ICON("maggdaforestdefense/display/lorbeer_icon.png");
+    LORBEER_ICON("maggdaforestdefense/display/lorbeer_icon.png"),
+    DISPLAY_PLAY_BUTTON("maggdaforestdefense/display/play.png"),
+    DISPLAY_FAST_FORWARD("maggdaforestdefense/display/fast_forward.png");
 
     private Image image;
 

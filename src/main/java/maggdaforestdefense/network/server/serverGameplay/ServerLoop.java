@@ -33,6 +33,8 @@ public class ServerLoop {
 
     private long startTimeNano = 0;
     private double runTime = 0, oldRunTime = 0;
+    
+    private double playspeedFact = 1;
 
     private ServerGame serverGame;
 
@@ -104,7 +106,7 @@ public class ServerLoop {
             while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {                         // ONE WAVE!
                 fpsLimiter.startOfIteration();
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
-                double timeElapsed = runTime - oldRunTime;
+                double timeElapsed = (runTime - oldRunTime) * playspeedFact;
                 oldRunTime = runTime;
 
                 serverGame.updateGameObjects(timeElapsed);
@@ -134,6 +136,10 @@ public class ServerLoop {
             currentWaveIndex++;
 
         }
+    }
+    
+    public void setPlayspeedFact(int i) {
+        playspeedFact = i;
     }
 
     public boolean allPlayersReadyForNextRound() {
@@ -165,4 +171,6 @@ public class ServerLoop {
     public boolean isInWave() {
         return isInWave;
     }
+
+    
 }

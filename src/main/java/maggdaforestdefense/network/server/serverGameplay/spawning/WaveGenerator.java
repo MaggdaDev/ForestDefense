@@ -67,7 +67,7 @@ public class WaveGenerator {
             case M_MARIENKAEFER:
                 return 5;
             case M_BORKENKAEFER:
-                return 1o;
+                return 10;
             default:
                 throw new UnsupportedOperationException();
         }

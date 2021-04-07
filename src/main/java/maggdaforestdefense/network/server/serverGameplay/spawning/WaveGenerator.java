@@ -36,7 +36,7 @@ public class WaveGenerator {
 
             int randIndex = (int)(Math.random() * mobs.length);
             if(round <= 5) {
-                randIndex = 4;
+                randIndex = 0;
             }
             int amount = (int)(totStrength/strengths[randIndex]);
             if(amount > 10) {
@@ -67,7 +67,7 @@ public class WaveGenerator {
             case M_MARIENKAEFER:
                 return 5;
             case M_BORKENKAEFER:
-                return 1;
+                return 1o;
             default:
                 throw new UnsupportedOperationException();
         }

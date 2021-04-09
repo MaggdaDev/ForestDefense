@@ -77,7 +77,11 @@ public class ClientCommandHandler {
         switch (command.getCommandType()) {
             case UPDATE:
                 for (CommandArgument arg : command.getAllArguments()) {
+                    try {
                     handleCommand(arg.getInnerCommand());
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
 
@@ -157,6 +161,9 @@ public class ClientCommandHandler {
                 break;
             case EDIT_TAUSCHHANDEL:
                 Game.getInstance().editTauschhandel(command);
+                break;
+            case EDIT_KOPFGELD:
+                Game.getInstance().editKopfgeld(command);
                 break;
             case NOTIFY_PLAYSPEED_CHANGE:
                 Game.getInstance().notifyPlayspeedChange(command);

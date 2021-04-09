@@ -290,6 +290,11 @@ public class Game {
         ((ClientLorbeer) gameObjects.get(id)).editTauschhandel(command);
 
     }
+    
+    public void editKopfgeld(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientLorbeer) gameObjects.get(id)).editKopfgeld(command);
+    }
 
     public void notifyPlayspeedChange(NetworkCommand command) {
         gameScreen.getEssenceMenu().notifyPlayspeedChange(command);
@@ -310,5 +315,7 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
+
+    
 
 }

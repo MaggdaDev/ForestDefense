@@ -163,7 +163,7 @@ public abstract class ClientMob extends ClientGameObject {
     
     @Override
     public void addColoredShadow(double radius, Color c) {
-        if (!(getEffect() instanceof DropShadow && ((DropShadow) getEffect()).getColor().equals(c))) {
+        if (!(shadow.getInput() instanceof DropShadow && ((DropShadow) shadow.getInput()).getColor().equals(c))) {
             shadow.setInput(new DropShadow(radius, c));
         }
     }

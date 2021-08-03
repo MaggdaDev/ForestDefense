@@ -50,7 +50,7 @@ public class EssenceButton extends ImageView{
         setVisible(false);
         
         setViewOrder(ViewOrder.POPUP);
-        setPickOnBounds(true);
+        //setPickOnBounds(true);
     }
     
     public void show() {

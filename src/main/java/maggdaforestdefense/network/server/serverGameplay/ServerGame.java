@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 
 import java.net.DatagramPacket;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -348,6 +349,19 @@ public class ServerGame extends Thread {
             }
         });
     }
+    
+    public void deleteAllProjectiles() {
+        ArrayList<Projectile> projectiles = new ArrayList<>();
+        for(GameObject currGameObj : gameObjects.values()) {
+            if(currGameObj instanceof Projectile) {
+                projectiles.add((Projectile)currGameObj);
+            }
+        }
+        
+        projectiles.forEach((Projectile proj)->{
+            removeProjectile(proj);
+        });
+    }
 
     public void addGold(int i) {
         coins += i;
@@ -435,6 +449,8 @@ public class ServerGame extends Thread {
             }
         });
     }
+
+   
 
     
 

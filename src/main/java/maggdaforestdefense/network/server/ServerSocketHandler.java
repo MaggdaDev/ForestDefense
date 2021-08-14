@@ -130,10 +130,12 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                     userId = user.getUsername() + "@wiki.minortom.net";
                     userName = user.getUsername();
                 } else if (credentials.getUserName().startsWith("Anonymous") && credentials.getMwUser().getUsername().equals("Anonymous")) {
+                    Logger.logServer("Anonymous login");
                     anonymous = true;
                     userId = "Anonymous@forestdefense.minortom.net";
                     userName = credentials.getUserName();
                 } else {
+                    Logger.logServer("User ID null! Neither anonymous nor other login working!  CredentialsUserName: " + credentials.getUserName() + "      mWUser.getUsername(): " + credentials.getMwUser().getUsername());
                     userId = null;
                 }
                 if (userId == null) {

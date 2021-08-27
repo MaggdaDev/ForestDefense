@@ -169,6 +169,7 @@ public class Game {
     }
 
     public void updateRessources(NetworkCommand command) {
+         
         coins = (int) command.getNumArgument("coins");
         essence = (int) command.getNumArgument("essence");
         maxEssence = (int) command.getNumArgument("maxEssence");

@@ -83,6 +83,7 @@ public class ServerLoop {
             serverGame.checkPlayers();
             
             serverGame.updateRessources();
+           
 
             Waiter.waitUntil(() -> {      // wait until
                 return allPlayersReadyForNextRound();
@@ -132,6 +133,7 @@ public class ServerLoop {
 
             serverGame.handleEssenceAfterRound();
             serverGame.notifyTowersNewRound();
+            serverGame.deleteAllProjectiles();
 
             currentWaveIndex++;
 

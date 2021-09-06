@@ -15,49 +15,50 @@ import maggdaforestdefense.util.Randomizer;
  * @author DavidPrivat
  */
 public class WaveGenerator {
-    
+
     private int[] strengths;
     private GameObjectType[] mobs;
+
     public WaveGenerator() {
-        
-        mobs =  GameObject.getMobs();
+
+        mobs = GameObject.getMobs();
         strengths = new int[mobs.length];
-        for(int i = 0; i < mobs.length; i++) {
+        for (int i = 0; i < mobs.length; i++) {
             strengths[i] = getStrength(mobs[i]);
         }
     }
-    
+
     public MobWave generateWave(int round) {
 
         int totStrength = getStrengthFromRound(round);
-        
-        Vector<Spawnable> spawnables = new Vector<>();
-        while(totStrength > 0) {
 
-            int randIndex = (int)(Math.random() * mobs.length);
-            if(round <= 5) {
+        Vector<Spawnable> spawnables = new Vector<>();
+        while (totStrength > 0) {
+
+            int randIndex = (int) (Math.random() * mobs.length);
+            if (round <= 5) {
                 randIndex = 0;
             }
-            int amount = (int)(totStrength/strengths[randIndex]);
-            if(amount > 10) {
+            int amount = (int) (totStrength / strengths[randIndex]);
+            if (amount > 10) {
                 amount = 5;
             }
-            for(int i = 0; i < amount; i++) {
-                spawnables.add(new Spawnable(mobs[randIndex], Math.pow((double)getStrength(mobs[randIndex]), 0.3)));
+            for (int i = 0; i < amount; i++) {
+                spawnables.add(new Spawnable(mobs[randIndex], Math.pow((double) getStrength(mobs[randIndex]), 0.3)));
             }
             totStrength -= amount * strengths[randIndex];
         }
         MobWave wave = new MobWave(spawnables);
-        
+
         return wave;
     }
-    
+
     private int getStrengthFromRound(int round) {
-        return (int)(3.0d + (double)round + 0.1d * Math.pow((double)round, 2.0d));
+        return (int) (3.0d + (double) round + 0.1d * Math.pow((double) round, 2.0d));
     }
-    
+
     private int getStrength(GameObjectType type) {
-        switch(type) {
+        switch (type) {
             case M_BLATTLAUS:
                 return 1;
             case M_WANDERLAUFER:
@@ -71,5 +72,14 @@ public class WaveGenerator {
             default:
                 throw new UnsupportedOperationException();
         }
+    }
+
+    public MobWave generateBossWave() {
+        Vector<Spawnable> vec = new Vector<Spawnable>();
+        for (int i = 0; i < 1; i++) {
+            vec.add(new Spawnable(GameObjectType.M_BOSS_CATERPILLAR, 2));
+        }
+        MobWave retWave = new MobWave(vec);
+        return retWave;
     }
 }

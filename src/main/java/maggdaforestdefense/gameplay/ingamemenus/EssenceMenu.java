@@ -113,6 +113,7 @@ public class EssenceMenu extends SideMenu {
     }
     
     public void notifyPlayspeedChange(NetworkCommand command) {
+        try {
         switch((int)command.getNumArgument("speedId")) {
             case 0:
                 play.setDisable(true);
@@ -122,6 +123,10 @@ public class EssenceMenu extends SideMenu {
                 play.setDisable(false);
                 fastForward.setDisable(true);
                 break;
+        }
+        } catch(Exception e) {
+            e.printStackTrace();
+            Logger.errClient(command.toString());
         }
     }
 

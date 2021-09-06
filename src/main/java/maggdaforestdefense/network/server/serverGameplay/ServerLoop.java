@@ -33,7 +33,7 @@ public class ServerLoop {
 
     private long startTimeNano = 0;
     private double runTime = 0, oldRunTime = 0;
-    
+
     private double playspeedFact = 1;
 
     private ServerGame serverGame;
@@ -45,12 +45,11 @@ public class ServerLoop {
     private MobWave currentWave;
 
     private boolean isInWave = false;
-    
-    
+
     private FPSLimiter fpsLimiter;
-    
+
     private ServerSoundsPicker musicPicker;
-    
+
     public ServerLoop(List<Player> playerList, ServerGame game) {
         players = playerList;
         serverGame = game;
@@ -65,43 +64,46 @@ public class ServerLoop {
         Logger.logServer("ServerLoop started.");
         startTimeNano = System.nanoTime();
         oldRunTime = 0;
-        
+
         try {
             Thread.sleep(500);
-        } catch(Exception e) {
-            
+        } catch (Exception e) {
+
         }
 
         while (running) {
-            
-            currentWave = waveGenerator.generateWave(currentWaveIndex);
+
+            if (currentWaveIndex == 19) {
+                currentWave = waveGenerator.generateBossWave();
+            } else {
+                currentWave = waveGenerator.generateWave(currentWaveIndex);
+            }
             mobsToSpawn = currentWave.getMobAmount();
 
             setAllPlayersNotReady();
             serverGame.sendCommandToAllPlayers(NetworkCommand.WAIR_FOR_READY_NEXT_WAVE);
-            
+
             serverGame.checkPlayers();
-            
+
             serverGame.updateRessources();
-           
 
             Waiter.waitUntil(() -> {      // wait until
                 return allPlayersReadyForNextRound();
             });
-            
+
             serverGame.handleTreesDieing();
 
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
-            
-            if((currentWaveIndex + 1) % 5 == 0) {
+
+            if ((currentWaveIndex + 1) % 5 == 0) {
                 serverGame.increaseMaxEssence(1);
             }
-            
+
             serverGame.handleEssenceNewRound();
-            
+
             runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
             oldRunTime = runTime;
-            
+
             isInWave = true;
             musicPicker.handleNewRound(currentWaveIndex, currentWave);
             while (running && !(livingMobs == 0 && mobsToSpawn == 0)) {                         // ONE WAVE!
@@ -123,9 +125,6 @@ public class ServerLoop {
                 }
 
                 // MOB SPAWNING END
-                
-               
-                
                 fpsLimiter.endOfIteration();
                 fpsLimiter.doSleep();
             }
@@ -139,7 +138,7 @@ public class ServerLoop {
 
         }
     }
-    
+
     public void setPlayspeedFact(int i) {
         playspeedFact = i;
     }
@@ -155,7 +154,7 @@ public class ServerLoop {
 
         return allReady;
     }
-    
+
     private void setAllPlayersNotReady() {
         for (Player player : players) {
             player.setReadyForNextRound(false);
@@ -169,10 +168,9 @@ public class ServerLoop {
     public void endGame() {
         running = false;
     }
-    
+
     public boolean isInWave() {
         return isInWave;
     }
 
-    
 }

@@ -114,7 +114,7 @@ public class Spruce extends Tower {
         shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
 
         if (shootTimer > shootTime * fichtenWutBuff) {
-            Mob target = findTarget(range);
+            Mob target = findTarget(range, serverGame.getMobs());
             if (target != null) {
                 shootTimer = 0;
                 shoot(target);
@@ -153,7 +153,7 @@ public class Spruce extends Tower {
             case SPRUCE_2_1:        // AUFRUESTUNG
                 onShoot.add((o) -> {
                     aufruestungCounter = 0;
-                    serverGame.getMobs().forEach((String key, Mob mob) -> {
+                    serverGame.getMobs().forEach((Mob mob) -> {
                         if (isInRange(mob, range)) {
                             aufruestungCounter++;
                         }

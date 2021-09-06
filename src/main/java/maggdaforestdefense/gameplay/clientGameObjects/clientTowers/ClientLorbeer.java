@@ -202,11 +202,7 @@ public class ClientLorbeer extends ClientTower {
             }
         }
 
-        if (updateCommand.containsArgument("headhunt")) {
-            headHunt = HeadHunt.fromString(updateCommand.getArgument("headhunt"));
-            headHuntBox.update(headHunt);
 
-        }
 
         if (headHunt != null) {
             boolean headHuntFinished = headHunt.isFinished();
@@ -233,6 +229,10 @@ public class ClientLorbeer extends ClientTower {
         }
     }
     
+    public void editKopfgeld(NetworkCommand command){
+        headHunt = HeadHunt.fromString(command.getArgument("headhunt"));
+        headHuntBox.update(headHunt);
+    }    
     public void editTauschhandel(NetworkCommand command) {
         if (command.getNumArgument("mode") == 1) {
             Upgrade upgrade = Upgrade.values()[(int) command.getNumArgument("upgradeId")];
@@ -422,7 +422,7 @@ public class ClientLorbeer extends ClientTower {
 
             public MissionBox(GameObjectType type, int amount) {
                 this.amount = amount;
-                imageView = new ImageView(GameObject.getGameImageFromType(type).getImage());
+                imageView = new ImageView(type.getImage());
                 imageView.setPreserveRatio(true);
                 imageView.setFitWidth(30);
                 progress = new Label("0/" + amount);

@@ -6,6 +6,7 @@
 package maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding;
 
 import java.util.Vector;
+import javafx.geometry.Point2D;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 
 /**
@@ -19,6 +20,7 @@ public class PathCell {
     private double xPos, yPos;
     private double fValue;
     private PathCell previousCell;
+    private double dijkstraDistance = Double.MAX_VALUE;
     
     private PathCell[] neighbours;
 
@@ -35,12 +37,23 @@ public class PathCell {
         this.cellType = cellType;
 
     }
+    
+   
 
     public double getFValue(PathCell endCell) {
         distanceToEnd = getDistance(this, endCell);
         fValue = distanceToEnd + distanceToStart;
         return fValue;
     }
+    
+    public void setDijkstraDist(double d) {
+        dijkstraDistance = d;
+    }
+    
+    public double getDijkstraDist() {
+        return dijkstraDistance;
+    }
+    
 
     public Vector<PathCell> generateVector(Vector<PathCell> vec) {
         vec.add(this);
@@ -50,6 +63,14 @@ public class PathCell {
             return vec;
         }
     }
+    
+    public Point2D getPointBetween(PathCell c2) {
+        return new Point2D((this.getXPos() + c2.getXPos())/2, (this.getYPos() + c2.getYPos())/2);
+    }
+    
+    public Point2D getOpposingPoint(Point2D p) {
+        return new Point2D(2 * this.getXPos() - p.getX(), 2 * this.getYPos() - p.getY());
+    } 
 
     public void setNeighbours(PathCell[] n) {
         neighbours = n;
@@ -110,5 +131,18 @@ public class PathCell {
 
     public static double getDistance(PathCell c1, PathCell c2) {
         return Math.sqrt(Math.pow(c2.getXPos() - c1.getXPos(), 2.0d) + Math.pow(c2.getYPos() - c1.getYPos(), 2.0d))/MapCell.CELL_SIZE;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof PathCell) {
+            PathCell c = (PathCell)o;
+            if(c.getXIndex() == this.getXIndex() && c.getYIndex() == this.getYIndex()) {
+                return true;
+            }
+            return false;
+        } else {
+            return false;
+        }
     }
 }

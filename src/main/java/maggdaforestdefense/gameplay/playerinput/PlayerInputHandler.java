@@ -68,8 +68,8 @@ public class PlayerInputHandler {
 
     public void setMousePressed(boolean b, MouseEvent e) {
         if (mousePressed == false && b == true) {
-            dragStartMouseX = e.getX();
-            dragStartMouseY = e.getY();
+            dragStartMouseX = e.getSceneX();
+            dragStartMouseY = e.getSceneY();
             dragStartXInset = Game.getInstance().getGameScreen().getXInset();
             dragStartYInset = Game.getInstance().getGameScreen().getYInset();
         }
@@ -79,8 +79,8 @@ public class PlayerInputHandler {
 
     public void mouseMoved(MouseEvent e) {
         if (mousePressed) {
-            Game.getInstance().getGameScreen().setXInset(dragStartXInset + e.getX() - dragStartMouseX);
-            Game.getInstance().getGameScreen().setYInset(dragStartYInset + e.getY() - dragStartMouseY);
+            Game.getInstance().getGameScreen().setXInset(dragStartXInset + e.getSceneX() - dragStartMouseX);
+            Game.getInstance().getGameScreen().setYInset(dragStartYInset + e.getSceneY() - dragStartMouseY);
         }
     }
 

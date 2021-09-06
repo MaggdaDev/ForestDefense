@@ -546,8 +546,8 @@ public class MapEditor extends VBox {
 
         public void setMousePressed(boolean b, MouseEvent e) {
             if (mousePressed == false && b == true) {
-                dragStartMouseX = e.getX();
-                dragStartMouseY = e.getY();
+                dragStartMouseX = e.getSceneX();
+                dragStartMouseY = e.getSceneY();
                 dragStartLayoutX = MapEditor.getInstance().mapGroup.getLayoutX();
                 dragStartLayoutY = MapEditor.getInstance().mapGroup.getLayoutY();
                 Logger.logClient("New Start");
@@ -559,8 +559,8 @@ public class MapEditor extends VBox {
         public void mouseMoved(MouseEvent e) {
             if (mousePressed) {
                 Logger.logClient("moved");
-                MapEditor.getInstance().mapGroup.setLayoutX(dragStartLayoutX + e.getX() - dragStartMouseX);
-                MapEditor.getInstance().mapGroup.setLayoutY(dragStartLayoutY + e.getY() - dragStartMouseY);
+                MapEditor.getInstance().mapGroup.setLayoutX(dragStartLayoutX + e.getSceneX() - dragStartMouseX);
+                MapEditor.getInstance().mapGroup.setLayoutY(dragStartLayoutY + e.getSceneY() - dragStartMouseY);
             }
         }
 

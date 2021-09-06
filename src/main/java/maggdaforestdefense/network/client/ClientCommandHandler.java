@@ -45,7 +45,12 @@ public class ClientCommandHandler {
     public void onMessage(String message) {
         if (NetworkCommand.testForKeyWord(message)) {
             if(isInGame) {
+                try {
             queue.add(NetworkCommand.fromString(message));
+                } catch(JsonSyntaxException e) {
+                    e.printStackTrace();
+                    Logger.errClient("Malformed json: " + message);
+                }
             } else {
                 handleCommand(NetworkCommand.fromString(message));
             }

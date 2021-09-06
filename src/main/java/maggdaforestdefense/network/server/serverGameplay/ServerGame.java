@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay;
 import java.net.DatagramPacket;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -24,6 +25,7 @@ import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Caterpillar;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Hirschkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Marienkaefer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
@@ -64,7 +66,7 @@ public class ServerGame extends Thread {
 
     private int currentGameObjectId;
 
-    private HashMap<String, Mob> mobsList;
+    private ArrayList<Mob> mobsList;
 
     private Vector<NetworkCommand> commandsToSend;
 
@@ -83,7 +85,7 @@ public class ServerGame extends Thread {
 
         gameObjects = new ConcurrentHashMap<>();
 
-        mobsList = new HashMap<>();
+        mobsList = new ArrayList<>();
 
         commandsToSend = new Vector<>();
     }
@@ -168,6 +170,9 @@ public class ServerGame extends Thread {
                 break;
             case M_MARIENKAEFER:
                 addMob(new Marienkaefer(this));
+                break;
+            case M_BOSS_CATERPILLAR:
+                addMob(new Caterpillar(this));
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -325,11 +330,17 @@ public class ServerGame extends Thread {
 
     public void addMob(Mob mob) {
         addGameObject(mob);
-        mobsList.put(String.valueOf(mob.getId()), mob);
+        mobsList.add(mob);
+        if(mob.getGameObjectType().equals(GameObjectType.M_BOSS_CATERPILLAR)) {
+            mobsList.addAll(Arrays.asList(((Caterpillar)mob).getSegments()));
+        }
     }
 
     public void killMob(Mob mob, boolean getGold) {
-        mobsList.remove(String.valueOf(mob.getId()));
+        mobsList.remove(mob);
+        if(mob.getGameObjectType().equals(GameObjectType.M_BOSS_CATERPILLAR)) {
+            mobsList.removeAll(Arrays.asList(((Caterpillar)mob).getSegments()));
+        }
         removeGameObject(mob);
         if (getGold) {
             coins += mob.calculateCoinValue();
@@ -367,7 +378,7 @@ public class ServerGame extends Thread {
         coins += i;
     }
 
-    public HashMap<String, Mob> getMobs() {
+    public ArrayList<Mob> getMobs() {
         return mobsList;
     }
 

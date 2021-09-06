@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay.towers;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -253,7 +254,7 @@ public class Lorbeer extends Tower {
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TC, new CommandArgument[]{new CommandArgument("id", id), new CommandArgument("skill", ActiveSkill.LORBEER_ATTACK.ordinal())}));
 
             ernteRauschKillCount = 0;
-            serverGame.getMobs().forEach((String id, Mob mob) -> {
+            serverGame.getMobs().forEach((Mob mob) -> {
                 if (isInRange(mob, range)) {
 
                     executiveDamage.setDamageVal(0.0d);

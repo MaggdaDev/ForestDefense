@@ -13,6 +13,7 @@ import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
+import maggdaforestdefense.network.server.serverGameplay.Map;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
@@ -62,7 +63,8 @@ public abstract class Mob extends GameObject {
     
     protected boolean sentDeathToClient = false;
 
-    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
+    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, 
+            HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
         super(game.getNextId(), objectType);
         serverGame = game;
         this.hitBox = hitBox;
@@ -111,8 +113,8 @@ public abstract class Mob extends GameObject {
                 startXIndex = (int) (Math.random() * width);
                 break;
         }
-        xPos = startXIndex * MapCell.CELL_SIZE;
-        yPos = startYIndex * MapCell.CELL_SIZE;
+        xPos = (0.5d + startXIndex) * (MapCell.CELL_SIZE);
+        yPos = (0.5d + startYIndex) * (MapCell.CELL_SIZE);
         hitBox.updatePos(xPos, yPos);
         initializePathFinder();
     }
@@ -174,6 +176,8 @@ public abstract class Mob extends GameObject {
     }
 
     protected void updateDamageTarget(double timeElapsed) {
+        currentXIndex = (int) (xPos/(MapCell.CELL_SIZE));
+        currentYIndex = (int) (yPos/(MapCell.CELL_SIZE));
         if (targetReached) {
 
             if (targetTower != null) {
@@ -182,7 +186,8 @@ public abstract class Mob extends GameObject {
                     damageTimer = 0;
                     damageTarget();
                 }
-            } else if (serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
+            } else if (currentXIndex < Map.MAP_SIZE && currentYIndex < Map.MAP_SIZE && serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
+                damageTime = 1;
                 damageTimer += timeElapsed;
                 if (damageTimer > damageTime) {
                     damageTimer = 0;
@@ -262,7 +267,7 @@ public abstract class Mob extends GameObject {
 
     }
     
-    private double applyDamage(double damageVal, Damage damage) {
+    protected double applyDamage(double damageVal, Damage damage) {
         if (checkAlive()) {
         double oldHealthPoints = healthPoints;
         healthPoints -= damageVal;
@@ -329,6 +334,8 @@ public abstract class Mob extends GameObject {
                 return 40;
             case M_MARIENKAEFER:
                 return 80;
+            case M_BOSS_CATERPILLAR:
+                return 200;
             default:
                 throw new UnsupportedOperationException();
         }

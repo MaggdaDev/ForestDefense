@@ -20,6 +20,9 @@ public enum GameImage {
     MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png"),
     MAP_CELL_BASE("maggdaforestdefense/map_cells/base.png"),
     // Mobs
+    MOB_BOSS_CATERPILLAR_1("maggdaforestdefense/mobs/boss1/raupe_1.png"),
+    MOB_BOSS_CATERPILLAR_2("maggdaforestdefense/mobs/boss1/raupe_2.png"),
+    MOB_BOSS_CATERPILLAR_3("maggdaforestdefense/mobs/boss1/raupe_3.png"),
     MOB_SCHWIMMKAEFER_1("maggdaforestdefense/mobs/blattlaus1.png"),
     MOB_SCHWIMMKAEFER_2("maggdaforestdefense/mobs/blattlaus2.png"),
     MOB_SCHWIMMKAEFER_3("maggdaforestdefense/mobs/blattlaus3.png"),

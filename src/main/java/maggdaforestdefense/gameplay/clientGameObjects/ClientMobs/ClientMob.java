@@ -16,8 +16,12 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.Map;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
+import maggdaforestdefense.storage.Logger;
+import maggdaforestdefense.util.GameMaths;
 
 /**
  *
@@ -28,8 +32,7 @@ public abstract class ClientMob extends ClientGameObject {
     protected HealthBar healthBar;
     protected DropShadow shadow;
 
-    protected double shadowOffsetX = 5;
-    protected double shadowOffsetY = 20;
+    protected double shadowOffset = 5;
 
     protected Mob.MovementType movementType;
     protected double size;
@@ -37,17 +40,19 @@ public abstract class ClientMob extends ClientGameObject {
     private double oldHealth;
 
     // Shadow offsets
-    public final static double SHADOW_OFFSET_X_DIG_MULT = 0;
-    public final static double SHADOW_OFFSET_Y_DIG_MULT = 0;
+    public final static double SHADOW_OFFSET_DIG_MULT = 0;
 
-    public final static double SHADOW_OFFSET_X_WALK_MULT = 0.04;
-    public final static double SHADOW_OFFSET_Y_WALK_MULT = 0.12;
+    public final static double SHADOW_OFFSET_WALK_MULT = 0.2;
 
-    public final static double SHADOW_OFFSET_X_FLY_MULT = 0.18;
-    public final static double SHADOW_OFFSET_Y_FLY_MULT = 0.54;
+    public final static double SHADOW_OFFSET_FLY_MULT = 0.54;
+   
+    public final static double ANGLE_OFFSET_RAD = 0.1 * Math.PI;
 
     public ClientMob(int id, GameImage image, GameObjectType type, double x, double y, double maxHealth, Mob.MovementType movement, double size) {
         super(id, image, type, x, y);
+        if(x < 0 || x > Map.MAP_SIZE*MapCell.CELL_SIZE || y < 0 || y > Map.MAP_SIZE*MapCell.CELL_SIZE) {
+            Logger.logClient("x: " + x + "  y: " + y + "      out of map!");
+        }
         this.size = size;
         movementType = movement;
         healthBar = new HealthBar(maxHealth, GameImage.DISPLAY_HEALTH_BOX, GameImage.DISPLAY_HEALTH_BAR_MOB, size);
@@ -55,8 +60,6 @@ public abstract class ClientMob extends ClientGameObject {
         Game.getInstance().getGameScreen().getGamePlayGroup().getChildren().add(healthBar);
 
         shadow = new DropShadow();
-        shadow.setOffsetX(shadowOffsetX);
-        shadow.setOffsetY(shadowOffsetY);
         shadow.setColor(Color.color(0, 0, 0, 0.2));
         shadow.setBlurType(BlurType.GAUSSIAN);
         setEffect(shadow);
@@ -82,47 +85,23 @@ public abstract class ClientMob extends ClientGameObject {
     protected void updateShadow() {
         switch (movementType) {
             case DIG:
-                shadowOffsetX = SHADOW_OFFSET_X_DIG_MULT * size;
-                shadowOffsetY = SHADOW_OFFSET_Y_DIG_MULT * size;
+                shadowOffset = SHADOW_OFFSET_DIG_MULT * size;
                 setOpacity(0.4);
                 break;
             case WALK:
-                shadowOffsetX = SHADOW_OFFSET_X_WALK_MULT * size;
-                shadowOffsetY = SHADOW_OFFSET_Y_WALK_MULT * size;
+                shadowOffset = SHADOW_OFFSET_WALK_MULT * size;
                 setOpacity(1);
                 break;
             case FLY:
-                shadowOffsetX = SHADOW_OFFSET_X_FLY_MULT * size;
-                shadowOffsetY = SHADOW_OFFSET_Y_FLY_MULT * size;
+                shadowOffset = SHADOW_OFFSET_FLY_MULT * size;
                 setOpacity(1);
                 break;
         }
-
-        int direction = (int) ((getRotate() / 90) + 0.5);
+        double direction = (getRotate() / 360) * 2 * Math.PI;
         
-        switch (direction) {
-            case 0:
-            case 4:
-                shadow.setOffsetX(shadowOffsetX);
-                shadow.setOffsetY(shadowOffsetY);
-                break;
-            case 1:
-            case -3:
-                shadow.setOffsetX(shadowOffsetY);
-                shadow.setOffsetY(-shadowOffsetX);
-                break;
-            case 2:
-            case -2:
-                shadow.setOffsetX(-shadowOffsetX);
-                shadow.setOffsetY(-shadowOffsetY);
-                break;
-            case 3:
-            case -1:
-                shadow.setOffsetX(-shadowOffsetY);
-                shadow.setOffsetY(shadowOffsetX);
-                break;
-
-        }
+        //shadowOffsetX = 0;
+        shadow.setOffsetX(-Math.sin(ANGLE_OFFSET_RAD - direction) * shadowOffset);
+        shadow.setOffsetY(Math.cos(ANGLE_OFFSET_RAD - direction) * shadowOffset);
     }
 
     protected void handleEffects(EffectSet set) {

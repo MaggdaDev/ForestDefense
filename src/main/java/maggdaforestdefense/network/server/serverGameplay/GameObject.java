@@ -11,6 +11,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBlattlaus;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBorkenkaefer;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientCaterpillar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHirschkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientMarienkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientSchwimmkaefer;
@@ -84,6 +85,8 @@ public abstract class GameObject {
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
+            case M_BOSS_CATERPILLAR:
+                return new ClientCaterpillar((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), command.getNumArgument("length"));
             case M_BORKENKAEFER:
                 return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_HIRSCHKAEFER:

@@ -57,7 +57,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private DatagramSocket udpSocket;
     private DatagramPacket udpPacket;
     private byte[] udpByteBuffer;
-    public final static int byteBufferLength = 500;
+    public final static int byteBufferLength = 1400;
     private boolean useUDP;
 
     public ServerSocketHandler(WebSocket conn, DatagramSocket udp) throws SocketException {

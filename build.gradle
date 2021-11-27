@@ -56,6 +56,6 @@ dependencies {
 }
 
 javafx {
-    version = "15.0.1"
+    version = "15.0.2"
     modules = [ 'javafx.base' , 'javafx.controls' , 'javafx.fxml' , 'javafx.graphics' , 'javafx.media' , 'javafx.swing' , 'javafx.web' ]
 }

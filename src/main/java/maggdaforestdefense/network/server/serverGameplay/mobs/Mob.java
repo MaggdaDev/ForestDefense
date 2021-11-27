@@ -335,7 +335,7 @@ public abstract class Mob extends GameObject {
             case M_MARIENKAEFER:
                 return 80;
             case M_BOSS_CATERPILLAR:
-                return 200;
+                return 750;
             default:
                 throw new UnsupportedOperationException();
         }

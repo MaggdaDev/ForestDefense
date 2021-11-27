@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
@@ -27,7 +28,11 @@ public class SocketAcceptor extends WebSocketServer {
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         Logger.debugServer("New connection to " + conn.getRemoteSocketAddress());
+        try {
         Server.getInstance().addNewSocket(conn);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

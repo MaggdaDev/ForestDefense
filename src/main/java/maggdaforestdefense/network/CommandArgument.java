@@ -5,6 +5,9 @@
  */
 package maggdaforestdefense.network;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
+
 /**
  *
  * @author David
@@ -24,7 +27,12 @@ public class CommandArgument {
     }
     
     public NetworkCommand getInnerCommand() {
+        try {
         return NetworkCommand.fromString(value);
+        } catch(JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     public CommandArgument(String n, int val) {

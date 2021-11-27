@@ -20,21 +20,21 @@ public class EffectSet {
         effects = new Vector<>();
         effectsToRemove = new Vector<>();
     }
-    
+
     public void update(double timeElapsed) {
-        for(Effect effect: effects) {
+        for (Effect effect : effects) {
             effect.update(timeElapsed);
-            if(!effect.isActive) {
+            if (!effect.isActive) {
                 effectsToRemove.add(effect);
             }
         }
         effects.removeAll(effectsToRemove);
         effectsToRemove.clear();
     }
-    
+
     public boolean isActive(EffectType type) {
         Effect e = searchForType(type);
-        if(e == null || (!e.isActive)) {
+        if (e == null || (!e.isActive)) {
             return false;
         }
         return true;
@@ -42,16 +42,21 @@ public class EffectSet {
 
     public void addEffect(Effect effect) {
         Effect existingEffect = searchForType(effect.getType());
-        if (existingEffect != null && existingEffect.getRestTime() > effect.getRestTime()) {
-            return;
+        if (existingEffect != null) {
+            if (existingEffect.getRestTime() > effect.getRestTime()) {
+                return;
+            } else {
+                existingEffect.setRestTime(effect.getDuration());
+                return;
+            }
         }
 
         effects.add(effect);
     }
-    
+
     public void removeEffect(EffectType type) {
         Effect e = searchForType(type);
-        if(e != null) {
+        if (e != null) {
             e.setActive(false);
         }
     }
@@ -69,15 +74,15 @@ public class EffectSet {
         effects.forEach((Effect effect) -> {
             if (effect.isActive()) {
                 handler.handleEffect(effect);
-            } 
+            }
         });
     }
-    
+
     @Override
     public String toString() {
         return new Gson().toJson(this);
     }
-    
+
     public static EffectSet fromString(String s) {
         return new Gson().fromJson(s, EffectSet.class);
     }
@@ -91,7 +96,6 @@ public class EffectSet {
         //
         MAPLE_ESCALATION,
         MAPLE_CHARGED,
-        
         OAK_ERHAERTUNG;
     }
 
@@ -101,9 +105,9 @@ public class EffectSet {
     }
 
     public static class Effect {
+
         public static double EFFECT_SENSITIVE_MULT = 2;
-        
-        
+
         public static double UNLIMITED = -1.0d;
 
         private double duration;
@@ -124,7 +128,7 @@ public class EffectSet {
                 }
             }
         }
-        
+
         public void setActive(boolean b) {
             isActive = b;
         }
@@ -135,6 +139,11 @@ public class EffectSet {
 
         public double getRestTime() {
             return duration - timer;
+        }
+        
+        public void setRestTime(double rest) {
+            timer = 0;
+            duration = rest;
         }
 
         public boolean isActive() {

@@ -23,6 +23,7 @@ import javafx.scene.text.Font;
 import language.Deutsch;
 import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientLorbeer;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
@@ -37,7 +38,7 @@ import maggdaforestdefense.storage.Logger;
  * @author David
  */
 public class Game {
-    
+
     public static Font HEADING_FONT, USUAL_FONT, DESCRIPTION_FONT;
 
     public static Language language = new Deutsch();
@@ -52,9 +53,8 @@ public class Game {
     private Vector<KeyEventHandler> keyEventHandlers;
 
     private int essence = 0, coins = 0, maxEssence = 0;
-    
+
     private Vector<Upgrade> lorbeerTradingUpgrades;
-    
 
     private Game(String gameName) {
         instance = this;
@@ -64,9 +64,6 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
         lorbeerTradingUpgrades = new Vector<>();
-        
-
-
 
     }
 
@@ -79,30 +76,33 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
         isInGame = true;
-        NetworkManager.getInstance().resetCommandHandler();
         NetworkManager.getInstance().setInGame(true);
 
         MenuManager.getInstance().setScreenShown(MenuManager.Screen.GAME);
         gameLoop.start();
+        gameLoop.setGameRunning(true);
 
         // Key Events
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
             handleKeyEvent(event.getCode());
         });
-        
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDENMUSIK_1);
+
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDEN_1_INTRO);
 
     }
 
     public void endGame(NetworkCommand command) {
-        gameLoop.stop();
-        gameLoop.setGameRunning(false);
+
         gameScreen.showGameOverOverlay();
 
         Logger.logClient("GAMEOVER");
+        NetworkManager.getInstance().setInGame(false);
         NetworkManager.getInstance().resetCommandHandler();
-        
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER_MUSIK);
+
+
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER);
+        gameLoop.stop();
+        gameLoop.setGameRunning(false);
     }
 
     // General
@@ -150,16 +150,15 @@ public class Game {
     }
 
     // COMMAND HANDLES
-    
     public void updateGameObject(NetworkCommand command) {
         ClientGameObject gObj = gameObjects.get(command.getArgument("id"));
         if (gObj != null) {
             gObj.update(command);
         }
     }
-    
+
     public void performActiveSkill(NetworkCommand command) {
-        ((ClientTower)gameObjects.get(command.getArgument("id"))).performActiveSkill(ActiveSkill.values()[(int)command.getNumArgument("skill")]);
+        ((ClientTower) gameObjects.get(command.getArgument("id"))).performActiveSkill(ActiveSkill.values()[(int) command.getNumArgument("skill")]);
     }
 
     public void plantTree(NetworkCommand command) {
@@ -170,6 +169,7 @@ public class Game {
     }
 
     public void updateRessources(NetworkCommand command) {
+         
         coins = (int) command.getNumArgument("coins");
         essence = (int) command.getNumArgument("essence");
         maxEssence = (int) command.getNumArgument("maxEssence");
@@ -192,15 +192,15 @@ public class Game {
         int wave = (int) command.getNumArgument("wave");
         gameScreen.hideReadyCheck();
         gameScreen.announceWave(wave);
-        
+
         Vector<String> idsToRemove = new Vector<>();
-        
-        gameObjects.forEach((String id, ClientGameObject gameObj)->{
-            if(!(gameObj instanceof ClientTower)) {
+
+        gameObjects.forEach((String id, ClientGameObject gameObj) -> {
+            if (!(gameObj instanceof ClientTower)) {
                 idsToRemove.add(id);
             }
         });
-        for(String idToRemove: idsToRemove) {
+        for (String idToRemove : idsToRemove) {
             gameObjects.remove(idsToRemove);
         }
     }
@@ -238,37 +238,37 @@ public class Game {
             gameScreen.updateReadyCheck(command.getNumArgument("progress"));
         });
     }
-    
+
     public void addLorbeerTradingUpgrade(Upgrade upgrade) {
         lorbeerTradingUpgrades.add(upgrade);
         refreshLorbeerTrading();
-    } 
-    
+    }
+
     public void removeLorbeerTradingUpgrade(Upgrade upgrade) {
-        if(lorbeerTradingUpgrades.contains(upgrade)) {
+        if (lorbeerTradingUpgrades.contains(upgrade)) {
             lorbeerTradingUpgrades.remove(upgrade);
         }
         refreshLorbeerTrading();
     }
-    
+
     public void removeAllLorbeerTradingUpgrades(Vector<Upgrade> tradeUpgrades) {
         lorbeerTradingUpgrades.removeAll(tradeUpgrades);
         refreshLorbeerTrading();
     }
-    
+
     public void clearLorbeerTradingUpgrades() {
-        
+
         lorbeerTradingUpgrades.clear();
         refreshLorbeerTrading();
     }
-    
+
     public void refreshLorbeerTrading() {
-        gameObjects.forEach((String id, ClientGameObject gameObject)->{
-            if(gameObject instanceof ClientTower) {
+        gameObjects.forEach((String id, ClientGameObject gameObject) -> {
+            if (gameObject instanceof ClientTower) {
                 ClientTower tower = (ClientTower) gameObject;
                 tower.clearLorbeerTrading();
-                lorbeerTradingUpgrades.forEach((Upgrade upgrade)->{
-                    if(upgrade.getOwnerType() == tower.getType()) {
+                lorbeerTradingUpgrades.forEach((Upgrade upgrade) -> {
+                    if (upgrade.getOwnerType() == tower.getType()) {
                         tower.addLorbeerTrade(upgrade);
                     }
                 });
@@ -276,14 +276,39 @@ public class Game {
         });
     }
 
+    public void suggestMusic(NetworkCommand command) {
+        int musicId = (int) command.getNumArgument("id");
+        int isLater = (int) command.getNumArgument("later");
+        if (isLater == 0) {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.values()[musicId]);
+        } else {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playLater(SoundEngine.Sound.values()[musicId]);
+        }
+    }
+
+    public void editTauschhandel(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientLorbeer) gameObjects.get(id)).editTauschhandel(command);
+
+    }
+    
+    public void editKopfgeld(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientLorbeer) gameObjects.get(id)).editKopfgeld(command);
+    }
+
+    public void notifyPlayspeedChange(NetworkCommand command) {
+        gameScreen.getEssenceMenu().notifyPlayspeedChange(command);
+    }
+
     public GameLoop getGameLoop() {
         return gameLoop;
     }
-    
+
     public static void addGamePlayNode(Node node) {
         instance.getGameScreen().getGamePlayGroup().getChildren().add(node);
     }
-    
+
     public static void removeGamePlayNode(Node node) {
         instance.getGameScreen().safeRemoveGameplayNode(node);
     }
@@ -291,8 +316,6 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
-
-    
 
     
 

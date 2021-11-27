@@ -44,8 +44,8 @@ public class Spruce extends Tower {
     // UPGRADE CONSTANTS
     public final static double FICHTEN_WUT_MULTIPLIER = 0.995;
     public final static double NADEL_STAERKUNG_MULT = 3;
-    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.25;
-    public final static double UPGRADE_LIFE_STEAL = 0.3;
+    public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.1;
+    public final static double UPGRADE_LIFE_STEAL = 0.1;
     public final static double RESEARCH_PROBABILITY = 0.1;
 
     // UPGRADE VARIABLES
@@ -114,7 +114,7 @@ public class Spruce extends Tower {
         shootTimer += timeElapsed * monoculturalMultiplier * rasendeFichteMultiplier * aufruestungMultiplier;
 
         if (shootTimer > shootTime * fichtenWutBuff) {
-            Mob target = findTarget(range);
+            Mob target = findTarget(range, serverGame.getMobs());
             if (target != null) {
                 shootTimer = 0;
                 shoot(target);
@@ -153,7 +153,7 @@ public class Spruce extends Tower {
             case SPRUCE_2_1:        // AUFRUESTUNG
                 onShoot.add((o) -> {
                     aufruestungCounter = 0;
-                    serverGame.getMobs().forEach((String key, Mob mob) -> {
+                    serverGame.getMobs().forEach((Mob mob) -> {
                         if (isInRange(mob, range)) {
                             aufruestungCounter++;
                         }

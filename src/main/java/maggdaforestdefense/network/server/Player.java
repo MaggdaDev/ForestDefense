@@ -33,6 +33,10 @@ public class Player {
         commandHandler.sendCommand(command);
     }
     
+    public void sendCommandUDP(NetworkCommand command) {
+        commandHandler.sendCommandUPD(command);
+    }
+    
     public void setReadyForNextRound(boolean b) {
         readyForNextRound = b;
     }

@@ -11,7 +11,9 @@ import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBug;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBlattlaus;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientBorkenkaefer;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientCaterpillar;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientHirschkaefer;
+import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientMarienkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientSchwimmkaefer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWanderlaeufer;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientMobs.ClientWasserlaeufer;
@@ -24,6 +26,7 @@ import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Marienkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.storage.GameImage;
 
@@ -37,7 +40,7 @@ public abstract class GameObject {
 
     protected final int id;
     protected final GameObjectType gameObjectType;
-    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER};
+    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER, GameObjectType.M_BORKENKAEFER};
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;
@@ -74,18 +77,6 @@ public abstract class GameObject {
         return gameObjectType;
     }
     
-    public static GameImage getGameImageFromType (GameObjectType type) {
-        switch(type) {
-            case M_BLATTLAUS:
-                return GameImage.MOB_BLATTLAUS_1;
-            case M_HIRSCHKAEFER:
-                return GameImage.MOB_HIRSCHKAEFER_1;
-            case M_WANDERLAUFER:
-                return GameImage.MOB_LAUFKAEFER_1;
-            default:
-                throw new UnsupportedOperationException();
-        }
-    }
     
     public static GameObjectType[] getMobs() {
         return mobs;
@@ -94,6 +85,8 @@ public abstract class GameObject {
     public static ClientGameObject generateClientGameObject(NetworkCommand command) {       // ADD HERE FOR NEW MOB
         switch (GameObjectType.values()[(int) command.getNumArgument("type")]) {
             // MOBS
+            case M_BOSS_CATERPILLAR:
+                return new ClientCaterpillar((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), command.getNumArgument("length"));
             case M_BORKENKAEFER:
                 return new ClientBorkenkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_HIRSCHKAEFER:
@@ -103,9 +96,12 @@ public abstract class GameObject {
             case M_WANDERLAUFER:
                 return new ClientWanderlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             case M_WASSERLAEUFER:
-                return new ClientWasserlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
-                case M_BLATTLAUS:
+                break;
+                //return new ClientWasserlaeufer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+            case M_BLATTLAUS:
                 return new ClientBlattlaus((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
+            case M_MARIENKAEFER:
+                return new ClientMarienkaefer((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"), command.getNumArgument("hp"), Mob.MovementType.values()[(int) command.getNumArgument("movement")]);
             //TOWERS
             case T_SPRUCE:
                 return new ClientSpruce((int) command.getNumArgument("id"), (int) command.getNumArgument("xIndex"), (int) command.getNumArgument("yIndex"), command.getNumArgument("growingTime"));
@@ -127,6 +123,8 @@ public abstract class GameObject {
                 return new ClientSpruceShot((int) command.getNumArgument("id"), command.getNumArgument("x"), command.getNumArgument("y"));
             default:
                 throw new UnsupportedOperationException();
+                
         }
+        return null;
     }
 }

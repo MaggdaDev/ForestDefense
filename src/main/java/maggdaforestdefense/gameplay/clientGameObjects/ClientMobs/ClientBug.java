@@ -23,7 +23,7 @@ import maggdaforestdefense.util.GameMaths;
  */
 public abstract class ClientBug extends ClientMob {
 
-    private double distance_between_steps = 5;
+    protected double distance_between_steps = 5;
 
     protected double distanceSinceLastStep = 0;
 
@@ -59,22 +59,6 @@ public abstract class ClientBug extends ClientMob {
 
     }
 
-    public void step() {
-        animationState++;
-        animationState %= 4;
-        switch (animationState) {
-            case 0:
-                setImage(GameImage.MOB_BUG_1.getImage());
-                break;
-            case 1:
-            case 3:
-                setImage(GameImage.MOB_BUG_2.getImage());
-                break;
-            case 2:
-                setImage(GameImage.MOB_BUG_3.getImage());
-                break;
-        }
-
-    }
+    abstract public void step();
 
 }

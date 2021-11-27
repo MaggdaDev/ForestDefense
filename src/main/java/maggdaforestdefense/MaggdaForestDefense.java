@@ -82,7 +82,7 @@ public class MaggdaForestDefense extends Application {
         mainApp(primaryStage);
         
         soundEngine = new SoundEngine();
-        soundEngine.playSound(SoundEngine.Sound.MENUMUSIK);
+        soundEngine.playSound(SoundEngine.Sound.MENU_INTRO);
     }
 
     /**
@@ -265,5 +265,7 @@ public class MaggdaForestDefense extends Application {
     public static boolean isDev() {
         return isDev;
     }
+    
+   
 
 }

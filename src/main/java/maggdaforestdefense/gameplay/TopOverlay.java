@@ -7,6 +7,9 @@ package maggdaforestdefense.gameplay;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import maggdaforestdefense.storage.GameImage;
 
@@ -27,8 +30,13 @@ public class TopOverlay extends HBox{
         maggdaforestdefense.MaggdaForestDefense.bindToWidth(spacingProperty(), 200);
         setAlignment(Pos.CENTER);
         setPadding(new Insets(20, 100, 100,100));
+        setMouseTransparent(true);
+        
+        
+        
         
         getChildren().addAll(coinsDisplay, essenceDisplay);
+        
     }
     
     public void updateRessourceDisplays(int coins, int essence, int maxEssence) {

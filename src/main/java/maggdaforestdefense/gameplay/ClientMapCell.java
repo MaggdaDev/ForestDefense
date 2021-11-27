@@ -74,6 +74,7 @@ public class ClientMapCell extends ImageView {
         switch (menuState) {
             case PLANT_MENU:
                 plantMenu.setBuyTreeBox(null);
+                plantMenu.updateCoins(Game.getInstance().getCoins());
                 return plantMenu;
             case UPGRADE_MENU:
                 return currentTower.getUpgradeMenu();

@@ -5,6 +5,8 @@
  */
 package maggdaforestdefense.network.client;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import java.io.BufferedReader;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -25,12 +27,13 @@ import sun.rmi.runtime.Log;
  *
  * @author David
  */
-public class ClientCommandHandler extends Thread {
+public class ClientCommandHandler {
 
     private LinkedBlockingQueue<NetworkCommand> queue;
     private LinkedList<NetworkCommand> workingQueue;
 
-    private boolean isInGame = false, running = true;
+    private boolean isInGame = false;
+    private int tempCount = 0;
 
     public ClientCommandHandler() {
         queue = new LinkedBlockingQueue<>();
@@ -38,18 +41,19 @@ public class ClientCommandHandler extends Thread {
 
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            if (!isInGame) {        // IF GAME IS RUNNING: HANDLES COMMANDS WITH 60FPS IN GAMETHREAD; IF NOT IN GAME: HANDLES COMMANDS AS SOON AS THEY ARRIVE IN COMMAND HANDLER THREAD (THIS)
-                handleInput();
-            }
-        }
-    }
 
     public void onMessage(String message) {
         if (NetworkCommand.testForKeyWord(message)) {
+            if(isInGame) {
+                try {
             queue.add(NetworkCommand.fromString(message));
+                } catch(JsonSyntaxException e) {
+                    e.printStackTrace();
+                    Logger.errClient("Malformed json: " + message);
+                }
+            } else {
+                handleCommand(NetworkCommand.fromString(message));
+            }
         } else {
             Logger.errClient("Received an invalid message from the server (KeywordNotFound): " + message);
         }
@@ -58,11 +62,9 @@ public class ClientCommandHandler extends Thread {
     public void reset() {
         queue.clear();
         workingQueue.clear();
+        
     }
 
-    public void stopRunning() {
-        running = false;
-    }
 
     public void handleInput() {
         queue.drainTo(workingQueue);
@@ -76,12 +78,18 @@ public class ClientCommandHandler extends Thread {
     }
 
     private void handleCommand(NetworkCommand command) {
+
         Logger.logClient("Command handled: " + command.toString());
+
 
         switch (command.getCommandType()) {
             case UPDATE:
                 for (CommandArgument arg : command.getAllArguments()) {
+                    try {
                     handleCommand(arg.getInnerCommand());
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
 
@@ -156,11 +164,23 @@ public class ClientCommandHandler extends Thread {
             case PERFORM_ACTIVESKILL_TC:
                 Game.getInstance().performActiveSkill(command);
                 break;
+            case SUGGEST_MUSIC:
+                Game.getInstance().suggestMusic(command);
+                break;
+            case EDIT_TAUSCHHANDEL:
+                Game.getInstance().editTauschhandel(command);
+                break;
+            case EDIT_KOPFGELD:
+                Game.getInstance().editKopfgeld(command);
+                break;
+            case NOTIFY_PLAYSPEED_CHANGE:
+                Game.getInstance().notifyPlayspeedChange(command);
+                break;
         }
     }
 
-    void setInGame(boolean b) {
-        isInGame = b;
+    public void setInGame(boolean b) {
+        isInGame = b;   
     }
 
 }

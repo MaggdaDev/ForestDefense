@@ -13,8 +13,8 @@ import maggdaforestdefense.storage.GameImage;
  *
  * @author David
  */
-public class ClientWasserlaeufer extends ClientBug{
+abstract public class ClientWasserlaeufer extends ClientBug{
     public ClientWasserlaeufer(int id, double x, double y, double hp, Mob.MovementType movement) {
-        super(id, x, y, hp, movement, GameObjectType.M_WASSERLAEUFER, GameImage.MOB_BUG_1, 90, 20);
+        super(id, x, y, hp, movement, GameObjectType.M_WASSERLAEUFER, GameImage.MOB_BLATTLAUS_1, 90, 20);
     }
 }

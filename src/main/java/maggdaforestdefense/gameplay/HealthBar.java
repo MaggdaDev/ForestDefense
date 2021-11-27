@@ -19,7 +19,7 @@ public class HealthBar extends Group{
     
 
     public static final double BOX_HEIGHT_MULT = 0.2;
-    public static final double BOX_BORDER_MULT = 0.03 ;
+    public static final double BOX_BORDER_MULT = 0.02 ;
     
     private final double size;
     
@@ -35,21 +35,21 @@ public class HealthBar extends Group{
         box.setFitHeight(BOX_HEIGHT_MULT * size);
         
         bar = new ImageView(barImage.getImage());
-        bar.setFitWidth((1-BOX_BORDER_MULT*2)*size);
-        bar.setFitHeight((BOX_HEIGHT_MULT-BOX_BORDER_MULT*2)*size);
+        bar.setFitWidth((1-BOX_BORDER_MULT*2)*size + 1);
+        bar.setFitHeight((BOX_HEIGHT_MULT-BOX_BORDER_MULT*2)*size + 1);
         bar.setLayoutX(BOX_BORDER_MULT*size);
         bar.setLayoutY(BOX_BORDER_MULT*size);
         
         setVisible(false);
         
-        getChildren().addAll(box, bar);
+        getChildren().addAll(box,bar);
         
         setViewOrder(ViewOrder.POPUP);
     }
     
     public void update(double x, double y, double health) {
-        if(health < 0) {
-            health = 0;
+        if(health <= 0) {
+            health = 0.01;
         }
         setLayoutX(x - 0.5 * size);
         setLayoutY(y - 1.5 * size * BOX_HEIGHT_MULT);

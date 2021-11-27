@@ -36,7 +36,7 @@ public class SpruceShot extends ConstantFlightProjectile {
     private Damage damageObject;
 
     // Upgrade consts
-    private final static double percetageOfHealthRiesenschreck = 0.1;
+    private final static double riesenschreckMaxhealth = 3000;
     private final static double extraDamagePerPixel = 0.01;
     private final static double critChance = 0.2, critMultiplier = 5;
     private final static double armorPierceDamageMult = 1;
@@ -45,8 +45,8 @@ public class SpruceShot extends ConstantFlightProjectile {
     private boolean isRiesenschreck = false;
     private boolean isArmorPierce = false;
     private boolean isFichtenForschung = false;
-    private Damage.NormalDamage basicDamage, riesenschreckDamage, dominierendeNadelnDamage, armorPierceDamage;
-    private Damage.NormalMultiplier nadelStaerkungMult, fichtenForschungMultiplier;
+    private Damage.NormalDamage basicDamage, dominierendeNadelnDamage, armorPierceDamage;
+    private Damage.NormalMultiplier nadelStaerkungMult, riesenschreckDamageMult, fichtenForschungMultiplier;
     private Damage.CriticalDamage criticalDamageMult;
 
     public SpruceShot(int id, ServerGame game, double x, double y, Mob target, Tower ownerTower, Tower.CanAttackSet attackSet) {
@@ -80,16 +80,17 @@ public class SpruceShot extends ConstantFlightProjectile {
 
     private final void setUpDamage() {
         damageObject = new Damage(this);
-        riesenschreckDamage = new Damage.NormalDamage(0);
+        
         dominierendeNadelnDamage = new Damage.NormalDamage(0);
         armorPierceDamage = new Damage.NormalDamage(0);
         basicDamage = new Damage.NormalDamage(DAMAGE);
-        damageObject.addAllDamage(new Damage.DamageSubclass[]{basicDamage, riesenschreckDamage, dominierendeNadelnDamage, armorPierceDamage});
+        damageObject.addAllDamage(new Damage.DamageSubclass[]{basicDamage, dominierendeNadelnDamage, armorPierceDamage});
 
+        riesenschreckDamageMult = new Damage.NormalMultiplier(1);
         nadelStaerkungMult = new Damage.NormalMultiplier(1);
         criticalDamageMult = new Damage.CriticalDamage(0, 1);
         fichtenForschungMultiplier = new Damage.NormalMultiplier(1);
-        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{nadelStaerkungMult, criticalDamageMult, fichtenForschungMultiplier});
+        damageObject.addAllDamageMultiplier(new Damage.DamageMultiplier[]{riesenschreckDamageMult, nadelStaerkungMult, criticalDamageMult, fichtenForschungMultiplier});
     }
 
     @Override
@@ -124,7 +125,7 @@ public class SpruceShot extends ConstantFlightProjectile {
             mobsDamaged.add(target);
 
             if (isRiesenschreck) {       // RIESENSCHRECK UPGRADE
-                riesenschreckDamage.setDamageVal(percetageOfHealthRiesenschreck * target.getHP());
+                riesenschreckDamageMult.setMultiplier(1 + Math.min(target.getHP()/riesenschreckMaxhealth, 1.5));
             }
             
             if(isArmorPierce) {         // ARMOR PIERCE UPGRADE

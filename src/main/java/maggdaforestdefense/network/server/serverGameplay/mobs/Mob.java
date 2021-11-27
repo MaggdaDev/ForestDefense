@@ -13,12 +13,15 @@ import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
+import maggdaforestdefense.network.server.serverGameplay.Map;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
+import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
+import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
 
@@ -60,7 +63,8 @@ public abstract class Mob extends GameObject {
     
     protected boolean sentDeathToClient = false;
 
-    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
+    public Mob(ServerGame game, GameObjectType objectType, double health, double speed, 
+            HitBox hitBox, int towerVision, double damage, double damageTime, MapDistanceSet distanceSet, double armor, MovementType movement) {
         super(game.getNextId(), objectType);
         serverGame = game;
         this.hitBox = hitBox;
@@ -109,8 +113,8 @@ public abstract class Mob extends GameObject {
                 startXIndex = (int) (Math.random() * width);
                 break;
         }
-        xPos = startXIndex * MapCell.CELL_SIZE;
-        yPos = startYIndex * MapCell.CELL_SIZE;
+        xPos = (0.5d + startXIndex) * (MapCell.CELL_SIZE);
+        yPos = (0.5d + startYIndex) * (MapCell.CELL_SIZE);
         hitBox.updatePos(xPos, yPos);
         initializePathFinder();
     }
@@ -153,7 +157,10 @@ public abstract class Mob extends GameObject {
                 if (tower.shouldPrioritize(dist * MapCell.CELL_SIZE, movementType) || Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
                     PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
                     Path newPath = finder.findPath();
-                    if (newPath.getRestWay() < path.getRestWay()) {
+                    if(movementType == MovementType.FLY && tower instanceof Oak && ((Oak)tower).getUpgrades().contains(Upgrade.OAK_1_2)) {
+                        newPath.setPriority(10);
+                    }
+                    if (newPath.getPriority() > path.getPriority() || newPath.getRestWay() < path.getRestWay()) {
                         path = newPath;
                         targetTower = tower;
                     }
@@ -169,6 +176,8 @@ public abstract class Mob extends GameObject {
     }
 
     protected void updateDamageTarget(double timeElapsed) {
+        currentXIndex = (int) (xPos/(MapCell.CELL_SIZE));
+        currentYIndex = (int) (yPos/(MapCell.CELL_SIZE));
         if (targetReached) {
 
             if (targetTower != null) {
@@ -177,7 +186,8 @@ public abstract class Mob extends GameObject {
                     damageTimer = 0;
                     damageTarget();
                 }
-            } else if (serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
+            } else if (currentXIndex < Map.MAP_SIZE && currentYIndex < Map.MAP_SIZE && serverGame.getMap().getCells()[currentXIndex][currentYIndex] == serverGame.getMap().getBase()) {
+                damageTime = 1;
                 damageTimer += timeElapsed;
                 if (damageTimer > damageTime) {
                     damageTimer = 0;
@@ -257,7 +267,7 @@ public abstract class Mob extends GameObject {
 
     }
     
-    private double applyDamage(double damageVal, Damage damage) {
+    protected double applyDamage(double damageVal, Damage damage) {
         if (checkAlive()) {
         double oldHealthPoints = healthPoints;
         healthPoints -= damageVal;
@@ -315,13 +325,17 @@ public abstract class Mob extends GameObject {
             case M_BORKENKAEFER:
                 return 100;
             case M_HIRSCHKAEFER:
-                return 500;
+                return 250;
             case M_SCHWIMMKAEFER:
                 return 20;
             case M_WANDERLAUFER:
                 return 100;
             case M_WASSERLAEUFER:
                 return 40;
+            case M_MARIENKAEFER:
+                return 80;
+            case M_BOSS_CATERPILLAR:
+                return 750;
             default:
                 throw new UnsupportedOperationException();
         }

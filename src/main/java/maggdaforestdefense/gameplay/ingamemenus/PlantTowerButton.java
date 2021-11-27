@@ -117,7 +117,7 @@ public class PlantTowerButton extends Button {
             new CommandArgument("type", String.valueOf(gameObjectType.ordinal()))}));
     }
 
-    void updateCoins(double coins) {
+    public void updateCoins(double coins) {
         if (coins < coinsPrize) {
             setOpacity(0.5);
         } else {

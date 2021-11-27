@@ -8,6 +8,7 @@ package maggdaforestdefense.gameplay;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.transform.Scale;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import maggdaforestdefense.MaggdaForestDefense;
@@ -40,15 +42,13 @@ import maggdaforestdefense.util.KeyEventHandler;
  */
 public class GameScreen extends Group {
 
-
-
     private ClientMap map;
     private BorderPane overlayPaneOuter, overlayPaneInner;
     private Group gamePlayGroup;
     private TopOverlay topOverlay;
     private PlayerInputHandler inputHandler;
 
-    private double scrolling = 0, mapXInset = 0, mapYInset = 0;
+    private double scale = 1, mapXInset = 0, mapYInset = 0;
 
     private SideMenu rightSideMenu;
     private EssenceMenu essenceMenu;
@@ -61,6 +61,8 @@ public class GameScreen extends Group {
         setManaged(false);
 
         gamePlayGroup = new Group();
+        gamePlayGroup.setManaged(false);
+
         overlayPaneOuter = new BorderPane();
         overlayPaneInner = new BorderPane();
 
@@ -83,11 +85,10 @@ public class GameScreen extends Group {
         overlayPaneInner.setBottom(readyCheckOverlay);
         overlayPaneOuter.setPickOnBounds(false);
         overlayPaneInner.setPickOnBounds(false);
-        
 
-  
-  
-       
+        setManaged(false);
+        setLayoutX(0);
+        setLayoutY(0);
 
         overlayPaneOuter.prefHeightProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().heightProperty());
         overlayPaneOuter.prefWidthProperty().bind(maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().widthProperty());
@@ -95,13 +96,8 @@ public class GameScreen extends Group {
         getChildren().addAll(gamePlayGroup, overlayPaneOuter, gameOverOverlay, readyCheckOverlay, waveAnnouncer);
         inputHandler = new PlayerInputHandler();
 
-        gamePlayGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), 0, 0));
         maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnScroll((ScrollEvent e) -> {
-
-            scrolling += e.getDeltaY();
-            gamePlayGroup.getTransforms().clear();
-            gamePlayGroup.getTransforms().add(new Scale(getScaleFromScroll(), getScaleFromScroll(), maggdaforestdefense.MaggdaForestDefense.getWindowWidth() / 2, maggdaforestdefense.MaggdaForestDefense.getWindowHeight() / 2));
-
+            handleScroll(e);
         });
 
         setUpInputListeners();
@@ -119,14 +115,57 @@ public class GameScreen extends Group {
             PlayerInputHandler.getInstance().mouseMoved(e);
 
         });
-
-
-
-
+        setOnKeyPressed((KeyEvent e) -> {
+            if (e.getCode().equals(KeyCode.Z)) {
+                mapXInset = 0;
+                mapYInset = 0;
+                refreshGameplayGroupPosition();
+            }
+        });
+     
 
     }
 
+    public void setXInset(double x) {
+        mapXInset = x;
+        refreshGameplayGroupPosition();
+    }
 
+    public void setYInset(double y) {
+        mapYInset = y;
+        refreshGameplayGroupPosition();
+    }
+
+    public double getXInset() {
+        return mapXInset;
+    }
+
+    public double getYInset() {
+        return mapYInset;
+    }
+
+    private void handleScroll(ScrollEvent e) {
+        double x = e.getSceneX();
+        double y = e.getSceneY();
+        double oldScale = gamePlayGroup.getScaleX();
+        scale = oldScale * Math.pow(1.001, e.getDeltaY());
+        if (scale > 2) {
+            scale = 2;
+        } else if (scale < 0.5) {
+            scale = 0.5;
+        }
+        gamePlayGroup.setScaleX(scale);
+        gamePlayGroup.setScaleY(scale);
+
+        double f = (scale / oldScale) - 1;
+        Bounds bounds = gamePlayGroup.localToScene(gamePlayGroup.getBoundsInLocal());
+        double dx = (x - (bounds.getWidth() / 2 + bounds.getMinX()));
+        double dy = (y - (bounds.getHeight() / 2 + bounds.getMinY()));
+
+        mapXInset -= f * dx;
+        mapYInset -= f * dy;
+        refreshGameplayGroupPosition();
+    }
 
     private final void setUpInputListeners() {
         Game.getInstance().addKeyListener(new KeyEventHandler(KeyCode.RIGHT) {
@@ -185,13 +224,10 @@ public class GameScreen extends Group {
         remove.onRemove();
     }
 
-    private double getScaleFromScroll() {
-        return Math.pow(1.001, scrolling);
-    }
-
     private void refreshGameplayGroupPosition() {
-        gamePlayGroup.setLayoutX(mapXInset);
-        gamePlayGroup.setLayoutY(mapYInset);
+
+        gamePlayGroup.setTranslateX(mapXInset);
+        gamePlayGroup.setTranslateY(mapYInset);
     }
 
     public void showGameOverOverlay() {

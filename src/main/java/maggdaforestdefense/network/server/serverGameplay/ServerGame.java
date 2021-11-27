@@ -5,6 +5,10 @@
  */
 package maggdaforestdefense.network.server.serverGameplay;
 
+import java.net.DatagramPacket;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -21,7 +25,9 @@ import maggdaforestdefense.network.server.Server;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Blattlaus;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Borkenkaefer;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Bug;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Caterpillar;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Hirschkaefer;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Marienkaefer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Spruce;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -60,11 +66,11 @@ public class ServerGame extends Thread {
 
     private int currentGameObjectId;
 
-    private HashMap<String, Mob> mobsList;
+    private ArrayList<Mob> mobsList;
 
     private Vector<NetworkCommand> commandsToSend;
-    
-    private boolean hasRemovedTrade = false;
+
+    private boolean hasRemovedTrade = false, endGame = false;
 
     public ServerGame(Player firstPlayer, String name) {
         this.name = name;
@@ -79,7 +85,7 @@ public class ServerGame extends Thread {
 
         gameObjects = new ConcurrentHashMap<>();
 
-        mobsList = new HashMap<>();
+        mobsList = new ArrayList<>();
 
         commandsToSend = new Vector<>();
     }
@@ -90,40 +96,38 @@ public class ServerGame extends Thread {
         isStarted = true;
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_MAP, new CommandArgument[]{new CommandArgument("map", map.toString())}));
 
-       
         serverLoop.run();
     }
 
     public void addPlayer(Player player) {
         players.add(player);
+        updatePlayersWaiting();
+        player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
+    }
+
+    public void updatePlayersWaiting() {
         CommandArgument[] args = new CommandArgument[players.size()];
         for (int i = 0; i < players.size(); i++) {
             args[i] = new CommandArgument("name", players.get(i).getUserName());
         }
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.SHOW_WAITING_PLAYERS, args));
-        player.sendCommand(new NetworkCommand(NetworkCommand.CommandType.LAUNCH_GAME, new CommandArgument[]{new CommandArgument("name", name)}));
+
     }
 
     public void removePlayer(Player owner) {
         players.remove(owner);
         checkPlayers();
+        if (!isStarted) {
+            updatePlayersWaiting();
+        }
+
     }
 
     public void endGame() {
+        this.endGame = true;
         serverLoop.endGame();
         sendCommandToAllPlayers(NetworkCommand.END_GAME);
         Server.getInstance().getGameHandler().removeGame(gameId);
-    }
-
-    public void flushCommands() {
-        CommandArgument[] args = new CommandArgument[commandsToSend.size()];
-        for (int i = 0; i < commandsToSend.size(); i++) {
-            args[i] = new CommandArgument(String.valueOf(i), commandsToSend.get(i));
-        }
-        commandsToSend.clear();
-
-        NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.UPDATE, args);
-        sendCommandToAllPlayers(command);
     }
 
     public void checkPlayers() {
@@ -164,6 +168,12 @@ public class ServerGame extends Thread {
             case M_BLATTLAUS:
                 addMob(new Blattlaus(this));
                 break;
+            case M_MARIENKAEFER:
+                addMob(new Marienkaefer(this));
+                break;
+            case M_BOSS_CATERPILLAR:
+                addMob(new Caterpillar(this));
+                break;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -192,7 +202,7 @@ public class ServerGame extends Thread {
                 break;
 
             case T_OAK:
-                if(coins < Oak.DEFAULT_PRIZE) {
+                if (coins < Oak.DEFAULT_PRIZE) {
                     return;
                 }
                 newTower = new Oak(this, xPos, yPos);
@@ -213,30 +223,34 @@ public class ServerGame extends Thread {
             new CommandArgument("type", String.valueOf(tower.getGameObjectType().ordinal())),
             new CommandArgument("growingTime", tower.getGrowingTime())
         }));
-        
+
         updateRessources();
 
         notifyTowerChanges();
     }
 
     public void updateGameObjects(double timeElapsed) {
-        gameObjects.forEach((String key, GameObject g) -> {
-            NetworkCommand comm = g.update(timeElapsed);
-            if (comm != null) {
-                queueUpdateCommand(comm);
-            }
-        });
+        if (!endGame) {
+            gameObjects.forEach((String key, GameObject g) -> {
+                NetworkCommand comm = g.update(timeElapsed);
+                if (comm != null) {
+                    sendCommandToAllPlayersUDP(comm);
+                }
+            });
+        }
 
     }
 
     public void handleEssenceAfterRound() {
-        sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
-        gameObjects.forEach((String id, GameObject gObj) -> {
-            if (gObj instanceof Tower) {
-                Tower tower = (Tower) gObj;
-                tower.handleAfterWave();
-            }
-        });
+        if (!endGame) {
+            sendCommandToAllPlayers(NetworkCommand.WAVE_FINISHED);
+            gameObjects.forEach((String id, GameObject gObj) -> {
+                if (gObj instanceof Tower) {
+                    Tower tower = (Tower) gObj;
+                    tower.handleAfterWave();
+                }
+            });
+        }
     }
 
     public void requestEssence(String id) {
@@ -258,13 +272,13 @@ public class ServerGame extends Thread {
             }
         });
     }
-    
+
     public void performActiveSkill(String id, ActiveSkill skill) {
-        ((Tower)gameObjects.get(id)).performActiveSkill(skill);
+        ((Tower) gameObjects.get(id)).performActiveSkill(skill);
     }
 
     public void handleEssenceNewRound() {
-        
+
         base.refillEssence();
     }
 
@@ -272,21 +286,15 @@ public class ServerGame extends Thread {
         base.increaseMaxEssence(i);
         updateRessources();
     }
-    
+
     public void updateRessources() {
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        if (!endGame) {
+            sendCommandToAllPlayersUDP(new NetworkCommand(NetworkCommand.CommandType.UPDATE_GAME_RESSOURCES, new CommandArgument[]{new CommandArgument("coins", coins), new CommandArgument("essence", base.getEssence()), new CommandArgument("maxEssence", base.getMaxEssence())}));
+        }
     }
 
     public void damageBase(Mob mob) {
         base.damageBase(mob);
-    }
-
-    public void queueUpdateCommand(NetworkCommand command) {
-        if (serverLoop.isInWave()) {
-            commandsToSend.add(command);
-        } else {
-            sendCommandToAllPlayers(command);
-        }
     }
 
     public void sendCommandToAllPlayers(NetworkCommand command) {
@@ -295,14 +303,20 @@ public class ServerGame extends Thread {
         });
     }
 
+    public void sendCommandToAllPlayersUDP(NetworkCommand command) {
+        players.forEach((Player player) -> {
+            player.sendCommandUDP(command);
+        });
+    }
+
     private void addGameObject(GameObject g) {
         gameObjects.put(String.valueOf(g.getId()), g);
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEW_GAME_OBJECT, g.toNetworkCommandArgs()));
     }
 
     private void removeGameObject(GameObject g) {
         gameObjects.remove(String.valueOf(g.getId()));
-        queueUpdateCommand(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
+        sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.REMOVE_GAME_OBJECT, new CommandArgument[]{new CommandArgument("id", String.valueOf(g.getId()))}));
 
     }
 
@@ -316,11 +330,17 @@ public class ServerGame extends Thread {
 
     public void addMob(Mob mob) {
         addGameObject(mob);
-        mobsList.put(String.valueOf(mob.getId()), mob);
+        mobsList.add(mob);
+        if(mob.getGameObjectType().equals(GameObjectType.M_BOSS_CATERPILLAR)) {
+            mobsList.addAll(Arrays.asList(((Caterpillar)mob).getSegments()));
+        }
     }
 
     public void killMob(Mob mob, boolean getGold) {
-        mobsList.remove(String.valueOf(mob.getId()));
+        mobsList.remove(mob);
+        if(mob.getGameObjectType().equals(GameObjectType.M_BOSS_CATERPILLAR)) {
+            mobsList.removeAll(Arrays.asList(((Caterpillar)mob).getSegments()));
+        }
         removeGameObject(mob);
         if (getGold) {
             coins += mob.calculateCoinValue();
@@ -341,11 +361,24 @@ public class ServerGame extends Thread {
         });
     }
     
-     public void addGold(int i) {
+    public void deleteAllProjectiles() {
+        ArrayList<Projectile> projectiles = new ArrayList<>();
+        for(GameObject currGameObj : gameObjects.values()) {
+            if(currGameObj instanceof Projectile) {
+                projectiles.add((Projectile)currGameObj);
+            }
+        }
+        
+        projectiles.forEach((Projectile proj)->{
+            removeProjectile(proj);
+        });
+    }
+
+    public void addGold(int i) {
         coins += i;
     }
 
-    public HashMap<String, Mob> getMobs() {
+    public ArrayList<Mob> getMobs() {
         return mobsList;
     }
 
@@ -373,24 +406,35 @@ public class ServerGame extends Thread {
         notifyTowerChanges();
 
     }
-    
+
     public void useLorbeerTrade(String id, Upgrade upgrade) {
         Tower tower = (Tower) gameObjects.get(id);
         tower.addUpgrade(upgrade);
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPGRADE_BUY_CONFIRMED, new CommandArgument[]{
-            new CommandArgument("id", id), 
-            new CommandArgument("tier", tower.getUpgradeSet().getTier(upgrade)), 
+            new CommandArgument("id", id),
+            new CommandArgument("tier", tower.getUpgradeSet().getTier(upgrade)),
             new CommandArgument("type", tower.getUpgradeSet().getType(upgrade))}));
         hasRemovedTrade = false;
-        gameObjects.forEach((String key, GameObject gameObject)->{
-            if((!hasRemovedTrade) && gameObject instanceof Lorbeer) {
+        gameObjects.forEach((String key, GameObject gameObject) -> {
+            if ((!hasRemovedTrade) && gameObject instanceof Lorbeer) {
                 Lorbeer currentLorbeer = (Lorbeer) gameObject;
-                if(currentLorbeer.removeTradeUpgrade(upgrade)) {
+                if (currentLorbeer.removeTradeUpgrade(upgrade)) {
                     hasRemovedTrade = true;
                 }
             }
         });
         notifyTowerChanges();
+    }
+    
+    public void editPlayspeed(int playspeedId) {
+        switch(playspeedId) {
+            case 0:
+                serverLoop.setPlayspeedFact(1);
+                break;
+            case 1:
+                serverLoop.setPlayspeedFact(2);
+                break;
+        }
     }
 
     public ConcurrentHashMap<String, GameObject> getGameObjects() {
@@ -416,10 +460,6 @@ public class ServerGame extends Thread {
             }
         });
     }
-
-    
-
-    
 
    
 

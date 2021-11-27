@@ -5,6 +5,7 @@
  */
 package maggdaforestdefense.network.server.serverGameplay.projectiles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ import maggdaforestdefense.network.server.serverGameplay.Damage;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.HitBox;
+import maggdaforestdefense.network.server.serverGameplay.mobs.Caterpillar;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.Logger;
@@ -54,26 +56,32 @@ public abstract class Projectile extends GameObject {
         return hitBox;
     }
 
-    public void collision(HashMap<String, Mob> mobs) {
+    public void collision(ArrayList<Mob> mobs) {
 
-        mobs.forEach((String s, Mob mob) -> {
+        mobs.forEach((Mob mob) -> {
+            
             if (HitBox.intersects(hitBox, mob.getHitBox())) {
-                switch(mob.getMovementType()) {
+                switch (mob.getMovementType()) {
                     case DIG:
-                        if(canAttackSet.canAttackDigging()) {
+                        if (canAttackSet.canAttackDigging()) {
                             dealDamage(mob);
                         }
                         break;
                     case FLY:
-                        if(canAttackSet.canAttackFlying()) {
+                        if (canAttackSet.canAttackFlying()) {
                             dealDamage(mob);
                         }
                         break;
                     case WALK:
-                        if(canAttackSet.canAttackWalking()) {
+                        if (canAttackSet.canAttackWalking()) {
                             dealDamage(mob);
                         }
                         break;
+                }
+            }
+            if (mob.getGameObjectType().equals(GameObjectType.M_BOSS_CATERPILLAR)) {
+                if (canAttackSet.canAttackWalking()) {
+                    ((Caterpillar) mob).checkSegmentCollision(this);
                 }
             }
         });
@@ -92,7 +100,7 @@ public abstract class Projectile extends GameObject {
             u.handleUpgrade(null);
         }
     }
-    
+
     protected void performUpgradesAfterCollision() {
         for (int i = 0; i < afterCollision.size(); i++) {
             UpgradeHandler u = (UpgradeHandler) afterCollision.get(i);
@@ -106,12 +114,12 @@ public abstract class Projectile extends GameObject {
             u.handleUpgrade(killed);
         }
     }
-    
+
     public void notifyKill(Mob target) {
         owner.notifyKill(target);
         performUpgradesOnKill(target);
     }
-    
+
     protected void notifyOwnerDamage(double damage) {
         owner.notifyDamage(damage);
     }

@@ -1,6 +1,5 @@
 package maggdaforestdefense.config;
 
-import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 
 import java.io.BufferedReader;

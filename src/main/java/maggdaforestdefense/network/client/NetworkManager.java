@@ -53,7 +53,7 @@ public class NetworkManager extends WebSocketClient {
 
     public NetworkManager(URI serverURI) {
         super(serverURI);
-        
+        Logger.logClient("Client NetworkManager creating... Server URI: " + serverURI.toString());
         udpReceiver = new UdpReceiver();
         udpReceiver.start();
     }
@@ -154,7 +154,7 @@ public class NetworkManager extends WebSocketClient {
     }
 
     public void reset() {
-        commandHandler.stop();
+        //commandHandler.stop();
         commandHandler = new ClientCommandHandler();
         reconnect();
     }

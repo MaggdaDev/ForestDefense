@@ -6,20 +6,14 @@
 package maggdaforestdefense.menues;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.client.NetworkManager;
-
 import maggdaforestdefense.storage.Logger;
-import org.panda_lang.panda.framework.language.parser.implementation.general.number.NumberUtils;
 
 /**
  *

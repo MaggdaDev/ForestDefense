@@ -73,7 +73,7 @@ public class ServerLoop {
 
         while (running) {
 
-            if (currentWaveIndex == 19) {
+            if (currentWaveIndex == 0) {
                 currentWave = waveGenerator.generateBossWave();
             } else {
                 currentWave = waveGenerator.generateWave(currentWaveIndex);

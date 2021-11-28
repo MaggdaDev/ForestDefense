@@ -29,7 +29,7 @@ public class WaveGenerator {
     }
 
     public MobWave generateWave(int round) {
-
+        
         int totStrength = getStrengthFromRound(round);
 
         Vector<Spawnable> spawnables = new Vector<>();

@@ -48,7 +48,7 @@ import maggdaforestdefense.util.Waiter;
  */
 public class ServerGame extends Thread {
 
-    public final static int START_COINS = 10000, START_ESSENCE = 3;
+    public final static int START_COINS = 100, START_ESSENCE = 3;
 
     // MANAGEMENT
     private final String name;
@@ -214,6 +214,10 @@ public class ServerGame extends Thread {
     }
 
     public void plantTree(Tower tower) {
+        if(placeOccupied(tower)) {
+            Logger.logServer("Place occupied! Tower cant be placed");
+            return;
+        }
         gameObjects.put(String.valueOf(tower.getId()), tower);
         coins -= tower.getPrize();
         sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.PLANT_TREE, new CommandArgument[]{
@@ -227,6 +231,19 @@ public class ServerGame extends Thread {
         updateRessources();
 
         notifyTowerChanges();
+    }
+    
+    private boolean placeOccupied(Tower tower) {
+        Tower currTower;
+        for(GameObject currObj: gameObjects.values()) {
+            if(currObj instanceof Tower) {
+                currTower = (Tower)currObj;
+                if(tower.getXIndex() == currTower.getXIndex() && tower.getYIndex() == currTower.getYIndex()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void updateGameObjects(double timeElapsed) {

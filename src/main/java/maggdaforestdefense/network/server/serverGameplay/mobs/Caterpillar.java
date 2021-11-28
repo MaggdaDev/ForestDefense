@@ -32,7 +32,7 @@ import maggdaforestdefense.util.LineWorm;
 public class Caterpillar extends Mob {
 
     //BALANCE
-    public final static double START_HP = 4000;
+    public final static double START_HP = 3000;
     public final static double DEFAULT_SPEED = 1;
     public final static int TOWER_VISION_RANGE = 0;
     public final static double DEFAULT_DAMAGE = 20;

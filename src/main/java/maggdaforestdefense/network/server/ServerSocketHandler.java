@@ -63,7 +63,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     private DatagramPacket udpPacket;
     private byte[] udpByteBuffer;
     public final static int byteBufferLength = 1400;
-    private boolean useUDP;
+    private boolean useUDP = true;
 
     public ServerSocketHandler(WebSocket conn, DatagramSocket udp) throws SocketException {
         this.useUDP = useUDP;
@@ -122,7 +122,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     private void handleCommand(NetworkCommand command) {
-        Logger.logServer("Command handled: " + command);
+        //Logger.logServer("Command handled: " + command);
         switch (command.getCommandType()) {
             case REQUIRE_CONNECTION:
                 try {
@@ -258,7 +258,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
     }
 
     public void sendCommand(NetworkCommand command) {
-        Logger.debugServer("Command sent: " + command.toString());
+        //Logger.debugServer("Command sent: " + command.toString());
         if (conn.isOpen()) {
             conn.send(command.toString());
         } else {

@@ -110,6 +110,9 @@ public class ServerLoop {
                 fpsLimiter.startOfIteration();
                 runTime = GameMaths.nanoToSeconds(System.nanoTime() - startTimeNano);
                 double timeElapsed = (runTime - oldRunTime) * playspeedFact;
+                if(timeElapsed > 0.05) {
+                    timeElapsed = 0.05;
+                }
                 oldRunTime = runTime;
 
                 serverGame.updateGameObjects(timeElapsed);

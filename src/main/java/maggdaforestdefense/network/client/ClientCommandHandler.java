@@ -79,7 +79,7 @@ public class ClientCommandHandler {
 
     private void handleCommand(NetworkCommand command) {
 
-        Logger.logClient("Command handled: " + command.toString());
+        //Logger.logClient("Command handled: " + command.toString());
 
 
         switch (command.getCommandType()) {

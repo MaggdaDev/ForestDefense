@@ -19,6 +19,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDistanceSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.Path;
+import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathFinder;
 import maggdaforestdefense.network.server.serverGameplay.towers.Lorbeer;
 import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
@@ -130,9 +131,16 @@ public abstract class Mob extends GameObject {
         if (!targetReached) {
             
             targetReached = path.walk(timeElapsed * speed);
-
-            xPos = path.getCurrentX();
-            yPos = path.getCurrentY();
+            
+            double newXPos = path.getCurrentX();
+            double newYPos = path.getCurrentY();
+            
+            if(((int) (newXPos / MapCell.CELL_SIZE)) != currentXIndex || ((int) (newYPos / MapCell.CELL_SIZE)) != currentYIndex) {
+                searchForTowers();
+            }
+            
+            xPos = newXPos;
+            yPos = newYPos;
             hitBox.updatePos(xPos, yPos);
         }
     }
@@ -140,11 +148,6 @@ public abstract class Mob extends GameObject {
     protected void updateIndexPosition() {
         currentXIndex = (int) (xPos / MapCell.CELL_SIZE);
         currentYIndex = (int) (yPos / MapCell.CELL_SIZE);
-        if (((int) (0.5d + xPos / MapCell.CELL_SIZE) != currentXMidIndex) || ((int) (0.5d + yPos / MapCell.CELL_SIZE) != currentYMidIndex)) {
-            currentXMidIndex = (int) (0.5d + xPos / MapCell.CELL_SIZE);
-            currentYMidIndex = (int) (0.5d + yPos / MapCell.CELL_SIZE);
-            searchForTowers();
-        }
 
     }
 
@@ -155,8 +158,10 @@ public abstract class Mob extends GameObject {
                 Tower tower = ((Tower) gameObject);
                 double dist = Math.sqrt(Math.pow(tower.getXIndex() - currentXIndex, 2.0d) + Math.pow(tower.getYIndex() - currentYIndex, 2.0d));
                 if (tower.shouldPrioritize(dist * MapCell.CELL_SIZE, movementType) || Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
+                    //current indizes must be OLD ones from PREVIOUS cell (must be called on cell change BEFORE indizes are updated
                     PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
                     Path newPath = finder.findPath();
+                    newPath.skipCurrentWayIndex();
                     if(movementType == MovementType.FLY && tower instanceof Oak && ((Oak)tower).getUpgrades().contains(Upgrade.OAK_1_2)) {
                         newPath.setPriority(10);
                     }

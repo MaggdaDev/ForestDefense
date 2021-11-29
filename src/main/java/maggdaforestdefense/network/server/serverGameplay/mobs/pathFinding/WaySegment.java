@@ -7,6 +7,7 @@ package maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding;
 
 import javafx.geometry.Point2D;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -43,6 +44,7 @@ public class WaySegment {
     }
 
     public Point2D getPointOnWay(double pos) {      // part between 0 (start) and 1 (end)
+
         if (isCurve) {
             double ax = Math.signum(pivot.getX() - start.getX());
             double ay = Math.signum(pivot.getY() - start.getY());

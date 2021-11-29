@@ -34,8 +34,7 @@ public abstract class ClientGameObject extends ImageView {
         }
         gameObjectType = objectType;
         this.id = id;
-        xPos = x;
-        yPos = y;
+        setNewPos(x, y);
 
         setMouseTransparent(true);
         

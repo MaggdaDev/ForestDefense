@@ -41,13 +41,12 @@ public class ClientCommandHandler {
 
     }
 
-
     public void onMessage(String message) {
         if (NetworkCommand.testForKeyWord(message)) {
-            if(isInGame) {
+            if (isInGame) {
                 try {
-            queue.add(NetworkCommand.fromString(message));
-                } catch(JsonSyntaxException e) {
+                    queue.add(NetworkCommand.fromString(message));
+                } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                     Logger.errClient("Malformed json: " + message);
                 }
@@ -62,9 +61,8 @@ public class ClientCommandHandler {
     public void reset() {
         queue.clear();
         workingQueue.clear();
-        
-    }
 
+    }
 
     public void handleInput() {
         queue.drainTo(workingQueue);
@@ -80,14 +78,12 @@ public class ClientCommandHandler {
     private void handleCommand(NetworkCommand command) {
 
         //Logger.logClient("Command handled: " + command.toString());
-
-
         switch (command.getCommandType()) {
             case UPDATE:
                 for (CommandArgument arg : command.getAllArguments()) {
                     try {
-                    handleCommand(arg.getInnerCommand());
-                    } catch(Exception e) {
+                        handleCommand(arg.getInnerCommand());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -180,7 +176,7 @@ public class ClientCommandHandler {
     }
 
     public void setInGame(boolean b) {
-        isInGame = b;   
+        isInGame = b;
     }
 
 }

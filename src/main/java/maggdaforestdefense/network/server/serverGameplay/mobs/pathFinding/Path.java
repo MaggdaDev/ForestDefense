@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding;
 import java.util.Vector;
 import javafx.geometry.Point2D;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -80,6 +81,7 @@ public class Path {
         if (wayWalked > getCurrSegment().getDistance()) {
             if (currWayIndex + 1 > ways.size() - 1) {
                 System.out.println("ARRIVED");
+                wayWalked = getCurrSegment().getDistance();
                 return true; // arrived
             } else {
                 wayWalked -= getCurrSegment().getDistance();
@@ -87,6 +89,16 @@ public class Path {
             }
         }
         return false;
+    }
+    
+    public void skipCurrentWayIndex() {
+        currWayIndex ++;
+        if(currWayIndex > (ways.size() - 1)) {
+            currWayIndex --;
+            Logger.logServer("Cant skip way segment with index: " + currWayIndex);
+            return;
+        }
+        wayWalked = 0;
     }
 
     public int[] getPosDirBehind(double distBehind) {

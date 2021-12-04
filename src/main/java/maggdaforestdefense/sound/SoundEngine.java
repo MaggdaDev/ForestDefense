@@ -31,13 +31,18 @@ public class SoundEngine {
 
     private MediaPlayer currentlyPlaying;
 
+    private Sound currentSound = null, nextSound = null;
+
     public SoundEngine() {
         loadSoundTracks();
 
     }
 
     public void playSound(Sound sound) {
-
+        if(sound == currentSound) {
+            return;
+        }
+        currentSound = sound;
         if (currentlyPlaying != null) {
             currentlyPlaying.stop();
         }
@@ -45,12 +50,11 @@ public class SoundEngine {
             case GAMEOVER:
                 playMedia(gameover);
                 currentlyPlaying = gameover;
+                nextSound = Sound.MENU_INTRO;
                 break;
             case MENU_INTRO:
+                nextSound = Sound.MENU_LOOP;
                 playMedia(menuIntro);
-                menuIntro.setOnEndOfMedia(() -> {
-                    playSound(Sound.MENU_LOOP);
-                });
                 currentlyPlaying = menuIntro;
                 break;
             case MENU_LOOP:
@@ -58,10 +62,8 @@ public class SoundEngine {
                 currentlyPlaying = menuLoop;
                 break;
             case RUNDEN_1_INTRO:
+                nextSound = Sound.RUNDEN_1_LOOP;
                 playMedia(runden1Intro);
-                runden1Intro.setOnEndOfMedia(() -> {
-                    playSound(Sound.RUNDEN_1_LOOP);
-                });
                 currentlyPlaying = runden1Intro;
                 break;
             case RUNDEN_1_LOOP:
@@ -69,16 +71,14 @@ public class SoundEngine {
                 currentlyPlaying = runden1Loop;
                 break;
             case RUNDEN_2:
+                nextSound = Sound.RUNDEN_1_INTRO;
                 playMedia(runden2);
                 currentlyPlaying = runden2;
-
                 break;
             case RUNDEN_3_INTRO:
+                nextSound = Sound.RUNDEN_3_LOOP;
                 playMedia(runden3Intro);
                 currentlyPlaying = runden3Intro;
-                runden3Intro.setOnEndOfMedia(() -> {
-                    playSound(Sound.RUNDEN_3_LOOP);
-                });
                 break;
             case RUNDEN_3_LOOP:
                 playMedia(runden3Loop);
@@ -89,14 +89,17 @@ public class SoundEngine {
     }
 
     public void playLater(Sound sound) {
-        currentlyPlaying.setOnEndOfMedia(() -> {
-            playSound(sound);
-        });
+        if (!sound.equals(currentSound)) {
+            nextSound = sound;
+        }
     }
 
     private void playMedia(MediaPlayer media) {
         media.play();
         media.setCycleCount(MediaPlayer.INDEFINITE);
+        media.setOnEndOfMedia(() -> {
+            playSound(nextSound);
+        });
     }
 
     private final void loadSoundTracks() {

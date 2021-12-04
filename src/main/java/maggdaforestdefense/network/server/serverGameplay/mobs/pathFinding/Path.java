@@ -138,15 +138,19 @@ public class Path {
     private double getPercentOfCurrSeg() {
         WaySegment currentWaySegment = getCurrSegment();
         double ret = wayWalked / currentWaySegment.getDistance();
-        return ret;
+        return Math.max(0.0, Math.min(1.0, ret));
     }
 
     public Point2D getPointOnSegment(int segIndex, double way) {
-        return ways.get(segIndex).getPointOnWay(way / ways.get(segIndex).getDistance());
+        return ways.get(segIndex).getPointOnWay(getNormalizedPercentOfSeg(segIndex, way));
     }
 
     public Point2D getDirOnSegment(int segIndex, double way) {
-        return ways.get(segIndex).getDirection(way / ways.get(segIndex).getDistance());
+        return ways.get(segIndex).getDirection(getNormalizedPercentOfSeg(segIndex, way));
+    }
+    
+    private double getNormalizedPercentOfSeg(int segIndex, double way) {
+        return Math.max(0.0, Math.min(1.0, way / ways.get(segIndex).getDistance()));
     }
 
     public double getCurrentX() {

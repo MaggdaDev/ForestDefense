@@ -47,7 +47,7 @@ import maggdaforestdefense.util.Waiter;
  * @author David
  */
 public class ServerGame extends Thread {
-    public final static boolean DEBUG_MODE = true;
+    public final static boolean DEBUG_MODE = false;
     
     
 
@@ -80,6 +80,7 @@ public class ServerGame extends Thread {
         
         if(DEBUG_MODE) {
             START_COINS = 100000;
+            coins = START_COINS;
             START_ESSENCE = 1000;
         }
         

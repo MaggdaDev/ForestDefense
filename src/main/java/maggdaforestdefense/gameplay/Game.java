@@ -28,6 +28,7 @@ import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
+import maggdaforestdefense.network.server.serverGameplay.ServerSoundsPicker.Sound;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.sound.SoundEngine;
@@ -87,7 +88,7 @@ public class Game {
             handleKeyEvent(event.getCode());
         });
 
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.RUNDEN_1_INTRO);
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.RUNDEN_1_INTRO);
 
     }
 
@@ -100,7 +101,7 @@ public class Game {
         NetworkManager.getInstance().resetCommandHandler();
 
 
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.GAMEOVER);
+        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.GAMEOVER);
         gameLoop.stop();
         gameLoop.setGameRunning(false);
     }
@@ -280,9 +281,9 @@ public class Game {
         int musicId = (int) command.getNumArgument("id");
         int isLater = (int) command.getNumArgument("later");
         if (isLater == 0) {
-            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(SoundEngine.Sound.values()[musicId]);
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.values()[musicId]);
         } else {
-            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playLater(SoundEngine.Sound.values()[musicId]);
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playLater(Sound.values()[musicId]);
         }
     }
 

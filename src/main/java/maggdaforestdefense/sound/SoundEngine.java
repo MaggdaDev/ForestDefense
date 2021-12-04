@@ -8,6 +8,7 @@ package maggdaforestdefense.sound;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import maggdaforestdefense.storage.MediaLoader;
+import maggdaforestdefense.network.server.serverGameplay.ServerSoundsPicker.Sound;
 
 /**
  *
@@ -128,15 +129,6 @@ public class SoundEngine {
         gameover.setVolume(DEFAULT_VOLUME);
     }
 
-    public static enum Sound {
-        RUNDEN_1_INTRO,
-        RUNDEN_1_LOOP,
-        RUNDEN_2,
-        RUNDEN_3_INTRO,
-        RUNDEN_3_LOOP,
-        MENU_INTRO,
-        MENU_LOOP,
-        GAMEOVER;
-    }
+   
 
 }

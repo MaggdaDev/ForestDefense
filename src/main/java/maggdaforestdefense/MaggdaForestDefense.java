@@ -33,6 +33,7 @@ import maggdaforestdefense.sound.SoundEngine;
 import maggdaforestdefense.storage.Logger;
 
 import java.util.Objects;
+import maggdaforestdefense.network.server.serverGameplay.ServerSoundsPicker.Sound;
 
 
 /**
@@ -82,7 +83,7 @@ public class MaggdaForestDefense extends Application {
         mainApp(primaryStage);
         
         soundEngine = new SoundEngine();
-        soundEngine.playSound(SoundEngine.Sound.MENU_INTRO);
+        soundEngine.playSound(Sound.MENU_INTRO);
     }
 
     /**

@@ -31,13 +31,14 @@ public class PathFinder {
 
     private PriorityQueue<PathCell> openList;
     private HashSet<PathCell> closedList;
-    private PathCell start, end;
+    private PathCell start, end, previous;
     private MapDistanceSet mapDistanceSet;
     private PathCell[][] map;
 
     private GameObjectType mobType;
+    
 
-    public PathFinder(PathCell start, PathCell end, PathCell[][] map, GameObjectType objectType, MapDistanceSet distanceSet) {
+    public PathFinder(PathCell start, PathCell end, PathCell[][] map, GameObjectType objectType, MapDistanceSet distanceSet, PathCell prevCell) {
         mobType = objectType;
         this.map = map;
         mapDistanceSet = distanceSet;
@@ -60,6 +61,7 @@ public class PathFinder {
 
         this.start = start;
         this.end = end;
+        this.previous = prevCell;
     }
 
     public Path findPath() {
@@ -141,7 +143,7 @@ public class PathFinder {
             }
         }
         start.setPrevious(null);
-        path.generate(end);
+        path.generate(end, previous);
         return path;
     }
 
@@ -187,7 +189,7 @@ public class PathFinder {
 
         }
         start.setPrevious(null);
-        path.generate(end);
+        path.generate(end, previous);
         return path;
     }
 

@@ -33,6 +33,9 @@ public class Marienkaefer extends Bug{
         if (!updateAlive()) {
             sentDeathToClient = true;
         }
+        int oldXIndex = currentXIndex;
+        int oldYIndex = currentYIndex;
+        
         updateIndexPosition();
         updateMovement(timeElapsed);
         updateDamageTarget(timeElapsed);
@@ -41,7 +44,7 @@ public class Marienkaefer extends Bug{
         switch(serverGame.getMap().getCells()[super.currentXIndex][super.currentYIndex].getCellType()) {
             case WATER:
                 if(super.movementType != MovementType.FLY) {
-                    super.searchForTowers();
+                    super.searchForTowers(serverGame.getMap().getCells()[oldXIndex][oldYIndex].getPathCell());
                 }
                 super.movementType = MovementType.FLY;
                 break;

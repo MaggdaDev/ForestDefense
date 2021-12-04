@@ -34,7 +34,7 @@ public class Path {
     public Path(Vector<PathCell> pathVec) {
         cells = pathVec;
         ways = new Vector<>();
-        setUpWay();
+        setUpWay(null);
         totalDistance = 0;
         ways.forEach((WaySegment seg) -> {
             totalDistance += seg.getDistance();
@@ -49,20 +49,22 @@ public class Path {
         return priority;
     }
 
-    public void generate(PathCell endCell) {
+    public void generate(PathCell endCell, PathCell previous) {
         cells = endCell.generateVector(cells);
-        setUpWay();
+        setUpWay(previous);
         totalDistance = 0;
         ways.forEach((WaySegment seg) -> {
             totalDistance += seg.getDistance();
         });
     }
 
-    public void setUpWay() {
+    public void setUpWay(PathCell previous) {
         for (int i = cells.size() - 1; i >= 0; i--) {
             PathCell origin = null, cell = null, destination = null;
             if (i < cells.size() - 1) {
                 origin = cells.get(i + 1);
+            } else {
+                origin = previous;
             }
             cell = cells.get(i);
             if (i > 0) {
@@ -100,6 +102,7 @@ public class Path {
         }
         wayWalked = 0;
     }
+    
 
     public int[] getPosDirBehind(double distBehind) {
         int searchedIndex = currWayIndex;
@@ -176,4 +179,6 @@ public class Path {
     public double getRestWay() {
         return totalDistance - totalWayWalked;
     }
+
+    
 }

@@ -8,6 +8,7 @@ package maggdaforestdefense.network.server.serverGameplay.spawning;
 import java.util.Vector;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
+import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.util.Randomizer;
 
 /**
@@ -36,8 +37,13 @@ public class WaveGenerator {
         while (totStrength > 0) {
 
             int randIndex = (int) (Math.random() * mobs.length);
-            if (round <= 5) {
-                randIndex = 0;
+            
+            if(ServerGame.DEBUG_MODE) {
+                
+            } else {
+                if (round <= 5) {
+                    randIndex = 0;
+                }
             }
             int amount = (int) (totStrength / strengths[randIndex]);
             if (amount > 10) {
@@ -54,7 +60,11 @@ public class WaveGenerator {
     }
 
     private int getStrengthFromRound(int round) {
+        if(ServerGame.DEBUG_MODE) {
+           return (int) (200.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d)); 
+        } else {
         return (int) (2.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d));
+        }
     }
 
     private int getStrength(GameObjectType type) {

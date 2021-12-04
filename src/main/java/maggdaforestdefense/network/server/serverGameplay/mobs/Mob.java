@@ -132,15 +132,16 @@ public abstract class Mob extends GameObject {
             
             targetReached = path.walk(timeElapsed * speed);
             
-            double newXPos = path.getCurrentX();
-            double newYPos = path.getCurrentY();
+            xPos = path.getCurrentX();
+            yPos = path.getCurrentY();
+            int oldXIndex = currentXIndex; 
+            int oldYIndex = currentYIndex;
+            updateIndexPosition();
             
-            if(((int) (newXPos / MapCell.CELL_SIZE)) != currentXIndex || ((int) (newYPos / MapCell.CELL_SIZE)) != currentYIndex) {
-                searchForTowers();
+            if(oldXIndex != currentXIndex || oldYIndex != currentYIndex) {
+                searchForTowers(serverGame.getMap().getCells()[oldXIndex][oldYIndex].getPathCell());
             }
             
-            xPos = newXPos;
-            yPos = newYPos;
             hitBox.updatePos(xPos, yPos);
         }
     }
@@ -151,17 +152,16 @@ public abstract class Mob extends GameObject {
 
     }
 
-    protected Tower searchForTowers() {
+    protected Tower searchForTowers(PathCell prevCell) {
 
         serverGame.getGameObjects().forEach((String key, GameObject gameObject) -> {
             if (gameObject instanceof Tower) {
                 Tower tower = ((Tower) gameObject);
                 double dist = Math.sqrt(Math.pow(tower.getXIndex() - currentXIndex, 2.0d) + Math.pow(tower.getYIndex() - currentYIndex, 2.0d));
                 if (tower.shouldPrioritize(dist * MapCell.CELL_SIZE, movementType) || Math.abs(tower.getXIndex() - currentXIndex) < towerVisionRange && Math.abs(tower.getYIndex() - currentYIndex) < towerVisionRange) {
-                    //current indizes must be OLD ones from PREVIOUS cell (must be called on cell change BEFORE indizes are updated
-                    PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
+                    PathFinder finder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getCells()[tower.getXIndex()][tower.getYIndex()].getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet, prevCell);
                     Path newPath = finder.findPath();
-                    newPath.skipCurrentWayIndex();
+
                     if(movementType == MovementType.FLY && tower instanceof Oak && ((Oak)tower).getUpgrades().contains(Upgrade.OAK_1_2)) {
                         newPath.setPriority(10);
                     }
@@ -202,7 +202,7 @@ public abstract class Mob extends GameObject {
             } else {
                 targetReached = false;
                 pathToBase();
-                searchForTowers();
+                searchForTowers(null);
             }
         }
     }
@@ -218,12 +218,12 @@ public abstract class Mob extends GameObject {
     }
 
     protected void pathToBase() {
-        pathFinder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
+        pathFinder = new PathFinder(serverGame.getMap().getCells()[currentXIndex][currentYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet, null);
         path = pathFinder.findPath();
     }
 
     protected void initializePathFinder() {
-        pathFinder = new PathFinder(serverGame.getMap().getCells()[startXIndex][startYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet);
+        pathFinder = new PathFinder(serverGame.getMap().getCells()[startXIndex][startYIndex].getPathCell(), serverGame.getMap().getBase().getPathCell(), serverGame.getMap().toPathCellMap(), gameObjectType, mapDistanceSet, null);
         path = pathFinder.findPath();
     }
 

@@ -47,8 +47,11 @@ import maggdaforestdefense.util.Waiter;
  * @author David
  */
 public class ServerGame extends Thread {
+    public final static boolean DEBUG_MODE = true;
+    
+    
 
-    public final static int START_COINS = 100, START_ESSENCE = 3;
+    public static int START_COINS = 100, START_ESSENCE = 3;
 
     // MANAGEMENT
     private final String name;
@@ -73,6 +76,16 @@ public class ServerGame extends Thread {
     private boolean hasRemovedTrade = false, endGame = false;
 
     public ServerGame(Player firstPlayer, String name) {
+        // DEBUG
+        
+        if(DEBUG_MODE) {
+            START_COINS = 100000;
+            START_ESSENCE = 1000;
+        }
+        
+        // DEBUG END
+        
+        
         this.name = name;
         currentGameObjectId = 0;
         players = new Vector<>();

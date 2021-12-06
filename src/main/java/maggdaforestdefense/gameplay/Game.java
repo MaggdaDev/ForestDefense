@@ -57,6 +57,8 @@ public class Game {
 
     private Vector<Upgrade> lorbeerTradingUpgrades;
 
+    private String gameName;
+
     private Game(String gameName) {
         instance = this;
         isInGame = false;
@@ -65,6 +67,7 @@ public class Game {
         gameScreen = new GameScreen();
         gameObjects = new HashMap<>();
         lorbeerTradingUpgrades = new Vector<>();
+        this.gameName = gameName;
 
     }
 
@@ -88,7 +91,12 @@ public class Game {
             handleKeyEvent(event.getCode());
         });
 
-        maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.RUNDEN_1_INTRO);
+        // EASTER EGG SAMSA
+        if (gameName.toLowerCase().equals("phranz kaphka")) {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.SAMSA);
+        } else {
+            maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.RUNDEN_1_INTRO);
+        }
 
     }
 
@@ -99,7 +107,6 @@ public class Game {
         Logger.logClient("GAMEOVER");
         NetworkManager.getInstance().setInGame(false);
         NetworkManager.getInstance().resetCommandHandler();
-
 
         maggdaforestdefense.MaggdaForestDefense.getSoundEngine().playSound(Sound.GAMEOVER);
         gameLoop.stop();
@@ -170,7 +177,7 @@ public class Game {
     }
 
     public void updateRessources(NetworkCommand command) {
-         
+
         coins = (int) command.getNumArgument("coins");
         essence = (int) command.getNumArgument("essence");
         maxEssence = (int) command.getNumArgument("maxEssence");
@@ -292,7 +299,7 @@ public class Game {
         ((ClientLorbeer) gameObjects.get(id)).editTauschhandel(command);
 
     }
-    
+
     public void editKopfgeld(NetworkCommand command) {
         String id = command.getArgument("id");
         ((ClientLorbeer) gameObjects.get(id)).editKopfgeld(command);
@@ -317,7 +324,5 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
-
-    
 
 }

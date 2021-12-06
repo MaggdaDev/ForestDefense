@@ -24,11 +24,12 @@ public class SoundEngine {
             MUSIC_3_LOOP = "runden_3_loop.wav",
             MUSIC_MENU_INTRO = "menu_intro.wav",
             MUSIC_MENU_LOOP = "menu_loop.wav",
-            MUSIC_GAMEOVER = "gameover.mp3";
+            MUSIC_GAMEOVER = "gameover.mp3",
+            MUSIC_SAMSA = "samsa.wav";
 
     public final static double DEFAULT_VOLUME = 0.1;
 
-    private MediaPlayer runden1Intro, runden1Loop, runden2, runden3Intro, runden3Loop, menuIntro, menuLoop, gameover;
+    private MediaPlayer runden1Intro, runden1Loop, runden2, runden3Intro, runden3Loop, menuIntro, menuLoop, gameover, samsa;
 
     private MediaPlayer currentlyPlaying;
 
@@ -85,6 +86,12 @@ public class SoundEngine {
                 playMedia(runden3Loop);
                 currentlyPlaying = runden3Loop;
                 break;
+            case SAMSA:
+                playMedia(samsa);
+                currentlyPlaying = samsa;
+                nextSound = Sound.SAMSA;
+                break;
+            
         }
 
     }
@@ -127,6 +134,9 @@ public class SoundEngine {
 
         gameover = new MediaPlayer(MediaLoader.loadMedia(MUSIC_PATH + MUSIC_GAMEOVER));
         gameover.setVolume(DEFAULT_VOLUME);
+        
+        samsa = new MediaPlayer(MediaLoader.loadMedia(MUSIC_PATH + MUSIC_SAMSA));
+        samsa.setVolume(DEFAULT_VOLUME);
     }
 
    

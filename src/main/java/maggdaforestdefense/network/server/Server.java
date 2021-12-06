@@ -6,7 +6,7 @@
 package maggdaforestdefense.network.server;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
 import javafx.collections.ObservableMap;
 import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.storage.Logger;

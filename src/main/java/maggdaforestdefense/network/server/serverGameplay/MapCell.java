@@ -6,7 +6,6 @@
 package maggdaforestdefense.network.server.serverGameplay;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.PathCell;
 import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
 import maggdaforestdefense.storage.GameImage;

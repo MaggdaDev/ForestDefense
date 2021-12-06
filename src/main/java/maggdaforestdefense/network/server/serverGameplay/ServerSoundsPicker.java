@@ -65,7 +65,8 @@ public class ServerSoundsPicker {
         RUNDEN_3_LOOP,
         MENU_INTRO,
         MENU_LOOP,
-        GAMEOVER;
+        GAMEOVER,
+        SAMSA;
     }
     
     

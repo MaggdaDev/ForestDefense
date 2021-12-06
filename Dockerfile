@@ -1,4 +1,4 @@
-FROM adoptopenjdk:11-jdk-openj9 as build
+FROM eclipse-temurin:11-jdk as build
 
 COPY . /build
 WORKDIR /build
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 RUN cd updater/ && ./build-docker.sh
 
 #FROM adoptopenjdk:11-jdk-openj9
-FROM amazoncorretto:17
+FROM eclipse-temurin:17
 
 EXPOSE 27756
 

@@ -40,16 +40,13 @@ import maggdaforestdefense.network.server.ServerSocketHandler;
  */
 public class NetworkManager extends WebSocketClient {
 
-    
-
     private ClientCommandHandler commandHandler;
     private static NetworkManager instance;
     private UdpReceiver udpReceiver;
 
     private CountDownLatch waitLatch = new CountDownLatch(1);
-    
-    
-    
+
+    private static String customIp;
 
     public NetworkManager(URI serverURI) {
         super(serverURI);
@@ -86,7 +83,7 @@ public class NetworkManager extends WebSocketClient {
         //commandHandler.start();
         /*
         sendCommand(new NetworkCommand(NetworkCommand.CommandType.REQUIRE_CONNECTION, new CommandArgument[]{new CommandArgument("auth", new Gson().toJson(ConfigurationManager.getConfig().getAuth()))}));
-        */
+         */
     }
 
     @Override
@@ -96,7 +93,7 @@ public class NetworkManager extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        
+
         //Logger.debugClient("Received: " + message);
         commandHandler.onMessage(message);
     }
@@ -113,11 +110,12 @@ public class NetworkManager extends WebSocketClient {
     }
 
     /**
-     * Used by ClientCommandHandler to tell that it has completed the connection handshake.
+     * Used by ClientCommandHandler to tell that it has completed the connection
+     * handshake.
      */
     public void onReady(boolean isAuthenticated) {
         waitLatch.countDown();
-        if(isAuthenticated) {
+        if (isAuthenticated) {
             Logger.debugClient("Ready!");
         } else {
             Logger.logClient("Could not authenticate with the server.");
@@ -129,19 +127,28 @@ public class NetworkManager extends WebSocketClient {
         this.send(command.toString());
         //Logger.debugClient("Sent: " + command.toString());
     }
-    
+
     public void setInGame(boolean b) {
         commandHandler.setInGame(b);
     }
-    
+
     public ClientCommandHandler getCommandHandler() {
         return commandHandler;
     }
-    
+
+    public static void setCustomIP(String ip) {
+        customIp = ip;
+    }
 
     public static NetworkManager getInstance() {
         if (instance == null) {
-            String WS_STRING = maggdaforestdefense.MaggdaForestDefense.isDev() ? "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME : Server.WS_URL + Server.WS_FILENAME;
+
+            String WS_STRING;
+            if (customIp == null) {
+                WS_STRING = maggdaforestdefense.MaggdaForestDefense.isDev() ? "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME : Server.WS_URL + Server.WS_FILENAME;
+            } else {
+                WS_STRING = customIp;
+            }
             //String WS_STRING = "ws://localhost:" + Server.WS_PORT + "/" + Server.WS_FILENAME;
             Logger.debugClient("WebSocket URI is " + WS_STRING);
             try {

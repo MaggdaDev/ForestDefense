@@ -69,6 +69,8 @@ public class MaggdaForestDefense extends Application {
     private static Game game;
     
     private static SoundEngine soundEngine;
+    
+    private static String customIp = null;
 
     /**
      * Starts the program/GUI
@@ -129,7 +131,9 @@ public class MaggdaForestDefense extends Application {
         // Main
 
         // Networks
+        NetworkManager.setCustomIP(customIp);
         networkManager = NetworkManager.getInstance();
+        
         authenticationManager = AuthenticationManager.getInstance();
 
         // Graphics
@@ -160,6 +164,9 @@ public class MaggdaForestDefense extends Application {
             } else if (arg.equals("--dev")) {
                 isDev = true;
                 Logger.logClient("Development mode!");
+            } else if (arg.startsWith("--ip")) {
+                customIp = arg.split("=")[1];
+                Logger.logClient("Using custom IP: " + customIp);
             }
         }
 

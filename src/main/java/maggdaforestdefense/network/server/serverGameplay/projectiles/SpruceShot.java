@@ -76,11 +76,16 @@ public class SpruceShot extends ConstantFlightProjectile {
 
         damageObject = new Damage(this);
         setUpDamage();
+        ownerTower.getUpgrades().forEach((Upgrade upgrade) -> {
+            if (upgrade != Upgrade.SPRUCE_1_1) {
+                addUpgrade(upgrade);
+            }
+        });
     }
 
     private final void setUpDamage() {
         damageObject = new Damage(this);
-        
+
         dominierendeNadelnDamage = new Damage.NormalDamage(0);
         armorPierceDamage = new Damage.NormalDamage(0);
         basicDamage = new Damage.NormalDamage(DAMAGE);
@@ -125,44 +130,41 @@ public class SpruceShot extends ConstantFlightProjectile {
             mobsDamaged.add(target);
 
             if (isRiesenschreck) {       // RIESENSCHRECK UPGRADE
-                riesenschreckDamageMult.setMultiplier(1 + Math.min(target.getHP()/riesenschreckMaxhealth, 1.5));
+                riesenschreckDamageMult.setMultiplier(1 + Math.min(target.getHP() / riesenschreckMaxhealth, 1.5));
             }
-            
-            if(isArmorPierce) {         // ARMOR PIERCE UPGRADE
+
+            if (isArmorPierce) {         // ARMOR PIERCE UPGRADE
                 armorPierceDamage.setDamageVal(target.getArmor() * armorPierceDamageMult);
             }
-            
-            if(isFichtenForschung) {
-                fichtenForschungMultiplier.setMultiplier(1 + Math.sqrt(((Spruce)owner).getResearchStacks().get(target.getGameObjectType().name())));
+
+            if (isFichtenForschung) {
+                fichtenForschungMultiplier.setMultiplier(((Spruce) owner).getResearchMultiplierFor(target.getGameObjectType().name()));
             }
 
             notifyOwnerDamage(target.damage(damageObject));
             performUpgradesAfterCollision();
-            
-            
+
         }
-        
+
     }
 
     private void addUpgrade(Upgrade upgrade) {
         switch (upgrade) {
             case SPRUCE_1_1:    // nadelteilung
-                beforeCollision.add((o)-> {
-                        performNeedleSplit();
-                        beforeCollision.remove(this);
-
-                    }
+                beforeCollision.add((o) -> {
+                    performNeedleSplit();
+                    beforeCollision.remove(this);
+                }
                 );
                 break;
             case SPRUCE_1_3:           // Ruestungsdurchdringende Nadeln
                 isArmorPierce = true;
                 break;
             case SPRUCE_1_5:    // Nadelstaerkung
-                afterCollision.add((o)-> {
-                        performNeedlesStronger();
-                        afterCollision.remove(this);
+                afterCollision.add((o) -> {
+                    performNeedlesStronger();
+                    afterCollision.remove(this);
 
-                    
                 });
                 break;
             case SPRUCE_2_3:    // kritische nadeln
@@ -170,10 +172,9 @@ public class SpruceShot extends ConstantFlightProjectile {
                 criticalDamageMult.setCritMult(critMultiplier);
                 break;
             case SPRUCE_2_5:    // Erbarmungslose fichte
-                onKill.add((o)->{
-                        performErbarmungslos();
+                onKill.add((o) -> {
+                    performErbarmungslos();
 
-                    
                 });
                 break;
             case SPRUCE_3_3:   //RIESENSCHRECK

@@ -47,7 +47,7 @@ import maggdaforestdefense.util.Waiter;
  * @author David
  */
 public class ServerGame extends Thread {
-    public final static boolean DEBUG_MODE = false;
+    public final static boolean DEBUG_MODE = true;
     
     
 

@@ -38,13 +38,11 @@ public class WaveGenerator {
 
             int randIndex = (int) (Math.random() * mobs.length);
             
-            if(ServerGame.DEBUG_MODE) {
-                
-            } else {
+
                 if (round <= 5) {
                     randIndex = 0;
                 }
-            }
+            
             int amount = (int) (totStrength / strengths[randIndex]);
             if (amount > 10) {
                 amount = 5;

@@ -169,6 +169,9 @@ public class ClientCommandHandler {
             case EDIT_KOPFGELD:
                 Game.getInstance().editKopfgeld(command);
                 break;
+            case EDIT_FICHTENFORSCHUNG:
+                Game.getInstance().editFichtenforschung(command);
+                break;
             case NOTIFY_PLAYSPEED_CHANGE:
                 Game.getInstance().notifyPlayspeedChange(command);
                 break;

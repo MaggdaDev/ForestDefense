@@ -20,6 +20,7 @@ import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.GameMaths;
+import maggdaforestdefense.util.GsonConverter;
 import maggdaforestdefense.util.Randomizer;
 
 /**
@@ -45,7 +46,7 @@ public class Spruce extends Tower {
     public final static double FICHTEN_WUT_MULTIPLIER = 0.995;
     public final static double NADEL_STAERKUNG_MULT = 3;
     public final static double REGEN_ADD_FICHTENFREUNDSCHAFT = 0.1;
-    public final static double UPGRADE_LIFE_STEAL = 0.1;
+    public final static double UPGRADE_LIFE_STEAL = 0.05;
     public final static double RESEARCH_PROBABILITY = 0.1;
 
     // UPGRADE VARIABLES
@@ -66,6 +67,7 @@ public class Spruce extends Tower {
     private double aufruhrDerFichtenDamagePerSpruce = 0;
 
     private HashMap<String, Integer> researchStacks;
+    private boolean isResearchStacksUpdate = false;
 
     // multiplier
     public Spruce(ServerGame game, double x, double y) {
@@ -120,6 +122,12 @@ public class Spruce extends Tower {
                 shoot(target);
             }
         }
+        
+        if(isResearchStacksUpdate) {
+            serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.EDIT_FICHTENFORSCHUNG, new CommandArgument[]{
+            new CommandArgument("id", this.id),
+            new CommandArgument("hashmap", GsonConverter.toGsonString(researchStacks))}));
+        }
 
     }
 
@@ -141,7 +149,7 @@ public class Spruce extends Tower {
                             spruceCounter++;
                         }
                     });
-                    monoculturalMultiplier = Math.sqrt((double) spruceCounter);
+                    monoculturalMultiplier = 1 + (0.2 * (double) spruceCounter);
                 });
                 break;
             case SPRUCE_1_4:        // HOEHER WACHSEN
@@ -185,16 +193,24 @@ public class Spruce extends Tower {
                 });
                 break;
             case SPRUCE_3_4:        // fichtenforschung
+
                 onKill.add((obj) -> {
                     Mob killed = (Mob) obj;
                     GameObjectType type = killed.getGameObjectType();
 
                     Randomizer.performWithProb(() -> {
-                        researchStacks.replace(type.name(), researchStacks.get(type.name()) + 1);
-                        Logger.logServer("(Spruce): Added researchstack for: " + type.name());
+                        if (researchStacks.containsKey(type.name())) {
+                            researchStacks.replace(type.name(), researchStacks.get(type.name()) + 1);
+                            Logger.logServer("(Spruce): Added researchstack for: " + type.name());
+                             isResearchStacksUpdate = true;
+                        } else {
+                            Logger.logServer("(Spruce): Cant add research stack for: " + type.name());
+                        }
+                       
                     }, RESEARCH_PROBABILITY);
 
                 });
+                isResearchStacksUpdate = true;
                 break;
             case SPRUCE_3_6:        // aufruhr der fickten
                 onUpdate.add((o) -> {
@@ -234,8 +250,16 @@ public class Spruce extends Tower {
         return oldHealth - healthPoints;
     }
 
-    public HashMap<String, Integer> getResearchStacks() {
+    private HashMap<String, Integer> getResearchStacks() {
         return researchStacks;
+    }
+
+    public double getResearchMultiplierFor(String name) {
+        double add = 0;
+        if (researchStacks.containsKey(name)) {
+            add = 0.5 * Math.sqrt(researchStacks.get(name));
+        }
+        return 1 + add;
     }
 
 }

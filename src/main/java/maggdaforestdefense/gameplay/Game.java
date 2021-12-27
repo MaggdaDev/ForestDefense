@@ -24,6 +24,7 @@ import language.Deutsch;
 import language.Language;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientLorbeer;
+import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientSpruce;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.clientTowers.ClientTower;
 import maggdaforestdefense.network.CommandArgument;
@@ -304,7 +305,12 @@ public class Game {
         String id = command.getArgument("id");
         ((ClientLorbeer) gameObjects.get(id)).editKopfgeld(command);
     }
-
+    
+    public void editFichtenforschung(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientSpruce) gameObjects.get(id)).editFichtenforschung(command);
+    }
+    
     public void notifyPlayspeedChange(NetworkCommand command) {
         gameScreen.getEssenceMenu().notifyPlayspeedChange(command);
     }
@@ -324,5 +330,7 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
+
+    
 
 }

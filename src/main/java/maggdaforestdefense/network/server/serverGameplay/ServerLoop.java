@@ -70,6 +70,10 @@ public class ServerLoop {
         } catch (Exception e) {
 
         }
+        
+        if(ServerGame.DEBUG_MODE) { // DEBUG MODE
+            //currentWaveIndex = 19;
+        }
 
         while (running) {
 

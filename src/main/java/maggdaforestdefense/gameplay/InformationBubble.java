@@ -10,7 +10,9 @@ import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -20,6 +22,7 @@ import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.util.Randomizer;
 
 /**
@@ -38,11 +41,20 @@ public class InformationBubble extends Label {
     public InformationBubble(String text, InformationType type, double startX, double startY) {
         setLayoutX(startX);
         setLayoutY(startY);
-        setText(text);
+        if(type != InformationType.FICHTEN_FORSCHUNG) {
+            setText(text);
+        }
         switch(type) {
             case LORBEER: case GOLD:
                 setFont(new Font(22));
                 bigFact = 3;
+                break;
+            case FICHTEN_FORSCHUNG:
+                ImageView typeView = new ImageView(GameObjectType.valueOf(text).getImage());
+                typeView.setPreserveRatio(true);
+                typeView.setFitWidth(15);
+                typeView.setEffect(new DropShadow(5, Color.RED));
+                setGraphic(typeView);
                 break;
             default:
                 setFont(new Font(11));
@@ -82,7 +94,8 @@ public class InformationBubble extends Label {
         GOLD(Color.GOLD),
         TREE_HP(Color.RED),
         LORBEER(Color.BLACK),
-        MOB_HP(Color.BLUE);
+        MOB_HP(Color.BLUE),
+        FICHTEN_FORSCHUNG(Color.GREEN);
 
         private final Paint color;
 

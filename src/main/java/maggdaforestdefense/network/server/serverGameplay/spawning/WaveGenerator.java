@@ -61,7 +61,7 @@ public class WaveGenerator {
         if(ServerGame.DEBUG_MODE) {
            return (int) (200.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d)); 
         } else {
-        return (int) (2.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d));
+        return (int) (2.0d + (double) round + 0.12d * Math.pow((double) round, 3.0d));
         }
     }
 

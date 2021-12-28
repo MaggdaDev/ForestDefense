@@ -122,7 +122,7 @@ public class Lorbeer extends Tower {
                 range += 1;
                 break;
             case LORBEER_1_2:   // ERTRAGREICH
-                goldPerLorbeerUpgradeMult = (1.5 * goldPerLorbeer);
+                goldPerLorbeerUpgradeMult = (1.5);
                 goldPerLorbeer = (int) (DEFAULT_GOLD_PER_LORBEER * goldPerLorbeerUpgradeMult);
                 tauschhandelPow -= 0.1;
                 break;

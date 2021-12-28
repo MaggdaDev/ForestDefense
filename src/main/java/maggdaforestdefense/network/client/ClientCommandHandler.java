@@ -175,6 +175,9 @@ public class ClientCommandHandler {
             case NOTIFY_PLAYSPEED_CHANGE:
                 Game.getInstance().notifyPlayspeedChange(command);
                 break;
+            case UPDATE_SIMPLE_PERMA_STACKS:
+                Game.getInstance().updateSimplePermaStacks(command);
+                break;
         }
     }
 

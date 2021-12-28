@@ -25,6 +25,7 @@ import maggdaforestdefense.network.server.serverGameplay.EffectSet;
 import maggdaforestdefense.network.server.serverGameplay.GameObject;
 import maggdaforestdefense.network.server.serverGameplay.GameObjectType;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.SimplePermaStack;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
@@ -42,9 +43,11 @@ public class ClientSpruce extends ClientTower {
     public final static Tower.RangeType RANGE_TYPE = Spruce.RANGE_TYPE;
     private HashMap<String, Double> fichtenForschung;
     private FichtenForschungBox fichtenForschungBox;
+    private SimpleStacksBox rasendStacks;
     public ClientSpruce(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_SPRUCE_1, GameObjectType.T_SPRUCE, UpgradeSet.SPRUCE_SET, xIndex, yIndex, Spruce.DEFAULT_RANGE, Spruce.HEALTH, growingTime, RANGE_TYPE);
         fichtenForschungBox = new FichtenForschungBox();
+        rasendStacks = new SimpleStacksBox("Rasende Fichte: ", 1.0, "x");
     }
 
     @Override
@@ -94,11 +97,30 @@ public class ClientSpruce extends ClientTower {
     
     @Override
     public void buyUpgrade(int tier, int type) {
-        if (UpgradeSet.SPRUCE_SET.getUpgrade(tier, type) == Upgrade.SPRUCE_3_4) {
-            upgradeMenu.getTreePane().getChildren().add(fichtenForschungBox);
+        switch(UpgradeSet.SPRUCE_SET.getUpgrade(tier, type)) {
+            case SPRUCE_3_2:
+                addBoxToMenu(rasendStacks);
+                break;
+            case SPRUCE_3_4:
+                addBoxToMenu(fichtenForschungBox);
+                break;
         }
-        
         upgradeMenu.buyUpgrade(tier, type);
+    }
+    
+    @Override
+    public void updateSimplePermaStacks(NetworkCommand command) {
+        SimplePermaStack type = SimplePermaStack.values()[(int)command.getNumArgument("type")];
+        double value = command.getNumArgument("value");
+        switch(type) {
+            case SPRUCE_RASEND:
+                rasendStacks.updateLabel(0.1d * Math.round(10 * value));
+                generateSimplePermaStackInformationBubble();
+                break;
+            default:
+                Logger.errClient("Received illegal perma stack upgrade for spruce: " + type.name());
+                break;
+        }
     }
 
     public void editFichtenforschung(NetworkCommand command) {

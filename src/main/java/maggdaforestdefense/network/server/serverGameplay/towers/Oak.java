@@ -18,6 +18,7 @@ import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.*;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.SimplePermaStack;
 import maggdaforestdefense.storage.Logger;
 import maggdaforestdefense.util.UpgradeHandler;
 
@@ -42,6 +43,7 @@ public class Oak extends Tower {
     private double spontanErhaertungTimer = 0;
     private int eichelErnteCounter = 0;
     private Vector<Mob> eichelErnteMobs;
+    private int addEichelErnte = 0;
     // Upgrade const
     public final double HARTE_RINDE_ADD = 50;
     public final double ATTRACT_RANGE = 1.5;
@@ -50,7 +52,7 @@ public class Oak extends Tower {
     public final double VERBUNDENE_WURZELN_PERCENTAGE = 0.5;
     public final double TOTAL_REGEN_COOLDOWN = 60;
     public final double SPONTAN_ERHAERTUNG_COOLDOWN = 10;
-    public final double HEALTH_PER_EICHEL_ERNTE = 1;
+    public final double HEALTH_PER_EICHEL_ERNTE = 2;
     
 
     public Oak(ServerGame game, double x, double y) {
@@ -96,12 +98,19 @@ public class Oak extends Tower {
                     eichelErnteMobs.add((Mob)mob);
                     eichelErnteCounter++;
                     maxHealth += HEALTH_PER_EICHEL_ERNTE;
+                    addEichelErnte += HEALTH_PER_EICHEL_ERNTE;
+                    serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_SIMPLE_PERMA_STACKS, new CommandArgument[]{
+                        new CommandArgument("id", id),
+                        new CommandArgument("type", SimplePermaStack.OAK_EICHELERNTE.ordinal()),
+                        new CommandArgument("value", addEichelErnte)
+                    }));
                     for(int i = 0; i < eichelErnteMobs.size(); i++) {
                         Mob currMob = eichelErnteMobs.get(i);
                         if(!currMob.checkAlive()) {
                             eichelErnteMobs.remove(currMob);
                         }
                     }
+                    
                 }
             }
         });

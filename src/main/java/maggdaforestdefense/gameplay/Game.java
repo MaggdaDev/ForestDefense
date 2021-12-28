@@ -311,6 +311,11 @@ public class Game {
         ((ClientSpruce) gameObjects.get(id)).editFichtenforschung(command);
     }
     
+     public void updateSimplePermaStacks(NetworkCommand command) {
+        String id = command.getArgument("id");
+        ((ClientTower) gameObjects.get(id)).updateSimplePermaStacks(command);
+    }
+    
     public void notifyPlayspeedChange(NetworkCommand command) {
         gameScreen.getEssenceMenu().notifyPlayspeedChange(command);
     }
@@ -322,6 +327,10 @@ public class Game {
     public static void addGamePlayNode(Node node) {
         instance.getGameScreen().getGamePlayGroup().getChildren().add(node);
     }
+    
+    public static void generateInformationBubble(String text, InformationBubble.InformationType type, double xPos, double yPos) {
+        Game.addGamePlayNode(new InformationBubble(text, type, xPos, yPos));
+    }
 
     public static void removeGamePlayNode(Node node) {
         instance.getGameScreen().safeRemoveGameplayNode(node);
@@ -330,6 +339,8 @@ public class Game {
     public Vector<Upgrade> getLorbeerTrades() {
         return lorbeerTradingUpgrades;
     }
+
+   
 
     
 

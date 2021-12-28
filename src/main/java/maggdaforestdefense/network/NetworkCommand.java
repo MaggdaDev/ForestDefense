@@ -143,6 +143,7 @@ public class NetworkCommand {
         EDIT_TAUSCHHANDEL,  // 0/1 = remove/add ; upgrade id
         EDIT_KOPFGELD,      // id; kopfgeld object
         EDIT_FICHTENFORSCHUNG,  // id; fichtenforschung hashmap
+        UPDATE_SIMPLE_PERMA_STACKS, //id; type=ordinal of simplepermastacks-enum; value
         NEXT_WAVE, //wave
         DO_ESSENCE_ANIMATION, // id (of tower)
         UPDATE_READY_CHECK, // readycheck progress

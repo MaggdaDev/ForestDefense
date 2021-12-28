@@ -45,11 +45,12 @@ public class InformationBubble extends Label {
             setText(text);
         }
         switch(type) {
-            case LORBEER: case GOLD:
+            case LORBEER: case GOLD: case SIMPLE_PERMA_STACKS:
                 setFont(new Font(22));
                 bigFact = 3;
                 break;
             case FICHTEN_FORSCHUNG:
+                bigFact = 3;
                 ImageView typeView = new ImageView(GameObjectType.valueOf(text).getImage());
                 typeView.setPreserveRatio(true);
                 typeView.setFitWidth(15);
@@ -95,7 +96,8 @@ public class InformationBubble extends Label {
         TREE_HP(Color.RED),
         LORBEER(Color.BLACK),
         MOB_HP(Color.BLUE),
-        FICHTEN_FORSCHUNG(Color.GREEN);
+        FICHTEN_FORSCHUNG(Color.GREEN),
+        SIMPLE_PERMA_STACKS(Color.CYAN);
 
         private final Paint color;
 

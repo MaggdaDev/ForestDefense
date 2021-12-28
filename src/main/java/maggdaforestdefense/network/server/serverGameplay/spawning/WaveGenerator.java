@@ -61,7 +61,7 @@ public class WaveGenerator {
         if(ServerGame.DEBUG_MODE) {
            return (int) (200.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d)); 
         } else {
-        return (int) (2.0d + (double) round + 0.12d * Math.pow((double) round, 3.0d));
+        return (int) (2.0d + (double) round + 0.15d * Math.pow((double) round, 2.0d));
         }
     }
 
@@ -70,9 +70,9 @@ public class WaveGenerator {
             case M_BLATTLAUS:
                 return 1;
             case M_WANDERLAUFER:
-                return 8;
+                return 7;
             case M_HIRSCHKAEFER:
-                return 25;
+                return 20;
             case M_MARIENKAEFER:
                 return 5;
             case M_BORKENKAEFER:

@@ -15,6 +15,7 @@ import maggdaforestdefense.network.server.serverGameplay.ServerGame;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 import maggdaforestdefense.network.server.serverGameplay.UpgradeSet;
 import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.SimplePermaStack;
 import maggdaforestdefense.network.server.serverGameplay.mobs.Mob;
 import maggdaforestdefense.network.server.serverGameplay.projectiles.SpruceShot;
 import maggdaforestdefense.storage.GameImage;
@@ -190,6 +191,11 @@ public class Spruce extends Tower {
                 onKill.add((o) -> {
                     rasendeFichteKillCounter++;
                     rasendeFichteMultiplier = Math.sqrt(0.01 * (int) rasendeFichteKillCounter + 1.0d);
+                    serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.UPDATE_SIMPLE_PERMA_STACKS, new CommandArgument[]{
+                        new CommandArgument("id", id),
+                        new CommandArgument("type", SimplePermaStack.SPRUCE_RASEND.ordinal()),
+                        new CommandArgument("value", rasendeFichteMultiplier)
+                    }));
                 });
                 break;
             case SPRUCE_3_4:        // fichtenforschung

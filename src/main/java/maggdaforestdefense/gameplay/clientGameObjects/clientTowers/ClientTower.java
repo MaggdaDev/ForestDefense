@@ -9,6 +9,7 @@ import java.util.Vector;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
@@ -20,6 +21,7 @@ import maggdaforestdefense.gameplay.HealthBar;
 import maggdaforestdefense.gameplay.InformationBubble;
 import maggdaforestdefense.gameplay.clientGameObjects.ClientGameObject;
 import maggdaforestdefense.gameplay.clientGameObjects.ViewOrder;
+import maggdaforestdefense.gameplay.ingamemenus.ContentBox;
 import maggdaforestdefense.gameplay.ingamemenus.GrowingWaitingMenu;
 import maggdaforestdefense.gameplay.ingamemenus.UpgradeMenu;
 import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
@@ -167,6 +169,10 @@ public abstract class ClientTower extends ClientGameObject {
             onMatured();
         }
     }
+    
+    public void updateSimplePermaStacks(NetworkCommand command) {   // OVERRIDABLE
+        
+    }
 
     protected void onMatured() {        // OVERRIDABLE
 
@@ -275,6 +281,35 @@ public abstract class ClientTower extends ClientGameObject {
 
     public void addLorbeerTrade(Upgrade upgrade) {
         upgradeMenu.addLorbeerTrade(upgrade);
+    }
+    
+    protected void addBoxToMenu(ContentBox box) {
+        upgradeMenu.getTreePane().getChildren().add(box);
+    }
+    
+    protected class SimpleStacksBox extends ContentBox {
+        private Label label;
+        private String stacksName, suffix;
+        
+        public SimpleStacksBox(String stacksName, double startVal, String suffix) {
+            label = new Label();
+            this.stacksName = stacksName;
+            this.suffix = suffix;
+            updateLabel(startVal);
+            getChildren().add(label);
+        }
+        
+        public SimpleStacksBox(String stacksName, double startVal) {
+            this(stacksName, startVal, "");
+        }
+        
+        public void updateLabel(double newVal) {
+            label.setText(stacksName + newVal + suffix);
+        }
+    }
+    
+    protected void generateSimplePermaStackInformationBubble() {
+        Game.generateInformationBubble("+", InformationBubble.InformationType.SIMPLE_PERMA_STACKS, xPos + (MapCell.CELL_SIZE/2), yPos);
     }
 
 }

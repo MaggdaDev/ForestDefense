@@ -7,6 +7,8 @@ package maggdaforestdefense.gameplay.clientGameObjects.clientTowers;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import maggdaforestdefense.gameplay.Game;
+import maggdaforestdefense.gameplay.InformationBubble;
 import maggdaforestdefense.gameplay.playerinput.ActiveSkillActivator;
 import maggdaforestdefense.network.NetworkCommand;
 import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
@@ -18,6 +20,9 @@ import maggdaforestdefense.network.server.serverGameplay.towers.Oak;
 import maggdaforestdefense.storage.GameImage;
 import maggdaforestdefense.network.CommandArgument;
 import maggdaforestdefense.network.client.NetworkManager;
+import maggdaforestdefense.network.server.serverGameplay.MapCell;
+import maggdaforestdefense.network.server.serverGameplay.SimplePermaStack;
+import maggdaforestdefense.storage.Logger;
 
 /**
  *
@@ -26,6 +31,7 @@ import maggdaforestdefense.network.client.NetworkManager;
 public class ClientOak extends ClientTower{
     private double maxHealth;
     private ActiveSkillActivator totalRegenActivator, spontanErhaertungActivator;
+    private SimpleStacksBox eichelernteBox;
     public ClientOak(int id, int xIndex, int yIndex, double growingTime) {
         super(id, GameImage.TOWER_OAK_1, GameObjectType.T_OAK, UpgradeSet.OAK_SET, xIndex, yIndex, Oak.DEFAULT_RANGE, Oak.DEFAULT_HEALTH, growingTime, Oak.RANGE_TYPE);
 
@@ -40,6 +46,8 @@ public class ClientOak extends ClientTower{
             NetworkCommand command = new NetworkCommand(NetworkCommand.CommandType.PERFORM_ACTIVESKILL_TS, new CommandArgument[]{new CommandArgument("id", super.id), new CommandArgument("skill", ActiveSkill.OAK_SPONTANERHAERTUNG.ordinal())});
             NetworkManager.getInstance().sendCommand(command);
         });
+        
+        eichelernteBox = new SimpleStacksBox("Eichelernte: +", 0 , " HP");
     }
 
     @Override
@@ -101,13 +109,34 @@ public class ClientOak extends ClientTower{
     
     @Override
     public void buyUpgrade(int tier, int type) {
-        if(UpgradeSet.OAK_SET.getUpgrade(tier, type) == Upgrade.OAK_3_1){
-            addActiveSkill(totalRegenActivator);
-        }
-        if(UpgradeSet.OAK_SET.getUpgrade(tier, type) == Upgrade.OAK_3_3) {  // SPONTANERHAERTUNG
-            addActiveSkill(spontanErhaertungActivator);
+        switch(UpgradeSet.OAK_SET.getUpgrade(tier, type)) {
+            case OAK_3_1:
+                addActiveSkill(totalRegenActivator);
+                break;
+            case OAK_3_3:
+                addActiveSkill(spontanErhaertungActivator);
+                break;
+            case OAK_3_4:
+                addBoxToMenu(eichelernteBox);
+                break;
         }
         upgradeMenu.buyUpgrade(tier, type);
+    }
+    
+    
+    @Override
+    public void updateSimplePermaStacks(NetworkCommand command) {
+        SimplePermaStack type = SimplePermaStack.values()[(int)command.getNumArgument("type")];
+        double value = command.getNumArgument("value");
+        switch(type) {
+            case OAK_EICHELERNTE:
+                eichelernteBox.updateLabel(Math.round(value));
+                generateSimplePermaStackInformationBubble();
+                break;
+            default:
+                Logger.errClient("Received illegal perma stack upgrade for spruce: " + type.name());
+                break;
+        }
     }
     
 }

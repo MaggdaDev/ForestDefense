@@ -264,12 +264,10 @@ public class Oak extends Tower {
         int counter = 1;
         while(true) {
             if(xIndex + counter >= serverGame.getMap().getCells().length) {
-      
                 break;
             }
             MapCell currentCell = serverGame.getMap().getCells()[xIndex + counter][yIndex];
             if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
-           
                 break;
             }
             hAmount ++;
@@ -282,8 +280,7 @@ public class Oak extends Tower {
                 break;
             }
             MapCell currentCell = serverGame.getMap().getCells()[xIndex - counter][yIndex];
-            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {
-                
+            if(currentCell.getTower() == null || !(currentCell.getTower() instanceof Oak) || ((Oak)currentCell.getTower()).isInWall()) {  
                 break;
             }
             hAmount ++;

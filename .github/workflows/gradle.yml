@@ -24,3 +24,8 @@ jobs:
         distribution: 'adopt'
     - name: Build with Gradle
       run: ./gradlew fatJar
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Forest Defense
+        path: build/libs/ForestDefense-all-app.jar

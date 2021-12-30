@@ -22,10 +22,40 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+        
     - name: Build with Gradle
       run: ./gradlew fatJar
+      
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Forest Defense
+        name: ForestDefense
         path: build/libs/ForestDefense-all-app.jar
+        
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      
+    - name: Delete Release
+      uses: ame-yu/action-delete-latest-release@v2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: 1.0
+        release_name: Main Release
+        body: Main Release
+        
+    - name: Upload Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ForestDefense/ForestDefense-all-app.jar
+        asset_name: ForestDefense.jar
+        asset_content_type: application/java-archive

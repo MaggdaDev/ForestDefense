@@ -26,15 +26,6 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew fatJar
       
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: ForestDefense
-        path: build/libs/ForestDefense-all-app.jar
-        
-    - name: Download Artifacts
-      uses: actions/download-artifact@v2
-      
     - name: Delete Release
       uses: ame-yu/action-delete-latest-release@v2
       with:
@@ -56,6 +47,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ForestDefense/ForestDefense-all-app.jar
+        asset_path: build/libs/ForestDefense-all-app.jar
         asset_name: ForestDefense.jar
         asset_content_type: application/java-archive

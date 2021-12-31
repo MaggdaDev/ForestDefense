@@ -43,7 +43,7 @@ public class Lorbeer extends Tower {
     public final static double DEFAULT_RANGE = 2;
     public final static double DEFAULT_GROWING_TIME = 30;
     public final static RangeType RANGE_TYPE = RangeType.SQUARED;
-    public final static double DEFAULT_DAMAGE = 10;
+    public final static double DEFAULT_DAMAGE = 15;
     public final static int DEFAULT_MAX_LORBEERS = 10;
     public final static int DEFAULT_GOLD_PER_LORBEER = 25;
 
@@ -59,6 +59,7 @@ public class Lorbeer extends Tower {
     private Vector<CommandArgument> updateCommandArgs;
 
     //UPGRADES
+    private final static double ERTRAGREICHE_ERNTE_MULT = 1.4d;
     private double goldPerLorbeerUpgradeMult = 1;
 
     private Damage.NormalDamage executiveDamage;
@@ -122,7 +123,7 @@ public class Lorbeer extends Tower {
                 range += 1;
                 break;
             case LORBEER_1_2:   // ERTRAGREICH
-                goldPerLorbeerUpgradeMult = (1.5);
+                goldPerLorbeerUpgradeMult = ERTRAGREICHE_ERNTE_MULT;
                 goldPerLorbeer = (int) (DEFAULT_GOLD_PER_LORBEER * goldPerLorbeerUpgradeMult);
                 tauschhandelPow -= 0.1;
                 break;
@@ -203,7 +204,7 @@ public class Lorbeer extends Tower {
         }
 
         if (isKopfgeld) {
-            if (headHunt.isUpdate()) {
+            if (headHunt != null && headHunt.isUpdate()) {
                 sendKopfgeldUpdate();
             }
         } else {

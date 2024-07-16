@@ -26,7 +26,7 @@ public class Deutsch extends Language{  // HALLE
         
         
     // Upgrade description
-    UPGRADE_DESCRIPTION_SPURCE_1_1 = "Nadel Teilung: Trifft eine Nadel auf einen Gegner, teilt sich die Nadel in weitere Nadeln auf, die sich allerdings nicht weiter aufteilen.";
+    UPGRADE_DESCRIPTION_SPURCE_1_1 = "Nadelteilung: Trifft eine Nadel auf einen Gegner, teilt sich die Nadel in weitere Nadeln auf, die sich allerdings nicht weiter aufteilen.";
     UPGRADE_DESCRIPTION_SPURCE_1_2 = "Fichten-Monokultur: Je mehr Fichten auf der Karte sind, desto schneller schießt die Fichte.";
     UPGRADE_DESCRIPTION_SPURCE_1_3 = "Rüstungsdurchdringende Nadeln: Fichte verursacht mehr Schaden an Gegnern mit Rüstung.";
     UPGRADE_DESCRIPTION_SPURCE_1_4 = "Höher Wachsen: Kann fliegende Gegner treffen.";
@@ -54,9 +54,9 @@ public class Deutsch extends Language{  // HALLE
     
     UPGRADE_DESCRIPTION_MAPLE_2_1 = "Eskalation: Stehen viele Gegner in der Reichweite des Ahorns, aktiviert dieser Eskalation und schießt für eine beschränkte Zeit schneller.";
     UPGRADE_DESCRIPTION_MAPLE_2_2 = "Aufladen: Nachdem der Ahorn eine bestimmte Zeit nicht angegriffen hat, macht der erste Angriff mehr Schaden.";
-    UPGRADE_DESCRIPTION_MAPLE_2_3 = "Erschöpfende Blätter: Von Ahorn getroffene Gegner bekommen mehr Schaden aus allen Quellen.";
+    UPGRADE_DESCRIPTION_MAPLE_2_3 = "Erschöpfende Blätter: Vom Ahorn getroffene Gegner bekommen mehr Schaden aus allen Quellen.";
     
-    UPGRADE_DESCRIPTION_MAPLE_3_1 = "Zerschmetternde Blätter: Anstatt Schaden zu verursachen, zerstört der Ahorn die Entsprechende Menge an Rüstungspunkten bei Gegnern permanent.";
+    UPGRADE_DESCRIPTION_MAPLE_3_1 = "Zerschmetternde Blätter: Anstatt Schaden zu verursachen, zerstört der Ahorn die entsprechende Menge an Rüstungspunkten bei Gegnern permanent.";
     UPGRADE_DESCRIPTION_MAPLE_3_2 = "Reißende Blätter: Jeder Gegner lässt die Blätter etwas weiter fliegen ";
     UPGRADE_DESCRIPTION_MAPLE_3_3 = "Zerlegende Blätter: Pro getroffenem Gegner wird die Abklingzeit für den nächsten Schuss verringert.";
     
@@ -69,26 +69,26 @@ public class Deutsch extends Language{  // HALLE
     UPGRADE_DESCRIPTION_LORBEER_2_1 = "Brutale Ernte: Je mehr Lebenspunkte der Gegner schon verloren hat, desto mehr Schaden wird verursacht.";
     UPGRADE_DESCRIPTION_LORBEER_2_2 = "Ernterausch: Werden viele gegner auf einmal getötet, so wird die Wartezeit zur nächsten Attacke halbiert.";
     UPGRADE_DESCRIPTION_LORBEER_2_3 = "Massenproduktion: Je mehr Lorbeeren auf einmal verkauft werden, desto mehr Geld erhält man für diese.";
-    UPGRADE_DESCRIPTION_LORBEER_2_4 = "Wiederverwertung: Vom lorbeerbaum verletzte aber nicht getötete Gegner, geben beim Tod mehr Geld.";
+    UPGRADE_DESCRIPTION_LORBEER_2_4 = "Wiederverwertung: Vom Lorbeerbaum verletzte, aber nicht getötete Gegner geben beim Tod mehr Geld.";
             
     UPGRADE_DESCRIPTION_LORBEER_3_1 = "Automatische Ernte: Kann ein Gegner in Reichweite getötet werden, so wird die Attacke automatisch aktiviert.";
-    UPGRADE_DESCRIPTION_LORBEER_3_2 = "Prestige Ernte: Befindet sich die maximale Anzahl an ungeernteten Lorbeeren am Baum, so können diese in eine Verbesserung für diesen Baum umgewandelt werden, welche den Ertrag für geernteten Lorbeeren um 20% erhöht.";
-    UPGRADE_DESCRIPTION_LORBEER_3_3 = "Kopfgeld Ernte: Für die Erfüllung bestimmter Aufträge wird die maximalanzahl an Lorbeeren produziert.";
+    UPGRADE_DESCRIPTION_LORBEER_3_2 = "Prestige-Ernte: Befindet sich die maximale Anzahl an ungeernteten Lorbeeren am Baum, so können diese in eine Verbesserung für diesen Baum umgewandelt werden, welche den Ertrag geernteter Lorbeeren um 20% erhöht.";
+    UPGRADE_DESCRIPTION_LORBEER_3_3 = "Kopfgeld-Ernte: Für die Erfüllung bestimmter Aufträge wird die Maximalanzahl an Lorbeeren produziert.";
     UPGRADE_DESCRIPTION_LORBEER_3_4 = "Tauschhandel: Befindet sich die maximale Anzahl an Lorbeeren am Baum, so können diese gegen eine zufällige Verbesserung eines Baums eingetauscht werden.";
     
     
     UPGRADE_DESCRIPTION_OAK_1_1 = "Harte Rinde: Die Eiche hat mehr Lebenspunkte.";
-    UPGRADE_DESCRIPTION_OAK_1_2 = "Leckere Eicheln: Fliegende Gegner bevorzugen die Eiche vor anderen Bäumen um von den leckeren Eicheln zu kosten.";
-    UPGRADE_DESCRIPTION_OAK_1_3 = "Leckere Wurzeln: Grabende Gegner bevorzugen die Eiche vor anderen Bäumen um von den leckeren Wurzeln zu kosten.";
+    UPGRADE_DESCRIPTION_OAK_1_2 = "Leckere Eicheln: Fliegende Gegner bevorzugen die Eiche vor anderen Bäumen, um von den leckeren Eicheln zu kosten.";
+    UPGRADE_DESCRIPTION_OAK_1_3 = "Leckere Wurzeln: Grabende Gegner bevorzugen die Eiche vor anderen Bäumen, um von den leckeren Wurzeln zu kosten.";
     UPGRADE_DESCRIPTION_OAK_1_4 = "Raue Rinde: Gegner, die die Eiche angreifen, erleiden mehr Schaden.";
             
     UPGRADE_DESCRIPTION_OAK_2_1 = "Auffrischung: Am Ende einer Runde füllt die Eiche ihre Lebenspunkte wieder auf.";
-    UPGRADE_DESCRIPTION_OAK_2_2 = "Frische Quelle: Steht die Eiche am Wasser regeneriert sie sich um einen Prozentsatz ihrer Leben.";
-    UPGRADE_DESCRIPTION_OAK_2_3 = "Soziale Eiche: Die Eiche spendet Bäume in ihrer Umgebung Leben, sollten diese angegriffen werden.";
+    UPGRADE_DESCRIPTION_OAK_2_2 = "Frische Quelle: Steht die Eiche am Wasser, regeneriert sie sich um einen Prozentsatz ihrer Leben.";
+    UPGRADE_DESCRIPTION_OAK_2_3 = "Soziale Eiche: Die Eiche spendet Bäumen in ihrer Umgebung Leben, sollten diese angegriffen werden.";
     UPGRADE_DESCRIPTION_OAK_2_4 = "Verbundene Wurzeln: Die Eiche heilt sich um einen kleinen Teil des Schadens, den andere Eichen erleiden.";
             
     UPGRADE_DESCRIPTION_OAK_3_1 = "Totalregeneration: Fähigkeit: füllt die Lebenspunkte der Eiche komplett auf.";
-    UPGRADE_DESCRIPTION_OAK_3_2 = "Eichenwall: Eichen in einer Reihe verbinden sich zu einem Wall; Erlittener Schaden wird dann auf alle eichen aufgeteilt.";
+    UPGRADE_DESCRIPTION_OAK_3_2 = "Eichenwall: Eichen in einer Reihe verbinden sich zu einem Wall; Erlittener Schaden wird dann auf alle Eichen aufgeteilt.";
     UPGRADE_DESCRIPTION_OAK_3_3 = "Spontane Erhärtung: Fähigkeit: Der nächste Angriff eines Gegners verursacht keinen Schaden.";
     UPGRADE_DESCRIPTION_OAK_3_4 = "Eichelernte: Für jeden neuen Gegner, der die Eiche angreift, erhält diese maximale Lebenspunkte dazu.";
 

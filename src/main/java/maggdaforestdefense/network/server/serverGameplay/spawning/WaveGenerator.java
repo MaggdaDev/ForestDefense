@@ -61,7 +61,7 @@ public class WaveGenerator {
         if(ServerGame.DEBUG_MODE) {
            return (int) (200.0d + (double) round + 0.12d * Math.pow((double) round, 2.0d)); 
         } else {
-        return (int) (2.0d + (double) round + 0.15d * Math.pow((double) round, 2.0d));
+        return (int) (2.0d + 0.9 * (double) round + 0.13d * Math.pow((double) round, 2.2d));
         }
     }
 
@@ -77,6 +77,8 @@ public class WaveGenerator {
                 return 5;
             case M_BORKENKAEFER:
                 return 10;
+            case M_BOSS_CATERPILLAR:
+                return 300;
             default:
                 throw new UnsupportedOperationException();
         }

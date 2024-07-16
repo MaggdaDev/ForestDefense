@@ -40,7 +40,7 @@ public abstract class GameObject {
 
     protected final int id;
     protected final GameObjectType gameObjectType;
-    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER, GameObjectType.M_BORKENKAEFER};
+    private static GameObjectType[] mobs = new GameObjectType[]{GameObjectType.M_BLATTLAUS, GameObjectType.M_HIRSCHKAEFER, GameObjectType.M_WANDERLAUFER, GameObjectType.M_MARIENKAEFER, GameObjectType.M_BORKENKAEFER, GameObjectType.M_BOSS_CATERPILLAR};
 
     public GameObject(int id, GameObjectType t) {
         this.id = id;

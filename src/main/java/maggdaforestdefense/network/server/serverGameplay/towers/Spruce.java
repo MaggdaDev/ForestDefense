@@ -150,7 +150,7 @@ public class Spruce extends Tower {
                             spruceCounter++;
                         }
                     });
-                    monoculturalMultiplier = 1 + (0.2 * (double) spruceCounter);
+                    monoculturalMultiplier = 1 + (0.2 * Math.sqrt(spruceCounter));
                 });
                 break;
             case SPRUCE_1_4:        // HOEHER WACHSEN

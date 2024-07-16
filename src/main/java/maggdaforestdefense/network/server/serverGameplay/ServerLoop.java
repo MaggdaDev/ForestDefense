@@ -77,7 +77,7 @@ public class ServerLoop {
 
         while (running) {
 
-            if (currentWaveIndex == 19) {
+            if (currentWaveIndex == 29) {
                 currentWave = waveGenerator.generateBossWave();
             } else {
                 currentWave = waveGenerator.generateWave(currentWaveIndex);
@@ -99,7 +99,7 @@ public class ServerLoop {
 
             serverGame.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NEXT_WAVE, new CommandArgument[]{new CommandArgument("wave", currentWaveIndex + 1)}));
 
-            if ((currentWaveIndex + 1) % 5 == 0) {
+            if ((currentWaveIndex + 1) % 4 == 0) {
                 serverGame.increaseMaxEssence(1);
             }
 

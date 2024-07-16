@@ -28,8 +28,8 @@ import maggdaforestdefense.util.UpgradeHandler;
  */
 public class Oak extends Tower {
 
-    public final static int DEFAULT_PRIZE = 150;
-    public final static double DEFAULT_HEALTH = 100, DEFAULT_REGEN = 0.1, DEFAULT_RANGE = 0, GROWING_TIME = 15;
+    public final static int DEFAULT_PRIZE = 100;
+    public final static double DEFAULT_HEALTH = 250, DEFAULT_REGEN = 1, DEFAULT_RANGE = 0, GROWING_TIME = 15;
     public final static RangeType RANGE_TYPE = RangeType.CIRCLE;
 
     //Upgrade var
@@ -47,12 +47,12 @@ public class Oak extends Tower {
     // Upgrade const
     public final double HARTE_RINDE_ADD = 50;
     public final double ATTRACT_RANGE = 1.5;
-    public final double REGEN_PER_WATER_ADD = 0.3;
+    public final double REGEN_PER_WATER_ADD = 5;
     public final double SOZIAL_PERCENTAGE_OF_DAMAGE = 0.5;
     public final double VERBUNDENE_WURZELN_PERCENTAGE = 0.5;
-    public final double TOTAL_REGEN_COOLDOWN = 60;
+    public final double TOTAL_REGEN_COOLDOWN = 200;
     public final double SPONTAN_ERHAERTUNG_COOLDOWN = 10;
-    public final double HEALTH_PER_EICHEL_ERNTE = 2;
+    public final double HEALTH_PER_EICHEL_ERNTE = 10;
     
 
     public Oak(ServerGame game, double x, double y) {

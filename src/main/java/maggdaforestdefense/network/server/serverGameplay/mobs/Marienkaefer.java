@@ -17,7 +17,7 @@ import maggdaforestdefense.network.server.serverGameplay.mobs.pathFinding.MapDis
  * @author David
  */
 public class Marienkaefer extends Bug{
-    public final static double HP = 100, SPEED = 100, DAMAGE = 10, ATTACK_TIME = 1, ARMOR = 0;
+    public final static double HP = 150, SPEED = 100, DAMAGE = 10, ATTACK_TIME = 1, ARMOR = 0;
     public final static int TOWER_VISION_RANGE = 3;
     public final static int DIRT_DISTANCE_WEIGHT = 1, WATER_DISTANCE_WEIGHT = 1, SAND_DISTANCE_WEIGHT = 100, STONE_DISTANCE_WEIGHT = 200;
     public final static Mob.MovementType MOVEMENT_TYPE = Mob.MovementType.WALK;

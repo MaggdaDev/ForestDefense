@@ -51,7 +51,7 @@ public class ServerGame extends Thread {
     
     
 
-    public static int START_COINS = 100, START_ESSENCE = 3;
+    public static int START_COINS = 100, START_ESSENCE = 2;
 
     // MANAGEMENT
     private final String name;

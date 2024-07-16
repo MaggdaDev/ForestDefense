@@ -26,7 +26,7 @@ public class MapleShot extends Projectile {
 
     public final static double WIDTH = 10;
     public final static double DAMAGE = 30;
-    private double EXPANSION = 500;
+    private double EXPANSION = 400;
 
     private double xPos, yPos;
     private double currentRadius;
@@ -68,7 +68,7 @@ public class MapleShot extends Projectile {
         this.xPos = xPos;
         this.yPos = yPos;
         this.serverGame = serverGame;
-        this.maxRadius = range * MapCell.CELL_SIZE;
+        this.maxRadius = 1.1*range * MapCell.CELL_SIZE;
         this.mobsInRange = mobsInRange;
 
         donutHitBox = (HitBox.DonutHitBox) super.hitBox;
@@ -109,7 +109,7 @@ public class MapleShot extends Projectile {
             }
 
             if (isGnadenlos) {
-                maxRadius += GNADENLOS_RANGE_PER_ENEMY_HIT * MapCell.CELL_SIZE;
+                maxRadius += 1.1 * GNADENLOS_RANGE_PER_ENEMY_HIT * MapCell.CELL_SIZE;
             }
 
             if (isZerschmetternd) {

@@ -40,7 +40,6 @@ import maggdaforestdefense.network.server.serverGameplay.ActiveSkill;
 import maggdaforestdefense.network.server.serverGameplay.Upgrade;
 
 /**
- *
  * @author David
  */
 public class ServerSocketHandler implements Runnable, Stoppable {
@@ -75,12 +74,12 @@ public class ServerSocketHandler implements Runnable, Stoppable {
 
         Logger.debugServer("New ServerSocketHandler created");
         useUDP = udp != null;
-        if(useUDP) {
-            
-        udpSocket = udp;
-        udpByteBuffer = new byte[byteBufferLength];
-        udpPacket = new DatagramPacket(udpByteBuffer, byteBufferLength, new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), Server.CLIENT_UDP_PORT));
-        Logger.logServer("UDP set up");
+        if (useUDP) {
+
+            udpSocket = udp;
+            udpByteBuffer = new byte[byteBufferLength];
+            udpPacket = new DatagramPacket(udpByteBuffer, byteBufferLength, new InetSocketAddress(conn.getRemoteSocketAddress().getHostName(), Server.CLIENT_UDP_PORT));
+            Logger.logServer("UDP set up");
         }
     }
 
@@ -199,7 +198,7 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 }
 
                 break;
-                
+
             case REMOVE_WAITING_PLAYER:
                 game.removePlayer(owner);
                 break;
@@ -219,15 +218,17 @@ public class ServerSocketHandler implements Runnable, Stoppable {
                 int upgradeType = (int) command.getNumArgument("type");
                 game.buyUpgrade(id, tier, upgradeType);
                 break;
-                
+
             case REQUEST_PLAYSPEED_CHANGE:
-                int playspeedId = (int)command.getNumArgument("speedId");
+                int playspeedId = (int) command.getNumArgument("speedId");
                 game.editPlayspeed(playspeedId);
                 game.sendCommandToAllPlayers(new NetworkCommand(NetworkCommand.CommandType.NOTIFY_PLAYSPEED_CHANGE, new CommandArgument[]{new CommandArgument("speedId", playspeedId)}));
                 break;
             case READY_FOR_NEXT_ROUND:
-                owner.setReadyForNextRound(true);
-                game.updateReadyProgress();
+                synchronized (this) {
+                    owner.setReadyForNextRound(true);
+                    game.updateReadyProgress();
+                }
                 break;
 
             case REQUEST_ESSENCE_TOWER:

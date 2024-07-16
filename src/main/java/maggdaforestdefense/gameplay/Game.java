@@ -88,8 +88,9 @@ public class Game {
         gameLoop.setGameRunning(true);
 
         // Key Events
-        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().setOnKeyPressed((KeyEvent event) -> {
+        maggdaforestdefense.MaggdaForestDefense.getInstance().getScene().addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             handleKeyEvent(event.getCode());
+            event.consume();
         });
 
         // EASTER EGG SAMSA

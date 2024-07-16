@@ -24,7 +24,7 @@ import maggdaforestdefense.network.server.serverGameplay.towers.Tower;
  */
 public class MapleShot extends Projectile {
 
-    public final static double WIDTH = 10;
+    public final static double WIDTH = 30;
     public final static double DAMAGE = 30;
     private double EXPANSION = 400;
 
@@ -59,7 +59,7 @@ public class MapleShot extends Projectile {
 
     //upgrade constants
     public final static double MAX_AUSBAU_MULTIPLIER = 2;
-    public final static double GNADENLOS_RANGE_PER_ENEMY_HIT = 1;
+    public final static double GNADENLOS_RANGE_PER_ENEMY_HIT = 0.5;
     public final static double ERSCHOEPFEND_DURATION = 3;
 
     public MapleShot(int id, double xPos, double yPos, Tower owner, Tower.CanAttackSet attackSet, ServerGame serverGame, int mobsInRange, double range) {

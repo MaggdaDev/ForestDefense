@@ -165,28 +165,28 @@ public class ServerGame extends Thread {
     public void spawnMob(Spawnable toSpawn) {
         switch (toSpawn.getType()) {
             case M_BORKENKAEFER:
-                addMob(new Borkenkaefer(this));
+                addMob(new Borkenkaefer(this, serverLoop.getCurrentWaveIndex()));
                 break;
             case M_HIRSCHKAEFER:
-                addMob(new Hirschkaefer(this));
+                addMob(new Hirschkaefer(this, serverLoop.getCurrentWaveIndex()));
                 break;
             case M_SCHWIMMKAEFER:
                 addMob(new Schwimmkaefer(this));
                 break;
             case M_WANDERLAUFER:
-                addMob(new Wanderlaeufer(this));
+                addMob(new Wanderlaeufer(this, serverLoop.getCurrentWaveIndex()));
                 break;
             case M_WASSERLAEUFER:
                 addMob(new Wasserlaeufer(this));
                 break;
             case M_BLATTLAUS:
-                addMob(new Blattlaus(this));
+                addMob(new Blattlaus(this, serverLoop.getCurrentWaveIndex()));
                 break;
             case M_MARIENKAEFER:
-                addMob(new Marienkaefer(this));
+                addMob(new Marienkaefer(this, serverLoop.getCurrentWaveIndex()));
                 break;
             case M_BOSS_CATERPILLAR:
-                addMob(new Caterpillar(this));
+                addMob(new Caterpillar(this, serverLoop.getCurrentWaveIndex()));
                 break;
             default:
                 throw new UnsupportedOperationException();

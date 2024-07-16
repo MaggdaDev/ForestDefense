@@ -28,6 +28,10 @@ public abstract class Bug extends Mob {
         findStartPos();
     }
 
+    protected static double calculateHpWaveFactor(int waveIndex) {
+        return Math.sqrt(0.4 * waveIndex + 1);
+    }
+
     @Override
     public CommandArgument[] toNetworkCommandArgs() {
         return new CommandArgument[]{new CommandArgument("x", String.valueOf(xPos)),

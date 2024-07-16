@@ -43,7 +43,7 @@ public class Maple extends Tower {
     public final static double BUND_DER_AHORNE_RANGE = 2, BUND_DER_AHORNE_ADD = 0.5;
     public final static double ZERLEGEND_SHOOTTIMER_PRCT_OF_MISSING = 0.1;
     public final static double ESCALATION_FACT = 4;
-    public final static double CHARGED_FACT = 5;
+    public final static double CHARGED_FACT = 3.5;
     public final static double CHARGED_COOLDOWN = 10;
     public final static double ESCALATION_COOLDOWN = 20, ESCALATION_DURATION = 4, ESCALATION_MOB_AMAOUNT = 5;
 

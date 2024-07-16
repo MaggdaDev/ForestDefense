@@ -77,7 +77,7 @@ public class ServerLoop {
 
         while (running) {
 
-            if (currentWaveIndex == 29) {
+            if (currentWaveIndex == 19) {
                 currentWave = waveGenerator.generateBossWave();
             } else {
                 currentWave = waveGenerator.generateWave(currentWaveIndex);
@@ -178,6 +178,10 @@ public class ServerLoop {
 
     public boolean isInWave() {
         return isInWave;
+    }
+
+    public int getCurrentWaveIndex() {
+        return currentWaveIndex;
     }
 
 }

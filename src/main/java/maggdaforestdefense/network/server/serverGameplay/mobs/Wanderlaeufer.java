@@ -22,8 +22,8 @@ public class Wanderlaeufer extends Bug {
 
     public final static MapDistanceSet MAP_DISTANCES = new MapDistanceSet(WATER_DISTANCE_WEIGHT, SAND_DISTANCE_WEIGHT, DIRT_DISTANCE_WEIGHT, STONE_DISTANCE_WEIGHT);
 
-    public Wanderlaeufer(ServerGame serverGame) {
-        super(serverGame, HP, SPEED, TOWER_VISION_RANGE, DAMAGE, ATTACK_TIME, MAP_DISTANCES, ARMOR, MOVEMENT_TYPE, GameObjectType.M_WANDERLAUFER);
+    public Wanderlaeufer(ServerGame serverGame, int waveIndex) {
+        super(serverGame, HP * Bug.calculateHpWaveFactor(waveIndex), SPEED, TOWER_VISION_RANGE, DAMAGE, ATTACK_TIME, MAP_DISTANCES, ARMOR, MOVEMENT_TYPE, GameObjectType.M_WANDERLAUFER);
     }
     
 

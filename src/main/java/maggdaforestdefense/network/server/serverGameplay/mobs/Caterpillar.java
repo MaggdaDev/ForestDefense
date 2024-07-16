@@ -55,9 +55,9 @@ public class Caterpillar extends Mob {
     private double attackTime = 2 * Math.PI / omega;
     private double attackTimer = 0;
 
-    public Caterpillar(ServerGame game) {
+    public Caterpillar(ServerGame game, int waveIndex) {
         super(game, GameObjectType.M_BOSS_CATERPILLAR,
-                START_HP, DEFAULT_SPEED, new HitBox.CircularHitBox(HITBOX_RADIUS, 0, 0), TOWER_VISION_RANGE, DEFAULT_DAMAGE, DEFAULT_ATTACK_TIME, DISTANCE_SET,
+                START_HP * Bug.calculateHpWaveFactor(waveIndex - 18), DEFAULT_SPEED, new HitBox.CircularHitBox(HITBOX_RADIUS, 0, 0), TOWER_VISION_RANGE, DEFAULT_DAMAGE, DEFAULT_ATTACK_TIME, DISTANCE_SET,
                 DEFAULT_ARMOR, MovementType.WALK);
         findStartPos();
         length = MIN_TOTAL_LENGTH;

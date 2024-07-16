@@ -14,10 +14,10 @@ import javafx.scene.image.Image;
 public enum GameImage {
 
     // Map Cells
-    MAP_CELL_SAND("maggdaforestdefense/map_cells/sand.png"),
-    MAP_CELL_WATER("maggdaforestdefense/map_cells/water.png"),
-    MAP_CELL_STONE("maggdaforestdefense/map_cells/stone.png"),
-    MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirt.png"),
+    MAP_CELL_SAND("maggdaforestdefense/map_cells/sandAlex.png"),
+    MAP_CELL_WATER("maggdaforestdefense/map_cells/waterAlex.png"),
+    MAP_CELL_STONE("maggdaforestdefense/map_cells/stoneAlex.png"),
+    MAP_CELL_DIRT("maggdaforestdefense/map_cells/dirtAlex.png"),
     MAP_CELL_BASE("maggdaforestdefense/map_cells/base.png"),
     // Mobs
     MOB_BOSS_CATERPILLAR_1("maggdaforestdefense/mobs/boss1/raupe_1.png"),

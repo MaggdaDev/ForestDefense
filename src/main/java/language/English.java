@@ -7,7 +7,7 @@ package language;
 
 /**
  *
- * @author DavidPrivat
+ * @author ist actually gar nicht DavidPrivat sondern alex; enalex
  */
 public class English extends Language{  // Halle (Saale) do you check it
 

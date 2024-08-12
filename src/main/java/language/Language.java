@@ -17,34 +17,36 @@ public abstract class Language {
     public String OAK_NAME;
     
     
-    // Tower descripition
+    // Tower description
     public String SPRUCE_DESCRIPTION;
     public String MAPLE_DESCRIPTION;
     public String LORBEER_DESCRIPTION;
     public String OAK_DESCRIPTION;
     
     // Upgrade description
-    // Spruce
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_1;
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_2;
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_3;
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_4;
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_5;
-    public  String UPGRADE_DESCRIPTION_SPURCE_1_6;
+    // SPRUCE
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_1;
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_2;
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_3;
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_4;
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_5;
+    public String UPGRADE_DESCRIPTION_SPRUCE_1_6;
     
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_1;
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_2;
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_3;
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_4;
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_5;
-    public  String UPGRADE_DESCRIPTION_SPURCE_2_6;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_1;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_2;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_3;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_4;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_5;
+    public String UPGRADE_DESCRIPTION_SPRUCE_2_6;
     
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_1;
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_2;
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_3;
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_4;
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_5;
-    public  String UPGRADE_DESCRIPTION_SPURCE_3_6;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_1;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_2;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_3;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_4;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_5;
+    public String UPGRADE_DESCRIPTION_SPRUCE_3_6;
+    
+    
     // MAPLE
     public String UPGRADE_DESCRIPTION_MAPLE_1_1;
     public String UPGRADE_DESCRIPTION_MAPLE_1_2;
@@ -57,6 +59,7 @@ public abstract class Language {
     public String UPGRADE_DESCRIPTION_MAPLE_3_1;
     public String UPGRADE_DESCRIPTION_MAPLE_3_2;
     public String UPGRADE_DESCRIPTION_MAPLE_3_3;
+    
     
     // LORBEER
     public String UPGRADE_DESCRIPTION_LORBEER_1_1;
@@ -74,8 +77,8 @@ public abstract class Language {
     public String UPGRADE_DESCRIPTION_LORBEER_3_3;
     public String UPGRADE_DESCRIPTION_LORBEER_3_4;
     
-    // OAK
     
+    // OAK
     public String UPGRADE_DESCRIPTION_OAK_1_1;
     public String UPGRADE_DESCRIPTION_OAK_1_2;
     public String UPGRADE_DESCRIPTION_OAK_1_3;
